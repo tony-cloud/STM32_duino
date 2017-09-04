@@ -1,12 +1,14 @@
-
 # STM32 ARM Core and platform.
 # ------------------------------
 #
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
+#          modify by huawei 2016 2017
+# ------------------------------
 
-name=STM32GENERIC for STM32 boards
-version=1.0.0
+name=STM32(HALMX & LL)
+
+version=1.8.3
 
 # STM compile variables
 # ----------------------
@@ -27,11 +29,13 @@ compiler.ar.cmd=arm-none-eabi-ar
 compiler.c.elf.cmd=arm-none-eabi-gcc
 compiler.objcopy.cmd=arm-none-eabi-objcopy
 
-compiler.S.flags=-mcpu={build.mcu} -DF_CPU={build.f_cpu} -mthumb -c -g -x assembler-with-cpp
+compiler.extra_flags=-mcpu={build.mcu} -DF_CPU={build.f_cpu} -mthumb -DSTM32GENERIC -DRAM_LENGTH={upload.maximum_data_size} -DFLASH_LENGTH={upload.maximum_size}
 
-compiler.c.flags=-mcpu={build.mcu} -DF_CPU={build.f_cpu} -mthumb -c -g -MMD -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -Dprintf=iprintf -MMD
+compiler.S.flags={compiler.extra_flags} -c -g -x assembler-with-cpp
 
-compiler.cpp.flags=-mcpu={build.mcu} -DF_CPU={build.f_cpu} -mthumb -c -g -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf -MMD
+compiler.c.flags={compiler.extra_flags} -c -g -MMD -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -Dprintf=iprintf -MMD
+
+compiler.cpp.flags={compiler.extra_flags} -c -g -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf -MMD
 
 compiler.ar.flags=rcs
 
@@ -40,6 +44,7 @@ compiler.c.elf.flags=-mcpu={build.mcu} -mthumb -Os -Wl,--cref -Wl,--check-sectio
 compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
 
 compiler.elf2hex.flags=-O binary
+compiler.elf2hex.flags2=-O ihex
 compiler.elf2hex.cmd=arm-none-eabi-objcopy
 
 compiler.ldflags=
@@ -55,6 +60,7 @@ build.extra_flags_jtag=
 build.extra_flags_os=
 build.extra_flags_menu={build.extra_flags_usb} {build.extra_flags_serial} {build.extra_flags_serial_auto} {build.extra_flags_jtag} {build.extra_flags_os}
 build.ldscript=ldscript.ld
+
 build.extra_lib=
 
 # These can be overridden in platform.local.txt
@@ -90,15 +96,21 @@ recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -D{build
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-#recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} "{build.path}/{archive_file}" -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
 recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} "{build.extra_lib}" "{build.path}/{archive_file}" -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
 
-## Create output (.bin file)
+## Create bin
 recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
 
-## Save hex
-recipe.output.tmp_file={build.project_name}.bin
-recipe.output.save_file={build.project_name}.{build.variant}.bin
+## Create hex
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags2} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+
+## Save hex or bin
+recipe.output.tmp_file.bin={build.project_name}.bin
+recipe.output.save_file.bin={build.project_name}.{build.variant}.bin
+recipe.output.tmp_file.hex={build.project_name}.hex
+recipe.output.save_file.hex={build.project_name}.{build.variant}.hex
+recipe.output.tmp_file.elf={build.project_name}.elf
+recipe.output.save_file.elf={build.project_name}.{build.variant}.elf
 
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
@@ -114,27 +126,39 @@ upload.altID=unknown
 upload.usbID=unknown
 
 #Upload to Nucleo via mass storage
-tools.nucleoFlasher.path={runtime.hardware.path}/tools/win/nucleoFlasher
-tools.nucleoFlasher.path.macosx={runtime.hardware.path}/tools/macosx/nucleoFlasher
-tools.nucleoFlasher.path.linux={runtime.hardware.path}/tools/linux/nucleoFlasher
-tools.nucleoFlasher.cmd.linux=nucleoFlasher
+tools.nucleoFlasher.path={runtime.ide.path}/hardware/tools/win/nucleoFlasher
+tools.nucleoFlasher.path.macosx={runtime.ide.path}/hardware/tools/macosx/nucleoFlasher
+tools.nucleoFlasher.path.linux={runtime.ide.path}/hardware/tools/linux/nucleoFlasher
 tools.nucleoFlasher.cmd.windows=nucleoFlasher.bat
+tools.nucleoFlasher.cmd.linux=nucleoFlasher
 tools.nucleoFlasher.cmd.macosx=nucleoFlasherMacOsX
 tools.nucleoFlasher.upload.params.verbose=
 tools.nucleoFlasher.upload.params.quiet=
 tools.nucleoFlasher.upload.pattern="{path}/{cmd}" {upload.verbose} -I "{build.path}/{build.project_name}.bin" -O "{massstorage_drive}"
 
-# stlink upload
+# STLINK/V2 upload
 tools.stlink_upload.cmd=stlink_upload
 tools.stlink_upload.cmd.windows=stlink_upload.bat
-tools.stlink_upload.path.windows={runtime.hardware.path}/tools/win
-tools.stlink_upload.path.macosx={runtime.hardware.path}/tools/macosx
-tools.stlink_upload.path.linux={runtime.hardware.path}/tools/linux
-tools.stlink_upload.path.linux64={runtime.hardware.path}/tools/linux64
+tools.stlink_upload.path.windows={runtime.ide.path}/hardware/tools/win
+tools.stlink_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
+tools.stlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
+
 tools.stlink_upload.upload.params.verbose=-d
 tools.stlink_upload.upload.params.quiet=
-tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" {upload.device} {build.uploadadr} {build.vect} 
 
+# jLINK/V21 upload
+# this can be overriden in boards.txt
+
+tools.jlink_upload.cmd=jlink_upload
+tools.jlink_upload.cmd.windows=jlink_upload.bat
+tools.jlink_upload.path.windows={runtime.ide.path}/hardware/tools/win
+tools.jlink_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
+tools.jlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
+
+tools.jlink_upload.upload.params.verbose=-d
+tools.jlink_upload.upload.params.quiet=
+tools.jlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" {upload.device} 0x8000000 0x8000000 
 
 # Upload using Maple bootloader over DFU
 tools.maple_upload.cmd=maple_upload
@@ -149,14 +173,22 @@ tools.maple_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altI
 
 #Added tool for generic STM32 upload via serial to Serial Port 1 (pins PA9 and PA10) - note. Boot0 line needs to high on board reset to enable upload via serial
 # at the end up the upload the program is automatically run, without the board being reset
-
 tools.serial_upload.cmd=serial_upload
-tools.serial_upload.cmd.windows=serial_upload.bat
-tools.serial_upload.cmd.macosx=serial_upload
-tools.serial_upload.path={runtime.hardware.path}/tools/win
-tools.serial_upload.path.macosx={runtime.hardware.path}/tools/macosx
-tools.serial_upload.path.linux={runtime.hardware.path}/tools/linux
-tools.serial_upload.path.linux64={runtime.hardware.path}/tools/linux64
-tools.serial_upload.upload.params.verbose=-d
-tools.serial_upload.upload.params.quiet=n
-tools.serial_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+tools.serial_upload.cmd.windows=serial_up.bat
+tools.serial_upload.cmd.macosx=serial_upload 
+
+tools.serial_upload.path={runtime.ide.path}/hardware/tools/win 
+tools.serial_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx 
+tools.serial_upload.path.linux={runtime.ide.path}/hardware/tools/linux 
+
+tools.serial_upload.upload.params.verbose=-d 
+tools.serial_upload.upload.params.quiet=n 
+tools.serial_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} "{build.path}/{build.project_name}.hex" {upload.device} 0x8000000 0x8000000 
+
+# blackmagic probe upload
+tools.bmp_upload.cmd=arm-none-eabi-gdb
+tools.bmp_upload.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
+tools.bmp_upload.upload.speed=230400
+tools.bmp_upload.upload.params.verbose=
+tools.bmp_upload.upload.params.quiet=-q --batch-silent
+tools.bmp_upload.upload.pattern="{path}{cmd}" -cd "{build.path}" -b {upload.speed} {upload.verbose} -ex "set debug remote 0" -ex "set target-async off" -ex "set remotetimeout 60" -ex "set mem inaccessible-by-default off" -ex "set confirm off" -ex "set height 0" -ex "target extended-remote {serial.port}" -ex "monitor swdp_scan" -ex "attach 1" -ex "x/wx 0x8000004" -ex "monitor erase_mass" -ex "echo 0x8000004 expect 0xffffffff after erase\n" -ex "x/wx 0x8000004" -ex "file {build.project_name}.elf" -ex "load" -ex "x/wx 0x08000004" -ex "tbreak main" -ex "run" -ex "echo \n\n\nUpload finished!" -ex "quit"
