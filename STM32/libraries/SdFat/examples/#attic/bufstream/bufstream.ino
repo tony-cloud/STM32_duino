@@ -11,7 +11,7 @@ void setup() {
   char buf[20];   // buffer for formatted line
   int i, j, k;    // values from parsed line
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   // Wait for USB Serial 
   while (!Serial) {

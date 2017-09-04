@@ -1,10 +1,10 @@
 #include "BSP_BLACK_F407VE.h"
 #include "FreeRTOS.h"
-#include "MW_STemWin.h"
+#include "STemWin.h"
 #include "sample.h"
 
 #define LED  LED_BUILTIN
-#define LED1 LED_BUILTIN1
+#define LED1 LED1_BUILTIN
 
 extern "C"  void GUI_X_ErrorOut(const char * s);
 
@@ -39,7 +39,7 @@ static void myTask2(void __attribute__ ((unused)) *argument)
 
 void MainTask1 (void __attribute__ ((unused)) *argument)
 {
-  TFTLCD_Init();
+  BSP_LCD_Init();
   /*Task setup*/
   GUI_Init();
   /* Activate the use of memory device feature */

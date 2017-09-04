@@ -92,6 +92,14 @@ class SPIClass {
 		stm32SetSCK(sck);
 	};
 
+    SPIClass(uint8_t mosi, uint8_t miso, uint8_t sck) {
+        stm32SetMOSI(mosi);
+        stm32SetMISO(miso);
+        stm32SetSCK(sck);
+
+        spiHandle.Instance = stm32GetSPIInstance(mosiPort, mosiPin, misoPort, misoPin, sckPort, sckPin);
+    }
+
     void stm32SetMOSI(uint8_t mosi);
     void stm32SetMISO(uint8_t miso);
     void stm32SetSCK(uint8_t sck);
@@ -209,6 +217,7 @@ class SPIClass {
     uint32_t sckPin = 0;
 };
 
+
 inline uint8_t SPIClass::transfer(uint8_t data) {
     while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_TXE) == RESET);
 
@@ -219,6 +228,11 @@ inline uint8_t SPIClass::transfer(uint8_t data) {
 
 	return *(volatile uint8_t*)&spiHandle.Instance->DR;
 }
+
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
 
 inline uint16_t SPIClass::transfer16(uint16_t data) {
     LL_SPI_SetDataWidth(spiHandle.Instance, LL_SPI_DATAWIDTH_16BIT);
@@ -236,6 +250,9 @@ inline uint16_t SPIClass::transfer16(uint16_t data) {
 
     return ret;
 }
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 inline void SPIClass::transfer(uint8_t *buf, size_t count) {
 	HAL_SPI_TransmitReceive(&spiHandle, buf, buf, count, 1000);

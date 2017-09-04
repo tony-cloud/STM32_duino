@@ -1,7 +1,14 @@
 #ifndef VARIANT_H
 #define VARIANT_H
-
+/*LED*/
+#ifndef LED_BUILTIN
 #define LED_BUILTIN PB1
+#endif
+#define LED_BUILTIN_MASK		0x00
+#define STM32_LED_BUILTIN_ACTIVE_LOW
+
+/*key*/
+#define KEY_LIST             /*KEY_LIST NUL*/
 
 #define MOSI PA7
 #define MISO PA6
@@ -50,5 +57,4 @@
     PIN(D,0), \
     PIN(D,1),
 
-    
 #endif

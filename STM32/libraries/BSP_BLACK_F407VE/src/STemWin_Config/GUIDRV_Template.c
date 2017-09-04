@@ -51,16 +51,14 @@ Purpose     : Template driver, could be used as starting point for new
   *
   ******************************************************************************
   */
-#if __has_include("MW_STemWin.h")
-#include "arduino.h"
+  
+#if __has_include("STemWin.h")
+#include <Arduino.h>
 #include "STemWin/inc/LCD_Private.h"
 #include "STemWin/inc/GUI_Private.h"
 #include "STemWin/inc/LCD_ConfDefaults.h"
 #include "LCD/BSP_tft_lcd.h"
 #include "bsp.h"
-//定义LCD的命令和数据位.
-uint32_t UCGUI_LCD_CMD  = 0X6007FFFE; //地址为0X6007FFFE;  0111 1110  FSMC_A18为0 
-uint32_t UCGUI_LCD_DATA = 0X60080000; //地址为0X60080000;  1000 0000  FSMC_A18为1
 
 /*********************************************************************
 *
@@ -149,7 +147,7 @@ static void _SetPixelIndex(GUI_DEVICE * pDevice, int x, int y, int PixelIndex) {
 		TFTLCD->RAM = (y&0XFF);
 	}else if(lcddev.id == 0X6804)
 	{
-		if(lcddev.id == 1)x=lcddev.width-1-x; //横屏时处理
+		if(lcddev.dir == 1)x=lcddev.width-1-x; //横屏时处理
 		//设置X坐标
 		TFTLCD->REG  = lcddev.setxcmd;
 		TFTLCD->RAM = (x>>8); 
@@ -170,16 +168,9 @@ static void _SetPixelIndex(GUI_DEVICE * pDevice, int x, int y, int PixelIndex) {
 		TFTLCD->RAM = (y>>8); //y地址地高八位
 		TFTLCD->REG  = lcddev.setycmd+1; //设置y坐标低八位
 		TFTLCD->RAM = (y&0XFF);//y地址低八位
-	}else if(lcddev.id == 0X55420)//其他屏幕  0x5420
-	{
-		if(lcddev.id == 0) x=lcddev.width-1-x;  //缺省横屏
-		TFTLCD->REG  = lcddev.setxcmd; 
-		TFTLCD->RAM = x; 
-		TFTLCD->REG  = lcddev.setycmd; 
-		TFTLCD->RAM = y; 
 	}else             //其他屏幕
 	{
-		if(lcddev.id == 1)x=lcddev.width-1-x;  //横屏其实就是调转X,Y坐标
+		if(lcddev.dir == 1)x=lcddev.width-1-x;  //横屏其实就是调转X,Y坐标
 		TFTLCD->REG  = lcddev.setxcmd; 
 		TFTLCD->RAM = x; 
 		TFTLCD->REG  = lcddev.setycmd; 
@@ -380,7 +371,44 @@ static void _FillRect(GUI_DEVICE * pDevice, int x0, int y0, int x1, int y1) {
 		TFTLCD->REG  = 0x211; 
 		TFTLCD->RAM = lcddev.height; 
 	}
-
+	else{	//设置窗口大小,X轴坐标的起始和终止坐标
+		TFTLCD->REG  = 0x50; 
+		TFTLCD->RAM = x0; 
+		TFTLCD->REG  = 0x51; 
+		TFTLCD->RAM = x1;
+	
+		//设置窗口大小,Y轴的起始和终止坐标
+		TFTLCD->REG  = 0x52; 
+		TFTLCD->RAM = y0;
+		TFTLCD->REG  = 0x53; 
+		TFTLCD->RAM = y1; 
+			
+		//设置开始坐标
+		TFTLCD->REG  = lcddev.setxcmd; 
+		TFTLCD->RAM = x0; 
+		TFTLCD->REG  = lcddev.setycmd; 
+		TFTLCD->RAM = y0;
+		
+		n=(uint32_t)(y1-y0+1)*(x1-x0+1);
+		TFTLCD->REG  = lcddev.wramcmd;  //写入颜色值
+		while(n--)
+		{
+			TFTLCD->RAM = LCD_COLORINDEX;//向LCD的gram写入颜色值
+		}
+		
+		//恢复窗口大小
+		TFTLCD->REG  = 0x50; 
+		TFTLCD->RAM = 0; 
+		TFTLCD->REG  = 0x51; 
+		TFTLCD->RAM = lcddev.width;
+	
+		//设置窗口大小,Y轴的起始和终止坐标
+		TFTLCD->REG  = 0x52;
+		TFTLCD->RAM = 0;
+		TFTLCD->REG  = 0x53; 
+		TFTLCD->RAM = lcddev.height; 
+		
+	}
 }
 
 
@@ -882,7 +910,6 @@ static void _SetSize(GUI_DEVICE * pDevice, int xSize, int ySize) {
 */
 static int  _Init(GUI_DEVICE * pDevice) {
   int r;
-
   r = _InitOnce(pDevice);
   r |= LCD_X_DisplayDriver(pDevice->LayerIndex, LCD_X_INITCONTROLLER, NULL);
   return r;

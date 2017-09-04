@@ -44,7 +44,7 @@
   *
   ******************************************************************************
   */ 
-#if __has_include("MW_STemWin.h")  
+#if __has_include("STemWin.h")  
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_def.h"  //for use st hal bsp lib huaweiwx@sina.com 2017.5

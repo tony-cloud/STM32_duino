@@ -71,7 +71,7 @@
 #define FREERTOS_CONFIG_H
 
 #ifndef USE_HEAP
-	#define  USE_HEAP 2
+	#define  USE_HEAP 4
 #endif
 /*-----------------------------------------------------------
  * Application specific definitions.

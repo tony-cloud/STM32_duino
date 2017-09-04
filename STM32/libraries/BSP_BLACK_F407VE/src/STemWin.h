@@ -2,19 +2,18 @@
 #define __STEMWIN_ARDUINO_H__
 
 #ifdef __cplusplus
-#if __has_include("MW_STemWin.h")
-
 /* class */
-#include "MW_STemWin.h"
+#include <STemWin532.h>
 #include "STemWin_Config/LCD/BSP_tft_lcd.h"
+#include "STemWin_Config/TOUCH/touch.h"
 
-class STemWinGUI : public emWinGUI
+class STemWin : public emWinGUI
 {
   public:
-      STemWinGUI(){};
+      STemWin(){};
 	  
 int Init(void){
- 	   TFTLCD_Init();
+ 	   BSP_LCD_Init();
 	   return GUI_Init();
 	};
 	
@@ -22,6 +21,5 @@ int Init(void){
 
 };
 
-#endif  //STemWin
 #endif //__cplusplus
 #endif //__STEMWIN_ARDUINO_H__

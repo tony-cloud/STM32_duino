@@ -2,6 +2,7 @@
 
 // Ignore HAL errors when compiling with -Werror
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 #ifdef STM32F0
     #include "stm32f0xx_hal_adc_ex.c"

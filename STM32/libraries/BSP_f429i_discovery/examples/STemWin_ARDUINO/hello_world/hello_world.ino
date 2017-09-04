@@ -10,13 +10,12 @@
 
 
 #include "BSP_f429i_discovery.h"      //F429discovery STemWin config & driver lib
-#include "MW_STemWin.h"               //STemWin 5.32 lib
-#include "STemWin.h"                  //STemWin 5.32 lib
+#include "STemWin.h"               //STemWin 5.32 lib
 
 #define LED1  LED_BUILTIN
-#define LED2 LED_BUILTIN1
+#define LED2 LED1_BUILTIN
 
-STemWinGUI GUI;
+STemWin GUI;
 
 void setup() {
   pinMode(LED1, OUTPUT);

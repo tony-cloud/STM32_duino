@@ -18,7 +18,7 @@ ArduinoOutStream cout(Serial);
 #define error(s) sd.errorHalt(F(s))
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(15200);
   
   // Wait for USB Serial 
   while (!Serial) {

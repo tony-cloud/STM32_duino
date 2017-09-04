@@ -2,9 +2,19 @@
 # Syntax Coloring Map For Wire
 #######################################
 
+
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
+
+#######################################
+# Instances (KEYWORD1)
+#######################################
+
+Wire	KEYWORD1
+HardWire	KEYWORD1
+TwoWire	KEYWORD1
+EEPROM	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -15,17 +25,16 @@ setClock	KEYWORD2
 beginTransmission	KEYWORD2
 endTransmission	KEYWORD2
 requestFrom	KEYWORD2
+send	KEYWORD2
+receive	KEYWORD2
 onReceive	KEYWORD2
 onRequest	KEYWORD2
 
 #######################################
-# Instances (KEYWORD2)
-#######################################
-
-Wire	KEYWORD2
-Wire1	KEYWORD2
-
-#######################################
 # Constants (LITERAL1)
+I2C_FAST_MODE	LITERAL1
+SOFT_STANDARD
+SOFT_FAST
+
 #######################################
 

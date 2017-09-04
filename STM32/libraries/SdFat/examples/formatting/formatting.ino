@@ -40,7 +40,7 @@ void showDate(int m, int d, int y) {
 }
 //------------------------------------------------------------------------------
 void setup(void) {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // Wait for USB Serial 
   while (!Serial) {

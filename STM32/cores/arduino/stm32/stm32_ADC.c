@@ -34,6 +34,7 @@
  */
 
 #include "stm32_gpio_af.h"
+#include "stm32_debug.h"
 
 void stm32_adc_init(ADC_HandleTypeDef *handle);
 
@@ -52,12 +53,53 @@ void stm32_adc_init(ADC_HandleTypeDef *handle);
 
 static int readResolution = 10;
 
+static ADC_HandleTypeDef handle[3];
+
 void analogReadResolution(int resolution) {
     readResolution = resolution;
 }
 
 int analogRead(uint8_t pin) {
-    static ADC_HandleTypeDef handle = {};
+
+#ifdef A0
+    if (pin == 0) pin = A0;
+#endif
+#ifdef A1
+    if (pin == 1) pin = A1;
+#endif
+#ifdef A2
+    if (pin == 2) pin = A2;
+#endif
+#ifdef A3
+    if (pin == 3) pin = A3;
+#endif
+#ifdef A4
+    if (pin == 4) pin = A4;
+#endif
+#ifdef A5
+    if (pin == 5) pin = A5;
+#endif
+
+    stm32_chip_adc1_channel_type config = stm32ADC1GetChannel(variant_pin_list[pin].port, variant_pin_list[pin].pin_mask);
+
+
+    if (config.instance == NULL) {
+        return 0;
+    }
+
+    int instanceIndex = 0;
+    #ifdef ADC2
+        if (config.instance == ADC2) {
+            instanceIndex = 1;
+            __HAL_RCC_ADC2_CLK_ENABLE();
+        }
+    #endif
+    #ifdef ADC3
+        if (config.instance == ADC3) {
+            instanceIndex = 2;
+            __HAL_RCC_ADC3_CLK_ENABLE();
+        }
+    #endif
 
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.Pin = variant_pin_list[pin].pin_mask;
@@ -65,7 +107,7 @@ int analogRead(uint8_t pin) {
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(variant_pin_list[pin].port, &GPIO_InitStruct);
 
-    if (handle.Instance == NULL) {
+    if (handle[instanceIndex].Instance == NULL) {
         #ifdef __HAL_RCC_ADC1_CLK_ENABLE
         __HAL_RCC_ADC1_CLK_ENABLE();
         #endif
@@ -73,38 +115,46 @@ int analogRead(uint8_t pin) {
         __HAL_RCC_ADC_CLK_ENABLE();
         #endif
         
-        handle.Instance = ADC1;
-        handle.Init.ScanConvMode = DISABLE;
-        handle.Init.ContinuousConvMode = ENABLE;
-        handle.Init.DiscontinuousConvMode = DISABLE;
-        handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+        handle[instanceIndex].Instance = config.instance;
+        handle[instanceIndex].Init.ScanConvMode = DISABLE;
+        handle[instanceIndex].Init.ContinuousConvMode = ENABLE;
+        handle[instanceIndex].Init.DiscontinuousConvMode = DISABLE;
+        handle[instanceIndex].Init.DataAlign = ADC_DATAALIGN_RIGHT;
 
         #ifdef STM32L0
-            handle.Init.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
+            handle[instanceIndex].Init.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
         #endif
 
         #if !defined(STM32L0) && !defined(STM32F0)
-            handle.Init.NbrOfConversion = 1;
+            handle[instanceIndex].Init.NbrOfConversion = 1;
         #endif
 
         #ifdef ADC_EOC_SINGLE_CONV
-            handle.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+            handle[instanceIndex].Init.EOCSelection = ADC_EOC_SINGLE_CONV;
         #endif
 
         #ifdef STM32F1
-            handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+            handle[instanceIndex].Init.ExternalTrigConv = ADC_SOFTWARE_START;
         #else
-            handle.Init.ClockPrescaler = ADC_CLOCK_DIV;
-            handle.Init.Resolution = ADC_RESOLUTION_12B;
+            handle[instanceIndex].Init.ClockPrescaler = ADC_CLOCK_DIV;
+            handle[instanceIndex].Init.Resolution = ADC_RESOLUTION_12B;
         #endif
 
-        HAL_ADC_Init(&handle);
-
+        HAL_StatusTypeDef error = HAL_ADC_Init(&handle[instanceIndex]);
+        if (error != HAL_OK) {
+            PRINT_ERROR("HAL_ADC_Init failed, error: %d", error);
+            return 0;
+        }
     }
 
     ADC_ChannelConfTypeDef sConfig;
-    sConfig.Channel = stm32ADC1GetChannel(variant_pin_list[pin].port, variant_pin_list[pin].pin_mask);
-    sConfig.Rank = 1;
+    sConfig.Channel = config.channel;
+
+    #ifdef ADC_RANK_CHANNEL_NUMBER
+        sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
+    #else
+        sConfig.Rank = 1;
+    #endif
 
     #if STM32L0
         //in handle
@@ -122,13 +172,33 @@ int analogRead(uint8_t pin) {
         #error "unknown sampleing time"
     #endif
 
-    HAL_ADC_ConfigChannel(&handle, &sConfig);
-
-    HAL_ADC_Start(&handle);
-
-    if (HAL_ADC_PollForConversion(&handle, 1000) != HAL_OK) {
-            return 0;
+    HAL_StatusTypeDef error = HAL_ADC_ConfigChannel(&handle[instanceIndex], &sConfig);
+    if (error != HAL_OK) {
+        PRINT_ERROR("HAL_ADC_ConfigChannel failed, error: %d", error);
+        return 0;
     }
 
-    return (HAL_ADC_GetValue(&handle) << readResolution) >> 12;
+    error = HAL_ADC_Start(&handle[instanceIndex]);
+    if (error != HAL_OK) {
+        PRINT_ERROR("HAL_ADC_Start failed, error: %d", error);
+        return 0;
+    }
+
+    error = HAL_ADC_PollForConversion(&handle[instanceIndex], 1000);
+    if (error != HAL_OK) {
+        PRINT_ERROR("HAL_ADC_PollForConversion failed, error: %d", error);
+        return 0;
+    }
+
+    int ret = (HAL_ADC_GetValue(&handle[instanceIndex]) << readResolution) >> 12;
+
+    HAL_ADC_Stop(&handle[instanceIndex]);
+
+    #ifdef ADC_RANK_NONE
+        sConfig.Rank = ADC_RANK_NONE;
+        HAL_ADC_ConfigChannel(&handle[instanceIndex], &sConfig);
+    #endif
+
+    return ret;
 }
+

@@ -1,7 +1,7 @@
-#include "arduino.h"
+#include <Arduino.h>"
 #include "sample.h"
 
-#include "MW_STemWin.hn.h"
+#include "STemWin.hn.h"
 
 #define MSG_CHANGE_TEXT (WM_USER + 0)  //用户自定义的消息类型
 #define SPEED           1250

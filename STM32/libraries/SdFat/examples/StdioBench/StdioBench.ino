@@ -29,7 +29,7 @@ void setup() {
   uint32_t printTime;
   uint32_t stdioTime = 0;
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {
     SysCall::yield();
   }

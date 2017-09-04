@@ -50,7 +50,7 @@ size_t readField(File* file, char* str, size_t size, const char* delim) {
 #define errorHalt(msg) {Serial.println(F(msg)); SysCall::halt();}
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   // Wait for USB Serial 
   while (!Serial) {

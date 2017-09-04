@@ -1,5 +1,3 @@
-// L4 RM0351 http://www.st.com/content/ccc/resource/technical/document/reference_manual/02/35/09/0c/4f/f7/40/03/DM00083560.pdf/files/DM00083560.pdf/jcr:content/translations/en.DM00083560.pdf#page=342
-
 typedef struct {
     void *periphInstance;
     dmaRequest request;
@@ -35,3 +33,4 @@ inline static void setDmaInstance(DMA_HandleTypeDef *handle, dma_request_to_inst
     handle->Instance = dmaRequestToStream.dmaInstance;
     handle->Init.Request = dmaRequestToStream.requestNumber;
 }
+

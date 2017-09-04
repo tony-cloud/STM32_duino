@@ -1,42 +1,52 @@
 #ifndef __BSP_H__
 #define __BSP_H__
-#include "arduino.h"
+#include <Arduino.h>
 
-
-/******************** LED************************/
-#define LEDn   BOARD_NR_LED
-typedef enum 
-{
-  LED1 = LED_BUILTIN,
-  LED2 = LED_BUILTIN1,
-} Led_TypeDef;
-
-/******************** JOY ************************/
-
-/******************** BOTTON ************************/
 
 /******************  BSP_TFT_LCD ******************/
-#define BSP_TFT_LCD   ILI9341
+#include "LCDConfig.h"
+#define LCD_ADDR_SETUPTIME 10       /*FSMC time setup*/
+#define LCD_DATA_SETUPTIME 25
 
 //USE NE1 A18
-#define LCD_BASE_BK11       ((uint32_t)(0x60000000 | 0x00000000)) //PD1/NE1 FSMC_BANK1_1
-#define LCD_BASE_BK12     ((uint32_t)(0x60000000 | 0x04000000))   //PG9/NE2 FSMC_BANK1_2
-#define LCD_BASE_BK13     ((uint32_t)(0x60000000 | 0x08000000))   //PG10/NE3 FSMC_BANK1_3
-#define LCD_BASE_BK14     ((uint32_t)(0x60000000 | 0x0C000000))   //PG12/NE4 FSMC_BANK1_4
+#define LCD_BASE_BK11     ((uint32_t)(0x60000000 | 0x00000000))   /*PD1/NE1 FSMC_BANK1_1*/
+#define LCD_BASE_BK12     ((uint32_t)(0x60000000 | 0x04000000))   /*PG9/NE2 FSMC_BANK1_2*/
+#define LCD_BASE_BK13     ((uint32_t)(0x60000000 | 0x08000000))   /*PG10/NE3 FSMC_BANK1_3*/
+#define LCD_BASE_BK14     ((uint32_t)(0x60000000 | 0x0C000000))   /*PG12/NE4 FSMC_BANK1_4*/
 
-#define LCD_REG	 *(volatile uint16_t *)(LCD_BASE_BK11)
-#define LCD_RAM	 *(volatile uint16_t *)(LCD_BASE_BK11 + (1 << 19))  //A18
-#define TFT_LCD_BASE	((uint32_t)(LCD_BASE_BK11 +(1 << 19)-2))
+#define TFT_LCD_BASE	((uint32_t)(LCD_BASE_BK11 +(1 << 19)-2)) /*A18*/  
 
-#define  BL_PORT  GPIOB
-#define  BL_PIN   GPIO_PIN_1
+#define  LCDBL_PIN   PB1
+
+/******************  BSP_TFT_TOUCH ******************/
+//电阻屏芯片连接引脚	   
+//#define PEN  		PCin(5)  	//T_PEN
+//#define DOUT 		PBin(14)   	//T_MISO
+//#define TDIN 		PBout(15)  	//T_MOSI
+//#define TCLK 		PBout(13)  	//T_SCK
+//#define TCS  		PBout(12)  	//T_CS  
+
+#define TOUCH_SPI  SPI2
+#define TOUCH_NCS  PB12
+#define TOUCH_SCK  PB13
+#define TOUCH_MISO PB14
+#define TOUCH_MOSI PB15
+#define TOUCH_NIRQ PC5
+
+#define TOUCH_XOFF 38  //int16
+#define TOUCH_XFAC 94.19  //float *1000
+#define TOUCH_YOFF 29   //int16
+#define TOUCH_YFAC 71.83 //float *1000
+#define TOUCH_XYCHG 1
+
+
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
 void STM_FSMC_LCD_Init(void);
-void STM_FSMC_LCD_Set(uint8_t _as, uint8_t _ds);
+void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds);
 
 #ifdef __cplusplus
 } //extern "C"

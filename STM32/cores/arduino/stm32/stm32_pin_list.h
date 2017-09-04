@@ -22,7 +22,7 @@
     #define PIN(a, b) __P##a##b
         enum {
             PIN_LIST
-            NUM_PINS,
+            NUM_DIGITAL_PINS,
         };
     #undef PIN
 
@@ -35,7 +35,7 @@
     #define PIN(a, b) P ## a ## b
     enum {
         PIN_LIST
-        NUM_PINS,
+        NUM_DIGITAL_PINS,
     };
     #undef PIN
 

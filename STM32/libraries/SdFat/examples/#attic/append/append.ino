@@ -24,7 +24,7 @@ void setup() {
   // filename for this example
   char name[] = "append.txt";
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   // Wait for USB Serial 
   while (!Serial) {

@@ -1,8 +1,7 @@
 #include "BSP_f429i_discovery.h"
-#include "MW_STemWin.h"
 #include "STemWin.h"                  //STemWin 5.32 lib
 
-STemWinGUI GUI;
+STemWin GUI;
 extern "C" void MainTask(void);
 void setup() {
   GUI.Init();

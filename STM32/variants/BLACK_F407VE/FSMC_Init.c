@@ -4,13 +4,13 @@
 #endif
 
 
-void Error_Handler(void);
+extern void Error_Handler(void);
 static uint32_t FSMC_Initialized = 0;
 
 //³õÊ¼»¯lcd FSMC
-SRAM_HandleTypeDef hsram1;
+SRAM_HandleTypeDef fsmcLcdHandle;
 
-void STM_FSMC_LCD_Set(uint8_t _as, uint8_t _ds)
+void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds)
 { 	
  
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -23,16 +23,6 @@ void STM_FSMC_LCD_Set(uint8_t _as, uint8_t _ds)
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_FSMC_CLK_ENABLE();
-  
-#ifdef BL_PORT
-    /* GPIO_InitStruct */
-  GPIO_InitStruct.Pin = BL_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(BL_PORT, &GPIO_InitStruct);
-  HAL_GPIO_WritePin(BL_PORT, BL_PIN, GPIO_PIN_SET);
-#endif
   
   /** FSMC GPIO Configuration  
   PE7   ------> FSMC_D4
@@ -78,23 +68,23 @@ void STM_FSMC_LCD_Set(uint8_t _as, uint8_t _ds)
   }
 
   /* Perform the SRAM1 memory initialization sequence*/
-  hsram1.Instance = FSMC_NORSRAM_DEVICE;
-  hsram1.Extended = FSMC_NORSRAM_EXTENDED_DEVICE;
-  /* hsram1.Init */
-  hsram1.Init.NSBank = FSMC_NORSRAM_BANK1;
-  hsram1.Init.DataAddressMux = FSMC_DATA_ADDRESS_MUX_DISABLE;
-  hsram1.Init.MemoryType = FSMC_MEMORY_TYPE_SRAM;
-  hsram1.Init.MemoryDataWidth = FSMC_NORSRAM_MEM_BUS_WIDTH_16;
-  hsram1.Init.BurstAccessMode = FSMC_BURST_ACCESS_MODE_DISABLE;
-  hsram1.Init.WaitSignalPolarity = FSMC_WAIT_SIGNAL_POLARITY_LOW;
-  hsram1.Init.WrapMode = FSMC_WRAP_MODE_DISABLE;
-  hsram1.Init.WaitSignalActive = FSMC_WAIT_TIMING_BEFORE_WS;
-  hsram1.Init.WriteOperation = FSMC_WRITE_OPERATION_ENABLE;
-  hsram1.Init.WaitSignal = FSMC_WAIT_SIGNAL_DISABLE;
-  hsram1.Init.ExtendedMode = FSMC_EXTENDED_MODE_DISABLE;
-  hsram1.Init.AsynchronousWait = FSMC_ASYNCHRONOUS_WAIT_DISABLE;
-  hsram1.Init.WriteBurst = FSMC_WRITE_BURST_DISABLE;
-  hsram1.Init.PageSize = FSMC_PAGE_SIZE_NONE;
+  fsmcLcdHandle.Instance = FSMC_NORSRAM_DEVICE;
+  fsmcLcdHandle.Extended = FSMC_NORSRAM_EXTENDED_DEVICE;
+  /* fsmcLcdHandle.Init */
+  fsmcLcdHandle.Init.NSBank = FSMC_NORSRAM_BANK1;
+  fsmcLcdHandle.Init.DataAddressMux = FSMC_DATA_ADDRESS_MUX_DISABLE;
+  fsmcLcdHandle.Init.MemoryType = FSMC_MEMORY_TYPE_SRAM;
+  fsmcLcdHandle.Init.MemoryDataWidth = FSMC_NORSRAM_MEM_BUS_WIDTH_16;
+  fsmcLcdHandle.Init.BurstAccessMode = FSMC_BURST_ACCESS_MODE_DISABLE;
+  fsmcLcdHandle.Init.WaitSignalPolarity = FSMC_WAIT_SIGNAL_POLARITY_LOW;
+  fsmcLcdHandle.Init.WrapMode = FSMC_WRAP_MODE_DISABLE;
+  fsmcLcdHandle.Init.WaitSignalActive = FSMC_WAIT_TIMING_BEFORE_WS;
+  fsmcLcdHandle.Init.WriteOperation = FSMC_WRITE_OPERATION_ENABLE;
+  fsmcLcdHandle.Init.WaitSignal = FSMC_WAIT_SIGNAL_DISABLE;
+  fsmcLcdHandle.Init.ExtendedMode = FSMC_EXTENDED_MODE_DISABLE;
+  fsmcLcdHandle.Init.AsynchronousWait = FSMC_ASYNCHRONOUS_WAIT_DISABLE;
+  fsmcLcdHandle.Init.WriteBurst = FSMC_WRITE_BURST_DISABLE;
+  fsmcLcdHandle.Init.PageSize = FSMC_PAGE_SIZE_NONE;
 
   /* Timing  stm324xG-eval time*/
   Timing.AddressSetupTime      = _as/6;	  //  6ns(1/168M)*2(HCLK) = 12ns	
@@ -106,14 +96,29 @@ void STM_FSMC_LCD_Set(uint8_t _as, uint8_t _ds)
   Timing.AccessMode            = FSMC_ACCESS_MODE_A;
   /* ExtTiming */
 
-  if (HAL_SRAM_Init(&hsram1, &Timing, NULL) != HAL_OK)
+  if (HAL_SRAM_Init(&fsmcLcdHandle, &Timing, NULL) != HAL_OK)
   {
     Error_Handler();
   }
 
 }
 
+#ifndef  LCD_ADDR_SETUPTIME
+# define LCD_ADDR_SETUPTIME 20
+#endif
+#ifndef  LCD_DATA_SETUPTIME
+# define LCD_DATA_SETUPTIME 40
+#endif
+
 void STM_FSMC_LCD_Init(void)
 {
-	STM_FSMC_LCD_Set(10, 25);
+	STM_FSMC_LCD_TimeSet(LCD_ADDR_SETUPTIME, LCD_DATA_SETUPTIME);
+#ifdef LCDBL_PIN
+    pinMode(LCDBL_PIN,OUTPUT);
+# ifdef LCDBL_ON
+	digitalWrite(LCDBL_PIN, LCDBL_ON); //backlight on if can set
+# else	
+	digitalWrite(LCDBL_PIN, HIGH); //backlight on if can set
+# endif	
+#endif	
 }

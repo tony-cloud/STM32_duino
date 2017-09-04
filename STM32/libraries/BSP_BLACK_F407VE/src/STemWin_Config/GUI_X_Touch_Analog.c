@@ -30,9 +30,9 @@ File        : GUI_TOUCH_X.C
 Purpose     : Config / System dependent externals for GUI
 ---------------------------END-OF-HEADER------------------------------
 */
-#if __has_include("MW_STemWin.h")
+#if __has_include("STemWin.h")
 
-#include "arduino.h"
+#include <Arduino.h>
 #include "STemWin/inc/GUI.h"
 #include "TOUCH/touch.h"
 #include "LCD/BSP_tft_lcd.h"

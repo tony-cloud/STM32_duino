@@ -36,12 +36,14 @@
 #define INPUT_PULLUP 0x2
 #define INPUT_PULLDOWN 0x3
 
+#define OUTPUT_PP 0x1    /* as OUTPUT add by huaweiwx@sina.com 2017.6.9   */
+#define OUTPUT_OD 0x11   /*!< Output Open Drain Mode  add by huaweiwx@sina.com 2017.6.9   */
+
 #ifndef GPIO_SPEED_FREQ_VERY_HIGH
     #define GPIO_SPEED_FREQ_VERY_HIGH GPIO_SPEED_FREQ_HIGH
 #endif
 
 #define RwReg uint32_t
-
 
 #ifdef __cplusplus
 extern "C"{
@@ -59,7 +61,7 @@ typedef struct {
     stm32_clock_freq_func clock_freq_func;
 } stm32_clock_freq_list_type;
 
-extern const stm32_port_pin_type variant_pin_list[NUM_PINS];
+extern const stm32_port_pin_type variant_pin_list[NUM_DIGITAL_PINS];
 
 /**
  * Start clock for the fedined port
@@ -95,6 +97,15 @@ inline int digitalRead(uint8_t pin) {
     
 }
 
+//add by huaweiwx@sina.com  2017.6.4
+inline void digitalToggle(uint8_t pin) {
+//    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
+//       return;
+//    }
+    stm32_port_pin_type port_pin = variant_pin_list[pin];
+    return HAL_GPIO_TogglePin(port_pin.port, port_pin.pin_mask);
+}
+
 #ifdef __cplusplus
 }
 #endif
@@ -121,6 +132,11 @@ inline void digitalWrite(__ConstPin pin, uint8_t value) {
 
 inline int digitalRead(__ConstPin pin) {
     return LL_GPIO_IsInputPinSet(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
+}
+
+//add by huaweiwx@sina.com  2017.6.4
+inline void digitalToggle(__ConstPin pin) {
+    LL_GPIO_TogglePin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
 }
 
 extern "C" void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode);

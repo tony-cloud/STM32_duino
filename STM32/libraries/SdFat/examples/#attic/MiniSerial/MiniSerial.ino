@@ -13,7 +13,7 @@
 MinimumSerial MiniSerial;
 
 void setup() {
-  MiniSerial.begin(9600);
+  MiniSerial.begin(115200);
   MiniSerial.println(FreeStack());
 }
 void loop() {

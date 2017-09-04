@@ -18,7 +18,7 @@
 #		endif
 #   endif
 #else
-#	if __has_include("MW_STemWin.h")
+#	if __has_include("STemWin.h")
 #   	warning "use STemWin, must select a STemWin lib on menu->tools->OS & Extern lib!"    		
 #   endif
 #endif	

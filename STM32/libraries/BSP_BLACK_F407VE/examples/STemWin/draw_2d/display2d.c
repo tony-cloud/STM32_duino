@@ -1,5 +1,5 @@
-#include "arduino.h"
-#include "MW_STemWin.h"
+#include <Arduino.h>
+#include "STemWin.h"
 #include "display2d.h"
 
 const GUI_POINT aPoints[]={

@@ -64,7 +64,7 @@ ostream& operator << (ostream& os, DateTime& dt) {
 #endif  // USE_DS1307
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   // Wait for USB Serial.
   while (!Serial) {

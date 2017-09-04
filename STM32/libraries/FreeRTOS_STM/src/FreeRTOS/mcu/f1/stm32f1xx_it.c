@@ -32,7 +32,7 @@
   */
 #if defined(STM32F1)||defined(STM32L1)
 /* Includes ------------------------------------------------------------------*/
-#include "arduino.h"
+#include <Arduino.h>
 /**
 * @brief This function handles TIM7 global interrupt.
 */

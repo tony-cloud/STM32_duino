@@ -2,6 +2,8 @@
 #define VARIANT_H
 
 #define LED_BUILTIN PA5
+#define LED_BUILTIN_MASK 1
+#define STM32_LED_BUILTIN_ACTIVE_HIGH
 
 #define MOSI PB5
 #define MISO PB4

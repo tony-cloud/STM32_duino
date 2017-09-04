@@ -21,7 +21,7 @@
 
 #include "stm32_dma.h"
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 static SDIOClass *_sdio_this;
 

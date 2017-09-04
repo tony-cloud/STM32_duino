@@ -22,22 +22,21 @@
  
  */
 
-#define mySerialPort Serial          // equal to SerialUSB
-//#define mySerialPort SerialUART1 
-//#define mySerialPort SerialUART2
+//#define Serial SerialUART1 
+//#define Serial SerialUART2
 
 void setup() 
 {
-  mySerialPort.begin(115200);
-  mySerialPort.println("Serial Port Example");
-  mySerialPort.println("just counting up");
+  Serial.begin(115200);
+  Serial.println("Serial Port Example");
+  Serial.println("just counting up");
 }
 
 int Counter=0;
 
 void loop() 
 {
-  mySerialPort.println(Counter); 
+  Serial.println(Counter); 
   Counter++;
   delay(1000);
 }

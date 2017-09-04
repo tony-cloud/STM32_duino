@@ -3,10 +3,10 @@
 
 #include "stdint.h"
 #include "stm32_def.h"
-#define sdRdTimeout 200
-#define sdWrTimeout 5000
+#define sdRdTimeout  200
+#define sdWrTimeout  5000
 #define sdBsyTimeout 500
-#define sdErTimeout 250
+#define sdErTimeout  250
 #define sd_timeout 250 // timeout in ms in the new HAL API
 #define SDCARD_STATUS_READY_BIT (1UL << 8)
 
@@ -43,11 +43,12 @@
 #endif
 
 // Fix typo for L4
-#ifndef HAL_SD_CardStateTypeDef
-#define HAL_SD_CardStateTypeDef HAL_SD_CardStateTypedef
-#define HAL_SD_CardStatusTypeDef HAL_SD_CardStatusTypedef
+#ifdef STM32L4
+# ifndef HAL_SD_CardStateTypeDef
+#  define HAL_SD_CardStateTypeDef   HAL_SD_CardStateTypedef
+#  define HAL_SD_CardStatusTypeDef  HAL_SD_CardStatusTypedef
+# endif
 #endif
-
 /*
  * Aux function. Doesn't exist in HAL. Allows to pre-erase blocks when the count of blocks to write is known.
  * ACMD23

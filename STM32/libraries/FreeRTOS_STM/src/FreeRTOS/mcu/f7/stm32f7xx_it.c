@@ -32,7 +32,7 @@
   */
 #if defined(STM32F7)
 /* Includes ------------------------------------------------------------------*/
-#include "arduino.h"
+#include <Arduino.h>
 
 /* USER CODE BEGIN 0 */
 

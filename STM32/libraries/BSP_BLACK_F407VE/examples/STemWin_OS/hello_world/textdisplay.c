@@ -1,5 +1,5 @@
-#include "arduino.h"
-#include "MW_STemWin.h"
+#include <Arduino.h>
+#include "STemWin.h"
 #include "textdisplay.h"
 
 //WEWIN文本显示例程

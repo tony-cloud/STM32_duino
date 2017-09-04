@@ -17,7 +17,7 @@
  * along with the Arduino SdSpiCard Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)|| defined(__MK60DN512__)
 #include "SdioCard.h"
 //==============================================================================
 #define SDHC_PROCTL_DTW_4BIT 0x01

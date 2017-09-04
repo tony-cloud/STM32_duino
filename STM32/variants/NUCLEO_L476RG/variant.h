@@ -1,7 +1,18 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 
+//LED
+#define BOARD_NR_LED    1
 #define LED_BUILTIN PA5
+#define LED_BUILTIN_MASK 1
+#define STM32_LED_BUILTIN_ACTIVE_HIGH
+
+//On-board user button
+#define BOARD_NR_KEY	1
+#define BOTTON			PC13  // 2
+#define USER_BTN		BOTTON  // 2
+#define BOTTON_MASK		0x00
+#define KEY_LIST  BOTTON_MASK,BOTTON
 
 #define MOSI PA7
 #define MISO PA6

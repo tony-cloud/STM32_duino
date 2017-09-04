@@ -769,7 +769,7 @@ void setup(void) {
   if (ERROR_LED_PIN >= 0) {
     pinMode(ERROR_LED_PIN, OUTPUT);
   }
-  Serial.begin(9600);
+  Serial.begin(15200);
 
   // Read the first sample pin to init the ADC.
   analogRead(PIN_LIST[0]);

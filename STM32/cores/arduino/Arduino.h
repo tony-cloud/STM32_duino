@@ -86,7 +86,7 @@ void yield(void);
 
 // avr-libc defines _NOP() since 1.6.2
 #ifndef _NOP
-#define _NOP() do { __asm__ volatile ("nop"); } while (0)
+# define _NOP() do { __asm__ volatile ("nop"); } while (0)
 #endif
 
 typedef unsigned int word;
@@ -110,6 +110,10 @@ void analogReference(uint8_t mode);
 void analogWrite(uint8_t, int);
 void analogWriteResolution(int bits);
 
+void setPwmFrequency(uint32_t freqHz);/*add huaweiwx@sina.com 2018.8.2*/
+uint32_t getPwmFrequency(void); /*add huaweiwx@sina.com 2018.8.2*/
+void pwmWrite(uint8_t pin, int dutyCycle16Bits, int frequency, int durationMillis);
+
 //unsigned long millis(void);
 //unsigned long micros(void);
 //void delay(unsigned long);
@@ -117,8 +121,8 @@ void analogWriteResolution(int bits);
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);
 
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
-uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+uint32_t shiftIn( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder ); //add by huaweiwx@sina.com
+void shiftOut( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder, uint32_t ulVal ); //add by huaweiwx@sina.com
 
 void attachInterrupt(uint8_t, void (*)(void), int mode);
 void detachInterrupt(uint8_t);
@@ -156,7 +160,7 @@ void loop(void);
 //#include "HardwareSerial.h"
 //#include "USBAPI.h"
 #if defined(HAVE_HWSERIAL0) && defined(HAVE_CDCSERIAL)
-#error "Targets with both UART0 and CDC serial not supported"
+# error "Targets with both UART0 and CDC serial not supported"
 #endif
 
 uint16_t makeWord(uint16_t w);
@@ -181,17 +185,19 @@ long map(long, long, long, long, long);
 #include "stm32_def.h"
 #include "stm32_clock.h"
 #include "stm32_gpio.h"
+#include "stm32_debug.h"
 
 #ifdef __cplusplus
 
 #include "SerialUART.h"
 #include <SerialUSB.h>
+#include <STM32System.h>
 #include "Streaming.h"  //add by huaweiwx@sina.com
 
 #if defined(MENU_SERIAL)
-#define Serial MENU_SERIAL
+# define Serial MENU_SERIAL
 #elif defined(MENU_SERIAL_AUTO)
-#define Serial MENU_SERIAL_AUTO
+# define Serial MENU_SERIAL_AUTO
 #endif
 
 #endif

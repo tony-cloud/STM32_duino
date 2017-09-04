@@ -44,7 +44,7 @@
 #if defined(STM32F3)||defined(STM32L3)
 
 /* Includes ------------------------------------------------------------------*/
-#include "arduino.h"
+#include <Arduino.h>
 
 TIM_HandleTypeDef        htim7; 
 uint32_t                 uwIncrementState = 0;

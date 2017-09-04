@@ -24,8 +24,8 @@
   */
 
 // for STM32F429 Discovery
-void Error_Handler(void);
-void SystemClock_Config(void) {
+extern void Error_Handler(void);
+extern void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
@@ -68,4 +68,3 @@ void SystemClock_Config(void) {
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 
 }
-

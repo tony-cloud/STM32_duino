@@ -3,7 +3,7 @@
 
 #include "stm32_dma.h"
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 I2SClass::I2SClass(SPI_TypeDef *instance) {
     handle.Instance = instance;

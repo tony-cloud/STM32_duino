@@ -14,7 +14,7 @@
 #ifndef _TFT_F429_DISCOVERY_
 #define _TFT_F429_DISCOVERY_
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 #include "Adafruit_GFX.h"
 //#include "BSP_f429i_discovery.h"

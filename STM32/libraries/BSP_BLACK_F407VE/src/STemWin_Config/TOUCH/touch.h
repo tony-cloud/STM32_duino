@@ -1,6 +1,6 @@
 #ifndef _TOUCH_H
 #define _TOUCH_H
-#include "like51.h"
+//#include "like51.h"
 
 #if __has_include("ott2001a.h")
   #include("ott2001a.h")
@@ -46,11 +46,19 @@ typedef struct
 extern _m_tp_dev tp_dev; //触屏控制器在touch.c里面定义
 
 //电阻屏芯片连接引脚	   
-#define PEN  		PCin(5)  	//T_PEN
-#define DOUT 		PBin(14)   	//T_MISO
-#define TDIN 		PBout(15)  	//T_MOSI
-#define TCLK 		PBout(13)  	//T_SCK
-#define TCS  		PBout(12)  	//T_CS  
+//#define PEN  		PCin(5)  	//T_PEN
+//#define DOUT 		PBin(14)   	//T_MISO
+//#define TDIN 		PBout(15)  	//T_MOSI
+//#define TCLK 		PBout(13)  	//T_SCK
+//#define TCS  		PBout(12)  	//T_CS  
+
+#ifdef __cplusplus
+ extern "C" {
+#endif /* __cplusplus */
+
+//电阻屏/电容屏 共用函数
+uint8_t TP_Scan(uint8_t tp);								//扫描
+uint8_t TP_Init(void);								//初始化
 
 //电阻屏函数
 void TP_Write_Byte(uint8_t num);						//向控制芯片写入一个数据
@@ -64,8 +72,36 @@ void TP_Save_Adjdata(void);						//保存校准参数
 uint8_t TP_Get_Adjdata(void);						//读取校准参数
 void TP_Adjust(void);							//触摸屏校准
 void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t x3,uint16_t y3,uint16_t fac);//显示校准信息
-//电阻屏/电容屏 共用函数
-uint8_t TP_Scan(uint8_t tp);								//扫描
-uint8_t TP_Init(void);								//初始化
+
+#ifdef __cplusplus
+}  // extern "C" {
+
+class TOUCH
+{
+ public:
+	TOUCH(){
+	};
+	uint8_t Init(void){
+		pTPdev = &tp_dev;
+		return TP_Init();};
+    void     writeByte(uint8_t num){TP_Write_Byte(num);};						//向控制芯片写入一个数据
+    uint16_t readAD(uint8_t CMD){return TP_Read_AD( CMD);};							//读取AD转换值
+	uint16_t readXOY(uint8_t xy){return TP_Read_XOY(xy);};							//带滤波的坐标读取(X/Y)
+	uint8_t  readXY(uint16_t *x,uint16_t *y){return TP_Read_XY(x,y);};					//双方向读取(X+Y)
+	uint8_t  readXY2(uint16_t *x,uint16_t *y){return TP_Read_XY2(x,y);};					//带加强滤波的双方向坐标读取
+//	void TP_Drow_Touch_Point(uint16_t x,uint16_t y,uint16_t color);//画一个坐标校准点
+//	void TP_Draw_Big_Point(uint16_t x,uint16_t y,uint16_t color);	//画一个大点
+//	void TP_Save_Adjdata(void);						//保存校准参数
+//	uint8_t TP_Get_Adjdata(void);					//读取校准参数
+	void     adjust(void){TP_Adjust();};			//触摸屏校准
+//	void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t x3,uint16_t y3,uint16_t fac);//显示校准信息
+	//电阻屏/电容屏 共用函数
+	uint8_t  scan(uint8_t tp){return TP_Scan( tp);};				//扫描
+	_m_tp_dev* tpInfo(void){
+		return pTPdev;
+	}
+	_m_tp_dev* pTPdev; 
+};
+#endif /* __cplusplus */ 
 #endif
 

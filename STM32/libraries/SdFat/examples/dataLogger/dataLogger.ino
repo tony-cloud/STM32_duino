@@ -66,7 +66,7 @@ void setup() {
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
-  Serial.begin(9600);
+  Serial.begin(15200);
   
   // Wait for USB Serial 
   while (!Serial) {

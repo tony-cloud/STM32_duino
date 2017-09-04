@@ -100,9 +100,12 @@ inline Print &operator <<(Print &obj, const _FLOAT &arg)
 // clever technique to allow for expressions like
 //   Serial << "Hello!" << _endl;
 
-
-//enum _EndLineCode { endl };
+#if __has_include("SdFat.h")
 enum _EndLineCode { _endl };
+#else
+enum _EndLineCode { endl };
+#define _endl endl
+#endif
 
 inline Print &operator <<(Print &obj, _EndLineCode arg) 
 {

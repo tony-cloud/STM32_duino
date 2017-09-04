@@ -72,7 +72,7 @@ Purpose     : Display controller initialization
   *
   ******************************************************************************
   */
-#if __has_include("MW_STemWin.h")  
+#if __has_include("STemWin532.h")  
 #include "STemWin/inc/GUI.h"
 
 /*********************************************************************

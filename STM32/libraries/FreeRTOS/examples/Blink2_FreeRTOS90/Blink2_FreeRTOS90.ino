@@ -8,37 +8,30 @@
   the documentation at http://www.arduino.cc
 
   This example code is in the public domain.
-  modified May 2 2017  by huaweiwx@sina.com
+  modified for STM32 HALMX   by huaweiwx@sina.com , May 2 2017
 */
 
 #include <FreeRTOS.h>
 
 #ifdef  LED_BUILTIN
-#	define LED    LED_BUILTIN
+# define LED    LED_BUILTIN
 #	define LED_ON bitRead(LED_BUILTIN_MASK,0)
 #else
-#	define LED  13
-#	define LED_ON 1
+#	define LED  13    //fixd me
+#	define LED_ON 1   //fixd me
 #endif
 
-#ifdef LED_BUILTIN1
-#	define LED1 LED_BUILTIN1
+#ifdef LED1_BUILTIN
+#	define LED1 LED1_BUILTIN
 #	define LED1_ON bitRead(LED_BUILTIN_MASK,1)
 #endif
-
-#define mySerial Serial  //select default USART
 
 static void myTask1(void  __attribute__ ((unused)) *argument)
 {
   /*Task setup*/
   pinMode(LED, OUTPUT);
 
-#if defined(ARDUINO_NUCLEO_144)
-  mySerial.stm32SetRX(PD9); //for NUCLEO 767ZI
-  mySerial.stm32SetTX(PD8);
-#endif
-
-  mySerial.begin(115200);
+  Serial.begin(115200);
 
   uint32_t i = 0;
   /* USER CODE BEGIN Task1 */
@@ -46,16 +39,16 @@ static void myTask1(void  __attribute__ ((unused)) *argument)
   for (;;)
   {
     digitalWrite(LED, LED_ON);	// turn the LED on (HIGH is the voltage level)
-    vTaskDelay(50);				// wait for a second
+    vTaskDelay(50);				// wait for 50ms
     digitalToggle(LED);			// turn the LED off by making the voltage LOW
-    vTaskDelay(950); 	// wait for a second
+    vTaskDelay(950); 			// wait for 950ms
     i++;
-    mySerial << "Count:" << _HEX(i) << " in myTask1\n";
+    Serial << "Count:" << _HEX(i) << " in myTask1\n";
   }
   /* USER CODE END Task1 */
 }
 
-#if defined(LED_BUILTIN1)
+#if defined(LED1_BUILTIN)
 static void myTask2(void __attribute__ ((unused)) *argument)
 {
   /*Task setup*/
@@ -65,9 +58,9 @@ static void myTask2(void __attribute__ ((unused)) *argument)
   for (;;)
   {
     digitalWrite(LED1, LED1_ON);  // turn the LED on (HIGH is the voltage level)
-    vTaskDelay(50);              // wait for a second
-    digitalToggle(LED1);    // turn the LED off by making the voltage LOW
-    vTaskDelay(200);              // wait for a second
+    vTaskDelay(50);               // wait for 50ms
+    digitalToggle(LED1);          // turn the LED off by making the voltage LOW
+    vTaskDelay(200);              // wait for 2000msd
   }
   /* USER CODE END Task2 */
 }
@@ -83,7 +76,7 @@ void setup() {
               NULL,
               3,
               NULL);
-#if defined(LED_BUILTIN1)
+#if defined(LED1_BUILTIN)
   xTaskCreate(myTask2,
               NULL,
               configMINIMAL_STACK_SIZE,
@@ -91,8 +84,8 @@ void setup() {
               3,
               NULL);
 #endif
-  vTaskStartScheduler();
-  // osKernelStart(); //FreeRTOS start and never return!
+  // osKernelStart(); 
+  vTaskStartScheduler();  //FreeRTOS start and never return!
 }
 
 // the loop function runs over and over again forever

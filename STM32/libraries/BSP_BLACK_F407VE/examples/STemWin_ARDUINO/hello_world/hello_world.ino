@@ -9,26 +9,32 @@
 */
 
 #include "BSP_BLACK_F407VE.h"      //  BLACK_F407VE STemWin config & driver lib
-#include "MW_STemWin.h"            //MiddleWare /STemWin 5.32 lib
+#include "STemWin.h"            //MiddleWare /STemWin 5.32 lib
 #include "STemWin.h"               //STemWin arduino style GUI
 
-#define LED1  LED_BUILTIN
-#define LED2 LED_BUILTIN1
-
-STemWinGUI GUI;
-
+#define LED1 LED_BUILTIN
+#ifdef  LED1_BUILTIN
+# define LED2 LED1_BUILTIN
+#endif
+STemWin GUI;
+TOUCH  TP;
 void setup() {
   pinMode(LED1, OUTPUT);
+#ifdef LED1_BUILTIN
   pinMode(LED2, OUTPUT);
+#endif
   digitalToggle(LED1);    // turn the LED off by making the voltage LOW
   GUI.Init();            //init LCD & STwinGUI
+  TP.Init();
 }
 
 //emwin text demo
 
 void led_blink(void) {
   digitalToggle(LED1);    // turn the LED off by making the voltage LOW
+#ifdef LED1_BUILTIN
   digitalToggle(LED2);    // turn the LED off by making the voltage LOW
+#endif
 }
 
 void emWin_TextDemo(void)
@@ -37,8 +43,8 @@ void emWin_TextDemo(void)
   char acText[] = "This example demostrates text wrapping";
   GUI_RECT Rect = {24, 24, 160, 100};
   GUI_WRAPMODE aWm[] = {GUI_WRAPMODE_NONE,
-                          GUI_WRAPMODE_CHAR,
-                          GUI_WRAPMODE_WORD
+                        GUI_WRAPMODE_CHAR,
+                        GUI_WRAPMODE_WORD
                        };
   for (i = 0; i < 3; i++)
   {
@@ -49,7 +55,7 @@ void emWin_TextDemo(void)
 
     GUI.SetFont(&GUI_Font24_ASCII); //设置字体
     GUI.SetColor(GUI_YELLOW);       //设置字体颜色
-    GUI.DispString("HELLO WORD!");
+    GUI.DispString("HELLO WORLD!");
     led_blink();
     delay(1000);              // wait for a second
 
@@ -92,9 +98,9 @@ void emWin_TextDemo(void)
     delay(1000);              // wait for a second
 
     GUI.SetTextMode(GUI_TM_TRANS);  //透明文本
- //   GUI.SetColor(GUI_WHITE);
- //   GUI.FillRectEx(&Rect);
- //   GUI.SetColor(GUI_BLACK);
+    //   GUI.SetColor(GUI_WHITE);
+    //   GUI.FillRectEx(&Rect);
+    //   GUI.SetColor(GUI_BLACK);
     GUI.DispStringInRectWrap(acText, &Rect, GUI_TA_LEFT, aWm[i]); //在当前窗口指定的矩形区域内显示字符串(并可自动换行)
     Rect.x0 += 70;
     Rect.x1 += 70;

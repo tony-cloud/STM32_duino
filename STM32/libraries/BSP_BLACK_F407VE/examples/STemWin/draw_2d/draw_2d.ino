@@ -1,15 +1,15 @@
 #include "BSP_BLACK_F407VE.h"
-#include "MW_STemWin.h"
+#include "STemWin.h"
 #include "display2d.h"
 
 #define LED  LED_BUILTIN
-#define LED1 LED_BUILTIN1
+#define LED1 LED1_BUILTIN
 
 
 void setup() {
   pinMode(LED, OUTPUT);
   pinMode(LED1, OUTPUT);
-  TFTLCD_Init();
+  BSP_LCD_Init();
   GUI_Init();
 }
 

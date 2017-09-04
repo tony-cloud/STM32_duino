@@ -67,14 +67,16 @@
     1 tab == 4 spaces!
 */
 
+#include "stm32_def.h"
+#if defined(__CM0PLUS_CMSIS_VERSION)||defined(__CM0_CMSIS_VERSION)
+//#if defined(STM32F0)||defined(STM32L0)
 /*-----------------------------------------------------------
  * Implementation of functions defined in portable.h for the ARM CM0 port.
  *----------------------------------------------------------*/
-#include "stm32_def.h"
-#if defined(__CM0PLUS_CMSIS_VERSION)||defined(__CM0_CMSIS_VERSION)
 /* Scheduler includes. */
 #include "../../../include/FreeRTOS.h"
 #include "../../../include/task.h"
+
 
 #ifndef configSYSTICK_CLOCK_HZ
 	#define configSYSTICK_CLOCK_HZ configCPU_CLOCK_HZ

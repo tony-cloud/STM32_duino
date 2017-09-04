@@ -10,27 +10,25 @@
   May 2017, ChrisMicro
 */
 
-/*
-  #define LED0_BUILTIN PA6 // same as LED_BUILTIN, active low
-  #define LED1_BUILTIN PA7 // active low
-*/
+#define LED  LED_BUILTIN     // same as LED_BUILTIN, active low
+#define LED1 LED1_BUILTIN     // active low
 
 void setup()
 {
-  pinMode(LED0_BUILTIN, OUTPUT);
-  pinMode(LED1_BUILTIN, OUTPUT);
+  pinMode(LED, OUTPUT);
+  pinMode(LED1, OUTPUT);
   
-  digitalWrite(LED0_BUILTIN, HIGH); // led off, led is active low
-  digitalWrite(LED1_BUILTIN, HIGH); // led off, led is active low
+  digitalWrite(LED, HIGH);  // led off, led is active low
+  digitalWrite(LED1, HIGH); // led off, led is active low
 }
 
 void loop()
 {
-    digitalWrite(LED0_BUILTIN, LOW); // led on
+    digitalWrite(LED, LOW); // led on
     delay(1000);
-    digitalWrite(LED0_BUILTIN, HIGH);// led off
+    digitalWrite(LED, HIGH);// led off
     
-    digitalWrite(LED1_BUILTIN, LOW); // led on
+    digitalWrite(LED1, LOW); // led on
     delay(1000);
-    digitalWrite(LED1_BUILTIN, HIGH); // led off
+    digitalWrite(LED1, HIGH); // led off
 }

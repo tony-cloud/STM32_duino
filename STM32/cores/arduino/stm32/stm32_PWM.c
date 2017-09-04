@@ -24,17 +24,18 @@
 
 TIM_HandleTypeDef *handle;
 
+#define min(a,b) ((a)<(b)?(a):(b))
+#define PWM_FREQUENCY_HZ  1000
+
 static uint32_t counter;
 static uint32_t waitCycles;
 static uint8_t analogWriteResolutionBits = 8;
-
+static uint32_t pwmFrequecyHz = PWM_FREQUENCY_HZ;  //add by huaweiwx@sina.com 2017.8.2
 const uint32_t TIMER_MAX_CYCLES = UINT16_MAX;
 
-const uint32_t PWM_FREQUENCY_HZ = 1000;
+//const uint32_t PWM_FREQUENCY_HZ = 1000;  /*huaweiwx@sina.com 2018.8.2*/
 
 extern void pinMode(uint8_t, uint8_t);
-
-#define min(a,b) ((a)<(b)?(a):(b))
 
 stm32_pwm_disable_callback_func stm32_pwm_disable_callback = NULL;
 
@@ -44,6 +45,7 @@ void pwm_callback();
 
 typedef struct {
     GPIO_TypeDef *port;
+    void (*callback)();
     uint32_t pin_mask;
     uint32_t waveLengthCycles;
     uint32_t dutyCycle;
@@ -103,11 +105,20 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
 
             pwm_config[i].port = variant_pin_list[pin].port;
             pwm_config[i].pin_mask = variant_pin_list[pin].pin_mask;
+#ifdef STM32F0
+            pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK1Freq() / frequency;
+#else
             pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK2Freq() / frequency;
-            pwm_config[i].dutyCycle = pwm_config[i].waveLengthCycles * dutyCycle / (1 << analogWriteResolutionBits);
+#endif
+		    pwm_config[i].dutyCycle = (uint64_t)pwm_config[i].waveLengthCycles * dutyCycle >> 16;
+
 
             if (durationMillis > 0) {
+#ifdef STM32F0
+                pwm_config[i].counterCycles = HAL_RCC_GetPCLK1Freq() / 1000 * durationMillis;
+#else
                 pwm_config[i].counterCycles = HAL_RCC_GetPCLK2Freq() / 1000 * durationMillis;
+#endif
             }
 
             break;
@@ -116,12 +127,21 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
 }
 
 extern void tone(uint8_t pin, unsigned int frequency, unsigned long durationMillis) {
-    pwmWrite(pin, 1 << (analogWriteResolutionBits - 1), frequency, durationMillis);
+	pwmWrite(pin, 1 << 15, frequency, durationMillis);
 }
 
 void analogWrite(uint8_t pin, int value) {
-    pwmWrite(pin, value, PWM_FREQUENCY_HZ, 0);
+	pwmWrite(pin, ((uint32_t)value << 16) >> analogWriteResolutionBits, pwmFrequecyHz, 0); //add by huaweiwx@sina.com 2017.8.2
 }
+
+/*add huaweiwx@sina.com 2018.8.2*/
+void setPwmFrequency(uint32_t freqHz){
+    pwmFrequecyHz = freqHz;
+}
+uint32_t getPwmFrequency(void){
+    return pwmFrequecyHz;
+}
+/*add huaweiwx@sina.com*/
 
 void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin_mask) {
     for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {

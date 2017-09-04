@@ -1,5 +1,5 @@
-#if __has_include("MW_STemWin.h")
-#include  "arduino.h"
+#if __has_include("STemWin.h")
+#include  <Arduino.h>
 #include "STemWin/inc/GUI.h"
 #include "LCD/BSP_tft_lcd.h"
 #include "GUIDRV_Template.h"
@@ -115,7 +115,7 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
   case LCD_X_INITCONTROLLER: {
 	//当初始化的时候被调用,主要是设置显示控制器,如果显示控制器在外部初始化则需要用户初始化
 		
-//	TFTLCD_Init(); //初始化LCD 已经在开始初始化了,所以此处不需要初始化。
+//	BSP_LCD_Init(); //初始化LCD 已经在开始初始化了,所以此处不需要初始化。
     return 0;
   }
 		default:

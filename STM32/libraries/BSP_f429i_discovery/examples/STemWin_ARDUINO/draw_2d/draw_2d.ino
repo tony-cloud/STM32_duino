@@ -10,10 +10,9 @@ draw_2d.ino: using STenWin lib demo & sample, whith ARDUINO style.
 
 
 #include "BSP_f429i_discovery.h"   //F429discovery STemWin config & driver lib
-#include "MW_STemWin.h"            //MiddleWare /STemWin 5.32 lib
 #include "STemWin.h"               //STemWin arduino style GUI
 
-#define LED1 LED_BUILTIN1
+#define LED1 LED1_BUILTIN
 #define LED2  LED_BUILTIN
 
 void display_2d(void);
@@ -22,7 +21,7 @@ void drawarcscale(void);
 void draw_graph(void);
 void draw_polygon(void);
 
-STemWinGUI GUI;
+STemWin GUI;
 void setup() {
   pinMode(LED2, OUTPUT);
   pinMode(LED1, OUTPUT);

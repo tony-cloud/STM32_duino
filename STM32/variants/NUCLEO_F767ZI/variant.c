@@ -42,7 +42,3 @@ void SystemClock_Config(void) {
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
- 
-//extern void initVariant() {
-     //UART3 is connected to ST-Link V2.1 as Virtual Com port on non-default PA9/PB7 pins
-//}

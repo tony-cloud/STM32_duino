@@ -26,7 +26,7 @@ void error(const char* s) {
 }
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   // Wait for USB Serial 
   while (!Serial) {

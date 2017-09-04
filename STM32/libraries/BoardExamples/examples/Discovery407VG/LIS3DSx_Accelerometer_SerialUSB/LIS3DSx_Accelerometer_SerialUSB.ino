@@ -41,7 +41,7 @@ uint8_t spiRead(uint8_t registerAddress)
 
 void setup() 
 {
-  SERIALINTERFACE.begin(9600);
+  SERIALINTERFACE.begin(115200);
 
   while(SERIALINTERFACE.available()==0)
   {

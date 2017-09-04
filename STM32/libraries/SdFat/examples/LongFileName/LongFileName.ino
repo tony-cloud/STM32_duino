@@ -22,7 +22,7 @@ const uint16_t nMax = 10;
 uint16_t dirIndex[nMax];
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {}
   delay(1000);
 

@@ -30,7 +30,7 @@ const uint16_t NWRITE = FILE_SIZE/BUF_DIM;
 #define initError(msg) initErrorHalt(F(msg))
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(15200);
   // Wait for USB Serial 
   while (!Serial) {
     SysCall::yield();

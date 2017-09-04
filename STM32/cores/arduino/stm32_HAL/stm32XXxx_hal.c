@@ -3,6 +3,8 @@
 // Ignore HAL errors when compiling with -Werror
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wparentheses"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
 
 #ifdef STM32F0
     #include "stm32f0xx_hal.c"
@@ -132,9 +134,24 @@
     #include "stm32f2xx_hal_uart.c"
     #include "stm32f2xx_hal_usart.c"
     #include "stm32f2xx_hal_wwdg.c"
+    #include "stm32f2xx_ll_adc.c"
+    #include "stm32f2xx_ll_crc.c"
+    #include "stm32f2xx_ll_dac.c"
+    #include "stm32f2xx_ll_dma.c"
+    #include "stm32f2xx_ll_exti.c"
     #include "stm32f2xx_ll_fsmc.c"
+    #include "stm32f2xx_ll_gpio.c"
+    #include "stm32f2xx_ll_i2c.c"
+    #include "stm32f2xx_ll_pwr.c"
+    #include "stm32f2xx_ll_rcc.c"
+    #include "stm32f2xx_ll_rng.c"
+    #include "stm32f2xx_ll_rtc.c"
     #include "stm32f2xx_ll_sdmmc.c"
+    #include "stm32f2xx_ll_spi.c"
+    #include "stm32f2xx_ll_tim.c"
+    #include "stm32f2xx_ll_usart.c"
     #include "stm32f2xx_ll_usb.c"
+    #include "stm32f2xx_ll_utils.c"
 #endif
 #ifdef STM32F3
     #include "stm32f3xx_hal.c"

@@ -8,7 +8,7 @@
 * The result is also available on serial
 */
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "HardwareTest.h"
 
 #include <SPI.h>
@@ -64,7 +64,7 @@ void testUART(SerialUART &SerialUARTToTest) {
 
   uint8_t data = 0x61;
 
-  SerialUARTToTest.begin(9600);
+  SerialUARTToTest.begin(115200);
   SerialUARTToTest.write(data);
   delay(10);
   int read = SerialUARTToTest.read();

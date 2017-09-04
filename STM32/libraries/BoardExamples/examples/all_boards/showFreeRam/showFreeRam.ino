@@ -13,9 +13,8 @@
  
  */
 
-#define mySerialPort Serial          // equal to SerialUSB
-//#define mySerialPort SerialUART1 
-//#define mySerialPort SerialUART2
+//#define Serial SerialUART1 
+//#define Serial SerialUART2
 
 // Freestack is found here
 // https://github.com/greiman/SdFat-beta/blob/master/SdFat/src/FreeStack.h#L45
@@ -30,10 +29,10 @@ static int FreeStack() {
 
 void setup() 
 {
-  mySerialPort.begin(115200);
+  Serial.begin(115200);
   delay(3000);
-  mySerialPort.println("Ram Free Example");
-  mySerialPort.println("show the RAM space available");
+  Serial.println("Ram Free Example");
+  Serial.println("show the RAM space available");
 }
 
 int Counter=0;
@@ -44,9 +43,9 @@ void loop()
   
   ram = FreeStack();
   
-  mySerialPort.print("free RAM: "); 
-  mySerialPort.print(ram);  mySerialPort.print(" bytes   is   "); 
-  mySerialPort.print(ram/1024);  mySerialPort.println(" KB");
+  Serial.print("free RAM: "); 
+  Serial.print(ram);  Serial.print(" bytes   is   "); 
+  Serial.print(ram/1024);  Serial.println(" KB");
   
   delay(1000);
 }

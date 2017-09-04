@@ -1,4 +1,4 @@
-#include "arduino.h"
+#include <Arduino.h>
 #include "BSP_tft_lcd.h"
 #include "FONT.h"
 #include "bsp.h"         //board spacil def 
@@ -498,7 +498,12 @@ void LCD_Display_Dir(uint8_t dir)
 			lcddev.height=320; 			
 		}
 	}
-	LCD_Scan_Dir(DFT_SCAN_DIR);  //默认扫描方向	
+	if(lcddev.id == ILI9320) 
+		LCD_Scan_Dir(D2U_R2L);
+	else if (lcddev.id == SPFD5420)
+		LCD_Scan_Dir(L2R_D2U);
+	else  
+		LCD_Scan_Dir(DFT_SCAN_DIR);  //默认扫描方向	
 }
 
 //设置窗口,并自动设置画点坐标到窗口左上角(sx,sy).
@@ -622,7 +627,7 @@ void Init_5420_4001(void)
 		px = y;
 
 	*/
-	LCD_WriteReg(0x0003, 0x1018); /* 0x1018 1030 */
+	LCD_WriteReg(0x0003, 0x1008); /* 0x1018 1030 */
 
 	LCD_WriteReg(0x0008, 0x0808);
 	LCD_WriteReg(0x0009, 0x0001);
@@ -697,13 +702,14 @@ void Init_5420_4001(void)
 //该初始化函数可以初始化各种ILI93XX液晶,但是其他函数是基于ILI9320的!!!
 //在其他型号的驱动芯片上没有测试! 
 uint8_t  g_TFTLCD_Inited =0;
-void TFTLCD_Init(void)
+uint8_t BSP_LCD_Init(void)
 { 	
 	volatile uint32_t i=0;
+	uint8_t rtn = LCD_OK;
 	if (g_TFTLCD_Inited) return;
 	g_TFTLCD_Inited = 1;
     STM_FSMC_LCD_Init();	
-#if __has_include("MW_STemWin.h")
+#if __has_include("STemWin.h")
   __HAL_RCC_CRC_CLK_ENABLE();
 #endif
 // 	LCD_WriteReg(0x0000,0x0001);  //reset
@@ -714,7 +720,7 @@ void TFTLCD_Init(void)
       ||(BSP_TFT_LCD == 0x4531)||(BSP_TFT_LCD == 0x4535)||(BSP_TFT_LCD == 0x5310)||(BSP_TFT_LCD ==0x5510))    
 	lcddev.id = BSP_TFT_LCD; 
   #else
-  	if (lcddev.id ==0)  LCD_ReadReg(0x0000);  //未配置及运行试指定 id , 读取;
+  	if (lcddev.id ==0)  lcddev.id=LCD_ReadReg(0x0000);  //未配置及运行试指定 id , 读取;
   #endif
 #else  
 	if (lcddev.id ==0)  lcddev.id = LCD_ReadReg(0x0000);  //未指定 id , 读取;
@@ -2219,7 +2225,7 @@ void TFTLCD_Init(void)
 		LCD_WriteReg(0x97,(0<<8));	//
 		LCD_WriteReg(0x98,0x0000);	//Frame Cycle Contral.	   
 		LCD_WriteReg(0x07,0x0173);	//(0x0173)
-	}else if(lcddev.id==ILI9331)//OK |/|/|			 
+	}else if(lcddev.id==ILI9331)//OK 			 
 	{							//9331
 		LCD_WriteReg(0x00E7, 0x1014);
 		LCD_WriteReg(0x0001, 0x0100); // set SS and SM bit
@@ -2616,14 +2622,13 @@ void TFTLCD_Init(void)
 		LCD_WriteReg(0X07,0X0023);   
 		LCD_WriteReg(0X07,0X0033);   
 		LCD_WriteReg(0X07,0X0133);   
-	}
-	else 	
-	{
-	  Init_5420_4001();  //5420 未初始化时读取不正确；
-	  lcddev.id = LCD_ReadReg(0x0000); //重新读取 ID, 看看是否 5420
+	}	else if(lcddev.id==SPFD5420)	
+	{		//5420
+	  Init_5420_4001();         //5420；
 	}	
 	LCD_Display_Dir(1);		 	//使用横屏
 	LCD_Clear(WHITE);
+	return rtn;
 }  
 
 //清屏函数
@@ -2746,6 +2751,7 @@ void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 	LCD_DrawLine(x1,y2,x2,y2);
 	LCD_DrawLine(x2,y1,x2,y2);
 }
+
 //在指定位置画一个指定大小的圆
 //(x,y):中心点
 //r    :半径
@@ -2867,7 +2873,6 @@ void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,ui
 				else LCD_ShowChar(x+(size/2)*t,y,' ',size,mode&0X01);  
  				continue;
 			}else enshow=1; 
-		 	 
 		}
 	 	LCD_ShowChar(x+(size/2)*t,y,temp+'0',size,mode&0X01); 
 	}

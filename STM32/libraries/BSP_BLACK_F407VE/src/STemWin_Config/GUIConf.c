@@ -1,5 +1,6 @@
-#if __has_include("MW_STemWin.h")
-#include "arduino.h"
+#if __has_include("STemWin.h")
+#include <Arduino.h>
+#include "bsp.h"
 #include "STemWin/inc/GUI.h"
 
 /*********************************************************************
@@ -15,7 +16,7 @@
 #if defined(STM32F4)
 	#define GUI_NUMBYTES  (1024) *  64   // x KByte
 #else
-	#define GUI_NUMBYTES  (1024) *  30   // x KByte
+	#define GUI_NUMBYTES  (1024) *  45   // x KByte
 #endif
 
 /*********************************************************************

@@ -56,7 +56,7 @@ void setup()
   
   enableDevices();
 
-  SERIALINTERFACE.begin(9600);
+  SERIALINTERFACE.begin(115200);
   delay(5000);
   SERIALINTERFACE.println("\nI2C Scanner");
 }

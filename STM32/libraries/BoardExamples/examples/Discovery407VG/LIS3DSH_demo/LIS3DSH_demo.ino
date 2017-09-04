@@ -131,7 +131,7 @@ void initSensor() {
 
 void setup() {
   
-  Serial.begin(230400);
+  Serial.begin(115200);
   pinMode(PE3, OUTPUT);
   pinMode(PD15, OUTPUT);
   pinMode(PD14, OUTPUT);

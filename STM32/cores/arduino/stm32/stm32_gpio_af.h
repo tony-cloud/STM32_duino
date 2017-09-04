@@ -30,6 +30,15 @@
 
 #include "stm32_gpio.h"
 
+typedef enum {
+    TIM_BKIN, TIM_BKIN2,
+    TIM_CH1, TIM_CH1N,
+    TIM_CH2, TIM_CH2N,
+    TIM_CH3, TIM_CH3N,
+    TIM_CH4, TIM_CH4N,
+    TIM_ETR
+} TIMER_SIGNALS;
+
 #ifdef STM32F1
 
 typedef void (*stm32_af_callback)();
@@ -41,6 +50,14 @@ typedef struct {
     stm32_af_callback alternate;
 } stm32_af_pin_list_type;
 
+typedef struct {
+    void *instance;
+    GPIO_TypeDef *port;
+    uint32_t pinMask;
+    uint8_t signalType;
+    stm32_af_callback alternate;
+} stm32_tim_pin_list_type;
+
 #else
 
 typedef struct {
@@ -50,10 +67,19 @@ typedef struct {
     uint8_t alternate;
 } stm32_af_pin_list_type;
 
+typedef struct {
+    void *instance;
+    GPIO_TypeDef *port;
+    uint32_t pinMask;
+    uint8_t signalType;
+    uint8_t alternate;
+} stm32_tim_pin_list_type;
+
 #endif
 
 
 typedef struct {
+    ADC_TypeDef *instance;
     GPIO_TypeDef *port;
     uint32_t pin_mask;
     uint32_t channel;
@@ -73,6 +99,10 @@ void stm32AfSPIInit(const SPI_TypeDef *instance,
     GPIO_TypeDef *misoPort, uint32_t misoPin,
 	GPIO_TypeDef *sckPort, uint32_t sckPin);
 
+SPI_TypeDef *stm32GetSPIInstance(GPIO_TypeDef *mosiPort, uint32_t mosiPin,
+    GPIO_TypeDef *misoPort, uint32_t misoPin,
+    GPIO_TypeDef *sckPort, uint32_t sckPin);
+
 void stm32AfI2SInit(const SPI_TypeDef *instance,
     GPIO_TypeDef *sdPort, uint32_t sdPin,
     GPIO_TypeDef *wsPort, uint32_t wsPin,
@@ -83,6 +113,9 @@ void stm32AfI2SInitWithMck(const SPI_TypeDef *instance,
     GPIO_TypeDef *wsPort, uint32_t wsPin,
     GPIO_TypeDef *ckPort, uint32_t ckPin,
     GPIO_TypeDef *mckPort, uint32_t mckPin);
+	
+I2C_TypeDef *stm32GetI2CInstance(GPIO_TypeDef *sdaPort, uint32_t sdaPin,
+    GPIO_TypeDef *sclPort, uint32_t sclPin); //add by huaweiwx@sina.com 2017.8.2
 
 void stm32AfI2CInit(const I2C_TypeDef *instance,
     GPIO_TypeDef *sdaPort, uint32_t sdaPin,
@@ -130,7 +163,7 @@ uint32_t stm32GetClockFrequency(void *instance);
 /**
  * Get the ADC1 channel for the specified port / pin
  */
-uint8_t stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pin_mask);
+stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pin_mask);
 
 /**
  * Internal: set the AF function for the selected peripheral on the selected pin, with GPIO_SPEED_FREQ_VERY_HIGH speed

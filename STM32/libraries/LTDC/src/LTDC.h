@@ -28,7 +28,7 @@
 #ifndef LTDC_H
 #define LTDC_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 #include "Adafruit_GFX.h"
 

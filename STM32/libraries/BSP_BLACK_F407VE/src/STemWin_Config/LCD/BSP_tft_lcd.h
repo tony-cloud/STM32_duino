@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "lcd_chipid_def.h"
 //////////////////////////////////////////////////////////////////////////////////	 
- 
+
 //2.4寸/2.8寸/3.5寸/4.3寸 TFT液晶驱动	  
 //支持驱动IC型号包括:ILI9341/ILI9325/RM68042/RM68021/ILI9320/ILI9328/LGDP4531/LGDP4535/
 //                  SPFD5408/1505/B505/C505/NT35310/NT35510等		    
@@ -16,9 +16,9 @@
 //LCD重要参数集
 typedef struct
 {
+	uint16_t id;			//LCD的ID
 	uint16_t width;	//LCD宽度
 	uint16_t height;	//LCD高度
-	uint16_t id;			//LCD的ID
 	uint8_t  dir;			//横屏还是竖屏控制:0 竖屏,1 横屏
 	uint16_t wramcmd;  //开始写gram指令
 	uint16_t setxcmd; 	//设置X坐标指令
@@ -78,7 +78,7 @@ typedef struct
 //以上三色为PANEL的颜色 
 
 #define LIGHTGREEN     	 0X841F //浅绿色
-//#define LIGHTGRAY        0XEF5B //浅灰色(PANNEL)
+//#define LIGHTGRAY      0XEF5B //浅灰色(PANNEL)
 #define LGRAY 			 0XC618 //浅灰色(PANNEL),窗体背景色
 
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
@@ -195,11 +195,16 @@ typedef struct
 #define R193           0xC1
 #define R229           0xE5	
 
+
+#define LCD_OK         0x00
+#define LCD_ERROR      0x01
+#define LCD_TIMEOUT    0x02
+
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-void TFTLCD_Init(void);													   	//初始化
+uint8_t  BSP_LCD_Init(void);													   	//初始化
 void LCD_DisplayOn(void);													//开显示
 void LCD_DisplayOff(void);													//关显示
 void LCD_Clear(uint16_t Color);	 												//清屏

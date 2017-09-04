@@ -1,14 +1,42 @@
-#include "arduino.h"
+#include <Arduino.h>
 #include "touch.h"
 #include "../LCD/BSP_tft_lcd.h"
 #include "math.h"
-//////////////////////////////////////////////////////////////////////////////////	 
  
 //触摸屏驱动（支持ADS7843/7846/UH7843/7846/XPT2046/TSC2046/OTT2001A等） 代码	   
-//STM32F4工程----库函数版本
-//淘宝店铺：http://mcudev.taobao.com								   
-//////////////////////////////////////////////////////////////////////////////////
+ 
+#ifndef TOUCH_NCS
+#define TOUCH_NCS PB12
+#endif
 
+#ifndef TOUCH_SCK
+#define TOUCH_SCK PB13
+#endif
+
+#ifndef TOUCH_MISO
+#define TOUCH_MISO PB14
+#endif
+
+#ifndef TOUCH_MOSI
+#define TOUCH_MOSI PB15
+#endif
+
+#ifndef TOUCH_NIRQ
+#define TOUCH_NIRQ PC5
+#endif
+
+//电阻屏芯片连接引脚	   
+#define PEN  		digitalRead(TOUCH_NIRQ)  	    //T_PEN
+#define DOUT 		digitalRead(TOUCH_MISO)   	    //T_MISO
+#define TDIN0 		digitalWrite(TOUCH_MOSI,LOW)  	//T_MOSI
+#define TDIN1 		digitalWrite(TOUCH_MOSI,HIGH)  	//T_MOSI
+#define TCLK0 		digitalWrite(TOUCH_SCK,LOW)  	//T_SCK
+#define TCLK1 		digitalWrite(TOUCH_SCK,HIGH)  	//T_SCK
+#define TCS0  		digitalWrite(TOUCH_NCS,LOW)  	//T_CS
+#define TCS1  		digitalWrite(TOUCH_NCS,HIGH)  	//T_CS
+
+#define delay_ms(x)  delay(x)
+#define delay_us(x)  delayMicroseconds(x)
 _m_tp_dev tp_dev=
 {
 	TP_Init,
@@ -35,11 +63,11 @@ void TP_Write_Byte(uint8_t num)
 	uint8_t count=0;   
 	for(count=0;count<8;count++)  
 	{ 	  
-		if(num&0x80)TDIN=1;  
-		else TDIN=0;   
+		if(num&0x80)TDIN1;  
+		else TDIN0;   
 		num<<=1;    
-		TCLK=0; 	 
-		TCLK=1;		//上升沿有效	        
+		TCLK0; 	 
+		TCLK1;		//上升沿有效	        
 	}		 			    
 }
 
@@ -51,26 +79,26 @@ uint16_t TP_Read_AD(uint8_t CMD)
 { 	 
 	uint8_t count=0; 	  
 	uint16_t Num=0; 
-	TCLK=0;		//先拉低时钟 	 
-	TDIN=0; 	//拉低数据线
-	TCS=0; 		//选中触摸屏IC
+	TCLK0;		//先拉低时钟 	 
+	TDIN0; 	//拉低数据线
+	TCS0; 		//选中触摸屏IC
 	TP_Write_Byte(CMD);//发送命令字
 	delay_us(6);//ADS7846的转换时间最长为6us
-	TCLK=0; 	     	    
+	TCLK0; 	     	    
 	delay_us(1);    	   
-	TCLK=1;		//给1个时钟，清除BUSY
+	TCLK1;		//给1个时钟，清除BUSY
 	delay_us(1);    
-	TCLK=0; 	     	    
+	TCLK0; 	     	    
 	for(count=0;count<16;count++)//读出16位数据,只有高12位有效 
 	{ 				  
 		Num<<=1; 	 
-		TCLK=0;	//下降沿有效  	    	   
+		TCLK0;	//下降沿有效  	    	   
 		delay_us(1);    
- 		TCLK=1;
+ 		TCLK1;
  		if(DOUT)Num++; 		 
 	}  	
 	Num>>=4;   	//只有高12位有效.
-	TCS=1;		//释放片选	 
+	TCS1;		//释放片选	 
 	return(Num);   
 }
 
@@ -208,7 +236,7 @@ uint8_t TP_Scan(uint8_t tp)
 		}	    
 	}
 	return tp_dev.sta&TP_PRES_DOWN;//返回当前的触屏状态
-}	  
+}
 
 //////////////////////////////////////////////////////////////////////////	 
 //保存在EEPROM里面的地址区间基址,占用13个字节(RANGE:SAVE_ADDR_BASE~SAVE_ADDR_BASE+12)
@@ -218,7 +246,7 @@ uint8_t TP_Scan(uint8_t tp)
 void TP_Save_Adjdata(void)
 {
 	int32 temp;			 
-	//保存校正结果!		   							  
+	//保存校正结果!
 	temp=tp_dev.xfac*100000000;//保存x校正因素      
     AT24CXX_WriteLenByte(SAVE_ADDR_BASE,temp,4);   
 	temp=tp_dev.yfac*100000000;//保存y校正因素    
@@ -439,7 +467,7 @@ void TP_Adjust(void)
 		outtime++;
 		if(outtime>1000)
 		{
-			TP_Get_Adjdata();
+//			TP_Get_Adjdata();
 			break;
 	 	} 
  	}
@@ -450,7 +478,7 @@ void TP_Adjust(void)
 //			 1,进行过校准
 uint8_t TP_Init(void)
 {
-#if 0
+#if 0	
 	if(lcddev.id == 0X5510) //电容触摸屏
 	{
 		OTT2001A_Init();
@@ -458,36 +486,17 @@ uint8_t TP_Init(void)
 		tp_dev.touchtype |= 0X80; //电容屏
 		tp_dev.touchtype |= lcddev.dir&0x01;//横屏还是竖屏
 		return 0;
-	}else{
+	}else
+#endif
+	{ 
+    pinMode(TOUCH_NCS,OUTPUT);
+	pinMode(TOUCH_SCK,OUTPUT);	
+    pinMode(TOUCH_MISO,INPUT);
+	pinMode(TOUCH_MOSI,OUTPUT);
+	pinMode(TOUCH_NIRQ,INPUT);	
 	  
-		GPIO_InitTypeDef  GPIO_InitStructure;	
-		
-		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB|RCC_AHB1Periph_GPIOC|RCC_AHB1Periph_GPIOF, ENABLE);//使能GPIOB,C,F时钟
-
-    //GPIOB14初始化设置
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;//PB14 设置为上拉输入
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//输入模式
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-    GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-		
-		
-		    //GPIOC5初始化设置
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//PC5 设置为上拉输入
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//输入模式
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-    GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
-		
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12| GPIO_Pin_13 | GPIO_Pin_15;//PB0设置为推挽输出
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//输出模式
-	  GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-	  
-		TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]); //第一次读取初始化
-		TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]); //第一次读取初始化
+	TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]); //第一次读取初始化
+	TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]); //第一次读取初始化
 		
 //		AT24CXX_Init(); //初始化24CXX
 		
@@ -500,10 +509,6 @@ uint8_t TP_Init(void)
 //		}
 //		TP_Get_Adjdata(); //获取校准值
     }
-#endif	
-    pinMode(PB14,INPUT);
-    pinMode(PC5,OUTPUT);
-
 	return 1;
 }
 	

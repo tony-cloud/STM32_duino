@@ -8,7 +8,7 @@
 class  UTFT {
   public:	
 	   UTFT(){};
-void Init(void){TFTLCD_Init();};													   	//初始化
+uint8_t Init(void){return BSP_LCD_Init();};													   	//初始化
 void DisplayOn(void){LCD_DisplayOn();};													//开显示
 void DisplayOff(void){LCD_DisplayOff();};													//关显示
 void Clear(uint16_t Color){LCD_Clear(Color);};	 												//清屏

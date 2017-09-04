@@ -12,7 +12,7 @@
 //#include "stm32_ub_system.h"
 #include <stdint.h>
 //#include "stm32_ub_i2c3.h"
-#include "Arduino.h"
+#include <Arduino.h>
 
 uint8_t UB_I2C3_ReadByte(uint8_t addressI2cDevice, uint8_t registerId);
 /*

@@ -2,7 +2,6 @@
 #include "stm32_def.h"
 
 extern void Error_Handler(void);
-
 void SystemClock_Config(void)
  {
   RCC_OscInitTypeDef RCC_OscInitStruct;
@@ -37,13 +36,13 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
-  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
-  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
-  Error_Handler();
-  }
+//  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
+//  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
+//  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
+//  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+//  {
+//  Error_Handler();
+//  }
   
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 

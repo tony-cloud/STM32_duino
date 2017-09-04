@@ -107,7 +107,7 @@
  * Set FAT12_SUPPORT nonzero to enable use if FAT12 volumes.
  * FAT12 has not been well tested and requires additional flash.
  */
-#define FAT12_SUPPORT 0
+#define FAT12_SUPPORT 1
 //------------------------------------------------------------------------------
 /**
  * Set DESTRUCTOR_CLOSES_FILE nonzero to close a file in its destructor.
@@ -158,11 +158,11 @@
 #endif  // RAMEND
 //-----------------------------------------------------------------------------
 /** Enable SDIO driver if available. */
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
+#if defined(__MK64FX512__) || defined(__MK66FX1M0__)|| defined(__MK60DN512__)
   #define ENABLE_SDIO_CLASS 1
   #define ENABLE_SDIOEX_CLASS 1
 #else  // ENABLE_SDIO_CLASS
-  #if defined(ARDUINO_ARCH_STM32)
+  #if (defined(ARDUINO_ARCH_STM32))||(defined(ARDUINO_ARCH_HALMX))
     #include "stm32_def.h"
     #if defined(SDIO) || defined(SDMMC1)
       #define ENABLE_SDIO_CLASS 1
@@ -177,7 +177,7 @@
 /**
  * Determine the default SPI configuration.
  */
-#if defined(__STM32F1__) || ARDUINO_ARCH_STM32
+#if defined(__STM32F1__)|| defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_STM32)
 // has multiple SPI ports
 #define SD_HAS_CUSTOM_SPI 2
 #elif defined(__AVR__)\

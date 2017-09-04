@@ -459,7 +459,7 @@ void formatCard() {
 //------------------------------------------------------------------------------
 void setup() {
   char c;
-  Serial.begin(9600);
+  Serial.begin(15200);
   // Wait for USB Serial 
   while (!Serial) {
     SysCall::yield();

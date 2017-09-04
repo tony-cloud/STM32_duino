@@ -3,7 +3,11 @@
 
 #include "SdFat.h"
 
-#if defined(ARDUINO_ARCH_STM32) && (defined(SD_InitTypeDef))
+#if (defined(ARDUINO_ARCH_STM32)|| defined(ARDUINO_ARCH_HALMX)\
+	 || defined(ARDUINO_ARCH_HALMX_RTOS)||defined(ARDUINO_ARCH_MAPLE_STM32F1)\
+	 ||defined(ARDUINO_ARCH_MAPLE_STM32F2)||defined(ARDUINO_ARCH_MAPLE_STM32F3)\
+	 ||defined(ARDUINO_ARCH_MAPLE_STM32F4)||defined(ARDUINO_ARCH_MAPLE_STM32F7))\
+     && (defined(SD_InitTypeDef))
 
 #include "SDIO.h"
 

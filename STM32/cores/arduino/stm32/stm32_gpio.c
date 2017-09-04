@@ -69,7 +69,11 @@ void pinMode(uint8_t pin, uint8_t mode) {
     }
 
     stm32GpioClockEnable(port_pin.port);
-    
+#ifdef STM32F1	
+//    if ((pin == PA15)||(pin == PB3)||(pin == PB4)){  // use this 3 pin must disJTAG  huaweiwx@sina.com 2017.6.9
+//	    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+//    }
+#endif	
     GPIO_InitTypeDef init;
     
     init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -94,6 +98,11 @@ void pinMode(uint8_t pin, uint8_t mode) {
       case OUTPUT:
         init.Mode = GPIO_MODE_OUTPUT_PP;
         init.Pull =  GPIO_NOPULL;
+        break;
+		
+      case OUTPUT_OD:                    //add by huaweiwx@sina.com 2017.6.9
+        init.Mode = GPIO_MODE_OUTPUT_OD;
+        init.Pull = GPIO_NOPULL;
         break;
         
       default:

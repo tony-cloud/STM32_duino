@@ -9,14 +9,12 @@
   huawei huaweiwx@sina.com 2017.7.2
 */
 #include <BSP_f429i_discovery.h>      //F429discovery STemWin config & driver lib
-#include <FreeRTOS.h>
-#include <MW_STemWin.h>
-#include <STemWin.h>                  //STemWin 5.32 lib
+#include <STemWin_OS.h>                  //STemWin 5.32 lib
 
 #define LED  LED_BUILTIN
-#define LED1 LED_BUILTIN1
+#define LED1 LED1_BUILTIN
 
-STemWinGUI GUI;
+STemWin GUI;
 
 static void myTask1(void  __attribute__ ((unused)) *argument)
 {

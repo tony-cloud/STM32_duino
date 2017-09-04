@@ -22,7 +22,7 @@ SdFatSoftSpi<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> sd;
 SdFile file;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Wait for USB Serial 
   while (!Serial) {
     SysCall::yield();

@@ -38,7 +38,7 @@
   *
   ******************************************************************************
   */
-#include "MW_STemWin.h"
+#include "STemWin532.h"
 #include "STemWin/inc/GUIDRV_Lin.h"
 
 #ifndef LCDCONF_H

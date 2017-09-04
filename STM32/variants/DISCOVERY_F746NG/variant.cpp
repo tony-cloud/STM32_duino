@@ -1,7 +1,6 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
-
-#include "Arduino.h"
+#include <Arduino.h>
 #include "syscalls.h"
 
 extern "C" void SystemClock_Config(void) {
@@ -51,7 +50,6 @@ extern "C" void preinitVariant() {
 }
 
 extern "C" void initVariant() {
-
     //UART1 is connected to ST-Link V2.1 as Virtual Com port on non-default PA9/PB7 pins
     SerialUART1.stm32SetTX(PA9);
     SerialUART1.stm32SetRX(PB7);

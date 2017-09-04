@@ -7,7 +7,7 @@ SdFat sd;
 
 void setup() {
   int c;
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Wait for USB Serial 
   while (!Serial) {
     SysCall::yield();

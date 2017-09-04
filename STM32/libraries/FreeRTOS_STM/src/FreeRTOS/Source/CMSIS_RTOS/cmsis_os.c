@@ -387,7 +387,8 @@ osStatus osDelay (uint32_t millisec)
 osEvent osWait (uint32_t millisec);
 
 #endif  /* Generic Wait available */
-
+//add by huaweiwx@sina.com 2017.7.22
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 /***********************  Timer Management Functions ***************************/
 /**
 * @brief  Create a timer.

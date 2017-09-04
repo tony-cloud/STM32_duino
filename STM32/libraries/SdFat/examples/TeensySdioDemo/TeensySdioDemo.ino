@@ -129,7 +129,7 @@ void runTest() {
 }
 //-----------------------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(15200);
   while (!Serial) {
   }
   Serial.println("SdFatSdioEX uses extended multi-block transfers without DMA.");

@@ -17,11 +17,13 @@
  * along with the Arduino SdSpiAltDriver Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#if defined(ARDUINO_ARCH_STM32)
+#if defined(ARDUINO_ARCH_STM32)||defined(ARDUINO_ARCH_HALMX)
 #include "SdSpiDriver.h"
 #include "SdCard/SdInfo.h"
 //------------------------------------------------------------------------------
 //static SPIClass& pSpi = SPI;
+
+static SPIClass m_SPI1(SPI1);
 
 #ifdef SPI2
     static SPIClass m_SPI2(SPI2);
@@ -30,17 +32,17 @@
     static SPIClass m_SPI3(SPI3);
 #endif
 #ifdef SPI4
-    static SPIClass m_SPI3(SPI4);
+    static SPIClass m_SPI4(SPI4);
 #endif
 #ifdef SPI5
-    static SPIClass m_SPI3(SPI5);
+    static SPIClass m_SPI5(SPI5);
 #endif
 #ifdef SPI6
-    static SPIClass m_SPI3(SPI6);
+    static SPIClass m_SPI6(SPI6);
 #endif
 
 static SPIClass* pSpi[] = {
-        &SPI,
+        &m_SPI1,
 #ifdef SPI2
         &m_SPI2,
 #endif
@@ -111,7 +113,7 @@ uint8_t SdSpiAltDriver::receive(uint8_t* buf, size_t n) {
 #else  // USE_STM32F1_DMAC
   //  pSpi.read(buf, n); fails ?? use byte transfer
   for (size_t i = 0; i < n; i++) {
-    buf[i] = pSpi[m_spiPort]->transfer(0XFF);
+    buf[i] = pSpi.transfer(0XFF);
   }
 #endif  // USE_STM32F1_DMAC
   return rtn;
@@ -135,7 +137,7 @@ void SdSpiAltDriver::send(const uint8_t* buf , size_t n) {
     pSpi[m_spiPort]->transfer((uint8_t*)buf, NULL, n);
 #else  // #if USE_STM32F1_DMAC
   for (size_t i = 0; i < n; i++) {
-	  pSpi[m_spiPort]->transfer(buf[i]);
+	  pSpi.transfer(buf[i]);
   }
 #endif  // USE_STM32F1_DMAC
 }

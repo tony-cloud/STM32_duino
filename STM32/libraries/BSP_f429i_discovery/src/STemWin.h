@@ -3,15 +3,13 @@
 
 #ifndef __STEMWIN_ARDUINO_H__
 #define __STEMWIN_ARDUINO_H__
-
-#if __has_include("MW_STemWin.h")
-
+#include <STemWin532.h>
 #ifdef __cplusplus
 
 /* class */
-class STemWinGUI : public emWinGUI{
+class STemWin : public emWinGUI{
   public:
-    STemWinGUI(){};
+    STemWin(){};
 int Init(void){
 	BSP_SDRAM_Init();	     /* Initializes the SDRAM device */
 	BSP_TS_Init(240, 320);   /* Initialize the Touch screen */
@@ -22,6 +20,4 @@ int Init(void){
 };
 
 #endif //__cplusplus
-#endif  //STemWin
-
 #endif //__STEMWIN_ARDUINO_H__

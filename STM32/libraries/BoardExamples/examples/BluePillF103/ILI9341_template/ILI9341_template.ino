@@ -1,22 +1,15 @@
 /************************************************************************
-
   ILI9341 TFT example template
-
   Required libraries: GFX, Adafruit 
-
   Installation Instructions:
   1. Import the Adadruit library in the menue
   Sketch=>Include Libraries=>Manage Libraries =>  Adafruit ILI9341   
   2. Import the Adadruit GFX-Library
   Sketch=>Include Libraries=>Manage Libraries =>  Adafruit GFX Library  
-
-
   May 2017, ChrisMicro
-
 ************************************************************************/
 /*
   STM32F103 BluePill
-
 */
 
 #include "SPI.h"
@@ -60,5 +53,4 @@ void loop(void)
   Counter ++;
   delay(1000);
 }
-
 
