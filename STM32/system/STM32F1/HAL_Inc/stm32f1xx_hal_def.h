@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f1xx_hal_def.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    14-April-2017
+  * @version V1.1.1
+  * @date    12-May-2017
   * @brief   This file contains HAL common defines, enumeration, macros and 
   *          structures definitions. 
   ******************************************************************************
@@ -46,9 +46,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx.h"
-#if defined(USE_HAL_LEGACY)
-#include "stm32_hal_legacy.h"
-#endif
+//#if defined(USE_HAL_LEGACY)  //huaweiwx@sina.com
+#include "Legacy/stm32_hal_legacy.h"
+//#endif
 #include <stdio.h>
 
 /* Exported types ------------------------------------------------------------*/
@@ -126,7 +126,7 @@ typedef enum
                                     }while (0U)
 #endif /* USE_RTOS */
 
-#if  defined ( __GNUC__ ) && !defined ( __CC_ARM )
+#if  defined ( __GNUC__ )
   #ifndef __weak
     #define __weak   __attribute__((weak))
   #endif /* __weak */

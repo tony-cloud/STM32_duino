@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f1xx_hal_conf.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    14-April-2017
+  * @version V1.1.1
+  * @date    12-May-2017
   * @brief   HAL configuration template file.
   *          This file should be copied to the application folder and renamed
   *          to stm32f1xx_hal_conf.h.
@@ -357,8 +357,17 @@
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT
-/* ALL MBED targets use same stm32_assert.h */
-#include "stm32_assert.h"
+/**
+  * @brief  The assert_param macro is used for function's parameters check.
+  * @param  expr: If expr is false, it calls assert_failed function
+  *         which reports the name of the source file and the source
+  *         line number of the call that failed. 
+  *         If expr is true, it returns no value.
+  * @retval None
+  */
+  #define assert_param(expr) ((expr) ? (void)0U : assert_failed((uint8_t *)__FILE__, __LINE__))
+/* Exported functions ------------------------------------------------------- */
+  void assert_failed(uint8_t* file, uint32_t line);
 #else
   #define assert_param(expr) ((void)0U)
 #endif /* USE_FULL_ASSERT */

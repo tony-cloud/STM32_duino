@@ -259,7 +259,7 @@
 /** @defgroup I2C_Private_Define I2C Private Define
   * @{
   */
-#define TIMING_CLEAR_MASK   (0xF0FFFFFFU)  /*!< I2C TIMING clear register Mask */
+#define TIMING_CLEAR_MASK   ((uint32_t)0xF0FFFFFFU)  /*!< I2C TIMING clear register Mask */
 #define I2C_TIMEOUT_ADDR    (10000U)       /*!< 10 s  */
 #define I2C_TIMEOUT_BUSY    (25U)          /*!< 25 ms */
 #define I2C_TIMEOUT_DIR     (25U)          /*!< 25 ms */

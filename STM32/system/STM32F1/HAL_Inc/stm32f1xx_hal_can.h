@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f1xx_hal_can.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    14-April-2017
+  * @version V1.1.1
+  * @date    12-May-2017
   * @brief   Header file of CAN HAL module.
   ******************************************************************************
   * @attention
@@ -557,9 +557,9 @@ typedef struct
   * @param  __HANDLE__: specifies the CAN Handle.
   * @param  __FLAG__: specifies the flag to check.
   *         This parameter can be one of the following values:
-  *            @arg CAN_FLAG_RQCP0: Request MailBox0 Flag
-  *            @arg CAN_FLAG_RQCP1: Request MailBox1 Flag
-  *            @arg CAN_FLAG_RQCP2: Request MailBox2 Flag
+  *            @arg CAN_TSR_RQCP0: Request MailBox0 Flag
+  *            @arg CAN_TSR_RQCP1: Request MailBox1 Flag
+  *            @arg CAN_TSR_RQCP2: Request MailBox2 Flag
   *            @arg CAN_FLAG_TXOK0: Transmission OK MailBox0 Flag
   *            @arg CAN_FLAG_TXOK1: Transmission OK MailBox1 Flag
   *            @arg CAN_FLAG_TXOK2: Transmission OK MailBox2 Flag
@@ -591,9 +591,9 @@ typedef struct
   * @param  __HANDLE__: specifies the CAN Handle.
   * @param  __FLAG__: specifies the flag to check.
   *         This parameter can be one of the following values:
-  *            @arg CAN_FLAG_RQCP0: Request MailBox0 Flag
-  *            @arg CAN_FLAG_RQCP1: Request MailBox1 Flag
-  *            @arg CAN_FLAG_RQCP2: Request MailBox2 Flag
+  *            @arg CAN_TSR_RQCP0: Request MailBox0 Flag
+  *            @arg CAN_TSR_RQCP1: Request MailBox1 Flag
+  *            @arg CAN_TSR_RQCP2: Request MailBox2 Flag
   *            @arg CAN_FLAG_TXOK0: Transmission OK MailBox0 Flag
   *            @arg CAN_FLAG_TXOK1: Transmission OK MailBox1 Flag
   *            @arg CAN_FLAG_TXOK2: Transmission OK MailBox2 Flag

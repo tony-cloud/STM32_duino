@@ -152,7 +152,9 @@
 #define HAL_TIMEOUT_TC      ((uint32_t)25)              /*!< 25 ms */
 #define HAL_TIMEOUT_TCR     ((uint32_t)25)              /*!< 25 ms */
 #define HAL_TIMEOUT_TXIS    ((uint32_t)25)              /*!< 25 ms */
-#define MAX_NBYTE_SIZE      255
+#ifndef  MAX_NBYTE_SIZE   //add by huaweiwx@sina.com 2017.9.1
+#define MAX_NBYTE_SIZE      255U
+#endif
 /**
   * @}
   */

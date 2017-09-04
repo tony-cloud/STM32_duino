@@ -4003,24 +4003,34 @@ static HAL_StatusTypeDef I2C_MasterReceive_RXNE(I2C_HandleTypeDef *hi2c)
     }
     else if((tmp == 2U) || (tmp == 3U))
     {
-      /* Disable Acknowledge */
-      hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
-
-      /* Enable Pos */
-      hi2c->Instance->CR1 |= I2C_CR1_POS;
+      if(hi2c->XferOptions != I2C_NEXT_FRAME)
+      {
+        /* Disable Acknowledge */
+        hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
+        
+        /* Enable Pos */
+        hi2c->Instance->CR1 |= I2C_CR1_POS;
+      }
+      else
+      {
+        /* Enable Acknowledge */
+        hi2c->Instance->CR1 |= I2C_CR1_ACK;
+      }
       
       /* Disable BUF interrupt */
       __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_BUF);
     }
     else
     {
-      /* Disable Acknowledge */
-      hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
-
-      if(hi2c->XferOptions == I2C_NEXT_FRAME)
+      if(hi2c->XferOptions != I2C_NEXT_FRAME)
       {
-        /* Enable Pos */
-        hi2c->Instance->CR1 |= I2C_CR1_POS;
+        /* Disable Acknowledge */
+        hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
+      }
+      else
+      {
+        /* Enable Acknowledge */
+        hi2c->Instance->CR1 |= I2C_CR1_ACK;
       }
 
       /* Disable EVT, BUF and ERR interrupt */
@@ -4076,11 +4086,25 @@ static HAL_StatusTypeDef I2C_MasterReceive_BTF(I2C_HandleTypeDef *hi2c)
     /* Prepare next transfer or stop current transfer */
     if((CurrentXferOptions != I2C_FIRST_AND_LAST_FRAME) && (CurrentXferOptions != I2C_LAST_FRAME) && (CurrentXferOptions != I2C_NO_OPTION_FRAME))
     {
-      /* Disable Acknowledge */
-      hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
+      if(CurrentXferOptions != I2C_NEXT_FRAME)
+      {
+        /* Disable Acknowledge */
+        hi2c->Instance->CR1 &= ~I2C_CR1_ACK;
+      }
+      else
+      {
+        /* Enable Acknowledge */
+        hi2c->Instance->CR1 |= I2C_CR1_ACK;
+      }
+
+      /* Disable EVT and ERR interrupt */
+      __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_ERR);
     }
     else
     {
+      /* Disable EVT and ERR interrupt */
+      __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_ERR);
+      
       /* Generate Stop */
       hi2c->Instance->CR1 |= I2C_CR1_STOP;
     }
@@ -4092,9 +4116,6 @@ static HAL_StatusTypeDef I2C_MasterReceive_BTF(I2C_HandleTypeDef *hi2c)
     /* Read data from DR */
     (*hi2c->pBuffPtr++) = hi2c->Instance->DR;
     hi2c->XferCount--;
-
-    /* Disable EVT and ERR interrupt */
-    __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_ERR);
 
     hi2c->State = HAL_I2C_STATE_READY;
     hi2c->PreviousState = I2C_STATE_NONE;
@@ -5552,4 +5573,3 @@ static HAL_StatusTypeDef I2C_IsAcknowledgeFailed(I2C_HandleTypeDef *hi2c)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
