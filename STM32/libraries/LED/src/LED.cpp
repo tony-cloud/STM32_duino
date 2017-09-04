@@ -1,0 +1,152 @@
+/*
+  LED.cpp - LED library
+  huaweiwx@sina.com 2017.  All right reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+#include <arduino.h>
+#include "LED.h"
+
+#ifdef ARDUINO_ARCH_HALMX
+ #if __has_include(<FreeRTOS.h>)   
+ #	include <FreeRTOS.h>
+ #	define  LED_DELAY(x) vTaskDelay(x)
+ #else
+ #  define  LED_DELAY(x) delay(x)		 
+ #endif
+#else
+ #define  LED_DELAY(x) delay(x)	
+#endif
+
+extern "C"{	
+  void LEDFlash(uint8_t pin,uint16_t timeon,uint16_t timeoff,uint8_t cnt,uint8_t on){
+	for(uint8_t i=cnt;i>0;i--){
+		if(timeon){
+		  digitalWrite(pin,on);
+		  LED_DELAY(timeon);
+		}  
+		if(timeoff){
+		  digitalWrite(pin,(on?LOW:HIGH));
+		  LED_DELAY(timeoff);
+		}   
+	}
+ }
+}  //extern "C"{
+
+
+void LEDClass::setPin(uint8_t pin, uint8_t on){
+	pdata->pin = pin;
+	pdata->on =  on?HIGH:LOW;
+	pdata->off = on?LOW:HIGH;
+	pdata->status = pdata->off;
+	this->brightness = 0;    // how bright the LED is
+    this->fadeAmount = 5;    // how many points to fade the LED by
+}
+
+LEDClass::LEDClass(uint8_t pin, uint8_t on){
+    this->setPin(pin, on);
+
+}
+
+void LEDClass::Init(void){
+	pinMode(pdata->pin,OUTPUT);	
+}
+
+//digitalWrite
+void LEDClass::on(void){
+	digitalWrite(pdata->pin,pdata->on);
+	pdata->status =pdata->on;
+}
+
+//analogWrite
+void LEDClass::on(int val){
+    analogWrite(pdata->pin, val);
+}
+
+#ifdef ARDUINO_ARCH_HALMX
+//analogWrite
+void LEDClass::pwm(int val, int frequency, int durationMillis){
+    pwmWrite(pdata->pin, val, frequency, durationMillis);
+}
+#endif
+
+void LEDClass::off(void){
+	digitalWrite(pdata->pin,pdata->off);
+	pdata->status = pdata->off;
+}
+
+void LEDClass::toggle(void){
+	if(pdata->status == pdata->off) this->on();
+	else this->off();
+	
+}
+
+void LEDClass::flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt){
+	LEDFlash(pdata->pin, timeon,timeoff,cnt,pdata->on);
+	pdata->status = pdata->off;
+};
+
+void LEDClass::fade(void) {
+  analogWrite(pdata->pin, this->brightness);
+
+  // change the brightness for next time through the loop:
+  this->brightness = this->brightness + this->fadeAmount;
+
+  // reverse the direction of the fading at the ends of the fade:
+  if (this->brightness <= 0 || this->brightness >= 255) {
+    this->fadeAmount = - this->fadeAmount;
+  }
+}
+
+#ifdef LED_BUILTIN_MASK
+# define LED_MASK LED_BUILTIN_MASK
+#elif defined(STM32_LED_BUILTIN_ACTIVE_LOW)
+# define LED_MASK 0
+#else
+# define LED_MASK 0xff
+#endif
+
+#ifdef LED_BUILTIN
+LEDClass Led(LED_BUILTIN, bitRead(LED_MASK,0));
+#endif
+
+#ifdef LED_BUILTIN1
+LEDClass Led1(LED_BUILTIN1, bitRead(LED_MASK,1));
+#endif
+
+#ifdef LED_BUILTIN2
+LEDClass Led2(LED_BUILTIN2, bitRead(LED_MASK,2));
+#endif
+
+#ifdef LED_BUILTIN3
+LEDClass Led3(LED_BUILTIN3, bitRead(LED_MASK,3));
+#endif
+
+#ifdef LED_BUILTIN4
+LEDClass Led4(LED_BUILTIN4, bitRead(LED_MASK,4));
+#endif
+
+#ifdef LED_BUILTIN5
+LEDClass Led5(LED_BUILTIN5, bitRead(LED_MASK,5));
+#endif
+
+#ifdef LED_BUILTIN6
+LEDClass Led6(LED_BUILTIN6, bitRead(LED_MASK,6));
+#endif
+
+#ifdef LED_BUILTIN7
+LEDClass Led7(LED_BUILTIN7, bitRead(LED_MASK,7));
+#endif
+

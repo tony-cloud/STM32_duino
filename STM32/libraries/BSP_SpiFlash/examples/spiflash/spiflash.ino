@@ -1,4 +1,4 @@
-/**  sram_test.ino   sram(sdram) test for this board:
+/**  spiflash.ino  spiflash test for this board:
       DISCOVERY_F746NG
       DISCOVERY_F429ZI
       ARMFLY_F407ZG
@@ -6,7 +6,6 @@
       ILLUMINATI_F407ZG
       REDBULL_V2_F103ZE
       WAVESHARE_F746IG
-   Allocate 256k ram, and write to Serial the results
 */
 #include <BSP_SpiFlash.h>
 
