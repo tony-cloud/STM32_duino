@@ -149,7 +149,7 @@ NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.series=STM32F7
 NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.variant=NUCLEO_F767ZI
 NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.board=NUCLEO_F767ZI
 NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.extra_flags=-DSTM32F767ZI
-NUCLEO_144.menu.subboard.Nucleo_F767ZI.massstorage_drive=EVAL-FUCKST
+NUCLEO_144.menu.subboard.Nucleo_F767ZI.massstorage_drive=NODE_F767ZI
 NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.f_cpu=216000000L
 
 NUCLEO_144.menu.upload_method.MassStorageMethod=Mass Storage
