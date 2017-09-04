@@ -16,8 +16,12 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 #include <Arduino.h>
+
+#if __has_include("ARDUINOConfig.h")      //test user config ARDUINO huawei (huaweiwx@sina.com)
+# include "ARDUINOConfig.h"
+#endif
+
 #include "USBDevice.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
@@ -31,6 +35,8 @@ void initVariant() { }
 void setupUSB() __attribute__((weak));
 void setupUSB() { }
 
+// Weak empty main may be use CubMX main.c source program.
+#ifndef USE_USERS_MAINPROGRAM
 int main(void)
 {
     //Used by FreeRTOS, see http://www.freertos.org/RTOS-Cortex-M3-M4.html
@@ -54,8 +60,6 @@ int main(void)
     __HAL_AFIO_REMAP_SWJ_DISABLE();
  #elif defined(MENU_DEBUG_SWD)
     __HAL_AFIO_REMAP_SWJ_NOJTAG();
- #elif defined(MENU_DEBUG_JTAG)
-    __HAL_AFIO_REMAP_SWJ_ENABLE();
  #endif
 #endif
 
@@ -77,3 +81,4 @@ int main(void)
         
 	return 0;
 }
+#endif
