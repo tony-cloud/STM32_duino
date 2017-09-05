@@ -1,0 +1,41 @@
+#######################################
+# Syntax Coloring Map SD
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+SdBaseFile	KEYWORD1
+SdFile	KEYWORD1
+SdFileSystem	KEYWORD1
+SdFatEX	KEYWORD1
+SdFatSoftSpi	KEYWORD1
+SdFatSdio	KEYWORD1
+SdFatSdioEX	KEYWORD1
+
+SD	KEYWORD1
+File	KEYWORD1
+FatFile	KEYWORD1
+FlashBlockFat	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+exists	KEYWORD2
+mkdir	KEYWORD2
+remove	KEYWORD2
+rmdir	KEYWORD2
+open	KEYWORD2
+close	KEYWORD2
+seek	KEYWORD2
+position	KEYWORD2
+size	KEYWORD2	
+curTimeMS	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+FILE_READ	LITERAL1
+FILE_WRITE	LITERAL1

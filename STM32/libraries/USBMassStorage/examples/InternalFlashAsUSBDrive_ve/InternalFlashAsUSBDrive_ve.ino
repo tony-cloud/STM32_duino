@@ -5,15 +5,21 @@
  *   chkdsk <drive> /f
  * Connect to USB. Upload files. Eject drive, Disconnect. Reconnect. Files should be there.
  * Create a config.txt in, and write 1/2/3 into it. The leds will light up accordingly
- * modify for F1/F4  by huaweiwx@sina.com
+ * modify for F1/F4 ret6 vet6 zet6  by huaweiwx@sina.com
  */
+ 
 #include "Flash_STM32.h"
+
+//check Environmental
+#ifndef MENU_USB_MASS_STORAGE
+#error   "You must select USB: Mass Storage from the menu!"  //必须在菜单上 选择 USB: Mass Storage
+#endif
 
 #define LED  LED_BUILTIN     // same as LED_BUILTIN, active low
 #define LED1 LED1_BUILTIN     // active low
 
-#define FLASHDRIVE_SIZE    64 * 1024 // Half of one flash page is about OK for drive size
-#define FLASHDIVE_BLOCKS   4* FLASHDRIVE_SIZE / 512 //256k
+#define FLASHDRIVE_SIZE    64*1024 // Half of one flash page is about OK for drive size
+#define FLASHDIVE_BLOCKS   4*FLASHDRIVE_SIZE/512	/*256k*/
 
 //2 x 128KB flash pages (see reference manual / flash module organization)
 STM32EmbeddedFlashBlock block0(FLASH_BASE + 2 * 128 * 1024, 128 * 1024);
