@@ -120,8 +120,8 @@ extern int _read(UNUSED_PARAM(int file), UNUSED_PARAM(char *ptr), UNUSED_PARAM(i
 {
   return 0 ;
 }
-
-extern int _write( UNUSED_PARAM(int file), char *ptr, int len )
+/*
+extern int _write( UNUSED_PARAM(int file), UNUSED_PARAM(char *ptr), int len )
 {
   int iIndex = 0;
 
@@ -130,7 +130,7 @@ extern int _write( UNUSED_PARAM(int file), char *ptr, int len )
   }
   return iIndex ;
 }
-
+*/
 extern void _exit( int status )
 {
   printf( "Exiting with status %d.\n", status ) ;

@@ -40,6 +40,12 @@
 #include "cdc/usbd_cdc.h"
 #include "cdc/usbd_cdc_if.h"
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+//#pragma GCC diagnostic ignored "-Wwrite-strings"
+//#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+//#pragma GCC diagnostic ignored "-Wunused-variable"
+//#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+
 /* USB Device Core handle declaration */
 
 /* init function */

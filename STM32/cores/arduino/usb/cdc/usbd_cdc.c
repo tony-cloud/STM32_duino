@@ -63,6 +63,8 @@
 #include "usbd_desc.h"
 #include "usbd_ctlreq.h"
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 void Error_Handler();
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY
