@@ -6,7 +6,7 @@ void SystemClock_Config(void)
  {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
+//  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 
   __HAL_RCC_PWR_CLK_ENABLE();
 
