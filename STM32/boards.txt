@@ -487,8 +487,8 @@ MapleMini.menu.upload_method.DFUUploadMethod1.build.extra_flags=-DSTM32F103CB -D
 MapleMini.menu.upload_method.DFUUploadMethod1.build.ldscript={build.ldscript_pre}_bootloader_5000.ld
 MapleMini.menu.upload_method.DFUUploadMethod1.upload.usbID=1EAF:0003
 MapleMini.menu.upload_method.DFUUploadMethod1.upload.altID=UNUSED
-MapleMini.menu.upload_method.DFUUploadMethod1.flash.maximum_size=110592
 MapleMini.menu.upload_method.DFUUploadMethod1.maximum_data_size=110592
+MapleMini.menu.upload_method.DFUUploadMethod1.flash.maximum_size=110592
 MapleMini.menu.upload_method.DFUUploadMethod1.ram.maximum_size=17408
 MapleMini.menu.upload_method.DFUUploadMethod1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
@@ -593,8 +593,8 @@ BluePill.menu.upload_method.DFUUploadMethod.build.extra_flags=-DSTM32F103CB -DVE
 BluePill.menu.upload_method.DFUUploadMethod.build.ldscript={build.ldscript_pre}_bootloader_2000.ld
 BluePill.menu.upload_method.DFUUploadMethod.upload.usbID=1EAF:0003
 BluePill.menu.upload_method.DFUUploadMethod.upload.altID=UNUSED
-BluePill.menu.upload_method.DFUUploadMethod.flash.maximum_size=122880
 BluePill.menu.upload_method.DFUUploadMethod.maximum_data_size=122880
+BluePill.menu.upload_method.DFUUploadMethod.flash.maximum_size=122880
 BluePill.menu.upload_method.DFUUploadMethod.ram.maximum_size=20480
 BluePill.menu.upload_method.DFUUploadMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
@@ -1300,9 +1300,6 @@ F407S.pid.0=0x7523
 
 F407S.vid.1=0x1366
 F407S.pid.1=0x0105
-
-F407S.upload.maximum_size=524288
-F407S.upload.maximum_data_size=131072
 
 F407S.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 F407S.build.core=arduino

@@ -15,7 +15,7 @@
 
 
 //beep
-#define BEEP_BUILTIN             PB10
+#define BEEP_PIN             PB10
 
 /******************  BSP_FSMC DEVICE ******************/
 //comman base address

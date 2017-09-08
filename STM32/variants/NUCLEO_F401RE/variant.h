@@ -12,7 +12,7 @@
 #define BOTTON			PC13  // 2
 #define USER_BTN		BOTTON  // 2
 #define BOTTON_MASK		0x00
-#define KEY_LIST  BOTTON_MASK,BOTTON
+#define KEYS_LIST   BOTTON
 
 
 #define MOSI PA7

@@ -3,17 +3,17 @@
 #include <Arduino.h>
 
 //device status
-#define HAVE_SRAM
-#define HAVE_NAND
-#define HAVE_NOR
+#define  HAVE_SRAM
+#define  HAVE_NAND
+#define  HAVE_NOR
 
-#define HAVE_TFT_LCD
-#define HAVE_TOUCH
+#define  HAVE_TFT_LCD
+#define  HAVE_TOUCH
 #define  HAVE_SPIFLASH
 #define  HAVE_24CXX
 
  
-#define BEEP_BUILTIN             PB10
+#define  BEEP_PIN             PB10
 
 /******************  BSP_FSMC DEVICE ******************/
 //comman base address

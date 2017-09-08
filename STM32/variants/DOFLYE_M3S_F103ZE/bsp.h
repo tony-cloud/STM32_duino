@@ -8,7 +8,7 @@
 #define  HAVE_24CXX
 
   
-#define BEEP_BUILTIN             PB8
+#define BEEP_PIN            PB8
 
 
 /******************  BSP_TFT_LCD ******************/

@@ -13,7 +13,7 @@
 
 
 
-#define  HAVE_BEEP      PG7
+#define  BEEP_PIN      PG7
 
 /******************  BSP_TFT_LCD ******************/
 #include "LCDConfig.h"

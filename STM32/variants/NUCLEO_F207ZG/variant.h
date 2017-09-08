@@ -13,7 +13,7 @@
 #define  BOARD_NR_KEY        1
 #define  BOTTON              PC13 
 #define  BOTTON_MASK         0x01
-#define KEY_LIST  BOTTON_MASK,BOTTON
+#define KEYS_LIST  	BOTTON
 #define USER_BTN  BOTTON // STM naming compatibility
 
 

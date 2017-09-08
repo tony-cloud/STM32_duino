@@ -7,16 +7,7 @@
 //#define HAVE_NOR
 
 #define HAVE_TOUCH
-
-//#define  HAVE_SPIFLASH
-//#define  HAVE_24CXX
 #define  HAVE_SDIO_SDMMC
-//#define  HAVE_SPI_SDMMC
-    
-//#define  HAVE_BEEP      PB9
-//#define  HAVE_NRF24L01   
-//#define  HAVE_DS18B02   PB3
-//#define  HAVE_IRREMOTE  PB4
 
 
 
