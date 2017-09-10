@@ -86,9 +86,11 @@ extern LEDClass Led4;
 #ifdef LED5_BUILTIN
 extern LEDClass Led5;
 #endif
+
 #ifdef LED6_BUILTIN
 extern LEDClass Led6;
 #endif
+
 #ifdef LED7_BUILTIN
 extern LEDClass Led7;
 #endif

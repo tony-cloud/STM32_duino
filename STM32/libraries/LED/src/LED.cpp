@@ -122,31 +122,31 @@ void LEDClass::fade(void) {
 LEDClass Led(LED_BUILTIN, bitRead(LED_MASK,0));
 #endif
 
-#ifdef LED_BUILTIN1
-LEDClass Led1(LED_BUILTIN1, bitRead(LED_MASK,1));
+#ifdef LED1_BUILTIN
+LEDClass Led1(LED1_BUILTIN, bitRead(LED_MASK,1));
 #endif
 
-#ifdef LED_BUILTIN2
-LEDClass Led2(LED_BUILTIN2, bitRead(LED_MASK,2));
+#ifdef LED2_BUILTIN
+LEDClass Led2(LED2_BUILTIN, bitRead(LED_MASK,2));
 #endif
 
-#ifdef LED_BUILTIN3
-LEDClass Led3(LED_BUILTIN3, bitRead(LED_MASK,3));
+#ifdef LED3_BUILTIN
+LEDClass Led3(LED3_BUILTIN, bitRead(LED_MASK,3));
 #endif
 
-#ifdef LED_BUILTIN4
-LEDClass Led4(LED_BUILTIN4, bitRead(LED_MASK,4));
+#ifdef LED4_BUILTIN
+LEDClass Led4(LED4_BUILTIN, bitRead(LED_MASK,4));
 #endif
 
-#ifdef LED_BUILTIN5
-LEDClass Led5(LED_BUILTIN5, bitRead(LED_MASK,5));
+#ifdef LED5_BUILTIN
+LEDClass Led5(LED5_BUILTIN, bitRead(LED_MASK,5));
 #endif
 
-#ifdef LED_BUILTIN6
-LEDClass Led6(LED_BUILTIN6, bitRead(LED_MASK,6));
+#ifdef LED6_BUILTIN
+LEDClass Led6(LED6_BUILTIN, bitRead(LED_MASK,6));
 #endif
 
-#ifdef LED_BUILTIN7
-LEDClass Led7(LED_BUILTIN7, bitRead(LED_MASK,7));
+#ifdef LED7_BUILTIN
+LEDClass Led7(LED7_BUILTIN, bitRead(LED_MASK,7));
 #endif
 
