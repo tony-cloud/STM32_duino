@@ -22,8 +22,8 @@
 
 #ifndef _USERMAIN_H
 #define _USERMAIN_H
-
-
+#include <ARDUINOConfig.h>
+#include <USBDevice.h>
 
 #endif
 
