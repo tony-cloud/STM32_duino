@@ -16,7 +16,7 @@ void SystemClock_Config(void) {
   RCC_OscInitStruct.HSICalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 16;
+  RCC_OscInitStruct.PLL.PLLM = 8;
 #else
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
 # ifdef USE_HSEBYPASS 
