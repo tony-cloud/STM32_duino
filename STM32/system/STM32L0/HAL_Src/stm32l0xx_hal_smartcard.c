@@ -106,7 +106,8 @@
   */
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define TEACK_REACK_TIMEOUT               1000U
+//#define TEACK_REACK_TIMEOUT               1000U
+#define TEACK_REACK_TIMEOUT                ((uint32_t) 1000U)/*modifly by huaweiwx@sina.com 2017.9.2*/
 #define HAL_SMARTCARD_TXDMA_TIMEOUTVALUE  22000U
 #define USART_CR1_FIELDS      ((uint32_t)(USART_CR1_M | USART_CR1_PCE | USART_CR1_PS | \
                                           USART_CR1_TE | USART_CR1_RE | USART_CR1_OVER8))
