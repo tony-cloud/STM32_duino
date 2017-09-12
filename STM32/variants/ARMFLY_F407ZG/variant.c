@@ -56,24 +56,28 @@ void SystemClock_Config(void) {
   }
 
   /* STM32F405x/407x/415x/417x Revision Z devices: prefetch is supported  */
-  if (HAL_GetREVID() == 0x1001)
-  {
+//  if (HAL_GetREVID() == 0x1001)
+//  {
     /* Enable the Flash prefetch */
-    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
-  }
+//    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+//  }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
-  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
-  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
-      Error_Handler();
-  }
+//  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
+//  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
+//  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
+//  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+//  {
+//      Error_Handler();
+//  }
   
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
+#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+#else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 }

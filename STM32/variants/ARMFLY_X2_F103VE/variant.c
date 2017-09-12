@@ -34,7 +34,11 @@ void SystemClock_Config(void) {
     HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+#else  
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 }
 
 //Armfly_X2 use PB3 pin for DS18B20 DQ_Pin must remaped this pin pins

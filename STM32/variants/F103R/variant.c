@@ -2,7 +2,11 @@
 #include "stm32_def.h"
 //      2016.9.18 huawei <huaweiwx@sina.com>
 //HSI
-#if OSC == 12
+#ifdef USE_HSI
+	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL12
+       #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
+#else
+#  if OSC == 12
      #if F_CPU == 120000000
        #define BOARD_RCC_PLLMUL RCC_PLL_MUL10
 	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2_5
@@ -13,7 +17,7 @@
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL6
 	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
      #endif
-#else
+#  else
      #if F_CPU == 120000000
        #define BOARD_RCC_PLLMUL RCC_PLL_MUL15
        #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2_5	   
@@ -24,6 +28,7 @@
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL9
        #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
      #endif
+#  endif
 #endif
 
 extern void Error_Handler(void);  
@@ -112,6 +117,10 @@ void SystemClock_Config(void) {
     HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+#else  
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 }
 #endif
