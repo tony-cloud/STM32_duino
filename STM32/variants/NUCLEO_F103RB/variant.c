@@ -28,22 +28,28 @@ void SystemClock_Config(void) {
 
     while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
 
-    SysTick_Config(48000000);
+    SysTick_Config(F_CPU);
 
     LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
-    LL_SetSystemCoreClock(48000000);
+    LL_SetSystemCoreClock(F_CPU);
 
     /* SysTick_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+	HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+#else  
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 }
 
-#else   //HSE
-//HSE
+#else   //HSE 
 void SystemClock_Config(void) {
 
     LL_RCC_HSE_Enable();
+	
+#ifdef 	USE_HSEBYPASS
     LL_RCC_HSE_EnableBypass();
+#endif
 
     LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE_DIV_1, LL_RCC_PLL_MUL_9);
 
@@ -75,18 +81,22 @@ void SystemClock_Config(void) {
 */
     while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
 
-    SysTick_Config(72000000);
+    SysTick_Config(F_CPU);
 
     LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
-    LL_SetSystemCoreClock(72000000);
+    LL_SetSystemCoreClock(F_CPU);
 
     //HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
     //HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+	HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+#else  
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 }
 
 #endif
