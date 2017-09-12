@@ -13,8 +13,8 @@ TODO create boards manager package
 2. Unzip it into [Arduino]/hardware folder
 3. Move the files in hardware/STM32GENERIC/tools folder to hardware/tools folder for allow other arduino arm can sharing it.
 4. Install Arduino Zero or Arduino Sam from the board manager for the arm-none-eabi-gcc compiler
-5. Download the [latest GNU ARM Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
-   above 5.4.0-2016q2,Change compiler.path in [platform.txt](https://github.com/danieleff/STM32GENERIC/blob/master/STM32/platform.txt#L21) to point to that you downloaded.
+5. Download the [GNU ARM Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
+   Recommended use GCC ver 5.4.0-2016q2,Change compiler.path in [platform.txt](https://github.com/danieleff/STM32GENERIC/blob/master/STM32/platform.txt#L21) to point to that you downloaded.
    Example for default position:  C:\Users\Administrator\AppData\Local\Arduino15\packages\arduino\tools\arm-none-eabi-gcc\
 6. Create a folder c:\Tmp
 7. Modify environment variables TEMP and TMP as: 
