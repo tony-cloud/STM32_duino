@@ -618,11 +618,13 @@ MapleMini.menu.upload_method.DFUUploadMethod1.flash.maximum_size=110592
 MapleMini.menu.upload_method.DFUUploadMethod1.ram.maximum_size=17408
 MapleMini.menu.upload_method.DFUUploadMethod1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
-MapleMini.menu.usb.Disabled=Disabled USB
+MapleMini.menu.usb.Disabled=USB_Default
 MapleMini.menu.usb.SerialUSB=Serial[Virtual COM port, PA11/PA12]
 MapleMini.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 MapleMini.menu.usb.SerialMSC=Mass storage
 MapleMini.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+MapleMini.menu.usb.Composite=Composite[CDC+MSC]
+MapleMini.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 MapleMini.menu.serial.SerialUSB=SerialUSB
 MapleMini.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
@@ -727,6 +729,8 @@ BluePill.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/PA12 pins]
 BluePill.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 BluePill.menu.usb.SerialMSC=Mass storage
 BluePill.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+BluePill.menu.usb.Composite=Composite[CDC+MSC]
+BluePill.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 BluePill.menu.serial.Automatic=Automatically selected based on upload method
 BluePill.menu.serial.SerialUSB=SerialUSB
@@ -741,6 +745,61 @@ BluePill.menu.jtag_swd.SWD=SWD [debug pins reserved: PA13, PA14]
 BluePill.menu.jtag_swd.SWD.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 BluePill.menu.jtag_swd.Disabled=Disabled [debug pins free]
 BluePill.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
+
+##################################### L152C ###########################################
+# L152C board(32M)
+
+L152C.name=L152Cx
+
+
+L152C.build.core=arduino
+L152C.build.board=L152C
+
+L152C.build.mcu=cortex-m3
+L152C.build.series=STM32L1
+
+L152C.menu.subboard.L152C8=L152C8
+L152C.menu.subboard.L152C8.upload.maximum_size=65536
+L152C.menu.subboard.L152C8.upload.maximum_data_size=16384
+L152C.menu.subboard.L152C8.build.variant=L152C
+L152C.menu.subboard.L152C8.build.extra_flags=-DSTM32L152C8
+L152C.menu.subboard.L152C8.build.ldscript=l152c8.ld
+
+L152C.menu.subboard.L152CB=L152CB
+L152C.menu.subboard.L152CB.upload.maximum_size=131072
+L152C.menu.subboard.L152CB.upload.maximum_data_size=16384
+L152C.menu.subboard.L152CB.build.variant=L152C
+L152C.menu.subboard.L152CB.build.extra_flags=-DSTM32L152C8
+L152C.menu.subboard.L152CB.build.ldscript=l152cb.ld
+
+L152C.build.f_cpupre=32000000L
+
+L152C.menu.clock_source.hsi=HSI
+L152C.menu.clock_source.hsi.build.f_cpu={build.f_cpupre} -DUSE_HSI
+
+L152C.menu.clock_source.hse8m=HSE(8M)
+L152C.menu.clock_source.hse8m.build.f_cpu={build.f_cpupre} -DUSE_HSE -DHSE_VALUE=8000000
+
+L152C.menu.upload_method.STLinkMethod=STLink
+L152C.menu.upload_method.STLinkMethod.upload.protocol=STLink
+L152C.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
+
+L152C.menu.upload_method.MassStorageMethod=Mass Storage
+L152C.menu.upload_method.MassStorageMethod.upload.protocol=
+L152C.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
+L152C.menu.upload_method.MassStorageMethod.massstorage_drive=DISCOVERY
+
+L152C.menu.usb.Disabled=Disabled USB
+L152C.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/12]
+L152C.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
+L152C.menu.usb.SerialMSC=Mass storage
+L152C.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+
+L152C.menu.serial.SerialUART1=SerialUART1 [Through ST-Link Virtual COM port] [PA9/10]
+L152C.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
+L152C.menu.serial.SerialUSB=SerialUSB (USB connector)
+L152C.menu.serial.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
+L152C.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 ######################################GD103R#######################################
 GD103R.name=GD32F103R
@@ -845,6 +904,8 @@ GD103R.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/PA12 pins]
 GD103R.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 GD103R.menu.usb.SerialMSC=Mass storage
 GD103R.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+GD103R.menu.usb.Composite=Composite[CDC+MSC]
+GD103R.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 
 GD103R.menu.serial.Automatic=Automatically selected based on upload method
@@ -980,6 +1041,8 @@ F103R.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/12]
 F103R.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F103R.menu.usb.SerialMSC=Mass storage
 F103R.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F103R.menu.usb.Composite=Composite[CDC+MSC]
+F103R.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F103R.menu.serial.SerialUART1=SerialUART1
 F103R.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
@@ -1143,6 +1206,8 @@ F103V.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/PA12 pins]
 F103V.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F103V.menu.usb.SerialMSC=Mass storage
 F103V.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F103V.menu.usb.Composite=Composite[CDC+MSC]
+F103V.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F103V.menu.serial.defalt=Automatically selected based on upload method
 F103V.menu.serial.SerialUART1=SerialUART1
@@ -1305,6 +1370,8 @@ F103Z.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/12]
 F103Z.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F103Z.menu.usb.SerialMSC=Mass storage
 F103Z.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F103Z.menu.usb.Composite=Composite[CDC+MSC]
+F103Z.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F103Z.menu.serial.Automatic=Serial_default
 F103Z.menu.serial.SerialUART1=SerialUART1
@@ -1413,6 +1480,8 @@ F401S.menu.usb.SerialUSB=Serial [Virtual COM port,PA11/12]
 F401S.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F401S.menu.usb.SerialMSC=Mass storage
 F401S.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F401S.menu.usb.Composite=Composite[CDC+MSC]
+F401S.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F401S.menu.serial.Automatic=Automatically selected based on upload method
 F401S.menu.serial.SerialUART1=SerialUART1
@@ -1589,6 +1658,8 @@ F407S.menu.usb.SerialUSB=Serial [Virtual COM port,PA11/12]
 F407S.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F407S.menu.usb.SerialMSC=Mass storage
 F407S.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F407S.menu.usb.Composite=Composite[CDC+MSC]
+F407S.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F407S.menu.serial.SerialUART1=SerialUART1
 F407S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
@@ -1625,6 +1696,8 @@ F746S.menu.usb.SerialUSB=Serial [Virtual COM port, PA11/12]
 F746S.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 F746S.menu.usb.SerialMSC=Mass storage
 F746S.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F746S.menu.usb.Composite=Composite[CDC+MSC]
+F746S.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F746S.menu.serial.SerialUART1=SerialUART1 [Through ST-Link Virtual COM port] [PA9/PA10]
 F746S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
