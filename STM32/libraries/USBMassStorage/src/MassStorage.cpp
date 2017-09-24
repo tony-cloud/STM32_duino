@@ -44,7 +44,7 @@ const uint8_t MSC_Inquirydata[] = {
   '0', '.', '0' ,'1',                     /* Version      : 4 Bytes */
 };
 
-USBD_StorageTypeDef USBD_DISK_fops = {
+USBD_StorageTypeDef USBD_MSC_Interface_fops_FS = {
     //Init
     [](uint8_t lun) -> int8_t {
         usbBlockDevice = getMassStorage();
