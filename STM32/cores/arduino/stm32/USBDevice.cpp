@@ -71,6 +71,22 @@ void USBDeviceClass::reenumerate() {
     #endif
 }
 
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+
+bool USBDeviceClass::beginIDA() {
+    reenumerate();
+
+    USBD_Init(&hUsbDeviceFS, &MSC_Desc, DEVICE_FS);
+
+    USBD_RegisterClass(&hUsbDeviceFS, &USBD_COMPOSITE);
+
+ //   USBD_MSC_RegisterStorage(&hUsbDeviceFS, &USBD_MSC_Interface_fops_FS);
+
+    USBD_Start(&hUsbDeviceFS);
+
+    return true;
+}
+#elif defined(MENU_USB_SERIAL)
 bool USBDeviceClass::beginCDC() {
     reenumerate();
 
@@ -78,13 +94,13 @@ bool USBDeviceClass::beginCDC() {
 
     USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC);
 
-    USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
+    USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_CDC_Interface_fops_FS);
 
     USBD_Start(&hUsbDeviceFS);
 
     return true;
 }
-
+#elif defined(MENU_USB_MASS_STORAGE)
 bool USBDeviceClass::beginMSC() {
     reenumerate();
 
@@ -92,12 +108,13 @@ bool USBDeviceClass::beginMSC() {
 
     USBD_RegisterClass(&hUsbDeviceFS, &USBD_MSC);
 
-    USBD_MSC_RegisterStorage(&hUsbDeviceFS, &USBD_DISK_fops);
+    USBD_MSC_RegisterStorage(&hUsbDeviceFS, &USBD_MSC_Interface_fops_FS);
 
     USBD_Start(&hUsbDeviceFS);
 
     return true;
 }
+#endif
 
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
@@ -114,9 +131,13 @@ extern "C" void OTG_FS_IRQHandler(void) {
 extern "C" void USB_IRQHandler(void) {
   HAL_PCD_IRQHandler(&hpcd_USB_FS);
 }
+//L1 huaweiwx@sina.com 2017.9.24
+extern "C" void USB_LP_IRQHandler(void)
+{
+  HAL_PCD_IRQHandler(&hpcd_USB_FS);
+}
 
 USBD_HandleTypeDef hUsbDeviceFS;
-
 USBDeviceClass USBDeviceFS;
 
 #endif
