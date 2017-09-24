@@ -119,23 +119,28 @@ bool USBDeviceClass::beginMSC() {
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
-//F1
-extern "C" void USB_LP_CAN1_RX0_IRQHandler(void) {
-  HAL_PCD_IRQHandler(&hpcd_USB_FS);
-}
-//F4 F7
-extern "C" void OTG_FS_IRQHandler(void) {
-  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
-}
-//L0
-extern "C" void USB_IRQHandler(void) {
-  HAL_PCD_IRQHandler(&hpcd_USB_FS);
-}
-//L1 huaweiwx@sina.com 2017.9.24
+#if defined(STM32L1)||defined(STM32F3)  /*L1 huaweiwx@sina.com 2017.9.24*/
 extern "C" void USB_LP_IRQHandler(void)
 {
   HAL_PCD_IRQHandler(&hpcd_USB_FS);
 }
+
+#else  //F1
+extern "C" void USB_LP_CAN1_RX0_IRQHandler(void) {
+  HAL_PCD_IRQHandler(&hpcd_USB_FS);
+}
+#endif
+
+//F4 F7
+extern "C" void OTG_FS_IRQHandler(void) {
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+}
+
+//L0
+extern "C" void USB_IRQHandler(void) {
+  HAL_PCD_IRQHandler(&hpcd_USB_FS);
+}
+
 
 USBD_HandleTypeDef hUsbDeviceFS;
 USBDeviceClass USBDeviceFS;
