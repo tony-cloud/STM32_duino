@@ -87,7 +87,7 @@ uint8_t CDC_getTransmitterStatus(void);
 /** @defgroup USBD_AUDIO_IF_Exported_Variables
   * @{
   */
-extern USBD_CDC_ItfTypeDef  USBD_Interface_fops_FS;
+extern USBD_CDC_ItfTypeDef  USBD_CDC_Interface_fops_FS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 /* USER CODE END EXPORTED_VARIABLES */

@@ -53,7 +53,12 @@ void USBSerial_Tx_Handler();
   */ 
 #define CDC_IN_EP                                   0x81  /* EP1 for data IN */
 #define CDC_OUT_EP                                  0x01  /* EP1 for data OUT */
-#define CDC_CMD_EP                                  0x82  /* EP2 for CDC commands */
+
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+# define CDC_CMD_EP                                 0x83  /* EP3 for CDC commands composite*/
+#else
+# define CDC_CMD_EP                                 0x82  /* EP2 for CDC commands */
+#endif
 
 /* CDC Endpoints parameters: you can fine tune these values depending on the needed baudrates and performance. */
 #define CDC_DATA_HS_MAX_PACKET_SIZE                 512  /* Endpoint IN & OUT Packet size */

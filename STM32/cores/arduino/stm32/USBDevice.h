@@ -27,16 +27,21 @@
 
 #include "msc/usbd_msc.h"
 
-extern USBD_StorageTypeDef USBD_DISK_fops;
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+#  include "usbd_composite.h"
+#endif
+extern USBD_StorageTypeDef USBD_MSC_Interface_fops_FS;
 
 class USBDeviceClass {
   public:
     void reenumerate();
-
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+    bool beginIDA();
+#elif defined(MENU_USB_SERIAL)
     bool beginCDC();
-
+#elif defined(MENU_USB_MASS_STORAGE)
     bool beginMSC();
-
+#endif	
 };
 
 extern USBDeviceClass USBDeviceFS;

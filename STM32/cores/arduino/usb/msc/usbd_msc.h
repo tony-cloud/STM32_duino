@@ -59,9 +59,13 @@
 #define USB_MSC_CONFIG_DESC_SIZ      32
  
 
-#define MSC_EPIN_ADDR                0x81 
-#define MSC_EPOUT_ADDR               0x01 
-
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+# define MSC_EPIN_ADDR                0x82 
+# define MSC_EPOUT_ADDR               0x02
+#else 
+# define MSC_EPIN_ADDR                0x81 
+# define MSC_EPOUT_ADDR               0x01 
+#endif
 #define MSC_MEDIA_PACKET     512
 
 /**

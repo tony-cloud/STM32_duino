@@ -1,11 +1,9 @@
 /**
   ******************************************************************************
-  * @file           : usbd_desc.h
-  * @version        : v1.0_Cube
-  * @brief          : Header for usbd_desc file.
+  * @file           : USB_COMPOSITE  
+  * @version        : v17.9_Cube
+  * @brief          : This file implements the USB Device 
   ******************************************************************************
-  * COPYRIGHT(c) 2016 STMicroelectronics
-  *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
   * 1. Redistributions of source code must retain the above copyright notice,
@@ -29,80 +27,67 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
+  * modify by  huaweiwx@sina.com 2017.9.15 
 */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USBD_DESC__H__
-#define __USBD_DESC__H__
+#ifndef __USBD_COMPOSITE_H
+#define __USBD_COMPOSITE_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
+
 /* Includes ------------------------------------------------------------------*/
-#include "usbd_def.h"
+#include  "msc/usbd_msc.h"
+#include  "cdc/usbd_cdc.h"
+#include  "cdc/usbd_cdc_if.h"
 
-/** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
-  * @{
+#define WBVAL(x) (x & 0xFF),((x >> 8) & 0xFF)
+#define DBVAL(x) (x & 0xFF),((x >> 8) & 0xFF),((x >> 16) & 0xFF),((x >> 24) & 0xFF)
+
+#define USBD_IAD_DESC_SIZE           0x08
+#define USBD_IAD_DESCRIPTOR_TYPE     0x0B
+
+#define USBD_CDC_FIRST_INTERFACE     0          /* CDC FirstInterface */
+#define USBD_CDC_INTERFACE_NUM       2          /* CDC Interface NUM */
+
+#define USBD_CDC_CMD_INTERFACE       0
+#define USBD_CDC_DATA_INTERFACE      1
+
+#define USBD_MSC_FIRST_INTERFACE     2          /* MSC FirstInterface */
+#define USBD_MSC_INTERFACE_NUM       1          /* MSC Interface NUM */
+
+#define USBD_MSC_INTERFACE           2
+
+
+#define MSC_INDATA_NUM              (MSC_EPIN_ADDR & 0x0F)
+#define MSC_OUTDATA_NUM             (MSC_EPOUT_ADDR & 0x0F)
+
+#define CDC_INDATA_NUM              (CDC_IN_EP & 0x0F)
+#define CDC_OUTDATA_NUM             (CDC_OUT_EP & 0x0F)
+#define CDC_OUTCMD_NUM              (CDC_CMD_EP & 0x0F)
+
+#define USBD_COMPOSITE_DESC_SIZE    (9  + 58 + 8 +  32 + 8)
+
+
+extern USBD_ClassTypeDef    USBD_COMPOSITE;
+
+/**
+  * @}
   */
-  
-/** @defgroup USB_DESC
-  * @brief general defines for the usb device library file
-  * @{
-  */ 
 
-/** @defgroup USB_DESC_Exported_Defines
-  * @{
+/**
+  * @}
   */
 
-/**
-  * @}
-  */ 
-
-/** @defgroup USBD_DESC_Exported_TypesDefinitions
-  * @{
-  */
-/**
-  * @}
-  */ 
-
-/** @defgroup USBD_DESC_Exported_Macros
-  * @{
-  */ 
-/**
-  * @}
-  */ 
-
-/** @defgroup USBD_DESC_Exported_Variables
-  * @{
-  */ 
-extern USBD_DescriptorsTypeDef CDC_Desc;
-
-extern USBD_DescriptorsTypeDef MSC_Desc;
-
-extern USBD_DescriptorsTypeDef COMPOSITE_Desc;
-
-/**
-  * @}
-  */ 
-
-/** @defgroup USBD_DESC_Exported_FunctionsPrototype
-  * @{
-  */ 
-  
-/**
-  * @}
-  */ 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __USBD_DESC_H */
-
+#endif  /* __USBD_MSC_H */
 /**
   * @}
-  */ 
+  */
 
-/**
-* @}
-*/ 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/*****************************END OF FILE****/
