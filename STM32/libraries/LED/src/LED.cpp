@@ -150,3 +150,37 @@ LEDClass Led6(LED6_BUILTIN, bitRead(LED_MASK,6));
 LEDClass Led7(LED7_BUILTIN, bitRead(LED_MASK,7));
 #endif
 
+#ifdef LED7_BUILTIN
+LEDClass LEDs[]={
+Led,Led1,Led2,Led3,Led4,Led5,Led6,Led7,	
+};
+#elif defined(LED6_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1,Led2,Led3,Led4,Led5,Led6	
+};
+#elif defined(LED5_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1,Led2,Led3,Led4,Led5	
+};
+#elif defined(LED4_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1,Led2,Led3,Led4,
+};
+#elif defined(LED3_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1,Led2,Led3,
+};
+#elif defined(LED2_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1,Led2,
+};
+#elif defined(LED1_BUILTIN)
+LEDClass LEDs[]={
+Led,Led1
+};
+#else
+LEDClass LEDs[]={
+Led,
+};
+#endif
+

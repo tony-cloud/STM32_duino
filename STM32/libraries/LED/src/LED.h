@@ -20,6 +20,24 @@
 #ifndef __LEDLIB_h__
 #define __LEDLIB_h__
 
+#ifdef LED7_BUILTIN
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN,LED4_BUILTIN,LED5_BUILTIN,LED6_BUILTIN,LED7_BUILTIN
+#elif defined(LED6_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN,LED4_BUILTIN,LED5_BUILTIN,LED6_BUILTIN
+#elif defined(LED5_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN,LED4_BUILTIN,LED5_BUILTIN
+#elif defined(LED4_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN,LED4_BUILTIN
+#elif defined(LED3_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN
+#elif defined(LED2_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN
+#elif defined(LED1_BUILTIN)
+#define LEDS_LIST LED_BUILTIN,LED1_BUILTIN
+#else
+#define LEDS_LIST LED_BUILTIN
+#endif
+
 typedef struct {
     uint8_t  pin;
     uint8_t  on;
@@ -95,6 +113,24 @@ extern LEDClass Led6;
 extern LEDClass Led7;
 #endif
 
+#ifdef LED7_BUILTIN
+extern LEDClass LEDs[];
+#elif defined(LED6_BUILTIN)
+extern LEDClass LEDs[];
+#elif defined(LED5_BUILTIN)
+extern LEDClass LEDs[];
+#elif defined(LED4_BUILTIN)
+extern LEDClass LEDs[];
+#elif defined(LED3_BUILTIN)
+extern LEDClass LEDs[];
+#elif defined(LED2_BUILTIN)
+extern LEDClass LEDs[];
+#elif defined(LED1_BUILTIN)
+extern LEDClass LEDs[];
+#else
+extern LEDClass LEDs[];
 #endif
-#endif
+
+#endif /*__cplusplus*/
+#endif /*__LEDLIB_h__*/
 
