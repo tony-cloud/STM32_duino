@@ -11,8 +11,11 @@
 
 #include "FlashVariables.h"
 #include "FlashBlockDevice.h"
+#include "SpiBlockDevice.h"
+#include "RamBlockDevice.h"
+
 #include "MassStorage.h"
 #include "FlashBlockFat.h"
-
+#include "SpiFlashBlock.h"  /*add huaweiwx@sina.com 2017.9.25*/
 
 #endif

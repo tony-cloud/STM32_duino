@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2017 Daniel Fekete
-
+  Copyright (c) 2017 huaweiwx
+  
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
@@ -18,25 +18,35 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
 */
 
-#ifndef STM32F1FLASHBLOCK_H
-#define STM32F1FLASHBLOCK_H
+#include <BSP_SpiFlash.h>
 #include "FlashBlock.h"
+#include "SpiFlashBlock.h"
 
-#ifdef __cplusplus
+extern W25QXX SPIFLASH;
+#define SPI_SECTOR_SIZE 4096
 
-class STM32F1EmbeddedFlashBlock: public FlashBlock {
-public:
-    STM32F1EmbeddedFlashBlock(uint32_t baseAddress, uint32_t size): FlashBlock(size), baseAddress(baseAddress) {
-        HAL_FLASH_Unlock();
-    };
-    bool erase(uint32_t offset, uint32_t size);
-    bool write(uint32_t offset, uint32_t size, uint8_t *data);
-    bool read(uint32_t offset, uint32_t size, uint8_t *data);
-    uint32_t baseAddress;
-    uint32_t sectorError;
-};
-#endif /*__cplusplus*/
-#endif
+bool SpiEmbeddedFlashBlock::erase(uint32_t offset, uint32_t size) {
+	uint32_t secadr = (baseAddress+ offset + SPI_SECTOR_SIZE - 1) / SPI_SECTOR_SIZE;
+	uint16_t pages = (size+SPI_SECTOR_SIZE - 1) / SPI_SECTOR_SIZE;
+	for(uint16_t i=0;i<pages;i++,secadr++){
+		SPIFLASH.eraseSector(secadr);
+	};
+    return true;
+}
+
+bool SpiEmbeddedFlashBlock::write(uint32_t offset, uint32_t size, uint8_t *data) {
+//    PRINT_DEBUG("Writing to flash at %u size %u", offset, size);
+	SPIFLASH.write(data,(baseAddress+offset),(uint16_t)size);
+    return true;
+}
+
+bool SpiEmbeddedFlashBlock::read(uint32_t offset, uint32_t size, uint8_t *data) {
+//    PRINT_TRACE("Reading from flash at %u size %u", offset, size);
+	SPIFLASH.read(data,(baseAddress+offset),(uint16_t)size);
+    return true;
+}
+
 

@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2017 Daniel Fekete
-
+  Copyright (c) 2017 huaweiwx
+  
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
@@ -18,25 +18,26 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
 */
 
-#ifndef STM32F1FLASHBLOCK_H
-#define STM32F1FLASHBLOCK_H
+#ifndef SPIFLASHBLOCK_H
+#define SPIFLASHBLOCK_H
 #include "FlashBlock.h"
 
 #ifdef __cplusplus
 
-class STM32F1EmbeddedFlashBlock: public FlashBlock {
+class SpiEmbeddedFlashBlock: public FlashBlock{
 public:
-    STM32F1EmbeddedFlashBlock(uint32_t baseAddress, uint32_t size): FlashBlock(size), baseAddress(baseAddress) {
-        HAL_FLASH_Unlock();
-    };
+	SpiEmbeddedFlashBlock(uint32_t baseAddress,uint32_t size): FlashBlock(size), baseAddress(baseAddress){};
+	
     bool erase(uint32_t offset, uint32_t size);
     bool write(uint32_t offset, uint32_t size, uint8_t *data);
     bool read(uint32_t offset, uint32_t size, uint8_t *data);
     uint32_t baseAddress;
-    uint32_t sectorError;
+    uint32_t sectorError = 0xFFFFFFFFU;  //NOT USED,always
 };
+
 #endif /*__cplusplus*/
 #endif
 

@@ -23,18 +23,19 @@
 #ifndef EMBEDDED_FLASH_H
 #define EMBEDDED_FLASH_H
 
+#ifdef __cplusplus
+
 #include "stdint.h"
-
 #include "string.h"
-
 #include "stdlib.h"
-
 #include "stdio.h"
-
 #include <Arduino.h>
+
 /**
  * Represents a part of STM32 chip embedded flash, from baseAddress, size bytes length
  */
+ 
+
 class FlashBlock {
 public:
     FlashBlock(uint32_t size): size(size) {};
@@ -107,5 +108,6 @@ public:
     uint8_t *buffer;
 };
 
+#endif /*__cplusplus*/
 #endif
 
