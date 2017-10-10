@@ -43,5 +43,5 @@ public:
     uint32_t sectorError;
 };
 
-#endif
-
+#endif /*__cplusplus*/
+#endif /*STM32F4F7FLASHBLOCK_H*/
