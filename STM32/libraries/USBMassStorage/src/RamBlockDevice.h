@@ -1,8 +1,7 @@
-#ifndef RAMDISK_H
-#define RAMDISK_H
+#ifndef __RAMBLOCKDEVICE_H__
+#define __RAMBLOCKDEVICE_H__
 
 #include "USBDevice.h"
-
 #include "BlockDevice.h"
 
 typedef void (*listener)(uint32_t block, size_t blocks);
@@ -32,4 +31,4 @@ public:
 
 };
 
-#endif /* MASSSTORAGE_H_ */
+#endif /* __RAMBLOCKDEVICE_H__ */

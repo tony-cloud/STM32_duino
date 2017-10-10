@@ -91,26 +91,26 @@ USBD_StorageTypeDef USBD_MSC_Interface_fops_FS = {
 
 
 const unsigned char fat12BootSector[] = {
-    0xEB, 0x3C, 0x90, //jump to boot program
-    'S', 'T', 'M', '3', '2', 'F', 'A', 'T', //manufacturer description
-    0x00, 0x02, // 512 bytes per block
-    0x01, // blocks per allocation unit
-    0x01, 0x00, // 1 reserved block for boot block
-    0x02, // number of FAT
-    0x10, 0x00, // max number of root dir entries
-    0x42, 0x00, // number of blocks in the entire disk
-    0xF8, // media descriptor
+    0xEB, 0x3C, 0x90, //0 jump to boot program
+    'S', 'T', 'M', '3', '2', 'F', 'A', 'T', //8 manufacturer description
+    0x00, 0x02, //11 512 bytes per block
+    0x01, 		//13 blocks per allocation unit
+    0x01, 0x00, //14 1 reserved block for boot block
+    0x02, 		//16 number of FAT
+    0x10, 0x00, //17 max number of root dir entries
+    0x42, 0x00, //19 number of blocks in the entire disk
+    0xF8, 		//21 media descriptor
 
-    0x01, 0x00, // blocks for FAT
-    0x00, 0x00, // for boot program
-    0x00, 0x00, // for boot program
-    0x00, 0x00, 0x00, 0x00, // hidden blocks
-    0x00, 0x00, 0x00, 0x00, // total number of blocks
-    0x00, 0x00, // for boot program
-    0x00, //for boot program
-    0x38, 0xD3, 0xC7, 0x53, // Disk ID
-    'S', 'T', 'M', '3', '2', ' ', 'D', 'r', 'i', 'v', 'e', // partition volume label
-    'F', 'A', 'T', '1', '2', ' ', ' ', ' ', // file system type
+    0x01, 0x00, 			//22 blocks for FAT
+    0x00, 0x00, 			//24 for boot program
+    0x00, 0x00, 			//26 for boot program
+    0x00, 0x00, 0x00, 0x00, //28 hidden blocks
+    0x00, 0x00, 0x00, 0x00, //32 total number of blocks
+    0x00, 0x00, 			//36 for boot program
+    0x00, 					//38 for boot program
+    0x38, 0xD3, 0xC7, 0x53, //39  Disk ID
+    'S', 'T', 'M', '3', '2', ' ', 'D', 'r', 'i', 'v', 'e', //43 partition volume label
+    'F', 'A', 'T', '1', '2', ' ', ' ', ' ', //54 file system type
 };
 
 void formatFat12(BlockDevice *blockDevice, uint32_t blockCount) {

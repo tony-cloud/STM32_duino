@@ -1,3 +1,20 @@
+/* disk_operate.ino cmdline demo for vdisk moniter
+   USB Mass Storage/MSC_CDC Composite drive based on internal flash or spi serial flash,
+   Select USB: Mass Storage or MSC_CDC Composite from the menu
+   EXPERIMENTAL, for testing purposes.
+   When writing, use eject drive, or the filesystem may get corrupted. In that case, use:
+     chkdsk <drive> /f
+   Connect to USB. Upload files. Eject drive, Disconnect. Reconnect. Files should be there.
+   Create some file as config.txt in,   
+   if Select Serial Communication:SerialUSB from the menu, output message by USB CDC
+   
+   ---------------------------------------------------------------------------------------
+   modify for f1/4  by huaweiwx@sina.com
+   default FLASHDISK_SIZE:   F103x8/xB  64    xC/xD/xE 256
+                             F4xx   xE  256         xG 512 
+   ---------------------------------------------------------------------------------------
+*/
+
 #define FLASHDISK_SIZE     64   /*user define, unused default defined*/
 
 //use InternalFlashDisk or SpiFlashDisk
@@ -17,6 +34,10 @@ boolean stringComplete = false;  // whether the string is complete
 void setup() {
   pinMode(LED, OUTPUT);     //LED D48
   Serial.begin(115200);
+  while (!Serial.available()) {
+    digitalToggle(LED);
+    delay(500);
+  }
   Serial.println(F("stm32 DOS demo"));
   ptr = 0;
   Serial.print(F(">"));

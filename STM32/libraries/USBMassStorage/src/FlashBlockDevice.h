@@ -34,5 +34,5 @@ private:
 
 };
 
-#endif /* MASSSTORAGE_H_ */
+#endif /* FLASHBLOCKDEVICE_H */
 

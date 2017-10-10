@@ -1,4 +1,4 @@
-/* USB Mass Storage/MSC_CDC Composite drive based on internal flash,
+/* USB Mass Storage/MSC_CDC Composite drive based on Spi serial flash or stm32 internal flash,
    Select USB: Mass Storage or MSC_CDC Composite from the menu
    EXPERIMENTAL, for testing purposes.
    When writing, use eject drive, or the filesystem may get corrupted. In that case, use:
@@ -13,7 +13,7 @@
    ---------------------------------------------------------------------------------------
 */
 
-#define SPIFLASHDISK_SIZE    64       /*user define, max 512k*/
+#define SPIFLASHDISK_SIZE    64       /*user define, default max 512k*/
 #include <SpiFlashDisk.h>
 #include <LED.h>
 
