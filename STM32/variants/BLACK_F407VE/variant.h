@@ -2,10 +2,10 @@
 #define VARIANT_H
 
 /******************** LED ************************/
-#define BOARD_NR_LED            2 
+#define BOARD_NR_LED            2
 #define LED_BUILTIN             PA6 /* 0 */
 #define LED1_BUILTIN            PA7 /* 0 */
-#define LED_BUILTIN_MASK        0x00  
+#define LED_BUILTIN_MASK        0x00
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 /******************** BOTTON **********************/
