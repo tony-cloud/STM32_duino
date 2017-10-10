@@ -4,24 +4,25 @@
    When writing, use eject drive, or the filesystem may get corrupted. In that case, use:
      chkdsk <drive> /f
    Connect to USB. Upload files. Eject drive, Disconnect. Reconnect. Files should be there.
-   Create a config.txt in, and write 1/2/3 into it. The leds will light up accordingly
-   
+   Create a config.txt in, and write 1/2/3 into it. The leds will light up accordingly   
    if Select Serial Communication:SerialUSB from the menu, output message by USB CDC
+   ---------------------------------------------------------------------------------------
    modify for f1/4  by huaweiwx@sina.com
+   default FLASHDISK_SIZE:   F103x8/xB  64    xC/xD/xE 256
+                             F4xx   xE 256         xG 512 
+   ---------------------------------------------------------------------------------------
 */
-
-#include <FlashBlockFat.h>
+#define FLASHDISK_SIZE     64   /*user define, unused default defined*/   
+#include <InternalFlashDisk.h>
 
 #define LED  LED_BUILTIN      // same as LED_BUILTIN
-
-// SdFat interface, so we can access it from the microcontroller
-extern FlashBlockFat fat;
-
 void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   delay(1000);
+  
+// SdFat interface:FlashBlockFat fat defined in InternalFlashDisk.h, so we can access it from the microcontroller
   fat.begin();
 }
 
@@ -29,7 +30,7 @@ void loop() {
   delay(1000);
   // Needed, or SdFat will not know about changes from USB drive
   fat.cacheClear();
-
+  
   File f = fat.open("config.txt", FILE_READ);
   if (!f) {
     return;
