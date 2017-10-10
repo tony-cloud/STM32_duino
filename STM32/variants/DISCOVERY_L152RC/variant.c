@@ -13,7 +13,6 @@ extern void SystemClock_Config(void) {
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = 16;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
 #else
@@ -23,10 +22,10 @@ extern void SystemClock_Config(void) {
 # else
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;	
 # endif	
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL12;
 #endif	
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLDIV = RCC_PLL_DIV3;
   HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
@@ -44,6 +43,7 @@ extern void SystemClock_Config(void) {
 
   /* SysTick_IRQn interrupt configuration */
 #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
