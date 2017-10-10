@@ -23,7 +23,7 @@
 #include "FlashBlock.h"
 
 #if defined(STM32F4)||defined(STM32F7)
-#include "STM32F1FlashBlock.h"
+#include "STM32F4FlashBlock.h"
 
 static uint32_t sectors[] = {
         0x08000000, //0: 16K
