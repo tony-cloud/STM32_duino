@@ -1,5 +1,9 @@
+#define FLASHDISK_SIZE     64   /*user define, unused default defined*/
 
-#include <FlashBlockFat.h>
+//use InternalFlashDisk or SpiFlashDisk
+//#include <InternalFlashDisk.h>
+#include <SpiFlashDisk.h>
+
 #include <cmdline.h>
 
 #define LED LED_BUILTIN
@@ -8,7 +12,7 @@ int ptr;
 boolean stringComplete = false;  // whether the string is complete
 
 // SdFat interface, so we can access it from the microcontroller
-extern FlashBlockFat fat;
+//extern FlashBlockFat fat;
 
 void setup() {
   pinMode(LED, OUTPUT);     //LED D48
@@ -166,6 +170,7 @@ int Cmd_pinMode(int argc, char *argv[])
   }
   return (0);
 }
+
 tCmdLineEntry g_sCmdTable[] =
 {
   { "help",   Cmd_help,      " : Display list of commands"} ,
