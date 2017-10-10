@@ -59,7 +59,11 @@
   */
 
 /*---------- -----------*/
-#define USBD_MAX_NUM_INTERFACES     1
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+#	define USBD_MAX_NUM_INTERFACES     3
+#else
+#	define USBD_MAX_NUM_INTERFACES     1
+#endif
 /*---------- -----------*/
 #define USBD_MAX_NUM_CONFIGURATION     1
 /*---------- -----------*/
@@ -83,8 +87,14 @@
   */
 
 /* Memory management macros */
-#define USBD_malloc               (uint32_t *)USBD_static_malloc
-#define USBD_free                 USBD_static_free
+#ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
+# define USBD_malloc               malloc
+# define USBD_free                 free
+#else
+# define USBD_malloc               (uint32_t *)USBD_static_malloc
+# define USBD_free                 USBD_static_free	
+#endif
+
 #define USBD_memset               /* Not used */
 #define USBD_memcpy               /* Not used */
 

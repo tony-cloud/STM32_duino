@@ -67,8 +67,10 @@ int main(void)
 
     #ifdef MENU_USB_SERIAL
         USBDeviceFS.beginCDC();
-    #elif MENU_USB_MASS_STORAGE
+    #elif  MENU_USB_MASS_STORAGE
         USBDeviceFS.beginMSC();
+    #elif  MENU_USB_IAD
+        USBDeviceFS.beginIDA();/*add by huaweiwx@sina.com 2017.9.15*/
     #endif
 
 #endif

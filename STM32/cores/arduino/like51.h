@@ -6,10 +6,25 @@
 #define __LIKE51_H__
 
 //bitband io opration,实现51类似的GPIO控制功能
-#define BITBAND(addr, bitnum) ((addr & 0xF0000000)+0x2000000+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
+#define BITBAND(addr, bitnum) (PERIPH_BB_BASE+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
 #define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
 #define BITBAND_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
-
+#define BITMASKPOS(mask)    (((mask)==bit(0))?0: \
+                            (((mask)==bit(1))?1: \
+                            (((mask)==bit(2))?2: \
+                            (((mask)==bit(3))?3: \
+                            (((mask)==bit(4))?4: \
+                            (((mask)==bit(5))?5: \
+                            (((mask)==bit(6))?6: \
+                            (((mask)==bit(7))?7: \
+                            (((mask)==bit(8))?8: \
+                            (((mask)==bit(9))?9: \
+                            (((mask)==bit(10))?10: \
+                            (((mask)==bit(11))?11: \
+                            (((mask)==bit(12))?12: \
+                            (((mask)==bit(13))?13: \
+                            (((mask)==bit(14))?14: \
+                            (((mask)==bit(15))?15:16))))))))))))))))
 //IO address 口地址映射
 #if defined(STM32F1)
 	#define GPIOA_ODR_Addr    (GPIOA_BASE+12) //0x4001080C 
