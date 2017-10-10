@@ -26,6 +26,39 @@
 #define SPIFLASH_CS		SS
 #endif
 
+#ifndef SPIFLASH_SPEED_Mhz
+#define SPIFLASH_SPEED_Mhz 20
+#endif
+
+////////////////////////////////////////////////////////////////////////////////// 
+//command list 指令表
+#define W25X_WriteStatusReg		0x01 
+#define W25X_PageProgram		0x02 
+#define W25X_ReadData			0x03 
+#define W25X_WriteDisable		0x04 
+#define W25X_ReadStatusReg		0x05 
+#define W25X_WriteEnable		0x06 
+#define W25X_FastReadData		0x0B 
+#define W25X_FastReadDual		0x3B 
+#define W25X_BlockErase			0xD8 
+#define W25X_SectorErase		0x20 
+#define W25X_ChipErase			0xC7 
+#define W25X_PowerDown			0xB9
+#define W25X_DummyByte          0xA5 
+#define W25X_ReleasePowerDown	0xAB 
+#define W25X_DeviceID			0xAB 
+#define W25X_ManufactDeviceID	0x90 
+#define W25X_JedecDeviceID		0x9F
+ 
+
+//IDO
+#define ID0_SPANSION	0x01
+#define ID0_MICRON		0x20
+#define ID0_MACRONIX	0xC2
+#define IDO_GIGA	 	0xC8
+#define ID0_SST			0xBF
+#define ID0_WINBOND		0xEF
+ 
  
 W25QXX::W25QXX()
        :SPIClass(SPIFLASH_MOSI,SPIFLASH_MISO, SPIFLASH_SCK){};
@@ -35,6 +68,7 @@ W25QXX::W25QXX(SPI_TypeDef *instance, uint8_t mosi, uint8_t miso, uint8_t sck)
 	   :SPIClass(instance, mosi, miso, sck){};
 W25QXX::W25QXX(uint8_t mosi, uint8_t miso, uint8_t sck)
 	   :SPIClass(mosi, miso, sck){};
+
 
 void W25QXX::begin(uint8_t cs)
 {
@@ -46,9 +80,9 @@ void W25QXX::begin(uint8_t cs)
   pinMode(pdata->cs_pin,OUTPUT);
   digitalWrite(pdata->cs_pin,HIGH);			//SPI FLASH不选中
   SPIClass::begin();	//初始化SPI
-  SPIClass::beginTransaction(SPISettings(100000, MSBFIRST, SPI_MODE0));
+  SPIClass::beginTransaction(SPISettings(1000000UL*SPIFLASH_SPEED_Mhz, MSBFIRST, SPI_MODE0));
 //  SPI1_SetSpeed(SPI_BaudRatePrescaler_2);		//设置为42M时钟,高速模式 
-  pdata->type = this->readID();	//读取FLASH ID.
+  this->jedecDeviceID(&pdata->ID[0]);	//读取FLASH ID.
 }  
 
 //读取W25QXX的状态寄存器
@@ -81,21 +115,23 @@ void W25QXX::writeSR(uint8_t sr)
 //将WEL置位   
 void W25QXX::writeEnable(void)   
 {
-	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
-    SPIClass::transfer(W25X_WriteEnable);      //发送写使能  
-	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选     	      
+	digitalWrite(pdata->cs_pin,LOW); 			 //使能器件   
+    SPIClass::transfer(W25X_WriteEnable);        //发送写使能  
+	digitalWrite(pdata->cs_pin,HIGH);  			 //取消片选     	      
 } 
+
 //W25QXX写禁止	
 //将WEL清零  
 void W25QXX::writeDisable(void)   
 {  
-	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
+	digitalWrite(pdata->cs_pin,LOW);			//使能器件   
     SPIClass::transfer(W25X_WriteDisable);     //发送写禁止指令    
-	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选     	      
+	digitalWrite(pdata->cs_pin,HIGH); 			//取消片选     	      
 } 
 		
 //读取芯片ID
 //返回值如下:				   
+//0XEF12,表示芯片型号为W25Q40  
 //0XEF13,表示芯片型号为W25Q80  
 //0XEF14,表示芯片型号为W25Q16    
 //0XEF15,表示芯片型号为W25Q32  
@@ -105,8 +141,9 @@ uint16_t W25QXX::readID(void)
 {
 	uint32_t temp = 0;	  
 	digitalWrite(pdata->cs_pin,LOW);				    
-	SPIClass::transfer(0x90);//发送读取ID命令	    
-	SPIClass::transfer(0x00); 	    
+	SPIClass::transfer(W25X_ManufactDeviceID);//发送读取ID命令	    
+	SPIClass::transfer(W25X_DummyByte); 	    
+	SPIClass::transfer(W25X_DummyByte); 	    
 	SPIClass::transfer(0x00); 	    
 	temp |= SPIClass::transfer(W25X_DummyByte)<< 8;  
 	temp |= SPIClass::transfer(W25X_DummyByte);
@@ -114,19 +151,35 @@ uint16_t W25QXX::readID(void)
 	return temp;
 }
 
-uint32_t W25QXX::jedecDeviceID(void)
+void W25QXX::jedecDeviceID(uint8_t *buf)
 {
-	uint32_t temp = 0;	  
 	digitalWrite(pdata->cs_pin,LOW);				    
-	SPIClass::transfer(0x9F);//发送读取ID命令	    
-	temp |=SPIClass::transfer(W25X_DummyByte)<<24; 	    
-	temp |=SPIClass::transfer(W25X_DummyByte)<<16; 	    
-	temp |= SPIClass::transfer(W25X_DummyByte)<< 8;  
-	temp |= SPIClass::transfer(W25X_DummyByte);
+	SPIClass::transfer(W25X_JedecDeviceID);//发送读取JedecDeviceID 0x9F命令	    
+	buf[0] = SPIClass::transfer(W25X_DummyByte); 	    
+	buf[1]= SPIClass::transfer(W25X_DummyByte);
+	buf[2]= SPIClass::transfer(W25X_DummyByte);
+	if (buf[0] == ID0_SPANSION) {
+		buf[3] = SPIClass::transfer(W25X_DummyByte); // ID-CFI
+		buf[4] = SPIClass::transfer(W25X_DummyByte); // sector size
+	}	
 	digitalWrite(pdata->cs_pin,HIGH);				    
-	return temp;
 }   		    
-   		    
+
+uint32_t W25QXX::capacity(void)
+{
+	uint32_t n = 1048576; // unknown chips, default to 1 MByte
+
+	if (pdata->ID[0] >= 0x10 && pdata->ID[0] <= 0x1F) {
+		n = 1ul << pdata->ID[2];
+	} else if (pdata->ID[2] >= 0x20 && pdata->ID[2] <= 0x25) {
+		n = 1ul << (pdata->ID[2] - 6);
+	} else	if ((pdata->ID[0]==0 && pdata->ID[1]==0 && pdata->ID[2]==0) || 
+		(pdata->ID[0]==255 && pdata->ID[1]==255 && pdata->ID[2]==255)) {
+		n = 0;
+	}
+	return n;
+}
+
 //读取SPI FLASH  
 //在指定地址开始读取指定长度的数据
 //pBuffer:数据存储区
@@ -134,18 +187,18 @@ uint32_t W25QXX::jedecDeviceID(void)
 //NumByteToRead:要读取的字节数(最大65535)
 void W25QXX::read(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)   
 { 
- 	uint16_t i;   										    
-	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
+ 	digitalWrite(pdata->cs_pin,LOW);   		   //使能器件   
     SPIClass::transfer(W25X_ReadData);         //发送读取命令   
     SPIClass::transfer((uint8_t)((ReadAddr)>>16));  //发送24bit地址    
     SPIClass::transfer((uint8_t)((ReadAddr)>>8));   
     SPIClass::transfer((uint8_t)ReadAddr);   
-    for(i=0;i<NumByteToRead;i++)
+    for(uint16_t i=0;i<NumByteToRead;i++)
 	{ 
         pBuffer[i]=SPIClass::transfer(0XFF);   //循环读数  
     }
 	digitalWrite(pdata->cs_pin,HIGH);  				    	      
 }  
+
 //SPI在一页(0~65535)内写入少于256个字节的数据
 //在指定地址开始写入最大256字节的数据
 //pBuffer:数据存储区
@@ -153,14 +206,13 @@ void W25QXX::read(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
 //NumByteToWrite:要写入的字节数(最大256),该数不应该超过该页的剩余字节数!!!	 
 void W25QXX::writePage(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 {
- 	uint16_t i;  
     this->writeEnable();                  //SET WEL 
-	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
+	digitalWrite(pdata->cs_pin,LOW);  		//使能器件   
     SPIClass::transfer(W25X_PageProgram);      //发送写页命令   
     SPIClass::transfer((uint8_t)((WriteAddr)>>16)); //发送24bit地址    
     SPIClass::transfer((uint8_t)((WriteAddr)>>8));   
     SPIClass::transfer((uint8_t)WriteAddr);   
-    for(i=0;i<NumByteToWrite;i++)SPIClass::transfer(pBuffer[i]);//循环写数  
+    for(uint16_t i=0;i<NumByteToWrite;i++)SPIClass::transfer(pBuffer[i]);//循环写数  
 	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选 
 	this->waitBusy();					   //等待写入结束
 } 
@@ -219,6 +271,7 @@ void W25QXX::write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 		{
 			if(W25QXX_BUF[secoff+i]!=0XFF)break;//需要擦除  	  
 		}
+
 		if(i<secremain)//需要擦除
 		{
 			this->eraseSector(secpos);//擦除这个扇区
@@ -263,61 +316,34 @@ void W25QXX::eraseSector(uint32_t Dst_Addr)
 	  
 // 	printf("fe:%x\r\n",Dst_Addr); //监视falsh擦除情况,测试用  
  	Dst_Addr*=4096;
-    this->writeEnable();                  //SET WEL 	 
+    this->writeEnable();     			        //SET WEL 	 
     this->waitBusy();   
-  	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
+  	digitalWrite(pdata->cs_pin,LOW);            //使能器件   
     SPIClass::transfer(W25X_SectorErase);      //发送扇区擦除指令 
     SPIClass::transfer((uint8_t)((Dst_Addr)>>16));  //发送24bit地址    
     SPIClass::transfer((uint8_t)((Dst_Addr)>>8));   
     SPIClass::transfer((uint8_t)Dst_Addr);  
-	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选     	      
-    this->waitBusy();   				   //等待擦除完成
-}  
+	digitalWrite(pdata->cs_pin,HIGH);		//取消片选     	      
+    this->waitBusy();						//等待擦除完成
+}
 //等待空闲
 inline void W25QXX::waitBusy(void)   
 {   
 	while((this->readSR()&0x01)==0x01);   // 等待BUSY位清空
-}  
+}
 //进入掉电模式
 void W25QXX::powerDown(void)   
 { 
-  	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
-    SPIClass::transfer(W25X_PowerDown);        //发送掉电命令  
-	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选     	      
-//    delayMicroseconds(3);                               //等待TRES1
-    delay(3);
+  	digitalWrite(pdata->cs_pin,LOW); 	        //使能器件   
+    SPIClass::transfer(W25X_PowerDown);         //发送掉电命令  
+	digitalWrite(pdata->cs_pin,HIGH);  			//取消片选
+    delay(3);                     //等待TRES1
 }   
 //唤醒
 void W25QXX::WAKEUP(void)   
 {  
-  	digitalWrite(pdata->cs_pin,LOW);                            //使能器件   
+  	digitalWrite(pdata->cs_pin,LOW);             //使能器件   
     SPIClass::transfer(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB    
-	digitalWrite(pdata->cs_pin,HIGH);                            //取消片选     	      
-//    delayMicroseconds(3);                               //等待TRES1
-    delay(3);
-}   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	digitalWrite(pdata->cs_pin,HIGH);            //取消片选
+    delay(3);									//等待TRES1
+}
