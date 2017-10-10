@@ -2,6 +2,7 @@
 #define VARIANT_H
 
 /*LED*/
+#define BOARD_NR_LED   1 
 #ifndef LED_BUILTIN
 #	define LED_BUILTIN PB9
 #endif
