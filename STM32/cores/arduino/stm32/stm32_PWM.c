@@ -59,8 +59,7 @@ void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin);
 void analogWriteResolution(int bits) {
     analogWriteResolutionBits = bits;
 }
-
-void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
+static void initTimer(){
     static TIM_HandleTypeDef staticHandle;
 
     if (handle == NULL) {
@@ -93,6 +92,16 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
 
         HAL_TIM_Base_Start_IT(handle);
     }
+}
+
+#ifdef STM32F0  // there is no pclk2
+#define timerFreq() HAL_RCC_GetPCLK1Freq()
+#else
+#define timerFreq() HAL_RCC_GetPCLK2Freq()
+#endif
+
+void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
+    initTimer();
 
     for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {
         if (pwm_config[i].port == NULL ||
@@ -102,23 +111,13 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
             if (pwm_config[i].port == NULL) {
                 pinMode(pin, OUTPUT);
             }
-
             pwm_config[i].port = variant_pin_list[pin].port;
             pwm_config[i].pin_mask = variant_pin_list[pin].pin_mask;
-#ifdef STM32F0
-            pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK1Freq() / frequency;
-#else
-            pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK2Freq() / frequency;
-#endif
+            pwm_config[i].waveLengthCycles = timerFreq() / frequency;
 		    pwm_config[i].dutyCycle = (uint64_t)pwm_config[i].waveLengthCycles * dutyCycle >> 16;
 
-
             if (durationMillis > 0) {
-#ifdef STM32F0
-                pwm_config[i].counterCycles = HAL_RCC_GetPCLK1Freq() / 1000 * durationMillis;
-#else
-                pwm_config[i].counterCycles = HAL_RCC_GetPCLK2Freq() / 1000 * durationMillis;
-#endif
+                pwm_config[i].counterCycles = timerFreq() / 1000 * durationMillis;
             }
 
             break;
@@ -141,7 +140,21 @@ void setPwmFrequency(uint32_t freqHz){
 uint32_t getPwmFrequency(void){
     return pwmFrequecyHz;
 }
-/*add huaweiwx@sina.com*/
+
+void stm32ScheduleMicros(uint32_t microseconds, void (*callback)()) {
+    initTimer();
+
+    for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {
+        if (pwm_config[i].port == NULL && pwm_config[i].callback == NULL) {
+
+            pwm_config[i].callback = callback;
+
+            pwm_config[i].waveLengthCycles = timerFreq() * (uint64_t)microseconds / 1000000;
+            pwm_config[i].counterCycles = pwm_config[i].waveLengthCycles;
+            break;
+        }
+    }
+}
 
 void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin_mask) {
     for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {
@@ -191,7 +204,13 @@ void pwm_callback() {
                             pwm_config[i].counterCycles -= waitCycles;
                         }
                     }
-                } else {
+                } else if (pwm_config[i].callback != NULL) {
+                    pwm_config[i].counterCycles -= waitCycles;
+                    if (pwm_config[i].counterCycles < 0) {
+                        pwm_config[i].callback();
+                        pwm_config[i].counterCycles += pwm_config[i].waveLengthCycles;
+					}
+				} else {
                     break;
                 }
             }
