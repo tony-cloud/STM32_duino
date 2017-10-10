@@ -2,10 +2,10 @@
 #define VARIANT_H
 
 /*LED*/
+#define BOARD_NR_LED          1 
 #ifndef LED_BUILTIN
 #	define LED_BUILTIN PC13
 #endif
-
 #ifndef LED_BUILTIN_MASK
 #	define LED_BUILTIN_MASK		0x00
 #endif

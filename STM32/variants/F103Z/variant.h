@@ -1,8 +1,9 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 
-//LED USERDEF RedBull
+//LEDS
 #define BOARD_NR_LED  1
+#define LED_BUILTIN PC13
 #define LED_BUILTIN_MASK		0x00
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 

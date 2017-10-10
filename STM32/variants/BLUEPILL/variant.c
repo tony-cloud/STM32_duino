@@ -37,6 +37,7 @@ void SystemClock_Config(void) {
 
     /* SysTick_IRQn interrupt configuration */
 #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
@@ -92,6 +93,7 @@ void SystemClock_Config(void) {
 
     /* SysTick_IRQn interrupt configuration */
 #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
