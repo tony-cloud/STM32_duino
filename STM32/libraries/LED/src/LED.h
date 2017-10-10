@@ -80,9 +80,9 @@ class LEDClass
 
 };
 
-
 #ifdef LED_BUILTIN
 extern LEDClass Led;
+extern LEDClass LEDs[];
 #endif
 
 #ifdef LED1_BUILTIN
@@ -113,23 +113,6 @@ extern LEDClass Led6;
 extern LEDClass Led7;
 #endif
 
-#ifdef LED7_BUILTIN
-extern LEDClass LEDs[];
-#elif defined(LED6_BUILTIN)
-extern LEDClass LEDs[];
-#elif defined(LED5_BUILTIN)
-extern LEDClass LEDs[];
-#elif defined(LED4_BUILTIN)
-extern LEDClass LEDs[];
-#elif defined(LED3_BUILTIN)
-extern LEDClass LEDs[];
-#elif defined(LED2_BUILTIN)
-extern LEDClass LEDs[];
-#elif defined(LED1_BUILTIN)
-extern LEDClass LEDs[];
-#else
-extern LEDClass LEDs[];
-#endif
 
 #endif /*__cplusplus*/
 #endif /*__LEDLIB_h__*/

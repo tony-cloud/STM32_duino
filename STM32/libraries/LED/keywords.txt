@@ -7,8 +7,7 @@
 #######################################
 
 LEDClass	KEYWORD1
-Led	KEYWORD1L
-LEDx	KEYWORD1L
+Led	KEYWORD1
 Led1	KEYWORD1
 Led2	KEYWORD1
 Led3	KEYWORD1
@@ -16,6 +15,8 @@ Led4	KEYWORD1
 Led5	KEYWORD1
 Led6	KEYWORD1
 Led7	KEYWORD1
+LEDs	KEYWORD1
+
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
@@ -32,6 +33,7 @@ fade	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
+BOARD_NR_LED	LITERAL1
 #######################################
 
 
