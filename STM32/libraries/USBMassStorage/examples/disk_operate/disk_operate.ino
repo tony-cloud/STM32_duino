@@ -68,7 +68,7 @@ void loop() {
     Serial.print(F("\r\n>"));
   }
 
-#if defined(ARDUINO_ARCH_STM32)||defined(ARDUINO_ARCH_HALMX)
+#if defined(STM32GENERIC)
   serialEvent();
 #endif
 }

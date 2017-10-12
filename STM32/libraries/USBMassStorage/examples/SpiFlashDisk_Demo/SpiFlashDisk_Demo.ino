@@ -9,11 +9,11 @@
    if Select Serial Communication:SerialUSB from the menu, output message by USB CDC
    ---------------------------------------------------------------------------------------
    huaweiwx@sina.com 2017.9.15
-   default:  W25x40 512k
+   default:  512k
    ---------------------------------------------------------------------------------------
 */
 
-#define SPIFLASHDISK_SIZE    64       /*user define, default max 512k*/
+#define SPIFLASHDISK_SIZE    512       /*user define, default max 512k*/
 #include <SpiFlashDisk.h>
 #include <LED.h>
 

@@ -1,6 +1,8 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 
+/******************** LED ************************/
+#define BOARD_NR_LED            1
 #define LED_BUILTIN  PF9
 #define LED_BUILTIN_MASK 0
 #define STM32_LED_BUILTIN_ACTIVE_LOW

@@ -4,8 +4,17 @@
 extern void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  PWR_PVDTypeDef sConfigPVD;
 
+  __HAL_RCC_SYSCFG_CLK_ENABLE();
   __HAL_RCC_PWR_CLK_ENABLE();
+  
+  sConfigPVD.PVDLevel = PWR_PVDLEVEL_0;
+  sConfigPVD.Mode = PWR_PVD_MODE_NORMAL;
+  HAL_PWR_ConfigPVD(&sConfigPVD);
+    /**Enable the PVD Output 
+    */
+  HAL_PWR_EnablePVD();
 
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
@@ -47,5 +56,5 @@ extern void SystemClock_Config(void) {
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#endif
 }
