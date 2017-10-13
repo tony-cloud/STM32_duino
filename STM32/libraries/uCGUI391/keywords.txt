@@ -19,6 +19,10 @@ GUI_ALPHA_STATE	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+#LCD
+LCD_GetXSize	KEYWORD2
+LCD_GetYSize	KEYWORD2
+
 #GUI General routines
 GUI_Init	KEYWORD2
 GUI_IsInitialized	KEYWORD2

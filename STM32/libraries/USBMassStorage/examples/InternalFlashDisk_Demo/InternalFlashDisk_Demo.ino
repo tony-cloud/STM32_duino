@@ -34,7 +34,7 @@ void loop() {
   fat.cacheClear();
   File f = fat.open("config.txt", FILE_READ);
   if (!f) {
-    Led.flash(10, 990, 1);
+    Led.flash(500, 500, 1);
     Serial << "config.txt not found!\n";
     return;
   }
@@ -44,16 +44,16 @@ void loop() {
   Serial.println(c);
   switch (c) {
     case '1':
-      Led.flash(500, 500, 1);
+      Led.flash(10, 990, 1);
       break;
     case '2':
-      Led.flash(250, 250, 2);
+      Led.flash(10, 490, 2);
       break;
     case '3':
-      Led.flash(165,165, 3);
+      Led.flash(10, 323, 3);
       break;
     default:
-      Led.flash(110, 110, 4);
+      Led.flash(250, 250, 2);
       break;
   }
   f.close();

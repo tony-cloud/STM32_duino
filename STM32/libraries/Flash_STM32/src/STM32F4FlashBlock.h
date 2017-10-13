@@ -22,9 +22,9 @@
 
 #ifndef STM32F4F7FLASHBLOCK_H
 #define STM32F4F7FLASHBLOCK_H
+#include "FlashBlock.h"
 
 #ifdef __cplusplus
-#include "FlashBlock.h"
 
 class STM32F4EmbeddedFlashBlock: public FlashBlock {
 public:
