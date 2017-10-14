@@ -4,6 +4,8 @@
    EXPERIMENTAL, for testing purposes.
    When writing, use eject drive, or the filesystem may get corrupted. In that case, use:
      chkdsk <drive> /f
+
+#define FLASHDISK_SIZE     64   /*user define, unused default defined*/
    Connect to USB. Upload files. Eject drive, Disconnect. Reconnect. Files should be there.
    Create some file as config.txt in,   
    if Select Serial Communication:SerialUSB from the menu, output message by USB CDC
@@ -15,10 +17,11 @@
    ---------------------------------------------------------------------------------------
 */
 
-#define FLASHDISK_SIZE     64   /*user define, unused default defined*/
-
 //use InternalFlashDisk or SpiFlashDisk
+//#define FLASHDISK_SIZE     64   /*user define, unused default defined*/
 //#include <InternalFlashDisk.h>
+
+#define SPIFLASHDISK_SIZE    2040       /*user define, max 2040k*/
 #include <SpiFlashDisk.h>
 
 #include <cmdline.h>
