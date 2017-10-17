@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    system_stm32l1xx.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    01-July-2016
   * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer System Source File.
   *             
   *   This file provides two functions and one global variable to be called from 
@@ -23,7 +21,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -80,12 +78,12 @@
   * @{
   */
 #if !defined  (HSE_VALUE) 
-  #define HSE_VALUE    ((uint32_t)8000000) /*!< Default value of the External oscillator in Hz.
+  #define HSE_VALUE    ((uint32_t)8000000U) /*!< Default value of the External oscillator in Hz.
                                                 This value can be provided and adapted by the user application. */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
-  #define HSI_VALUE    ((uint32_t)8000000) /*!< Default value of the Internal oscillator in Hz.
+  #define HSI_VALUE    ((uint32_t)8000000U) /*!< Default value of the Internal oscillator in Hz.
                                                 This value can be provided and adapted by the user application. */
 #endif /* HSI_VALUE */
 
@@ -97,7 +95,7 @@
      Internal SRAM. */ 
 /* #define VECT_TAB_SRAM */
 #ifndef VECT_TAB_OFFSET
-#define VECT_TAB_OFFSET  0x00000000U /*!< Vector Table base offset field. 
+#define VECT_TAB_OFFSET  0x00U /*!< Vector Table base offset field. 
                                   This value must be a multiple of 0x200. */
 #endif
 /**
@@ -123,10 +121,10 @@
                is no need to call the 2 first functions listed above, since SystemCoreClock
                variable is updated automatically.
   */
-uint32_t SystemCoreClock        = 2097000;
-const uint8_t PLLMulTable[9]    = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
-const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
+uint32_t SystemCoreClock        = 2097000U;
+const uint8_t PLLMulTable[9]    = {3U, 4U, 6U, 8U, 12U, 16U, 24U, 32U, 48U};
+const uint8_t AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
+const uint8_t APBPrescTable[8]  = {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
 /**
   * @}
@@ -149,7 +147,6 @@ const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
 /** @addtogroup STM32L1xx_System_Private_Functions
   * @{
   */
-
 //Override in variant to run beforer constructors
 __attribute__((weak)) void preinitVariant(void) {
     

@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    system_stm32f0xx.c
   * @author  MCD Application Team
-  * @version V2.3.0
-  * @date    27-May-2016
   * @brief   CMSIS Cortex-M0 Device Peripheral Access Layer System Source File.
   *
   * 1. This file provides two functions and one global variable to be called from
@@ -155,11 +153,12 @@ const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
 /** @addtogroup STM32F0xx_System_Private_Functions
   * @{
   */
-  
-//Override in variant to run beforer constructors
+
+//Override in variant to run beforer constructors huaweiwx@sina.com 2017.10
 __attribute__((weak)) void preinitVariant(void) {
     
 }
+
 /**
   * @brief  Setup the microcontroller system.
   *         Initialize the default HSI clock source, vector table location and the PLL configuration is reset.
@@ -224,7 +223,7 @@ void SystemInit(void)
 
   /* Disable all interrupts */
   RCC->CIR = 0x00000000U;
-  
+
   preinitVariant();
 }
 
