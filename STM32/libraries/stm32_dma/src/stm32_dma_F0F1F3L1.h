@@ -1,4 +1,13 @@
 
+#if defined(STM32F0)
+#define DMA1_Channel2_IRQn DMA1_Channel2_3_IRQn
+#define DMA1_Channel3_IRQn DMA1_Channel2_3_IRQn
+#define DMA1_Channel4_IRQn DMA1_Channel4_5_6_7_IRQn
+#define DMA1_Channel5_IRQn DMA1_Channel4_5_6_7_IRQn
+#define DMA1_Channel6_IRQn DMA1_Channel4_5_6_7_IRQn
+#define DMA1_Channel7_IRQn DMA1_Channel4_5_6_7_IRQn
+#endif
+
 typedef struct {
     void *periphInstance;
     dmaRequest request;
