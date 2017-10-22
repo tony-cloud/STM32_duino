@@ -96,7 +96,8 @@ recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -D{build
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} "{build.extra_lib}" "{build.path}/{archive_file}" -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
+#recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} "{build.extra_lib}" "{build.path}/{archive_file}" -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} "{build.extra_lib}" "{build.path}/{archive_file}" -lstdc++ -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
 
 ## Create bin
 recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
@@ -114,7 +115,7 @@ recipe.output.save_file.elf={build.project_name}.{build.variant}.elf
 
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
-recipe.size.regex=^(?:\.text|\.data|\.rodata)\s+([0-9]+).*
+recipe.size.regex=^(?:\.text|\.data|\.rodata|\.isr_vector)\s+([0-9]+).*
 recipe.size.regex.data=^(?:\.data|\.bss|\._user_heap_stack)\s+([0-9]+).*
 recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 
@@ -122,8 +123,9 @@ recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 # Uploader tool
 # -------------------
 
-upload.altID=unknown
-upload.usbID=unknown
+# this can be overriden in boards.txt
+upload.altID="unknown"
+upload.usbID="unknown"
 
 #Upload to Nucleo via mass storage
 tools.nucleoFlasher.path={runtime.ide.path}/hardware/tools/win/nucleoFlasher
@@ -145,7 +147,7 @@ tools.stlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
 
 tools.stlink_upload.upload.params.verbose=-d
 tools.stlink_upload.upload.params.quiet=
-tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" {upload.device} {build.uploadadr} {build.vect} 
+tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" "{upload.device}" "{upload.uploadadr}" "{upload.vect}"
 
 # jLINK/V21 upload
 # this can be overriden in boards.txt
@@ -158,7 +160,7 @@ tools.jlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
 
 tools.jlink_upload.upload.params.verbose=-d
 tools.jlink_upload.upload.params.quiet=
-tools.jlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" {upload.device} 0x8000000 0x8000000 
+tools.jlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" {upload.device} "{upload.uploadadr}" "{upload.vect}" 
 
 # Upload using Maple bootloader over DFU
 tools.maple_upload.cmd=maple_upload
@@ -183,7 +185,8 @@ tools.serial_upload.path.linux={runtime.ide.path}/hardware/tools/linux
 
 tools.serial_upload.upload.params.verbose=-d 
 tools.serial_upload.upload.params.quiet=n 
-tools.serial_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} "{build.path}/{build.project_name}.hex" {upload.device} 0x8000000 0x8000000 
+tools.serial_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} "{build.path}/{build.project_name}.hex" "{upload.device}" "{upload.uploadadr}" "{upload.vect}"
+
 
 # blackmagic probe upload
 tools.bmp_upload.cmd=arm-none-eabi-gdb
