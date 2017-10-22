@@ -10,17 +10,12 @@ set str=%4
 set str=%str:/=\%
 
 set alt=%2
-if "%2"=="RAM"       goto runInRam
 
-
+echo on
 :FLASH
-stlink\ST-LINK_CLI.exe -c SWD -P %str% %7 -Rst -Run
+stlink\ST-LINK_CLI.exe -c SWD -P %str% %6 -Run %7  -Rst
 goto EXIT
 
-
-:RAM
-stlink\ST-LINK_CLI.exe -c SWD -P %str% %7 nBoot1=1  BOOT_ADD0=0x08000 -Rst -Run
-goto EXIT
 
 :TEXANE
 rem: Using the open source texane-stlink instead of the proprietary STM stlink exe
@@ -34,5 +29,5 @@ goto EXIT
 
 
 :EXIT
-wait_for_serial.bat %1
+rem: wait_for_serial.bat %1
 

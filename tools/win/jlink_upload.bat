@@ -14,22 +14,12 @@ set str=%str:/=\%
 
 :FLASH
 echo f >stm32.jlink
-echo loadfile %str%,0X8000000 >>stm32.jlink
+echo loadfile %str%,, >>stm32.jlink
 echo r >>stm32.jlink
 echo g >>stm32.jlink
 echo qc >>stm32.jlink
 GOTO UPLOAD
 
-:RAM r13(sp) r15(pc)
-echo f >stm32.jlink
-echo loadfile %str%,%6 >>stm32.jlink
-echo w4 0xE000ED08,0x20000200 >>stm32.jlink
-echo wreg MSP,0x20010000 >>stm32.jlink
-echo setpc 0x20000204 >>stm32.jlink
-echo r >>stm32.jlink
-echo g >>stm32.jlink
-echo qc >>stm32.jlink
-GOTO UPLOAD
 
 :NOR
 echo f >stm32.jlink
