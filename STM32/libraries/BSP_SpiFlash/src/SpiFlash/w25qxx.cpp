@@ -72,6 +72,8 @@ W25QXX::W25QXX(uint8_t mosi, uint8_t miso, uint8_t sck)
 
 void W25QXX::begin(uint8_t cs)
 {
+  if(pdata->inited == 0){
+	pdata->inited = 1;  
   if (cs == 0xff)
     pdata->cs_pin = SPIFLASH_CS;
   else
@@ -83,6 +85,8 @@ void W25QXX::begin(uint8_t cs)
   SPIClass::beginTransaction(SPISettings(1000000UL*SPIFLASH_SPEED_Mhz, MSBFIRST, SPI_MODE0));
 //  SPI1_SetSpeed(SPI_BaudRatePrescaler_2);		//设置为42M时钟,高速模式 
   this->jedecDeviceID(&pdata->ID[0]);	//读取FLASH ID.
+  
+  }
 }  
 
 //读取W25QXX的状态寄存器

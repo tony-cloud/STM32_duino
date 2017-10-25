@@ -30,6 +30,7 @@ typedef struct {
     uint8_t cs_pin;
 	uint8_t	aBuf[W25QXX_BUFFERSIZE];	
     uint8_t	ID[5];  //∂®“ÂW25QXX–æ∆¨ID
+	uint8_t inited = 0;
 } W25QXX_TypeDef;
 
 

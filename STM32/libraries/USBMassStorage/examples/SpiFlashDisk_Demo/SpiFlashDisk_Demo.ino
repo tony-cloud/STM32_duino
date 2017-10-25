@@ -13,11 +13,12 @@
    ---------------------------------------------------------------------------------------
 */
 
-#define SPIFLASHDISK_SIZE    512       /*user define, default max 512k*/
+#define SPIFLASHDISK_SIZE    2040       /*user define, max 2040k*/
 #include <SpiFlashDisk.h>
 #include <LED.h>
 
 void setup() {
+  SPIFLASH.begin(); //need while usb unconnected
   Serial.begin(115200);
   Led.Init();
   while (!Serial.available()) {
