@@ -11,7 +11,6 @@ set str=%str:/=\%
 
 set alt=%2
 
-echo on
 :FLASH
 stlink\ST-LINK_CLI.exe -c SWD -P %str% %6 -Run %7  -Rst
 goto EXIT
