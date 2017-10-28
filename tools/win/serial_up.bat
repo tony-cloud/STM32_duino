@@ -1,4 +1,4 @@
-rem @Echo off
+@Echo off
 Rem: Note %~dp0 get path of this batch file
 Rem: Need to change drive if My Documents is on a drive other than C:
 set driverLetter=%~dp0
@@ -48,7 +48,11 @@ echo for user define  Rts/Dtr to reset&boot
 stm32flash -b 115200 -w %str% %1 -S%s% -g%g% -i  2,-1,1,2 -n 40
 goto EXIT
 
+
 :UNUSED
+
+
+:UPLOAD
 echo for General Board Dtr/Rts unused
 stm32flash -b 115200 -w %str% %1 -S%s% -g%g% -n 40
 
