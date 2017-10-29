@@ -8,9 +8,8 @@ Documentation: https://danieleff.github.io/STM32GENERIC/
 TODO create boards manager package
 
 ## Installation - Developers
-
 1. Download the latest version from [https://github.com/huaweiwx/STM32GENERIC](https://github.com/huaweiwx/STM32GENERIC)
-2. Unzip it into [Arduino]/hardware folder
+2. Unzip it into [Arduino]/hardware folder (Arduino must be ver1.8.5 or newer)
 3. Move the files in hardware/STM32GENERIC/tools folder to hardware/tools folder for allow other arduino arm can sharing it.
 4. Install Arduino Zero or Arduino Sam from the board manager for the arm-none-eabi-gcc compiler
 5. Download the [GNU ARM Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
