@@ -4,6 +4,7 @@
 
 #define LED  LED_BUILTIN
 
+AT24XX EEPROM(AT24C02);
 
 void setup() {
   pinMode(LED, OUTPUT);
@@ -23,12 +24,12 @@ void setup() {
   else
     Serial << "eeprom init ok    dev:24C" << EEPROM.pdata->dev << "  at adr 0x" << _HEX(EEPROM.pdata->devAdr) << "\n";
 
-  
   /*
     for (uint16_t i = 0; i < 16; i++) {
       EEPROM.writeOneByte((uint16_t)i, (uint8_t)i);
     }
   */
+  
   for (uint16_t i = 0; i < 16; i++) {
     for (uint16_t j = 0; j < 16; j++) {
       Serial << _HEX(EEPROM.readOneByte(i * 16 + j)) << " ";
