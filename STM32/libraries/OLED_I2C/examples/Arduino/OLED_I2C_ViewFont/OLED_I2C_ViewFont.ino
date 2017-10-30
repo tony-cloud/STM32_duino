@@ -38,10 +38,16 @@
 //
 
 #include <OLED_I2C.h>
+/*OLED12864/32 
+OLED:   CS  RST  DC  D1(SDA)  D0(SCL)   VCC    GND
+STM32:  -   PA3  -    PA1      PA2     3.3/5V  0V
+ZION    -   23        49       50
+*/
 
-OLED_12864  myOLED(PG_1,PG_2,  PA_7);   //use soft i2c  12832 avr zion
 //OLED_12864  myOLED(PC5,PC4,PC1);      //use soft i2c  12864 gd32
 //OLED_12864  myOLED(SDA, SCL, 8);      //arduino
+
+OLED_12864  myOLED(PA1,PA2,PA3);   //use soft i2c  12864 STM32F1
 
 extern uint8_t SmallFont[];
 

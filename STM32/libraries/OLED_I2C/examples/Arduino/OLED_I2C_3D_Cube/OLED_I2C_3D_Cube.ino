@@ -42,6 +42,7 @@
 
 #include <OLED_I2C.h>
 
+//OLED_12864  myOLED(PG_1,PG_2,  PA_7);   //use soft i2c  12832 avr zion
 OLED_12864  myOLED(PA1,PA2,PA3);      //use soft i2c  12864 gd32
 //OLED_12864  myOLED(SDA, SCL, 8);      //arduino
 

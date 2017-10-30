@@ -27,8 +27,26 @@
 
 #include "Arduino.h"
 #include "OLED_I2C.h"
-#include "hardware/arm/HW_STM32HAL_defines.h"
-#include "hardware/arm/HW_STM32.h"
+
+#if defined(__AVR__)
+	#include "hardware/avr/HW_AVR_defines.h"
+	#include "hardware/avr/HW_AVR.h"
+#elif defined(__PIC32MX__)
+	#include "WProgram.h"
+	#include "hardware/pic32/HW_PIC32_defines.h"
+	#include "hardware/pic32/HW_PIC32.h"
+#elif defined(STM32GENERIC)
+    #include "hardware/arm/HW_STM32HAL_defines.h"
+	#include "hardware/arm/HW_STM32.h"
+#elif defined (__STM32F1__) ||defined (STM32F2)||defined (STM32F4)
+    #include "hardware/arm/HW_STM32_defines.h"
+	#include "hardware/arm/HW_STM32.h"
+#elif defined(__arm__)
+	#include "hardware/arm/HW_ARM_defines.h"
+	#include "hardware/arm/HW_ARM.h"
+#else
+	#error "board notdefined"
+#endif
 
 OLED_I2C::OLED_I2C(uint8_t data_pin, uint8_t sclk_pin, uint8_t rst_pin)
 { 
@@ -49,7 +67,19 @@ void OLED_I2C::init()
 		delay(10);
 		digitalWrite(_rst_pin, HIGH);
 	}
-	
+#if defined(__AVR__)|| defined(__PIC32MX__)
+
+#if defined(SDA1) & defined(SCL1)
+	if (((_sda_pin == SDA) and (_scl_pin == SCL)) or ((_sda_pin == SDA1) and (_scl_pin == SCL1)))
+#else
+	if ((_sda_pin == SDA) and (_scl_pin == SCL))
+#endif
+	{
+		_use_hw = true;
+		_initTWI();
+	}
+	else
+#endif		
 	{
 		_use_hw = false;
 		pinMode(_scl_pin, OUTPUT);

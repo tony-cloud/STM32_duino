@@ -42,9 +42,13 @@
 // class OLED_12832 128x32    OLED_12864 128x64
 //
 
-#include <OLED_I2C.h>
 #include <LED.h>
-#include <InternalTempSensor.h>
+#include <OLED_I2C.h>
+
+//OLED12864/32 
+//OLED:   CS  RST  DC  D1(SDA)  D0(SCL)   VCC    GND
+//STM32:  -   PA3  -    PA1      PA2     3.3/5V  0V
+//ZION    -   23        49       50
 
 //OLED_12832  myOLED(SDA, SCL, 8);   //use hwi2c
 //OLED_12864  myOLED(SDA, SCL, 8);   //use hwi2c
@@ -52,25 +56,23 @@
 //OLED_12864  myOLED(PC5,PC4,PC1);   //use soft i2c  12864
 
 #define USE12864
+
 #if defined(USE12864)
- OLED_12864  myOLED(PC5,PC4,PC1);   //use soft i2c  12864
+ OLED_12864  myOLED(PA1,PA2,PA3);   //use soft i2c  12864
 #else 
- OLED_12832  myOLED(PC5, PC4, PC1);   //use soft i2c  12832
+ OLED_12832  myOLED(PA1,PA2,PA3);   //use soft i2c  12832
 #endif 
-
-//LEDClass Led1();                           //init LEDClass Led1 default(LED_BUILTIN,HIGH ON;
-LEDClass Led1(LED_BUILTIN, 0);              //init LEDClass Led1 (LED_BUILTIN,  LOW ON);
-
 extern uint8_t SmallFont[];
 extern uint8_t MediumNumbers[];
 extern uint8_t BigNumbers[];
 
 void setup()
 {
-  ADC_TempSensorEn();
-  Led1.Flash(10, 330, 3);
+//  ADC_TempSensorEn();
+  Led.Init();
+  Led.flash(10, 330, 3);
   myOLED.begin();
-  Led1.Flash(10, 490, 2);
+  Led.flash(10, 490, 2);
   myOLED.setFont(SmallFont);
   myOLED.printxy("HELLO MYDIGIT.CN!", CENTER, 0);
   myOLED.printxy("Internal TempSenser", CENTER,  8);
@@ -83,8 +85,8 @@ void setup()
 
 void loop()
 {
-  Led1.Flash(500, 500, 1);
-  myOLED.printNumF(get_temperature() / 100, 2, CENTER, 16);
+  Led.flash(500, 500, 1);
+  myOLED.printNumF(8888, 2, CENTER, 16);
   myOLED.update();
 }
 

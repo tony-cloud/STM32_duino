@@ -39,22 +39,26 @@
 
 // add support ssd1306_12832 by huaweiwx@sina.com 2016.11.08
 // class OLED_12832 128x32    OLED_12864 128x64
+// OLED_128xx  myOLED(SDA, SCL);      //default unuse RST
+// OLED_128xx  myOLED(SDA, SCL, RST); //use rst
 //
 
 #include <OLED_I2C.h>
 #include <LED.h>
-
-//OLED_12832  myOLED(SDA, SCL,  PA7);   //use hwi2c
-//OLED_12864  myOLED(SDA, SCL, 8);      //use hwi2c
+/*OLED12864/32 
+OLED:   CS  RST  DC  D1(SDA)  D0(SCL)   VCC    GND
+STM32:  -   PA3  -    PA1      PA2     3.3/5V  0V
+ZION    -   23        49       50
+*/
 
 //OLED_12832  myOLED(PG_1,PG_2,  PA_7);   //use soft i2c  12832 avr zion
-OLED_12864  myOLED(PG_1,PG_2,  PA_7);   //use soft i2c  12864 avr zion
-//OLED_12832  myOLED(PC5,PC4,PC1);      //use soft i2c  12832 gd32
-//OLED_12864  myOLED(PC5,PC4,PC1);      //use soft i2c  12864 gd32
+//OLED_12864  myOLED(PG_1,PG_2,  PA_7);   //use soft i2c  12864 avr zion
 
-
-//LEDClass Led1();                           //init LEDClass Led1 default(LED_BUILTIN,HIGH ON;
-LEDClass Led1(LED_BUILTIN, 0);              //init LEDClass Led1 (LED_BUILTIN,  LOW ON);
+// SDA:PC5 SCL:PC4 RST:PC1  my GD32 conected
+//OLED_12832  myOLED(PC5,PC4,PC1);    //use soft i2c  12832 gd32
+//OLED_12832  myOLED(PC5,PC4);        //use soft i2c  12832 gd32 unuse reset
+OLED_12864    myOLED(PA1,PA2,PA3);      //use soft i2c  12864 gd32
+//OLED_12864  myOLED(PC5,PC4);        //use soft i2c  12864 gd32 unuse reset
 
 extern uint8_t SmallFont[];
 extern uint8_t MediumNumbers[];
@@ -62,6 +66,7 @@ extern uint8_t BigNumbers[];
 
 void setup()
 {
+  Led.Init();
   myOLED.begin();
   myOLED.setFont(SmallFont);
   myOLED.printxy("012345678901234567890", CENTER, 0);
@@ -73,7 +78,7 @@ void setup()
 
 void loop()
 {
-  Led1.Flash(500, 500, 1);
+  Led.flash(500, 500, 1);
 }
 
 
