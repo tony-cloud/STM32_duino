@@ -6,24 +6,27 @@
 #if __has_include("i2cEepromConfig.h")
 #  include "i2cEepromConfig.h"
 #endif
-
 #include "at24cxx.h"
+
+#ifndef AT24CXX_SDA
+# define   AT24CXX_SDA SDA
+#endif
+
+#ifndef AT24CXX_SCL
+# define   AT24CXX_SCL SCL
+#endif
 
 AT24XX::AT24XX(uint16_t _dev)
        :TwoWireSoft(){
+
+#ifdef 	AT24CXX_TYPE
+	   pdata->dev = AT24CXX_TYPE; 
+#else 	   
 	   pdata->dev = _dev;
-	   
-#ifdef 	AT24CXX_TYPE	   
-	   pdata->dev = AT24CXX_TYPE;
-#endif
-	   
-#ifdef AT24CXX_SDA
-       this->setSDA(AT24CXX_SDA);
 #endif
 
-#ifdef AT24CXX_SCL
+       this->setSDA(AT24CXX_SDA);
        this->setSCL(AT24CXX_SCL);
-#endif
  
 #ifdef AT24CXX_A2A1A0
        pdata->devAdr = (0x50 | AT24CXX_A2A1A0)<<1;   //0x50|A2A1A0

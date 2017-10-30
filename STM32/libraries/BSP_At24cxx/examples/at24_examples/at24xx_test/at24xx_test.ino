@@ -2,13 +2,19 @@
 //  huaweiwx@sina.com 2017.2.21
 #include <BSP_At24cxx.h>
 
-#define LED0  LED_BUILTIN
+#define LED  LED_BUILTIN
 
-AT24XX EEPROM;
+
 void setup() {
+  pinMode(LED, OUTPUT);
   Serial.begin(115200);
   //EEPROM.begin();    //defaul chip addr A2A1A0 = 000;
   //EEPROM.begin(0x03) //A2A1A0 =011
+
+  while (!Serial.available()) { //wait for usb_serial available;
+    digitalToggle(LED);
+    delay(1000);
+  }
 
   if (EEPROM.begin())
     Serial << "eeprom init err!  dev:24C " << EEPROM.pdata->dev << "  at adr 0x" << _HEX(EEPROM.pdata->devAdr) << "\n";
@@ -17,7 +23,7 @@ void setup() {
   else
     Serial << "eeprom init ok    dev:24C" << EEPROM.pdata->dev << "  at adr 0x" << _HEX(EEPROM.pdata->devAdr) << "\n";
 
-  pinMode(LED0, OUTPUT);
+  
   /*
     for (uint16_t i = 0; i < 16; i++) {
       EEPROM.writeOneByte((uint16_t)i, (uint8_t)i);
@@ -33,7 +39,7 @@ void setup() {
 
 
 void loop() {
-  digitalToggle(LED0);
+  digitalToggle(LED);
   delay(1000);
   // Insert background code here
 }

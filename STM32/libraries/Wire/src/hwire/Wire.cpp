@@ -1,13 +1,11 @@
 //TODO I2C slave mode for chips that use something else than I2C_IT_BUF
 
+#include <Arduino.h>
 #include "Wire.h"
 #include "stm32_gpio_af.h"
-#include <Arduino.h>
 
-#ifndef I2C1_EV_IRQn  /*F0/L0*/
+#if defined(STM32F0)||defined(STM32L0)  /*F0/L0*/
 #define I2C1_EV_IRQn I2C1_IRQn
-#endif
-#ifndef I2C2_EV_IRQn /*F0/L0*/
 #define I2C2_EV_IRQn I2C1_IRQn
 #endif
 
