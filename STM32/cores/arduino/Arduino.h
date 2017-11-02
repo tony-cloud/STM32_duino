@@ -20,18 +20,16 @@
 #ifndef Arduino_h
 #define Arduino_h
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include <bit_constants.h>
 
 // #include <avr/pgmspace.h>
 // #include <avr/io.h>
 // #include <avr/interrupt.h>
-
-//#include "binary.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -118,8 +116,6 @@ void pwmWrite(uint8_t pin, int dutyCycle16Bits, int frequency, int durationMilli
 //unsigned long micros(void);
 //void delay(unsigned long);
 //void delayMicroseconds(uint32_t us);
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
-unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);
 
 uint32_t shiftIn( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder ); //add by huaweiwx@sina.com
 void shiftOut( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder, uint32_t ulVal ); //add by huaweiwx@sina.com
@@ -155,7 +151,7 @@ void loop(void);
 #endif
 
 #ifdef __cplusplus
-//#include "WCharacter.h"
+#include "WCharacter.h"
 //#include "WString.h"
 //#include "HardwareSerial.h"
 //#include "USBAPI.h"
@@ -168,8 +164,8 @@ uint16_t makeWord(byte h, byte l);
 
 #define word(...) makeWord(__VA_ARGS__)
 
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
-unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+//unsigned long pulseIn(uint32_t pin, uint32_t state, unsigned long timeout = 1000000L);
+//unsigned long pulseInLong(uint32_t pin, uint32_t state, unsigned long timeout = 1000000L);
 
 extern "C" void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
 void noTone(uint8_t _pin);
@@ -192,7 +188,12 @@ long map(long, long, long, long, long);
 #include "SerialUART.h"
 #include <SerialUSB.h>
 #include <STM32System.h>
-#include "Streaming.h"  //add by huaweiwx@sina.com
+
+//add by huaweiwx@sina.com
+//#include <string>
+//#include <vector>
+#include "Streaming.h"
+#include "wiring_pulse.h"  /*copy from Arduino_core_STM32 huaweiwx@sina.com 2017.11*/
 
 #if defined(MENU_SERIAL)
 # define Serial MENU_SERIAL
