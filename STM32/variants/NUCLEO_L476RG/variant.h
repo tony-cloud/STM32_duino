@@ -21,6 +21,10 @@
 
 #define SDA PB9
 #define SCL PB8
+#define I2C1_100KHZ_TIMING 0x10909CEC
+#define I2C2_100KHZ_TIMING 0x10909CEC
+#define I2C3_100KHZ_TIMING 0x10909CEC
+
 
 #define A0 PA0
 #define A1 PA1

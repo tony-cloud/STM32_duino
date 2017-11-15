@@ -32,6 +32,15 @@
 #define SDA                         PB9
 #define SCL                         PB6
 
+#define I2C1_100KHZ_TIMING 0x2000090E
+#define I2C2_100KHZ_TIMING 0x2000090E
+#define I2C3_100KHZ_TIMING 0x2000090E
+#define I2C4_100KHZ_TIMING 0x2000090E
+
 //USB
+
+//serial bootloader address
+# define SERIAL_LOAD_RAM 0x20001800U
+
 
 #endif
