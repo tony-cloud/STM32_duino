@@ -1,11 +1,5 @@
 #include <Arduino.h>
-#if __has_include("bsp.h")
-#  include "bsp.h"
-#endif
 
-#if __has_include("i2cEepromConfig.h")
-#  include "i2cEepromConfig.h"
-#endif
 #include "at24cxx.h"
 
 #ifndef AT24CXX_SDA
@@ -16,27 +10,26 @@
 # define   AT24CXX_SCL SCL
 #endif
 
+
 AT24XX::AT24XX(uint16_t _dev)
        :TwoWireSoft(){
 
-#ifdef 	AT24CXX_TYPE
-	   pdata->dev = AT24CXX_TYPE; 
-#else 	   
 	   pdata->dev = _dev;
-#endif
-
+	   
        this->setSDA(AT24CXX_SDA);
        this->setSCL(AT24CXX_SCL);
  
 #ifdef AT24CXX_A2A1A0
-       pdata->devAdr = (0x50 | AT24CXX_A2A1A0)<<1;   //0x50|A2A1A0
+       pdata->adr = (0x50 | AT24CXX_A2A1A0)<<1;   //0x50|A2A1A0
 #else
-       pdata->devAdr = 0x50<<1 ; //A2A1A0=0      
-#endif	
+       pdata->adr = 0x50<<1 ; //A2A1A0=0      
+#endif
+       pdata->ctrl = 0;	
 }
 
-AT24XX::AT24XX(uint8_t scl, uint8_t sda)
-       :TwoWireSoft(scl,sda){
+AT24XX::AT24XX (uint8_t sda,uint8_t scl)
+       :TwoWireSoft(sda,scl){
+       pdata->ctrl = 0;	
 }
 
 void AT24XX::setSDA(uint8_t sda){
@@ -51,14 +44,14 @@ void AT24XX::setSCL(uint8_t scl){
 uint8_t AT24XX::begin(uint8_t _devAdr)
 {
     if (_devAdr >= 0xA0)  //rw addr
-		pdata->devAdr = _devAdr;
+		pdata->adr = _devAdr;
     if (_devAdr >= 0x50)   //dev addr
-       pdata->devAdr = (_devAdr<<1);  //0x5x
+       pdata->adr = (_devAdr<<1);  //0x5x
 	else if(_devAdr > 0)        //a2a1a0 adr else use default rw addr;
-       pdata->devAdr = (0x50 | _devAdr)<<1;
+       pdata->adr = (0x50 | _devAdr)<<1;
    
 	TwoWireSoft::begin();
-	return this->check();
+	return ((pdata->ctrl)?this->check():0);
 }
 
 uint8_t AT24XX::begin(int _devAdr)
@@ -75,15 +68,15 @@ uint8_t AT24XX::readOneByte(uint16_t ReadAddr)
     TwoWireSoft::start();  
 	if((pdata->dev)>AT24C16)
 	{
-		TwoWireSoft::sendByte(pdata->devAdr);	   //发送写命令
+		TwoWireSoft::sendByte(pdata->adr);	   //发送写命令
 		TwoWireSoft::waitAck();
 		TwoWireSoft::sendByte(ReadAddr>>8);//发送高地址	    
-	}else TwoWireSoft::sendByte((pdata->devAdr)+((ReadAddr/256)<<1));   //发送器件地址0XA0,写数据 	   
+	}else TwoWireSoft::sendByte((pdata->adr)+((ReadAddr/256)<<1));   //发送器件地址0XA0,写数据 	   
 	TwoWireSoft::waitAck(); 
     TwoWireSoft::sendByte(ReadAddr%256);   //发送低地址
 	TwoWireSoft::waitAck();	    
 	TwoWireSoft::start();  	 	   
-	TwoWireSoft::sendByte((pdata->devAdr)+1);           //进入接收模式			   
+	TwoWireSoft::sendByte((pdata->adr)+1);           //进入接收模式			   
 	TwoWireSoft::waitAck();	 
     temp=TwoWireSoft::readByte(0);		   
     TwoWireSoft::stop();//产生一个停止条件	    
@@ -97,17 +90,17 @@ void AT24XX::writeOneByte(uint16_t WriteAddr,uint8_t DataToWrite)
     TwoWireSoft::start();  
 	if((pdata->dev)>AT24C16)
 	{
-		TwoWireSoft::sendByte(pdata->devAdr << 1);	    //发送写命令
+		TwoWireSoft::sendByte(pdata->adr);	    //发送写命令
 		TwoWireSoft::waitAck();
 		TwoWireSoft::sendByte(WriteAddr>>8);//发送高地址	  
-	}else TwoWireSoft::sendByte((pdata->devAdr << 1)+((WriteAddr/256)<<1));   //发送器件地址0XA0,写数据 	 
+	}else TwoWireSoft::sendByte((pdata->adr)+((WriteAddr/256)<<1));   //发送器件地址0XA0,写数据 	 
 	TwoWireSoft::waitAck();	   
     TwoWireSoft::sendByte(WriteAddr%256);   //发送低地址
 	TwoWireSoft::waitAck(); 	 										  		   
 	TwoWireSoft::sendByte(DataToWrite);     //发送字节							   
 	TwoWireSoft::waitAck();  		    	   
     TwoWireSoft::stop();//产生一个停止条件 
-	delay(5);	 
+	delay(10);	 
 }
 //在AT24CXX里面的指定地址开始写入长度为Len的数据
 //该函数用于写入16bit或者32bit的数据.

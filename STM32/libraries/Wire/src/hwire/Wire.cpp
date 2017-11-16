@@ -17,7 +17,7 @@ TwoWire::TwoWire(){
   handle.Instance = I2C1;	
 };
 
-TwoWire::TwoWire(uint8_t scl,uint8_t sda) { //add huaweiwx@sina.com 2017.8.2
+TwoWire::TwoWire(uint8_t sda,uint8_t scl) { //add huaweiwx@sina.com 2017.8.2
     stm32SetSDA(sda);
     stm32SetSCL(scl);
     handle.Instance = stm32GetI2CInstance(sdaPort,sdaPin,sclPort,sclPin);

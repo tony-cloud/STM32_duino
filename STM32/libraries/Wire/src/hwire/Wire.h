@@ -61,7 +61,7 @@ class TwoWire : public Stream {
 
 
 	TwoWire(); //add huaweiwx@sina.com 2017.8.2
-    TwoWire(uint8_t scl,uint8_t sda); //add huaweiwx@sina.com 2017.8.2
+    TwoWire(uint8_t sda,uint8_t scl); //add huaweiwx@sina.com 2017.8.2
     TwoWire(I2C_TypeDef *instance);
     TwoWire(I2C_TypeDef *instance, uint8_t sda, uint8_t scl);
     

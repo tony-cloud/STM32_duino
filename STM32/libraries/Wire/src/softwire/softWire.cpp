@@ -25,7 +25,7 @@ void TwoWireSoft::setSCL(uint8_t scl){
 //初始化IIC
 void TwoWireSoft::begin(void)
 {			
-  pinMode(pdev->sdapin,OUTPUT);
+  pinMode(pdev->sdapin,OUTPUT_OD);
   pinMode(pdev->sclpin,OUTPUT);
   digitalWrite(pdev->sclpin,HIGH);
   digitalWrite(pdev->sdapin,HIGH);
@@ -34,7 +34,7 @@ void TwoWireSoft::begin(void)
 //产生IIC起始信号
 void TwoWireSoft::start(void)
 {
-	pinMode(pdev->sdapin,OUTPUT);     //sda线输出
+	pinMode(pdev->sdapin,OUTPUT_OD);     //sda线输出
 	digitalWrite(pdev->sdapin,HIGH);	  	  
 	digitalWrite(pdev->sclpin,HIGH);
 	delayMicroseconds(4);
@@ -45,7 +45,7 @@ void TwoWireSoft::start(void)
 //产生IIC停止信号
 void TwoWireSoft::stop(void)
 {
-	pinMode(pdev->sdapin,OUTPUT);//sda线输出
+	pinMode(pdev->sdapin,OUTPUT_OD);//sda线输出
 	digitalWrite(pdev->sclpin,LOW);
 	digitalWrite(pdev->sdapin,LOW);//STOP:when CLK is high DATA change form low to high
  	delayMicroseconds(4);
@@ -78,7 +78,7 @@ uint8_t TwoWireSoft::waitAck(void)
 void TwoWireSoft::ack(void)
 {
 	digitalWrite(pdev->sclpin,LOW);
-	pinMode(pdev->sdapin,OUTPUT);
+	pinMode(pdev->sdapin,OUTPUT_OD);
 	digitalWrite(pdev->sdapin,LOW);
 	delayMicroseconds(2);
 	digitalWrite(pdev->sclpin,HIGH);
@@ -89,7 +89,7 @@ void TwoWireSoft::ack(void)
 void TwoWireSoft::nAck(void)
 {
 	digitalWrite(pdev->sclpin,LOW);
-	pinMode(pdev->sdapin,OUTPUT);
+	pinMode(pdev->sdapin,OUTPUT_OD);
 	digitalWrite(pdev->sdapin,HIGH);
 	delayMicroseconds(2);
 	digitalWrite(pdev->sclpin,HIGH);
@@ -103,7 +103,7 @@ void TwoWireSoft::nAck(void)
 void TwoWireSoft::sendByte(uint8_t txd)
 {                        
     uint8_t t;   
-	pinMode(pdev->sdapin,OUTPUT); 	    
+	pinMode(pdev->sdapin,OUTPUT_OD); 	    
     digitalWrite(pdev->sclpin,LOW);//拉低时钟开始数据传输
     for(t=0;t<8;t++)
     {              
