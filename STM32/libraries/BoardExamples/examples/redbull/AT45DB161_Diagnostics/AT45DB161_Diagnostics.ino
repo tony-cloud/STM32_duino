@@ -3,8 +3,9 @@
 // Open USB serial monitor
 
 #include<SPIFlash.h>
-#if __has_include("ARDUINOConfig.h")      //test user config ARDUINO huawei (huaweiwx@sina.com)
-# include "ARDUINOConfig.h"
+
+#if __has_include("configs/spiFlashConfig.h")
+#  include "configs/spiFlashConfig.h"
 #endif
 
 #ifndef SPIFLASH_CS
@@ -18,10 +19,7 @@
 SPIFlash flash(SPIFLASH_CS);
 
 void setup() {
-  SPI.stm32SetMOSI(SPIFLASH_MOSI);
-  SPI.stm32SetMISO(SPIFLASH_MISO);
-  SPI.stm32SetSCK(SPIFLASH_SCK);
-  
+  SPI.setPins(SPIFLASH_MOSI,SPIFLASH_MISO,SPIFLASH_SCK);
   Serial.begin(115200);
   
   flash.begin(16000000);

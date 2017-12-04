@@ -6,11 +6,12 @@
 SPIFlash flash(PB0);
 
 void setup() {
-  SPI.stm32SetMOSI(PB5);
-  SPI.stm32SetMISO(PB4);
-  SPI.stm32SetSCK(PB3);
-  
+//  SPI.setMOSI(PB5);
+//  SPI.setMISO(PB4);
+//  SPI.setSCK(PB3);
+  SPI.setPins(PB5,PB4,PB3);
   Serial.begin(115200);
+  while (!Serial.available()); //wait for usb_serial input a char; 
   
   flash.begin();
 

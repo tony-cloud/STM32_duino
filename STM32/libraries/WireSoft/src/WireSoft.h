@@ -63,13 +63,10 @@ class TwoWire : public WireBase {
     uint8_t	scl_pin;
     uint8_t	sda_pin;
 	
-	void setSDA(uint8_t sda){
+    void setPins(uint8_t sda,uint8_t scl){
 		 sda_pin = sda;
-	    };
-	void setSCL(uint8_t scl){
-	     scl_pin =scl;		 
-		 };
-
+	     scl_pin = scl;
+		};
     /*
      * Sets the SCL line to HIGH/LOW and allow for clock stretching by slave
      * devices
