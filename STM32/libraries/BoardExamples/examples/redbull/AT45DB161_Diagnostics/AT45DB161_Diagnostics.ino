@@ -3,7 +3,9 @@
 // Open USB serial monitor
 
 #include<SPIFlash.h>
-#include "spiFlashConfig.h"
+#if __has_include("ARDUINOConfig.h")      //test user config ARDUINO huawei (huaweiwx@sina.com)
+# include "ARDUINOConfig.h"
+#endif
 
 #ifndef SPIFLASH_CS
 #define SPIFLASH_CS	PA4

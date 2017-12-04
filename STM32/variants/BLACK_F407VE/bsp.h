@@ -4,7 +4,7 @@
 
 
 /******************  BSP_TFT_LCD ******************/
-#include "LCDConfig.h"
+#include "configs/LCDConfig.h"
 #define LCD_ADDR_SETUPTIME 10       /*FSMC time setup*/
 #define LCD_DATA_SETUPTIME 25
 

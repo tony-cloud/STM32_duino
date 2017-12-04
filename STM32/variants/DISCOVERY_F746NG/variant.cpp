@@ -54,8 +54,9 @@ extern "C" void preinitVariant() {
     setHeap((unsigned char*)0xC0000000, (unsigned char*)(0xC0000000 + 8 * 1024 * 1024));
 }
 
+#define TXPIN PA9  
+#define RXPIN PB7
 extern "C" void initVariant() {
     //UART1 is connected to ST-Link V2.1 as Virtual Com port on non-default PA9/PB7 pins
-    SerialUART1.stm32SetTX(PA9);
-    SerialUART1.stm32SetRX(PB7);
+    SerialUART1.setPins(TXPIN,RXPIN);
 }

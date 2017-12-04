@@ -36,5 +36,7 @@
 #define I2C4_100KHZ_TIMING 0x20404768
 
 /*usb*/
+//serial bootloader address
+# define SERIAL_LOAD_RAM 0x20004000U
 
 #endif

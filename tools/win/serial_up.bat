@@ -40,7 +40,7 @@ goto EXIT
 
 :PL2303
 echo for PL2303 Rts_HiRst Dtr_HiBoot
-stm32flash -b 115200 -w %str% %1 -S%s% -g%g% -i  1,-2,2,1 -n 40
+stm32flash -b 115200 -w %str% %1 -S%s% -g%g% -i  1,-2,2,1:-1-2 -n 40
 goto EXIT
 
 :USERDEF

@@ -114,7 +114,13 @@ void SPIClass::begin() {
 	__HAL_LINKDMA(&spiHandle, hdmatx, hdma_spi_tx);
 	__HAL_LINKDMA(&spiHandle, hdmarx, hdma_spi_rx);
 
-	stm32AfSPIInit(spiHandle.Instance, mosiPort, mosiPin, misoPort, misoPin, sckPort, sckPin);
+	stm32AfSPIInit(spiHandle.Instance, 
+			       variant_pin_list[mosiPin].port,
+				   variant_pin_list[mosiPin].pin_mask,
+		           variant_pin_list[misoPin].port,
+				   variant_pin_list[misoPin].pin_mask,
+		           variant_pin_list[sckPin].port,
+				   variant_pin_list[sckPin].pin_mask);
 
 }
 
@@ -185,24 +191,34 @@ void SPIClass::setClockDivider(uint8_t clockDevider) {
 	beginTransaction(SPISettings(apb_freq / clockDevider, settings.bitOrder, settings.dataMode));
 }
 
-void SPIClass::stm32SetMOSI(uint8_t mosi) {
-	mosiPort = variant_pin_list[mosi].port;
-	mosiPin = variant_pin_list[mosi].pin_mask;
-}
+//void SPIClass::setMOSI(uint8_t mosi) {
+//	mosiPin = mosi;
+//}
+//void SPIClass::setMISO(uint8_t miso) {
+//	misoPin = miso;
+//}
+//void SPIClass::setSCK(uint8_t sck) {
+//	sckPin = sck;
+//}
+//void SPIClass::setInstance(SPI_TypeDef *instance) {
+//	spiHandle.Instance = instance;
+//}
 
-void SPIClass::stm32SetMISO(uint8_t miso) {
-	misoPort = variant_pin_list[miso].port;
-	misoPin = variant_pin_list[miso].pin_mask;
-}
+HAL_StatusTypeDef SPIClass::setPins(uint8_t mosi,uint8_t miso,uint8_t sck){
+	mosiPin = mosi;
+	misoPin = miso;
+	sckPin  = sck;
+    spiHandle.Instance=stm32GetSPIInstance(
+	                    variant_pin_list[mosi].port,
+						variant_pin_list[mosi].pin_mask,
+	                    variant_pin_list[miso].port,
+						variant_pin_list[miso].pin_mask,
+	                    variant_pin_list[sck].port,
+						variant_pin_list[sck].pin_mask);
+	if(spiHandle.Instance) return HAL_OK;
+	return HAL_ERROR;
+};
 
-void SPIClass::stm32SetSCK(uint8_t sck) {
-	sckPort = variant_pin_list[sck].port;
-	sckPin = variant_pin_list[sck].pin_mask;
-}
-
-void SPIClass::stm32SetInstance(SPI_TypeDef *instance) {
-	spiHandle.Instance = instance;
-}
 
 /** Returns true on success, false on failure
  * */

@@ -146,9 +146,15 @@ void SerialUART::begin(const uint32_t baud) {
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   }
   #endif
-
-  stm32AfUARTInit(instance, rxPort, rxPin, txPort, txPin);
-  
+  if((txPin < 0xff) && (rxpin <0xff))
+    stm32AfUARTInit(instance, 
+                  variant_pin_list[rxPin].port,
+				  variant_pin_list[rxPin].pin_mask,
+                  variant_pin_list[txPin].port,
+				  variant_pin_list[txPin].pin_mask);
+  else			  
+    stm32AfUARTInit(instance, NULL,0,NULL,0);
+ 
   handle->Init.BaudRate = baud; 
   handle->Init.WordLength = UART_WORDLENGTH_8B;
   handle->Init.StopBits = UART_STOPBITS_1; 
@@ -162,9 +168,70 @@ void SerialUART::begin(const uint32_t baud) {
     
 }
 
+void SerialUART::end(void) {
+  #ifdef USART1
+  if (handle->Instance == USART1) {
+    HAL_NVIC_DisableIRQ(USART1_IRQn);
+//    __HAL_RCC_USART1_CLK_DISABLE();
+  }
+  #endif
+  
+  #ifdef USART2
+  if (handle->Instance == USART2) {
+    HAL_NVIC_DisableIRQ(USART2_IRQn); 
+    __HAL_RCC_USART2_CLK_DISABLE();
+  }
+  #endif
+  
+  #ifdef USART3
+  if (handle->Instance == USART3) {
+    HAL_NVIC_DisableIRQ(USART3_IRQn); 
+    __HAL_RCC_USART3_CLK_DISABLE();
+  }
+  #endif
+  
+  #ifdef UART4
+  if (handle->Instance == UART4) {
+    HAL_NVIC_DisableIRQ(UART4_IRQn);
+    __HAL_RCC_UART4_CLK_DISABLE();
+  }
+  #endif
+  #ifdef USART4
+  if (handle->Instance == USART4) {
+    HAL_NVIC_DisableIRQ(USART4_IRQn); 
+    __HAL_RCC_USART4_CLK_DISABLE();
+  }
+  #endif
+  
+  #ifdef UART5
+  if (handle->Instance == UART5) {
+    HAL_NVIC_DisableIRQ(UART5_IRQn);
+    __HAL_RCC_UART5_CLK_DISABLE();
+  }
+  #endif
+  #ifdef USART5
+  if (handle->Instance == USART5) {
+    HAL_NVIC_DisableIRQ(USART5_IRQn);
+    __HAL_RCC_USART5_CLK_DISABLE();
+  }
+  #endif
+
+  #ifdef USART6
+  if (handle->Instance == USART6) {
+    HAL_NVIC_DisableIRQ(USART6_IRQn);
+    __HAL_RCC_USART6_CLK_DISABLE();
+  }
+  #endif   
+}
+
 int SerialUART::available() {
     return rxEnd != rxStart;
 }
+
+int SerialUART::availableForWrite() {  
+    return txEnd != txStart;  
+}  
+
 int SerialUART::peek() {
     if (available()) {
     return rxBuffer[rxStart % BUFFER_SIZE];
@@ -198,15 +265,17 @@ size_t SerialUART::write(const uint8_t c) {
 }
 
 void SerialUART::stm32SetRX(uint8_t rx) {
-    rxPort = variant_pin_list[rx].port;
-    rxPin = variant_pin_list[rx].pin_mask;
+    rxPin = rx;
 }
 
 void SerialUART::stm32SetTX(uint8_t tx) {
-    txPort = variant_pin_list[tx].port;
-    txPin = variant_pin_list[tx].pin_mask;
+    txPin = tx;
 }
 
+void SerialUART::setPins(uint8_t tx,uint8_t rx) {
+    txPin = tx;
+    rxPin = rx;
+}
 //// Interrupt
 
 SerialUART *interruptUART;

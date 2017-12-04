@@ -22,7 +22,7 @@
 #define LCD_BASE_BK13	((uint32_t)(0x60000000 | 0x08000000)) //PG10/NE3 FSMC_BANK1_3
 #define LCD_BASE_BK14	((uint32_t)(0x60000000 | 0x0C000000)) //PG12/NE4 FSMC_BANK1_4
 
-#include "LCDConfig.h"
+#include "configs/LCDConfig.h"
 #define LCD_ADDR_SETUPTIME 30       //FSMC addr time setup
 #define LCD_DATA_SETUPTIME 45       //FSMC data time setup
 #define TFT_LCD_BASE          LCD_BASE_BK14        //use NE4 A0

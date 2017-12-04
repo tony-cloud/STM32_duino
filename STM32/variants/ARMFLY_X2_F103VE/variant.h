@@ -35,4 +35,7 @@
   #define USB_DISC_PIN      PE1  //103Zet6 is PB14
 #endif
 
+//serial bootloader address
+# define SERIAL_LOAD_RAM 0x20000200U
+
 #endif

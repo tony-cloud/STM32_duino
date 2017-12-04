@@ -27,4 +27,8 @@
 #define SCL PB6
 
 /* usb disconnected*/
+
+//serial bootloader address
+#define SERIAL_LOAD_RAM 0x20003000U
+
 #endif

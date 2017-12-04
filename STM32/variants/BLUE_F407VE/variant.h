@@ -24,8 +24,12 @@
 #define MISO PA6
 #define SCK  PA5
 #define SS   PA4
+
 //*************** I2C pins ********************************
 #define SDA PB7
 #define SCL PB6
+
+//serial bootloader address
+#define SERIAL_LOAD_RAM 0x20003000U
 
 #endif

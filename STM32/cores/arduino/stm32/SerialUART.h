@@ -35,6 +35,7 @@ class SerialUART : public Stream  {
     void begin(const uint32_t baud);
     void end(void);
     int available(void);
+	int availableForWrite();
     int peek(void);
     int read(void);
     void flush(void);
@@ -44,6 +45,7 @@ class SerialUART : public Stream  {
 
     void stm32SetRX(uint8_t rx);
     void stm32SetTX(uint8_t tx);
+    void setPins(uint8_t tx,uint8_t rx);
     
     USART_TypeDef *instance = NULL;
     UART_HandleTypeDef *handle = NULL;
@@ -58,10 +60,14 @@ class SerialUART : public Stream  {
     volatile uint8_t rxStart = 0;
     volatile uint8_t rxEnd = 0;
 
-    GPIO_TypeDef *rxPort = NULL;
-    uint32_t rxPin = 0;
-    GPIO_TypeDef *txPort = NULL;
-    uint32_t txPin = 0;
+//    GPIO_TypeDef *rxPort = NULL;
+//    uint32_t rxPin = 0;
+//    GPIO_TypeDef *txPort = NULL;
+//    uint32_t txPin = 0;
+	
+    uint8_t rxPin = 0xff;
+    uint8_t txPin = 0xff;
+	
 };
 
 #ifdef USART1

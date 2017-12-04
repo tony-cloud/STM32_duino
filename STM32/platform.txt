@@ -8,7 +8,7 @@
 
 name=STM32(HALMX & LL)
 
-version=1.8.3
+version=1.8.5
 
 # STM compile variables
 # ----------------------
@@ -21,6 +21,7 @@ compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
 compiler.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
+
 
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.c.cmd=arm-none-eabi-gcc
@@ -59,7 +60,7 @@ build.extra_flags_serial_auto=
 build.extra_flags_jtag=
 build.extra_flags_os=
 build.extra_flags_menu={build.extra_flags_usb} {build.extra_flags_serial} {build.extra_flags_serial_auto} {build.extra_flags_jtag} {build.extra_flags_os}
-build.ldscript=ldscript.ld
+build.ldscript=ld/ldscript.ld
 
 build.extra_lib=
 
@@ -124,8 +125,8 @@ recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 # -------------------
 
 # this can be overriden in boards.txt
-upload.altID="unknown"
-upload.usbID="unknown"
+upload.altID=unknown
+upload.usbID=unknown
 
 #Upload to Nucleo via mass storage
 tools.nucleoFlasher.path={runtime.ide.path}/hardware/tools/win/nucleoFlasher
@@ -147,7 +148,7 @@ tools.stlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
 
 tools.stlink_upload.upload.params.verbose=-d
 tools.stlink_upload.upload.params.quiet=
-tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.hex" "{upload.device}" "{upload.uploadadr}" "{upload.vect}"
+tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} "{upload.altID}" "{upload.usbID}" "{build.path}/{build.project_name}.hex" "{upload.device}" "{upload.uploadadr}" "{upload.vect}"
 
 # jLINK/V21 upload
 # this can be overriden in boards.txt

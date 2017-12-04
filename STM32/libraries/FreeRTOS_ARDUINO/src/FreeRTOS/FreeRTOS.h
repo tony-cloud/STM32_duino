@@ -96,8 +96,8 @@ extern "C" {
 /* Application specific configuration options. */
 
 //#include "FreeRTOSConfig.h"
-#if __has_include("FreeRTOSConfig.h")  //
-#   include "FreeRTOSConfig.h"
+#if __has_include("configs/FreeRTOSConfig.h")  //
+#   include "configs/FreeRTOSConfig.h"
 #else
 #   include "default/FreeRTOSConfig.h"
 #endif

@@ -22,12 +22,6 @@
 
 #include "stm32_gpio_af.h"
 
-//add by huaweiwx@sina.com  2017.6.4
-#ifdef STM32F1  
-  #ifndef  AFIO_MAPR_SPI3_REMAP
-    #define  __HAL_AFIO_REMAP_SPI3_DISABLE  AF_NO_REMAP
-  #endif
-#endif
 #include CHIP_PERIPHERAL_INCLUDE
 
 void stm32AfInit(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pin, uint32_t mode, uint32_t pull) {

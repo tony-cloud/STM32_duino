@@ -23,19 +23,30 @@
 // This sketch tests the standard 7-bit addresses
 // Devices with higher bit address might not be seen properly.
 //
+#include <LED.h>
 #include <Wire.h>
-#include "i2cEepromConfig.h"
+//#include <WireSoft.h>
 
-#define EE_SDA AT24CXX_SDA //PB7
-#define EE_SCL AT24CXX_SCL //PB6
+//#define EE_SDA AT24CXX_SDA //PB7
+//#define EE_SCL AT24CXX_SCL //PB6
 
 //TwoWire Wire;
-TwoWire myWire(I2C1);
+TwoWire myWire(SDA,SCL);
 
 void setup() {
   Serial.begin(115200);
-  myWire.begin();
+  Led.Init();
+  //for  use SerialUSB if selected from menu
+#if (MENU_USB_SERIAL || MENU_USB_IAD)
+  while (!Serial.available()) {
+    Led.flash(10, 990, 1);
+  }
+#endif
   Serial.println("\nI2C Scanner");
+  delay(1000);
+  
+  myWire.begin();
+  Led.flash(10, 190, 10);
 }
 
 void loop() {
@@ -45,27 +56,27 @@ void loop() {
   Serial.println("Scanning...");
 
   nDevices = 0;
-  for(address = 1; address < 127; address++) {
+  for (address = 1; address < 127; address++) {
     // The i2c_scanner uses the return value of
     // the Write.endTransmisstion to see if
     // a device did acknowledge to the address.
 
     myWire.beginTransmission(address);
     error = myWire.endTransmission();
-    
+
     if (error == 0) {
       Serial.print("I2C device found at address 0x");
-      if (address < 16) 
-         Serial.print("0");
+      if (address < 16)
+        Serial.print("0");
       Serial.println(address, HEX);
       nDevices++;
     }
     else if (error == 4) {
       Serial.print("Unknown error at address 0x");
-      if (address < 16) 
+      if (address < 16)
         Serial.print("0");
       Serial.println(address, HEX);
-    }    
+    }
   }
   if (nDevices == 0)
     Serial.println("No I2C devices found");

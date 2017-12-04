@@ -15,8 +15,8 @@
 #  include "bsp.h"
 #endif
 
-#if __has_include("LCDConfig.h")
-#  include "LCDConfig.h"
+#if __has_include("configs/LCDConfig.h")
+#  include "configs/LCDConfig.h"
 #endif
 
 #ifdef  TFT_LCD_BASE

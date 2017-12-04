@@ -4,7 +4,7 @@
 //led  
 #define BOARD_NR_LED              2
 #define LED_BUILTIN              PD2   //!!需改成目标板子上的具体led 位置!!
-#define LED1_BUILTIN             PA8   //!!需改成目标板子上的具体led 位置!! 
+#define LED1_BUILTIN             PA8   //!!需改成目标板子上的具体led 位置!!
 #define LED_BUILTIN_MASK		0x00
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
@@ -27,5 +27,8 @@
 #define SCL PB6
 
 //usb disconnected
+
+//serial bootloader address
+# define SERIAL_LOAD_RAM 0x20000200U
 
 #endif

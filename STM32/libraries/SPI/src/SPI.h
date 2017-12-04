@@ -81,30 +81,17 @@ typedef void (*spi_callback_type)();
 
 class SPIClass {
   public:
+    SPIClass(){};
+	
+    SPIClass(uint8_t mosi, uint8_t miso, uint8_t sck) {
+        setPins(mosi,miso,sck);
+    };
+	
     SPIClass(SPI_TypeDef *instance) {
     	spiHandle.Instance = instance;
     };
-    SPIClass(SPI_TypeDef *instance, uint8_t mosi, uint8_t miso, uint8_t sck) {
-		spiHandle.Instance = instance;
 
-		stm32SetMOSI(mosi);
-		stm32SetMISO(miso);
-		stm32SetSCK(sck);
-	};
-
-    SPIClass(uint8_t mosi, uint8_t miso, uint8_t sck) {
-        stm32SetMOSI(mosi);
-        stm32SetMISO(miso);
-        stm32SetSCK(sck);
-
-        spiHandle.Instance = stm32GetSPIInstance(mosiPort, mosiPin, misoPort, misoPin, sckPort, sckPin);
-    }
-
-    void stm32SetMOSI(uint8_t mosi);
-    void stm32SetMISO(uint8_t miso);
-    void stm32SetSCK(uint8_t sck);
-    void stm32SetInstance(SPI_TypeDef *instance);
-
+	HAL_StatusTypeDef setPins(uint8_t mosi,uint8_t miso,uint8_t sck);
     void begin();
     void end();
 
@@ -209,12 +196,16 @@ class SPIClass {
     DMA_HandleTypeDef hdma_spi_rx = {};
     DMA_HandleTypeDef hdma_spi_tx = {};
 
-    GPIO_TypeDef *mosiPort = NULL;
-    uint32_t mosiPin = 0;
-    GPIO_TypeDef *misoPort = NULL;
-    uint32_t misoPin = 0;
-    GPIO_TypeDef *sckPort = NULL;
-    uint32_t sckPin = 0;
+//    GPIO_TypeDef *mosiPort = NULL;
+//    uint32_t mosiPin = 0;
+//    GPIO_TypeDef *misoPort = NULL;
+//    uint32_t misoPin = 0;
+//    GPIO_TypeDef *sckPort = NULL;
+//    uint32_t sckPin = 0;
+    uint8_t mosiPin = 0xff;
+    uint8_t misoPin = 0xff;
+    uint8_t sckPin = 0xff;
+
 };
 
 

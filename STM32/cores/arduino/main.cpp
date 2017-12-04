@@ -22,6 +22,7 @@
 # include "ARDUINOConfig.h"
 #endif
 
+
 #include "USBDevice.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
@@ -39,13 +40,6 @@ void setupUSB() { }
 #ifndef USE_USERS_MAINPROGRAM
 int main(void)
 {
-    //Used by FreeRTOS, see http://www.freertos.org/RTOS-Cortex-M3-M4.html
-//#if defined(NVIC_PRIORITYGROUP_4)
-#if __has_include("FreeRTOS.h")                       //huawei (huaweiwx@sina.com)
-	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-#elif defined(NVIC_PRIORITYGROUP_4) //huawei (huaweiwx@sina.com)
-    HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-#endif
 
 #ifdef STM32F7
     SCB_EnableICache();
