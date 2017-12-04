@@ -19,7 +19,7 @@
 void setup() {
 
   // initialize digital pin LED_BUILTIN as an output.
-   pinMode(LED, OUTPUT);
+  pinMode(LED, OUTPUT);
   myKeys.Init();
   Serial.begin(115200);
 }

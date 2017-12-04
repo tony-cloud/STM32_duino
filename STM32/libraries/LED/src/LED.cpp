@@ -19,7 +19,7 @@
 #include <arduino.h>
 #include "LED.h"
 
-#ifdef ARDUINO_ARCH_HALMX
+#ifdef STM32GENERIC
  #if __has_include(<FreeRTOS.h>)   
  #	include <FreeRTOS.h>
  #	define  LED_DELAY(x) vTaskDelay(x)
@@ -75,7 +75,7 @@ void LEDClass::on(int val){
     analogWrite(pdata->pin, val);
 }
 
-#ifdef ARDUINO_ARCH_HALMX
+#ifdef STM32GENERIC
 //analogWrite
 void LEDClass::pwm(int val, int frequency, int durationMillis){
     pwmWrite(pdata->pin, val, frequency, durationMillis);
