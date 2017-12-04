@@ -146,7 +146,7 @@ void SerialUART::begin(const uint32_t baud) {
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   }
   #endif
-  if((txPin < 0xff) && (rxpin <0xff))
+  if((txPin < 0xff) && (rxPin <0xff))
     stm32AfUARTInit(instance, 
                   variant_pin_list[rxPin].port,
 				  variant_pin_list[rxPin].pin_mask,
