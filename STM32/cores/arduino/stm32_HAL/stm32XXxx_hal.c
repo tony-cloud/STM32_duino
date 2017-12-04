@@ -25,7 +25,7 @@
     #include "stm32f0xx_hal_pwr.c"
     #include "stm32f0xx_hal_rcc.c"
     #include "stm32f0xx_hal_rtc.c"
-    #include "stm32f0xx_hal_smartcard.c"
+//    #include "stm32f0xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f0xx_hal_smbus.c"
     #include "stm32f0xx_hal_spi.c"
     #include "stm32f0xx_hal_tim.c"
@@ -75,7 +75,7 @@
     #include "stm32f1xx_hal_rcc.c"
     #include "stm32f1xx_hal_rtc.c"
     #include "stm32f1xx_hal_sd.c"
-    #include "stm32f1xx_hal_smartcard.c"
+//    #include "stm32f1xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f1xx_hal_spi.c"
     #include "stm32f1xx_hal_sram.c"
     #include "stm32f1xx_hal_tim.c"
@@ -127,7 +127,7 @@
     #include "stm32f2xx_hal_rng.c"
     #include "stm32f2xx_hal_rtc.c"
     #include "stm32f2xx_hal_sd.c"
-    #include "stm32f2xx_hal_smartcard.c"
+//    #include "stm32f2xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f2xx_hal_spi.c"
     #include "stm32f2xx_hal_sram.c"
     #include "stm32f2xx_hal_tim.c"
@@ -178,7 +178,7 @@
     #include "stm32f3xx_hal_rcc.c"
     #include "stm32f3xx_hal_rtc.c"
     #include "stm32f3xx_hal_sdadc.c"
-    #include "stm32f3xx_hal_smartcard.c"
+//    #include "stm32f3xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f3xx_hal_smbus.c"
     #include "stm32f3xx_hal_spi.c"
     #include "stm32f3xx_hal_sram.c"
@@ -245,7 +245,7 @@
     #include "stm32f4xx_hal_sai.c"
     #include "stm32f4xx_hal_sd.c"
     #include "stm32f4xx_hal_sdram.c"
-    #include "stm32f4xx_hal_smartcard.c"
+//    #include "stm32f4xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f4xx_hal_spdifrx.c"
     #include "stm32f4xx_hal_spi.c"
     #include "stm32f4xx_hal_sram.c"
@@ -313,7 +313,7 @@
     #include "stm32f7xx_hal_sai.c"
     #include "stm32f7xx_hal_sd.c"
     #include "stm32f7xx_hal_sdram.c"
-    #include "stm32f7xx_hal_smartcard.c"
+//    #include "stm32f7xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32f7xx_hal_smbus.c"
     #include "stm32f7xx_hal_spdifrx.c"
     #include "stm32f7xx_hal_spi.c"
@@ -366,7 +366,7 @@
     #include "stm32l0xx_hal_rcc.c"
     #include "stm32l0xx_hal_rng.c"
     #include "stm32l0xx_hal_rtc.c"
-    #include "stm32l0xx_hal_smartcard.c"
+//    #include "stm32l0xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32l0xx_hal_smbus.c"
     #include "stm32l0xx_hal_spi.c"
     #include "stm32l0xx_hal_tim.c"
@@ -417,7 +417,7 @@
     #include "stm32l1xx_hal_rcc.c"
     #include "stm32l1xx_hal_rtc.c"
     #include "stm32l1xx_hal_sd.c"
-    #include "stm32l1xx_hal_smartcard.c"
+//    #include "stm32l1xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32l1xx_hal_spi.c"
     #include "stm32l1xx_hal_sram.c"
     #include "stm32l1xx_hal_tim.c"
@@ -477,7 +477,7 @@
     #include "stm32l4xx_hal_rtc.c"
     #include "stm32l4xx_hal_sai.c"
     #include "stm32l4xx_hal_sd.c"
-    #include "stm32l4xx_hal_smartcard.c"
+//    #include "stm32l4xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
     #include "stm32l4xx_hal_smbus.c"
     #include "stm32l4xx_hal_spi.c"
     #include "stm32l4xx_hal_sram.c"
