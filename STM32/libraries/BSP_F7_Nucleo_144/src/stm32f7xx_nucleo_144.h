@@ -48,7 +48,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#ifdef ARDUINO_ARCH_HALMX
+#ifdef STM32GENERIC
   #include "stm32_def.h"  //for use st hal bsp lib huaweiwx@sina.com 2017.5
 #else
   #include "stm32f7xx_hal.h"

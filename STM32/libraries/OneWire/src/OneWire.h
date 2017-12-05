@@ -104,7 +104,7 @@
 #define DIRECT_WRITE_LOW(base, mask)    ((*(base+8+1)) = (mask))          //LATXCLR  + 0x24
 #define DIRECT_WRITE_HIGH(base, mask)   ((*(base+8+2)) = (mask))          //LATXSET + 0x28
 
-#elif defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_STM32)
+#elif defined(STM32GENERIC)
 
 /*
  Fallback to Arduino GPIO API calls for all other architectures.
