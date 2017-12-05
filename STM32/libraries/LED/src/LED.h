@@ -64,7 +64,7 @@ class LEDClass
 //analogWrite
     void on(int val);
 	
-#ifdef ARDUINO_ARCH_HALMX
+#ifdef STM32GENERIC
 //analogWrite
     void pwm(int val, int frequency=1000, int durationMillis=0);
 #endif
