@@ -2,7 +2,7 @@
 #include "variant.h"
 #include "stm32_dma.h"
 #include "stm32_HAL/stm32XXxx_ll_spi.h"
-
+#include "util/utils_def.h"
 
 #if defined(MOSI) || defined(MISO) || defined(SCK)
 	SPIClass SPI(MOSI, MISO, SCK);
@@ -191,18 +191,18 @@ void SPIClass::setClockDivider(uint8_t clockDevider) {
 	beginTransaction(SPISettings(apb_freq / clockDevider, settings.bitOrder, settings.dataMode));
 }
 
-//void SPIClass::setMOSI(uint8_t mosi) {
-//	mosiPin = mosi;
-//}
-//void SPIClass::setMISO(uint8_t miso) {
-//	misoPin = miso;
-//}
-//void SPIClass::setSCK(uint8_t sck) {
-//	sckPin = sck;
-//}
-//void SPIClass::setInstance(SPI_TypeDef *instance) {
-//	spiHandle.Instance = instance;
-//}
+void SPIClass::stm32SetMOSI(uint8_t mosi) {
+	mosiPin = mosi;
+}
+void SPIClass::stm32SetMISO(uint8_t miso) {
+	misoPin = miso;
+}
+void SPIClass::stm32SetSCK(uint8_t sck) {
+	sckPin = sck;
+}
+void SPIClass::stm32SetInstance(SPI_TypeDef *instance) {
+	spiHandle.Instance = instance;
+}
 
 HAL_StatusTypeDef SPIClass::setPins(uint8_t mosi,uint8_t miso,uint8_t sck){
 	mosiPin = mosi;

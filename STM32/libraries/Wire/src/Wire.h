@@ -25,6 +25,7 @@
 #include <inttypes.h>
 #include "Stream.h"
 #include "stm32_def.h"
+#include "util/utils_def.h"
 
 #if __has_include("configs/i2cEepromConfig.h")
 #  include "configs/i2cEepromConfig.h"
@@ -131,6 +132,11 @@ class TwoWire : public Stream {
 	TwoWire(){}; //add huaweiwx@sina.com 2017.8.2
     TwoWire(uint8_t,uint8_t); //add huaweiwx@sina.com 2017.8.2
     TwoWire(I2C_TypeDef *instance);
+    TwoWire(I2C_TypeDef *instance, uint8_t sda, uint8_t scl){
+		    pdev->handle.Instance = instance;
+            pdev->sda = sda;
+            pdev->scl = scl;
+			};
     WIRE_StatusTypeDef setPins(uint8_t sda,uint8_t scl);
 	
     void begin();
@@ -138,7 +144,6 @@ class TwoWire : public Stream {
     void begin(int);
     void end();
 	
-    void setInstance(I2C_TypeDef *instance);
     void setClock(uint32_t);
 	
     void beginTransmission(uint8_t);
@@ -159,6 +164,13 @@ class TwoWire : public Stream {
     void onReceive( void (*)(int) );
     void onRequest( void (*)(void) );
 
+    void stm32SetInstance(I2C_TypeDef *instance){pdev->handle.Instance = instance;};
+
+    DEPRECATED("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+    void stm32SetSDA(uint8_t sda){pdev->sda = sda;};
+  
+    DEPRECATED("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+    void stm32SetSCL(uint8_t scl){pdev->scl = scl;};
 
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
     inline size_t write(long n) { return write((uint8_t)n); }

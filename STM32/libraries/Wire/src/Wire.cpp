@@ -273,7 +273,7 @@ void TwoWire::beginTransmission(int address)
 //  devices will behave oddly if they do not see a STOP.
 //
 uint8_t TwoWire::endTransmission(uint8_t __attribute__ ((unused)) sendStop) {
-    int8_t ret;
+    int8_t ret = 0;
 
     if (pdev->isMaster == true) {
         HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(&pdev->handle, 
