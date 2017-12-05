@@ -220,7 +220,7 @@ static inline uint32_t BB_pinAddr(uint32_t pin,uint8_t mode){
 #endif
 
 #else
-# error "BitBand unsuport  F0/L0F7 mcu!"
+# error "BitBand unsuport  F0/L0/F7 mcu!"
 #endif
 
 #endif
