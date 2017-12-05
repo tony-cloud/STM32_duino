@@ -16,12 +16,16 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+/*GCC tools chain check  add by huaweiwx@sina.com 2017.12.5*/
+#if __GNUC__ > 5 || (__GNUC__ == 5 && (__GNUC_MINOR__ > 4 || \
+   (__GNUC_MINOR__ == 4 && __GNUC_PATCHLEVEL__ > 0)))
+
 #include <Arduino.h>
 
 #if __has_include("ARDUINOConfig.h")      //test user config ARDUINO huawei (huaweiwx@sina.com)
 # include "ARDUINOConfig.h"
 #endif
-
 
 #include "USBDevice.h"
 
@@ -77,4 +81,7 @@ int main(void)
         
 	return 0;
 }
+#endif
+#else
+#error "Please update to GCC ver 5-2016q2 https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads"	
 #endif
