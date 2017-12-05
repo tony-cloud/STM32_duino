@@ -14,8 +14,8 @@
 #ifndef LCDCONF_H
 #define LCDCONF_H
 
-#if __has_include("LCDConfig.h")
-# include "LCDConfig.h"    
+#if __has_include("configs/LCDConfig.h")
+# include "configs/LCDConfig.h"    
 #endif
 
 #ifndef  LCD_XSIZE
