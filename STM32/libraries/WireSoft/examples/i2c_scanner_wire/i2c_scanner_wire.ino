@@ -23,56 +23,65 @@
 // This sketch tests the standard 7-bit addresses
 // Devices with higher bit address might not be seen properly.
 //
-
+#include <LED.h>
 //#include <Wire.h>
 #include <WireSoft.h>
 
-#define EE_SDA     AT24CXX_SDA
-#define EE_SCL     AT24CXX_SCL
-#define EE_TYPE    AT24C02
+//#define EE_SDA AT24CXX_SDA //PB7
+//#define EE_SCL AT24CXX_SCL //PB6
 
 //TwoWire Wire;
-TwoWire myWire(EE_SDA,EE_SCL);
+TwoWire myWire(SDA,SCL);
 
 void setup() {
-  Serial1.begin(115200);
+  Serial.begin(115200);
+  Led.Init();
+  //for  use SerialUSB if selected from menu
+#if (MENU_USB_SERIAL || MENU_USB_IAD)
+  while (!Serial.available()) {
+    Led.flash(10, 990, 1);
+  }
+#endif
+  Serial.println("\nI2C Scanner");
+  delay(1000);
+  
   myWire.begin();
-  Serial1.println("\nI2C Scanner");
+  Led.flash(10, 190, 10);
 }
 
 void loop() {
   byte error, address;
   int nDevices;
 
-  Serial1.println("Scanning...");
+  Serial.println("Scanning...");
 
   nDevices = 0;
-  for(address = 1; address < 127; address++) {
+  for (address = 1; address < 127; address++) {
     // The i2c_scanner uses the return value of
     // the Write.endTransmisstion to see if
     // a device did acknowledge to the address.
 
     myWire.beginTransmission(address);
     error = myWire.endTransmission();
-    
+
     if (error == 0) {
-      Serial1.print("I2C device found at address 0x");
-      if (address < 16) 
-         Serial1.print("0");
-      Serial1.println(address, HEX);
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.println(address, HEX);
       nDevices++;
     }
     else if (error == 4) {
-      Serial1.print("Unknown error at address 0x");
-      if (address < 16) 
-        Serial1.print("0");
-      Serial1.println(address, HEX);
-    }    
+      Serial.print("Unknown error at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.println(address, HEX);
+    }
   }
   if (nDevices == 0)
-    Serial1.println("No I2C devices found");
+    Serial.println("No I2C devices found");
   else
-    Serial1.println("done");
+    Serial.println("done");
 
   delay(5000);           // wait 5 seconds for next scan
 }
