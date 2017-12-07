@@ -18,7 +18,7 @@ static void myTask1(void  __attribute__ ((unused)) *argument)
   
   
  /* USER CODE END Task1 */
-   vTaskDelay(xxxx);    //set delay time 
+   vTaskDelay(1000);    //set delay 1s 
   }
 }
 
@@ -34,7 +34,7 @@ static void myTask2(void __attribute__ ((unused)) *argument)
   /* USER CODE BEGIN Task2 */
  
   /* USER CODE END Task2 */
-   vTaskDelay(xxxx);    //set delay time 
+   vTaskDelay(1000);    //set delay 1s
   }
 }
 
