@@ -25,8 +25,33 @@
 #include "Arduino.h"
 
 #pragma GCC diagnostic ignored "-Wformat"
-void print_log(const char *level, const char *format, const char *file, const int line, ...) {
 
+char _stderr_buf[80];           //for stderr outbuf add by huaweiwx@sina.com  2017.12.8
+
+//debug_if add by huaweiwx@sina.com  2017.12.8
+void debug(const char *format, ...) {
+    setbuf(stderr,_stderr_buf);  //set stderr outbuf add by huaweiwx@sina.com  2017.12.8
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+    fprintf(stderr, "");
+}
+
+//debug_if add by huaweiwx@sina.com  2017.12.8
+void debug_if(int condition, const char *format, ...) {	
+    setbuf(stderr,_stderr_buf);
+    if (condition) {
+       va_list args;
+       va_start(args, format);
+       vfprintf(stderr, format, args);
+       va_end(args);
+       fprintf(stderr, "");
+    }
+}
+
+void print_log(const char *level, const char *format, const char *file, const int line, ...) {
+    setbuf(stderr,_stderr_buf);  //set stderr outbuf add by huaweiwx@sina.com  2017.12.8
     uint32_t m = micros();
 
     uint32_t seconds = m / 1000000;
@@ -39,7 +64,6 @@ void print_log(const char *level, const char *format, const char *file, const in
     va_start(argList, line);
     vfprintf(stderr, format, argList);
     va_end(argList);
-
     fprintf(stderr, "\n");
 }
 
@@ -49,12 +73,14 @@ char *stm32PortPinName(GPIO_TypeDef *port, uint32_t pinMask) {
             return stm32PinName(i);
         }
     }
-    return (char*)"Unknown pin";
+//    return (char*)"Unknown pin";
+    return NULL;
 }
 
 char *stm32PinName(uint8_t pin) {
     if (pin >= NUM_DIGITAL_PINS) {
-        return (char*)"Unknown";
+//        return (char*)"Unknown";
+        return NULL;
     }
     static char ret[10];
     int index = 0;
@@ -93,3 +119,11 @@ char *stm32PinName(uint8_t pin) {
 
 }
 
+//assert_failed() used by stm32_assert.h. add by huaweiwx@sina.com  2017.12.8
+#ifdef USE_FULL_ASSERT
+void assert_failed(uint8_t* file, uint32_t line) {
+	debug("\nassert_failed in file: %s line:%d\n",(char *)file,line);
+	while(1)
+		yield();
+};
+#endif
