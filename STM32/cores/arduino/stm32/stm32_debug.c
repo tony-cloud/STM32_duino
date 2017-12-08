@@ -24,6 +24,7 @@
 
 #include "Arduino.h"
 
+#pragma GCC diagnostic ignored "-Wformat-zero-length"
 #pragma GCC diagnostic ignored "-Wformat"
 
 char _stderr_buf[80];           //for stderr outbuf add by huaweiwx@sina.com  2017.12.8
@@ -121,7 +122,8 @@ char *stm32PinName(uint8_t pin) {
 
 //assert_failed() used by stm32_assert.h. add by huaweiwx@sina.com  2017.12.8
 #ifdef USE_FULL_ASSERT
-void assert_failed(uint8_t* file, uint32_t line) {
+void assert_failed(uint8_t* file, uint32_t line) __attribute__((weak));
+void assert_failed(uint8_t* file, uint32_t line){
 	debug("\nassert_failed in file: %s line:%d\n",(char *)file,line);
 	while(1)
 		yield();
