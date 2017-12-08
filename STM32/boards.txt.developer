@@ -11,7 +11,7 @@ menu.serial=Serial communication
 menu.jtag_swd=JTAG/SWD debugging
 menu.extern_lib=Extern lib
 menu.upload_method=Upload method
-menu.log=Out Log_level
+menu.log=Debug Log_level
 
 #################################### Nucleo-64 ############################################
 # NUCLEO 64 board
