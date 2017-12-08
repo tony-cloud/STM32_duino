@@ -28,6 +28,17 @@
 
 #include "stm32_def.h"
 
+#ifndef __LOG_LEVEL
+//  #define __LOG_LEVEL    0
+#endif
+
+#define __LOG_FATAL   __LOG_LEVEL >= 1
+#define __LOG_ERROR   __LOG_LEVEL >= 2
+#define __LOG_WARNING __LOG_LEVEL >= 3
+#define __LOG_INFO    __LOG_LEVEL >= 4
+#define __LOG_DEBUG   __LOG_LEVEL >= 5
+#define __LOG_TRACE   __LOG_LEVEL >= 6
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -41,23 +52,19 @@ char *stm32PortPinName(GPIO_TypeDef *port, uint32_t pinMask);
 // Internal: use PRINT_XXX instead
 void print_log(const char *level, const char *format, const char *file, const int line, ...);
 
+//stm32_assert.h use stderr out debug info
+void debug(const char *format, ...);
+void debug_if(int condition, const char *format, ...);
+
 #ifdef __cplusplus
 }
 #endif
 
-
+#if __unix__
 #define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
-
-
-#define __LOG_LEVEL    0
-
-#define __LOG_FATAL   __LOG_LEVEL >= 1
-#define __LOG_ERROR   __LOG_LEVEL >= 2
-#define __LOG_WARNING __LOG_LEVEL >= 3
-#define __LOG_INFO    __LOG_LEVEL >= 4
-#define __LOG_DEBUG   __LOG_LEVEL >= 5
-#define __LOG_TRACE   __LOG_LEVEL >= 6
-
+#else
+#define __FILENAME__ (__builtin_strrchr(__FILE__, '\\') ? __builtin_strrchr(__FILE__, '\\') + 1 : __FILE__)	
+#endif
 
 #define PRINT_LOG(level, format, ...) print_log(level, format, __FILENAME__, __LINE__, ##__VA_ARGS__)
 
