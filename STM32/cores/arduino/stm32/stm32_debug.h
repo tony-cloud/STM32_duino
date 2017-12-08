@@ -29,7 +29,7 @@
 #include "stm32_def.h"
 
 #ifndef __LOG_LEVEL
-//  #define __LOG_LEVEL    0
+  #define __LOG_LEVEL    0
 #endif
 
 #define __LOG_FATAL   __LOG_LEVEL >= 1
