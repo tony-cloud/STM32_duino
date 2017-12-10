@@ -27,45 +27,38 @@
 #pragma GCC diagnostic ignored "-Wformat-zero-length"
 #pragma GCC diagnostic ignored "-Wformat"
 
-char _stderr_buf[80];           //for stderr outbuf add by huaweiwx@sina.com  2017.12.8
 
 //debug_if add by huaweiwx@sina.com  2017.12.8
 void debug(const char *format, ...) {
-    setbuf(stderr,_stderr_buf);  //set stderr outbuf add by huaweiwx@sina.com  2017.12.8
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
-    fprintf(stderr, "");
 }
 
 //debug_if add by huaweiwx@sina.com  2017.12.8
 void debug_if(int condition, const char *format, ...) {	
-    setbuf(stderr,_stderr_buf);
     if (condition) {
        va_list args;
        va_start(args, format);
        vfprintf(stderr, format, args);
        va_end(args);
-       fprintf(stderr, "");
     }
 }
 
 void print_log(const char *level, const char *format, const char *file, const int line, ...) {
-    setbuf(stderr,_stderr_buf);  //set stderr outbuf add by huaweiwx@sina.com  2017.12.8
+
     uint32_t m = micros();
 
     uint32_t seconds = m / 1000000;
     uint32_t fractions = m % 1000000;
 
-    fprintf(stderr, "[%2u.%-6u]%10s %3d %s:", seconds, fractions, file, line, level);
+    debug("[%2u.%-6u]%10s %3d %s:", seconds, fractions, file, line, level);
 
     va_list argList;
-
     va_start(argList, line);
     vfprintf(stderr, format, argList);
     va_end(argList);
-    fprintf(stderr, "\n");
 }
 
 char *stm32PortPinName(GPIO_TypeDef *port, uint32_t pinMask) {
@@ -124,7 +117,7 @@ char *stm32PinName(uint8_t pin) {
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t* file, uint32_t line) __attribute__((weak));
 void assert_failed(uint8_t* file, uint32_t line){
-	debug("\nassert_failed in file: %s line:%d\n",(char *)file,line);
+	debug("Assert failed! File: '%s' on Line:%d\r\n",(char *)file,line);
 	while(1)
 		yield();
 };

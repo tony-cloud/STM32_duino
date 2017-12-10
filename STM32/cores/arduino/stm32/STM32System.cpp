@@ -47,23 +47,22 @@ int stm32SetPrintOutput(Print *p) {
 }
 
 extern "C" int _write( int file, char *ptr, int len ) {
+    
+    if (file == STDOUT_FILENO)
+        return Serial.write(ptr, len);
 
-    if (file == STDOUT_FILENO) {
-
-        Serial.write(ptr, len);
-
-    } else if (file == STDERR_FILENO) {
-
-        Serial.write(ptr, len);
+	if (file == STDERR_FILENO) {
+		Serial.write(ptr, len);
         Serial.flush();
-
-    } else if (file == print_fileno) {
-
-        if (print != NULL)print->write(ptr, len);
-
-    } else {
-        // TODO show error
+		return len;
     }
+	
+	if (file == print_fileno) {
+        if (print != NULL) return print->write(ptr, len);
+    }
+
+	// TODO show error
+
     return 0;  //return no-void warning add by huaweiwx@sina.com 2017.7.21
 }
 
