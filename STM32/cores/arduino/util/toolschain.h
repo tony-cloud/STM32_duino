@@ -1,10 +1,3 @@
-/** \addtogroup platform */
-/** @{*/
-/**
- * \defgroup platform_toolchain Toolchain functions
- * @{
- */
-
 /* mbed Microcontroller Library
  * Copyright (c) 2006-2013 ARM Limited
  *
@@ -22,77 +15,62 @@
  */
 /* form mbed by huaweiwx@sina.com 2017.12.5*/
 
-#ifndef _UTILSDEF_H_
-#define _UTILSDEF_H_
+#ifndef _TOOLSCHAIN_H_
+#define _TOOLSCHAIN_H_
 
 // Warning for unsupported compilers
 #if !defined(__GNUC__)   /* GCC        */ \
  && !defined(__CC_ARM)   /* ARMCC      */ \
- && !defined(__clang__)  /* LLVM/Clang */ \
  && !defined(__ICCARM__) /* IAR        */
 #warning "This compiler is not yet supported."
 #endif
 
-
-
-/** DEPRECATED("message string")
- *  Mark a function declaration as deprecated, if it used then a warning will be
- *  issued by the compiler possibly including the provided message. Note that not
- *  all compilers are able to display the message.
- *
- *  @code
- *
- *  DEPRECATED("don't foo any more, bar instead")
- *  void foo(int arg);
- *  @endcode
- */
-#ifndef DEPRECATED
-#if defined(__CC_ARM)
-#define DEPRECATED(M) __attribute__((deprecated))
-#elif defined(__GNUC__) || defined(__clang__)
-#define DEPRECATED(M) __attribute__((deprecated(M)))
-#else
-#define DEPRECATED(M)
-#endif
-#endif
-
-/** DEPRECATED_SINCE("version", "message string")
- *  Mark a function declaration as deprecated, noting that the declaration was
- *  deprecated on the specified version. If the function is used then a warning
- *  will be issued by the compiler possibly including the provided message.
- *  Note that not all compilers are able to display this message.
- *
- *  @code
- *
- *  DEPRECATED_SINCE("mbed-os-5.1", "don't foo any more, bar instead")
- *  void foo(int arg);
- *  @endcode
- */
-#define DEPRECATED_SINCE(D, M) DEPRECATED(M " [since " D "]")
-
-/** CALLER_ADDR()
- * Returns the caller of the current function.
- *
- * @note
- * This macro is only implemented for GCC and ARMCC.
- *
- * @code
- *
- * printf("This function was called from %p", CALLER_ADDR());
- * @endcode
- *
- * @return Address of the calling function
- */
-#ifndef CALLER_ADDR
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(__CC_ARM)
-#define CALLER_ADDR() __builtin_extract_return_addr(__builtin_return_address(0))
+//for toolschain
+ #define MBED_STRINGIFY(a) MBED_STRINGIFY_(a)
+ #define MBED_STRINGIFY_(a) #a
+ 
+#if defined(__GNUC__)
+// #define __alignas(n)    __attribute__ ((aligned (n)))
+// #define __unused __attribute__((unused))
+//  #define __packed  __attribute__((__packed__)) 
+  #define __weak __attribute__((weak))
+// #define __inline static inline __attribute__((always_inline))
+// #define __section(name) __attribute__ ((section (name)))
+// #define __noreturn __attribute__((__noreturn__))
+ #define __call_addr() __builtin_extract_return_addr(__builtin_return_address(0))
+ #define __deprecated(x) __attribute__((deprecated(x)))
+ #define __atadr(adr) __attribute__((at(adr)))
+ 
 #elif defined(__CC_ARM)
-#define CALLER_ADDR() __builtin_return_address(0)
-#else
-#define CALLER_ADDR() (NULL)
-#endif
+ #define __alignas(n)    __align(n)
+ #define __deprecated(x) __attribute__((deprecated))
+ #define __unused __attribute__((unused))
+ #ifndef __packed
+  #define __packed __attribute__((packed)) 
+ #endif
+ #ifndef __weak 
+  #define __weak __attribute__((weak))
+ #endif 
+ #define __inline static inline __attribute__((always_inline))
+ #define __call_addr()  __builtin_return_address(0)
+ #define __section(name) __attribute__ ((section (name)))
+ #define __noreturn __attribute__((noreturn))
+
+#elif defined(__ICCARM__)
+
+ #define __alignas(n)  _Pragma(MBED_STRINGIFY(data_alignment=n))
+ #define __deprecated(x)
+ #define __unused
+ #define __inline _Pragma("inline=forced") static
+ #define __call_addr() (NULL)
+ #define __section(name) _Pragma(MBED_STRINGIFY(location=name))
+ #define __noreturn
+
 #endif
 
+
+#define __deprecated_since(D, M) __deprecated(M " [since " D "]")
+#define __unusedparm(x) __unused x
 /**
  * Macro expanding to a string literal of the enclosing function name.
  *
@@ -139,6 +117,7 @@
 #endif
 #endif
 
+
 // FILEHANDLE declaration
 //#if defined(TOOLCHAIN_ARM)
 //#include <rt_sys.h>
@@ -148,5 +127,8 @@
 typedef int FILEHANDLE;
 #endif
 
-#endif
+typedef void (*voidFuncPtr)(void);
+typedef void (*voidArgumentFuncPtr)(void *);
+
+#endif //_TOOLSCHAIN_H_
 
