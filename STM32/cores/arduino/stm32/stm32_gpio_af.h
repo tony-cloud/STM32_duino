@@ -46,7 +46,7 @@ typedef void (*stm32_af_callback)();
 typedef struct {
     void *instance;
     GPIO_TypeDef *port;
-    uint32_t pin;
+    uint32_t pinMask;
     stm32_af_callback alternate;
 } stm32_af_pin_list_type;
 
@@ -63,7 +63,7 @@ typedef struct {
 typedef struct {
     void *instance;
     GPIO_TypeDef *port;
-    uint32_t pin;
+    uint32_t pinMask;
     uint8_t alternate;
 } stm32_af_pin_list_type;
 
@@ -81,7 +81,7 @@ typedef struct {
 typedef struct {
     ADC_TypeDef *instance;
     GPIO_TypeDef *port;
-    uint32_t pin_mask;
+    uint32_t pinMask;
     uint32_t channel;
 } stm32_chip_adc1_channel_type;
 
@@ -163,17 +163,17 @@ uint32_t stm32GetClockFrequency(void *instance);
 /**
  * Get the ADC1 channel for the specified port / pin
  */
-stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pin_mask);
+stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask);
 
 /**
  * Internal: set the AF function for the selected peripheral on the selected pin, with GPIO_SPEED_FREQ_VERY_HIGH speed
  */
-void stm32AfInit(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pin, uint32_t mode, uint32_t pull);
+void stm32AfInit(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pinMask, uint32_t mode, uint32_t pull);
 
 /**
  * Internal: set the AF function for the selected peripheral on the selected pin, with the specified GPIO speed
  */
-void stm32AfInitSpeed(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pin, uint32_t mode, uint32_t pull, uint32_t speed);
+void stm32AfInitSpeed(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pinMask, uint32_t mode, uint32_t pull, uint32_t speed);
 
 /**
  * Internal: get the default pin for the given peripheral

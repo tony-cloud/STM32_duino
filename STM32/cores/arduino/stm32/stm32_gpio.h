@@ -51,7 +51,7 @@ extern "C"{
 
 typedef struct {
     GPIO_TypeDef *port;
-    uint32_t pin_mask;
+    uint32_t pinMask;
 } stm32_port_pin_type;
 
 typedef uint32_t (*stm32_clock_freq_func)();
@@ -81,7 +81,7 @@ inline void digitalWrite(uint8_t pin, uint8_t value) {
     
     stm32_port_pin_type port_pin = variant_pin_list[pin];
     
-    HAL_GPIO_WritePin(port_pin.port, port_pin.pin_mask, value ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(port_pin.port, port_pin.pinMask, value ? GPIO_PIN_SET : GPIO_PIN_RESET);
     
 }
 
@@ -93,7 +93,7 @@ inline int digitalRead(uint8_t pin) {
     
     stm32_port_pin_type port_pin = variant_pin_list[pin];
     
-    return HAL_GPIO_ReadPin(port_pin.port, port_pin.pin_mask);
+    return HAL_GPIO_ReadPin(port_pin.port, port_pin.pinMask);
     
 }
 
@@ -103,7 +103,7 @@ inline void digitalToggle(uint8_t pin) {
 //       return;
 //    }
     stm32_port_pin_type port_pin = variant_pin_list[pin];
-    return HAL_GPIO_TogglePin(port_pin.port, port_pin.pin_mask);
+    return HAL_GPIO_TogglePin(port_pin.port, port_pin.pinMask);
 }
 
 #ifdef __cplusplus
@@ -124,25 +124,25 @@ static const stm32_port_pin_type variant_pin_list_ll_static[] = {
 
 inline void digitalWrite(__ConstPin pin, uint8_t value) {
     if (value) {
-        LL_GPIO_SetOutputPin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
+        LL_GPIO_SetOutputPin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
     } else {
-        LL_GPIO_ResetOutputPin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
+        LL_GPIO_ResetOutputPin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
     }
 }
 
 inline int digitalRead(__ConstPin pin) {
-    return LL_GPIO_IsInputPinSet(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
+    return LL_GPIO_IsInputPinSet(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 }
 
 //add by huaweiwx@sina.com  2017.6.4
 inline void digitalToggle(__ConstPin pin) {
-    LL_GPIO_TogglePin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask);
+    LL_GPIO_TogglePin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 }
 
 extern "C" void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode);
 
 inline static void pinMode(__ConstPin pin, uint8_t mode) {
-    pinModeLL(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pin_mask, mode);
+    pinModeLL(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask, mode);
 }
 
 #endif

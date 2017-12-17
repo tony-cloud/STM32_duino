@@ -29,7 +29,7 @@ int8_t stm32AfGet(const stm32_af_pin_list_type list[], int size, const void *ins
     for(int i=0; i<size; i++) {
         if (instance == list[i].instance
             && port == list[i].port
-            && pin == list[i].pin) {
+            && pin == list[i].pinMask) {
                 
             return list[i].alternate;
         }

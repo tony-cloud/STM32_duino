@@ -47,14 +47,14 @@ stm32_exti_callback_func callbacks[16];
 void attachInterrupt(uint8_t pin, stm32_exti_callback_func callback, int mode) {
     const stm32_port_pin_type port_pin = variant_pin_list[pin];
 
-    uint8_t irq = __builtin_ffs(port_pin.pin_mask) - 1;
+    uint8_t irq = __builtin_ffs(port_pin.pinMask) - 1;
     callbacks[irq] = callback;
 
     stm32GpioClockEnable(port_pin.port);
 
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    GPIO_InitStruct.Pin = port_pin.pin_mask;
+    GPIO_InitStruct.Pin = port_pin.pinMask;
     switch(mode) {
         case RISING:
             GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
@@ -77,7 +77,7 @@ void attachInterrupt(uint8_t pin, stm32_exti_callback_func callback, int mode) {
 }
 
 void detachInterrupt(uint8_t pin) {
-    callbacks[__builtin_ffs(variant_pin_list[pin].pin_mask) - 1] = NULL;
+    callbacks[__builtin_ffs(variant_pin_list[pin].pinMask) - 1] = NULL;
 }
 
 void EXTI0_IRQHandler(void) {

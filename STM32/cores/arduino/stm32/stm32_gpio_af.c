@@ -24,15 +24,15 @@
 
 #include CHIP_PERIPHERAL_INCLUDE
 
-void stm32AfInit(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pin, uint32_t mode, uint32_t pull) {
-    stm32AfInitSpeed(list, size, instance, port, pin, mode, pull, GPIO_SPEED_FREQ_VERY_HIGH);
+void stm32AfInit(const stm32_af_pin_list_type list[], int size, const void *instance, GPIO_TypeDef *port, uint32_t pinMask, uint32_t mode, uint32_t pull) {
+    stm32AfInitSpeed(list, size, instance, port, pinMask, mode, pull, GPIO_SPEED_FREQ_VERY_HIGH);
 }
 
 
 GPIO_TypeDef *stm32AfGetDefault(const stm32_af_pin_list_type list[], int size, const void *instance, uint32_t *pin) {
     for(int i=0; i<size; i++) {
         if (instance == list[i].instance) {
-            *pin = list[i].pin;
+            *pin = list[i].pinMask;
             return list[i].port;
         }
     }
@@ -48,9 +48,9 @@ uint32_t stm32GetClockFrequency(void *instance) {
 	return 0;
 }
 
-stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pin_mask) {
+stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask) {
     for(size_t i=0; i<sizeof(chip_adc1_channel) / sizeof(chip_adc1_channel[0]); i++) {
-        if (chip_adc1_channel[i].port == port && chip_adc1_channel[i].pin_mask == pin_mask) {
+        if (chip_adc1_channel[i].port == port && chip_adc1_channel[i].pinMask == pinMask) {
             return chip_adc1_channel[i];
         }
     }
@@ -89,13 +89,13 @@ SPI_TypeDef *stm32GetSPIInstance(GPIO_TypeDef *mosiPort, uint32_t mosiPin,
     GPIO_TypeDef *sckPort, uint32_t sckPin) {
 
     for (size_t i=0; i<sizeof(chip_af_spi_mosi) / sizeof(chip_af_spi_mosi[0]); i++) {
-        if (chip_af_spi_mosi[i].port == mosiPort && chip_af_spi_mosi[i].pin == mosiPin) {
+        if (chip_af_spi_mosi[i].port == mosiPort && chip_af_spi_mosi[i].pinMask == mosiPin) {
 
             for (size_t j=0; j<sizeof(chip_af_spi_miso) / sizeof(chip_af_spi_miso[0]); j++) {
-                if (chip_af_spi_miso[j].port == misoPort && chip_af_spi_miso[j].pin == misoPin && chip_af_spi_mosi[i].instance == chip_af_spi_miso[j].instance) {
+                if (chip_af_spi_miso[j].port == misoPort && chip_af_spi_miso[j].pinMask == misoPin && chip_af_spi_mosi[i].instance == chip_af_spi_miso[j].instance) {
 
                     for (size_t k=0; k<sizeof(chip_af_spi_sck) / sizeof(chip_af_spi_sck[0]); k++) {
-                       if (chip_af_spi_sck[k].port == sckPort && chip_af_spi_sck[k].pin == sckPin && chip_af_spi_mosi[i].instance == chip_af_spi_sck[k].instance) {
+                       if (chip_af_spi_sck[k].port == sckPort && chip_af_spi_sck[k].pinMask == sckPin && chip_af_spi_mosi[i].instance == chip_af_spi_sck[k].instance) {
 
                            return chip_af_spi_mosi[i].instance;
 
@@ -152,9 +152,9 @@ I2C_TypeDef *stm32GetI2CInstance(GPIO_TypeDef *sdaPort, uint32_t sdaPin,
     GPIO_TypeDef *sclPort, uint32_t sclPin) {
 
     for (size_t i=0; i<sizeof(chip_af_i2c_sda) / sizeof(chip_af_i2c_sda[0]); i++) {
-        if (chip_af_i2c_sda[i].port == sdaPort && chip_af_i2c_sda[i].pin == sdaPin) {
+        if (chip_af_i2c_sda[i].port == sdaPort && chip_af_i2c_sda[i].pinMask == sdaPin) {
             for (size_t j=0; j<sizeof(chip_af_i2c_scl) / sizeof(chip_af_i2c_scl[0]); j++) {
-                if (chip_af_i2c_scl[j].port == sclPort && chip_af_i2c_scl[j].pin == sclPin && chip_af_i2c_sda[i].instance == chip_af_i2c_scl[j].instance) {
+                if (chip_af_i2c_scl[j].port == sclPort && chip_af_i2c_scl[j].pinMask == sclPin && chip_af_i2c_sda[i].instance == chip_af_i2c_scl[j].instance) {
                     return chip_af_i2c_sda[i].instance;
                 }
             }

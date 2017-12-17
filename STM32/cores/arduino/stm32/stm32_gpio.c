@@ -65,7 +65,7 @@ void pinMode(uint8_t pin, uint8_t mode) {
     stm32_port_pin_type port_pin = variant_pin_list[pin];
     
     if (stm32_pwm_disable_callback != NULL) {
-        (*stm32_pwm_disable_callback)(port_pin.port, port_pin.pin_mask);
+        (*stm32_pwm_disable_callback)(port_pin.port, port_pin.pinMask);
     }
 
     stm32GpioClockEnable(port_pin.port);
@@ -77,7 +77,7 @@ void pinMode(uint8_t pin, uint8_t mode) {
     GPIO_InitTypeDef init;
     
     init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    init.Pin = port_pin.pin_mask;
+    init.Pin = port_pin.pinMask;
     
     switch ( mode ) {
       case INPUT:

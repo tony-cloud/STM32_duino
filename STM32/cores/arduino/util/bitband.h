@@ -119,10 +119,10 @@
 
 //for arduino const pin
 #define PIN_OUTADDR(n)  BITBAND(((uint32_t)&variant_pin_list[n].port->ODR),\
-                              BITMASKPOS(variant_pin_list[n].pin_mask))
+                              BITMASKPOS(variant_pin_list[n].pinMask))
 							
 #define PIN_INADDR(n)   BITBAND(((uint32_t)&variant_pin_list[n].port->IDR),\
-                              BITMASKPOS(variant_pin_list[n].pin_mask))
+                              BITMASKPOS(variant_pin_list[n].pinMask))
 							
 #ifdef __cplusplus
 extern "C" {
@@ -210,7 +210,7 @@ static inline uint32_t BB_pinAddr(uint32_t pin,uint8_t mode){
 	uint32_t portaddr =((mode)?((uint32_t) &variant_pin_list[pin].port->ODR)
 	                          :((uint32_t) &variant_pin_list[pin].port->IDR));
 							  
-	uint32_t bit = BITMASKPOS(variant_pin_list[pin].pin_mask);
+	uint32_t bit = BITMASKPOS(variant_pin_list[pin].pinMask);
 	return BITBAND(portaddr,bit);
 }
 

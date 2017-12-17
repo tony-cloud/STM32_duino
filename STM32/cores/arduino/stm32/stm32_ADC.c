@@ -88,7 +88,7 @@ int analogRead(uint8_t pin) {
     if (pin == 5) pin = A5;
 #endif
 
-    stm32_chip_adc1_channel_type config = stm32ADC1GetChannel(variant_pin_list[pin].port, variant_pin_list[pin].pin_mask);
+    stm32_chip_adc1_channel_type config = stm32ADC1GetChannel(variant_pin_list[pin].port, variant_pin_list[pin].pinMask);
 
 
     if (config.instance == NULL) {
@@ -110,7 +110,7 @@ int analogRead(uint8_t pin) {
     #endif
 
     GPIO_InitTypeDef GPIO_InitStruct;
-    GPIO_InitStruct.Pin = variant_pin_list[pin].pin_mask;
+    GPIO_InitStruct.Pin = variant_pin_list[pin].pinMask;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(variant_pin_list[pin].port, &GPIO_InitStruct);

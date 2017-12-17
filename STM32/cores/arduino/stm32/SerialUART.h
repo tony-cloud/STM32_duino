@@ -26,7 +26,7 @@
 #include "stm32_def.h"
 #include "stm32_gpio.h"
 #include "Stream.h"
-#include "util/utils_def.h"
+#include "util/toolschain.h"
 #define BUFFER_SIZE 128
 
 class SerialUART : public Stream  {
@@ -45,10 +45,10 @@ class SerialUART : public Stream  {
 
     void setPins(uint8_t tx,uint8_t rx);
 	
-    DEPRECATED("have a new func instead: setPins(tx,rx).add by huaweiwx")
+    __deprecated("have a new func instead: setPins(tx,rx).add by huaweiwx")
     void stm32SetRX(uint8_t rx);
 
-    DEPRECATED("have a new func instead: setPins(tx,rx).add by huaweiwx")	
+    __deprecated("have a new func instead: setPins(tx,rx).add by huaweiwx")	
     void stm32SetTX(uint8_t tx);
     
     USART_TypeDef *instance = NULL;

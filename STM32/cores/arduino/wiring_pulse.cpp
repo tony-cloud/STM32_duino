@@ -34,25 +34,25 @@ uint32_t pulseIn( uint32_t pin, uint32_t state, uint32_t timeout )
   // pulse width measuring loop and achieve finer resolution.
   // Calling digitalRead() instead yields much coarser resolution.
   stm32_port_pin_type port_pin = variant_pin_list[pin];
-  state = (state ? port_pin.pin_mask : 0);
+  state = (state ? port_pin.pinMask : 0);
  
   uint32_t startMicros = micros();
 
   // wait for any previous pulse to end
-  while ((port_pin.port->IDR & port_pin.pin_mask) == state) {
+  while ((port_pin.port->IDR & port_pin.pinMask) == state) {
     if (micros() - startMicros > timeout)
       return 0;
   }
 
   // wait for the pulse to start
-  while ((port_pin.port->IDR & port_pin.pin_mask) != state) {
+  while ((port_pin.port->IDR & port_pin.pinMask) != state) {
     if (micros() - startMicros > timeout)
       return 0;
   }
 
   uint32_t start = micros();
   // wait for the pulse to stop
-  while ((port_pin.port->IDR & port_pin.pin_mask) == state) {
+  while ((port_pin.port->IDR & port_pin.pinMask) == state) {
     if (micros() - startMicros > timeout)
       return 0;
   }

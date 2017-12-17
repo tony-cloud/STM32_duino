@@ -46,7 +46,7 @@ void pwm_callback();
 typedef struct {
     GPIO_TypeDef *port;
     void (*callback)();
-    uint32_t pin_mask;
+    uint32_t pinMask;
     uint32_t waveLengthCycles;
     uint32_t dutyCycle;
     int32_t counterCycles;
@@ -106,13 +106,13 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
     for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {
         if (pwm_config[i].port == NULL ||
                 (pwm_config[i].port == variant_pin_list[pin].port
-                && pwm_config[i].pin_mask == variant_pin_list[pin].pin_mask)) {
+                && pwm_config[i].pinMask == variant_pin_list[pin].pinMask)) {
 
             if (pwm_config[i].port == NULL) {
                 pinMode(pin, OUTPUT);
             }
             pwm_config[i].port = variant_pin_list[pin].port;
-            pwm_config[i].pin_mask = variant_pin_list[pin].pin_mask;
+            pwm_config[i].pinMask = variant_pin_list[pin].pinMask;
             pwm_config[i].waveLengthCycles = timerFreq() / frequency;
 		    pwm_config[i].dutyCycle = (uint64_t)pwm_config[i].waveLengthCycles * dutyCycle >> 16;
 
@@ -156,18 +156,18 @@ void stm32ScheduleMicros(uint32_t microseconds, void (*callback)()) {
     }
 }
 
-void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin_mask) {
+void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pinMask) {
     for(size_t i=0; i<sizeof(pwm_config) / sizeof(pwm_config[0]); i++) {
         if (pwm_config[i].port == NULL) {
             return;
         }
 
-        if (pwm_config[i].port == port && pwm_config[i].pin_mask == pin_mask) {
+        if (pwm_config[i].port == port && pwm_config[i].pinMask == pinMask) {
 
             for(size_t j = i + 1; j < sizeof(pwm_config) / sizeof(pwm_config[0]); j++) {
                 if (pwm_config[j].port == NULL) {
                     pwm_config[i].port = pwm_config[j - 1].port;
-                    pwm_config[i].pin_mask = pwm_config[j - 1].pin_mask;
+                    pwm_config[i].pinMask = pwm_config[j - 1].pinMask;
 
                     pwm_config[j - 1].port = NULL;
                     break;
@@ -190,16 +190,16 @@ void pwm_callback() {
             for(size_t i=0; i<sizeof(pwm_config); i++) {
                 if (pwm_config[i].port != NULL) {
                     if (pwm_config[i].dutyCycle > counter % pwm_config[i].waveLengthCycles) {
-                        pwm_config[i].port->BSRR = pwm_config[i].pin_mask;
+                        pwm_config[i].port->BSRR = pwm_config[i].pinMask;
                         nextWaitCycles = min(nextWaitCycles, pwm_config[i].dutyCycle - (counter % pwm_config[i].waveLengthCycles));
                     } else {
-                        pwm_config[i].port->BSRR = pwm_config[i].pin_mask << 16;
+                        pwm_config[i].port->BSRR = pwm_config[i].pinMask << 16;
                         nextWaitCycles = min(nextWaitCycles, pwm_config[i].waveLengthCycles - counter % pwm_config[i].waveLengthCycles);
                     }
 
                     if (pwm_config[i].counterCycles > 0) {
                         if (pwm_config[i].counterCycles <= (int)waitCycles) {
-                            stm32_pwm_disable(pwm_config[i].port, pwm_config[i].pin_mask);
+                            stm32_pwm_disable(pwm_config[i].port, pwm_config[i].pinMask);
                         } else {
                             pwm_config[i].counterCycles -= waitCycles;
                         }

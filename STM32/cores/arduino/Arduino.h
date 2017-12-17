@@ -26,6 +26,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include "bit_constants.h"
+#include "util/toolschain.h"
 
 // #include <avr/pgmspace.h>
 // #include <avr/io.h>
@@ -97,7 +99,7 @@ typedef uint8_t byte;
 void init(void);
 void initVariant(void);
 
-int atexit(void (*func)()) __attribute__((weak));
+int atexit(void (*func)()) __weak;
 
 void pinMode(uint8_t, uint8_t);
 //void digitalWrite(uint8_t, uint8_t);
@@ -130,12 +132,11 @@ void loop(void);
 // This comes from the pins_*.c file for the active board configuration.
 
 #define analogInPinToBit(P) (P)
-
 #define digitalPinToPort(P) ( variant_pin_list[P].port )
-#define digitalPinToBitMask(P) ( variant_pin_list[P].pin_mask )
+#define digitalPinToBitMask(P) ( variant_pin_list[P].pinMask )
 #define portOutputRegister(P) ( &(P->ODR) )
 #define portInputRegister(P) ( &(P->IDR) )
-
+#define IS_ARDUINO_PIN(PIN)  ((PIN) < NUM_DIGITAL_PINS)
 // #define digitalPinToTimer(P) ( pgm_read_byte( digital_pin_to_timer_PGM + (P) ) )
 // #define analogInPinToBit(P) (P)
 // #define portInputRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_input_PGM + (P))) )
@@ -190,8 +191,6 @@ long map(long, long, long, long, long);
 #include <STM32System.h>
 
 //add by huaweiwx@sina.com
-//#include <string>
-//#include <vector>
 #include "Streaming.h"
 #include "wiring_pulse.h"  /*copy from Arduino_core_STM32 huaweiwx@sina.com 2017.11*/
 
