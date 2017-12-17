@@ -24,27 +24,37 @@
 
 #ifndef _BOOTLOADER_H_
 #define _BOOTLOADER_H_
-#define  USER_CODE_RAM   0x20000000U
+#define USER_CODE_RAM   0x20000000U
 
-//for run in sram app manager
 #ifdef STM32F1  //F0/L0/F1/L1/F3
 # if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
 # else  /*128k flash 20k ram for x8/xB*/
 #  define MAX_PROG_RAM (16*1024)      /*use 0x20000000~0x20003FFF*/
 # endif
+
 #elif defined(STM32F401CC)
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
-#elif defined(STM32F207ZG)||defined(STM32F401RE
+
+#elif defined(STM32F401RE)
+#  define MAX_PROG_RAM (64*1024)
+
+#elif defined(STM32F407VE)||defined(STM32F407VG)||defined(STM32F407ZE)||\
+      defined(STM32F407ZG)||defined(STM32F407IG)||defined(STM32F411RE)
 #  define MAX_PROG_RAM (96*1024)
-#elif defined(STM32F407VE)||defined(STM32F407VG)||defined(STM32F407ZE)||defined(STM32F407ZG)
-#  define MAX_PROG_RAM (96*1024)
+
+#elif defined(STM32F429ZI)
+#  define MAX_PROG_RAM (128*1024)
+
 #elif defined(STM32F746IG)
-# define MAX_PROG_RAM (196*1024)
+#  define MAX_PROG_RAM (196*1024)
+
 #elif defined(STM32F767ZI)
-# define MAX_PROG_RAM (256*1024)
-#elif defined(STM32LL476RG)
-# define MAX_PROG_RAM (64*1024)
+#  define MAX_PROG_RAM (256*1024)
+
+#elif defined(STM32L152RE)||defined(STM32L476RG)
+#  define MAX_PROG_RAM (64*1024)
+
 #else /*f4/7*/
 //# error "please add me!"
 #endif
