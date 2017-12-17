@@ -1,5 +1,6 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
+#include "variant.h"
 
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
@@ -7,10 +8,7 @@ void SystemClock_Config(void) {
     RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-    RCC_OscInitStruct.HSICalibrationValue = 16;
+	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
     RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
@@ -27,6 +25,11 @@ void SystemClock_Config(void) {
 
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB; 
     PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5; 
+#if (LSE_SOURCE_SELECT == 1)
+    PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+#else
+    PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;	
+#endif
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
 
     HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

@@ -1,7 +1,7 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
 
-extern void Error_Handler(void);
+void _Error_Handler(char* file, uint32_t line);
 void SystemClock_Config(void)
 {
 
@@ -11,17 +11,15 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType =RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
@@ -35,7 +33,7 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_USART1
@@ -53,7 +51,7 @@ void SystemClock_Config(void)
   PeriphClkInit.Tim1ClockSelection = RCC_TIM1CLK_HCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Configure the Systick interrupt time 

@@ -10,14 +10,14 @@
 
 /** System Clock Configuration
 */
-extern void Error_Handler(void);
+void _Error_Handler(char* file, uint32_t line);
 #if defined(USE_HSI)
 extern void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
   if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
   {
-  Error_Handler();  
+  _Error_Handler(__FILE__, __LINE__);
   }
   LL_RCC_HSI_Enable();
    /* Wait till HSI is ready */
@@ -58,7 +58,7 @@ void SystemClock_Config(void)
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
   if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
   {
-  Error_Handler();  
+  _Error_Handler(__FILE__, __LINE__);
   }
 #ifdef  USE_HSEBYPASS
   LL_RCC_HSE_EnableBypass();

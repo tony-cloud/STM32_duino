@@ -1,5 +1,6 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
+#include "variant.h"
 
 extern void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;

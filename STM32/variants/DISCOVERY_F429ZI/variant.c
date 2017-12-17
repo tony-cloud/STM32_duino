@@ -24,7 +24,7 @@
   */
 
 // for STM32F429 Discovery
-extern void Error_Handler(void);
+void _Error_Handler(char* file, uint32_t line);
 extern void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -44,7 +44,7 @@ extern void SystemClock_Config(void) {
   RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
   // Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
@@ -57,7 +57,7 @@ extern void SystemClock_Config(void) {
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

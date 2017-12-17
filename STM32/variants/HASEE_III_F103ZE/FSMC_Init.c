@@ -4,10 +4,7 @@
   #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
 
-extern void Error_Handler(void);
-
-
-
+void _Error_Handler(char* file, uint32_t line);
 static uint32_t FSMC_Initialized = 0;
 void STM_FSMC_GPIO_Init(void)
 {
@@ -154,7 +151,7 @@ void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds)
 
   if (HAL_SRAM_Init(&fsmcLcdHandle, &Timing, NULL) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 }
 
@@ -201,7 +198,7 @@ void STM_FSMC_SRAM_Init(void)
 
   if (HAL_SRAM_Init(&sramHandle, &Timing, NULL) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 }
 
@@ -243,7 +240,7 @@ void STM_FSMC_NOR_Init(void)
 
   if (HAL_NOR_Init(&norHandle, &Timing, NULL) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 }
 

@@ -1,5 +1,7 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
+#include "variant.h"
+
 //      2016.9.18 huawei <huaweiwx@sina.com>
 //HSI
 #ifdef USE_HSI
@@ -13,9 +15,12 @@
 	 #elif F_CPU == 96000000
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL8
 	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2
-	 #else
+	 #elif F_CPU == 72000000
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL6
 	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
+	 #else
+	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL4
+	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL
      #endif
 #  else
      #if F_CPU == 120000000
@@ -24,14 +29,17 @@
 	 #elif F_CPU == 96000000
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL12
        #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2
-	 #else
+	 #elif F_CPU == 72000000
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL9
        #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
+	 #else
+	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL6
+	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL
      #endif
 #  endif
 #endif
 
-extern void Error_Handler(void);  
+void _Error_Handler(char* file, uint32_t line);
 #if defined(USE_HSI)
 void void SystemClock_Config(void)
 {
@@ -49,7 +57,7 @@ void void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLMUL = BOARD_RCC_PLLMUL;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
@@ -63,15 +71,14 @@ void void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_USB;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
   PeriphClkInit.UsbClockSelection = BOARD_USB_PLLDIV;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Configure the Systick interrupt time 
@@ -89,10 +96,9 @@ void SystemClock_Config(void) {
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
+//for RTC selected LSI(0)/LSE(1)/BYPASS(2)
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
     RCC_OscInitStruct.HSICalibrationValue = 16;
     RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -109,7 +115,7 @@ void SystemClock_Config(void) {
     HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
 
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB; 
-    PeriphClkInit.UsbClockSelection = BOARD_USB_PLLDIV; 
+    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5; 
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
 
     HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

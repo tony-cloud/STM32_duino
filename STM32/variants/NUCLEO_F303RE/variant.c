@@ -14,7 +14,7 @@ extern void SystemClock_Config(void) {
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL12;
 #else
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
 # ifdef USE_HSEBYPASS 
   RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
 # else
