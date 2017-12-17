@@ -116,6 +116,10 @@ bool USBDeviceClass::beginMSC() {
 }
 #endif
 
+bool USBDeviceClass::end() {
+    return USBD_DeInit(&hUsbDeviceFS);
+}
+
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 

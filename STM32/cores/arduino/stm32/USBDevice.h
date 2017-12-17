@@ -42,6 +42,7 @@ class USBDeviceClass {
 #elif defined(MENU_USB_MASS_STORAGE)
     bool beginMSC();
 #endif	
+    bool end();
 };
 
 extern USBDeviceClass USBDeviceFS;
