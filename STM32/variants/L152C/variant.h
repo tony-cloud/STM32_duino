@@ -30,7 +30,4 @@
 
 /*USB*/
 
-//serial bootloader address
-#define SERIAL_LOAD_RAM 0x20000800U  /*x6(8/B)*/
-
 #endif

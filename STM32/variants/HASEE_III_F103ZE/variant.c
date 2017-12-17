@@ -1,22 +1,24 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
 
-extern void Error_Handler(void);
+void _Error_Handler(char* file, uint32_t line);
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
+//for RTC selected LSI(0)/LSE(1)/BYPASS(2)
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
     RCC_OscInitStruct.HSICalibrationValue = 16;
     RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
     RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-    HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+	_Error_Handler(__FILE__, __LINE__);
+  }
 
     RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                                 |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;

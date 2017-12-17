@@ -21,7 +21,7 @@
   * @param  None
   * @retval None
   */
-extern void Error_Handler(void);
+void _Error_Handler(char* file, uint32_t line);
 void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -41,7 +41,7 @@ void SystemClock_Config(void) {
   RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -52,7 +52,7 @@ void SystemClock_Config(void) {
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
   /* STM32F405x/407x/415x/417x Revision Z devices: prefetch is supported  */
@@ -67,7 +67,7 @@ void SystemClock_Config(void) {
 //  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
 //  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
 //  {
-//      Error_Handler();
+//      _Error_Handler(__FILE__, __LINE__);
 //  }
   
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

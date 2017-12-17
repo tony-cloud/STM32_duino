@@ -1,5 +1,6 @@
 #include "stm32_build_defines.h"
 #include "stm32_def.h"
+
 //      2016.9.18 huawei <huaweiwx@sina.com>
 //HSI
 #if OSC == 12
@@ -26,7 +27,7 @@
      #endif
 #endif
 
-extern void Error_Handler(void);  
+void _Error_Handler(char* file, uint32_t line);
 #if defined(USE_HSI)
 void SystemClock_Config(void)
 {
@@ -44,7 +45,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLMUL = BOARD_RCC_PLLMUL;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
@@ -58,15 +59,14 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_USB;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB; 
   PeriphClkInit.UsbClockSelection = BOARD_USB_PLLDIV;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
-    Error_Handler();
+    _Error_Handler(__FILE__, __LINE__);
   }
 
     /**Configure the Systick interrupt time 
@@ -78,6 +78,8 @@ void SystemClock_Config(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
 }
+
+//HSE
 #else
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
@@ -86,9 +88,6 @@ void SystemClock_Config(void) {
 
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-    RCC_OscInitStruct.HSICalibrationValue = 16;
     RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;

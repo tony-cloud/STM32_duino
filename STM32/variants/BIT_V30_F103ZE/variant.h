@@ -23,7 +23,5 @@
 #define SDA PB7
 #define SCL PB6
 
-//serial bootloader address
-# define SERIAL_LOAD_RAM 0x20000200U
 
 #endif

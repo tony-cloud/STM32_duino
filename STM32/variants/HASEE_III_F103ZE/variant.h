@@ -34,7 +34,4 @@
 #define USB_DISC_PIN      PG11
 #define USB_DISC_LOW      // disconnet by set PG11 set LOW.   add  by huaweiwx@sina.com 2017.4.23
 
-//serial bootloader address
-#define SERIAL_LOAD_RAM 0x20000200U
-
 #endif

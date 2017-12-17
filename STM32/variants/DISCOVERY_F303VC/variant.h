@@ -39,8 +39,4 @@
 
 //USB
 
-//serial bootloader address
-# define SERIAL_LOAD_RAM 0x20001800U
-
-
 #endif

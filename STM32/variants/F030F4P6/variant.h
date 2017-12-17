@@ -15,6 +15,4 @@
 #define SCL  PA9
 #define I2C1_100KHZ_TIMING 0x2000090E
 
-//serial bootloader address
-# define SERIAL_LOAD_RAM 0x20000800U
 #endif
