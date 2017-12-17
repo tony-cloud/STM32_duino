@@ -34,10 +34,10 @@ int atexit(void (* /*func*/ )()) { return 0; }
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
-void initVariant() __attribute__((weak));
+void initVariant() __weak;
 void initVariant() { }
 
-void setupUSB() __attribute__((weak));
+void setupUSB() __weak;
 void setupUSB() { }
 
 // Weak empty main may be use CubMX main.c source program.
