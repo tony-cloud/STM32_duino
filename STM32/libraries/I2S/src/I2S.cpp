@@ -179,21 +179,21 @@ uint32_t I2SClass::getDelay() {
 
 void I2SClass::stm32SetSD(uint8_t sd) {
     this->sdPort = variant_pin_list[sd].port;
-    this->sdPin = variant_pin_list[sd].pin_mask;
+    this->sdPin = variant_pin_list[sd].pinMask;
 }
 
 void I2SClass::stm32SetWS(uint8_t ws) {
     this->wsPort = variant_pin_list[ws].port;
-    this->wsPin = variant_pin_list[ws].pin_mask;
+    this->wsPin = variant_pin_list[ws].pinMask;
 }
 
 void I2SClass::stm32SetCK(uint8_t ck) {
     this->ckPort = variant_pin_list[ck].port;
-    this->ckPin = variant_pin_list[ck].pin_mask;
+    this->ckPin = variant_pin_list[ck].pinMask;
 }
 
 void I2SClass::stm32SetMCK(uint8_t mck) {
     this->mckPort = variant_pin_list[mck].port;
-    this->mckPin = variant_pin_list[mck].pin_mask;
+    this->mckPin = variant_pin_list[mck].pinMask;
     useMck = true;
 }

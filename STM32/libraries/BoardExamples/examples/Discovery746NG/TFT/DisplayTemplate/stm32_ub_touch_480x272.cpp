@@ -223,7 +223,7 @@ uint8_t P_Touch_GetContacts(void)
 // interne Funktion
 uint8_t P_Touch_GetPositions(void)
 {
-  uint8_t n,adr,wert_lo,wert_hi;
+  uint8_t n,addr,wert_lo,wert_hi;
   int16_t i2c_wert;
   uint16_t position;
 
@@ -232,26 +232,26 @@ uint8_t P_Touch_GetPositions(void)
   // alle daten einlesen
   for(n=0;n<MultiTouch_Data.cnt;n++) {
     // x_lo
-    adr=FT5336_TOUCH_REG[n][0];
-    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, adr);
+    addr=FT5336_TOUCH_REG[n][0];
+    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, addr);
     if(i2c_wert<0) return 99;
     wert_lo = i2c_wert & FT5336_LO_MASK;
     // x_hi
-    adr=FT5336_TOUCH_REG[n][1];
-    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, adr);
+    addr=FT5336_TOUCH_REG[n][1];
+    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, addr);
     if(i2c_wert<0) return 99;
     wert_hi = i2c_wert & FT5336_HI_MASK;    
     position=(wert_hi<<8)|wert_lo;
     if(position>=TOUCH_MAXY) position=(TOUCH_MAXY-1);
     MultiTouch_Data.p[n].yp=position;
     // y_lo
-    adr=FT5336_TOUCH_REG[n][2];
-    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, adr);
+    addr=FT5336_TOUCH_REG[n][2];
+    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, addr);
     if(i2c_wert<0) return 99;
     wert_lo = i2c_wert & FT5336_LO_MASK;
     // y_hi
-    adr=FT5336_TOUCH_REG[n][3];
-    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, adr);
+    addr=FT5336_TOUCH_REG[n][3];
+    i2c_wert=UB_I2C3_ReadByte(FT5336_I2C_ADDR, addr);
     if(i2c_wert<0) return 99;
     wert_hi = i2c_wert & FT5336_HI_MASK;    
     position=(wert_hi<<8)|wert_lo;

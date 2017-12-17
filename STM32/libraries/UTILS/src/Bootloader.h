@@ -20,29 +20,36 @@
   SOFTWARE.
 */
 #include <Arduino.h>
-#include "USBDevice.h"
+//#include "USBDevice.h"
 
 #ifndef _BOOTLOADER_H_
 #define _BOOTLOADER_H_
-#define USER_CODE_RAM   0x20000000U
+#define  USER_CODE_RAM   0x20000000U
 
+//for run in sram app manager
 #ifdef STM32F1  //F0/L0/F1/L1/F3
 # if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
-#  ifdef GD32F10X
-#    define CODESEG_NUM 4
-#  else
-#    define CODESEG_NUM  8
-#  endif
 # else  /*128k flash 20k ram for x8/xB*/
 #  define MAX_PROG_RAM (16*1024)      /*use 0x20000000~0x20003FFF*/
-#  define  CODESEG_NUM  4
 # endif
+#elif defined(STM32F401CC)
+#  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
+#elif defined(STM32F207ZG)||defined(STM32F401RE
+#  define MAX_PROG_RAM (96*1024)
+#elif defined(STM32F407VE)||defined(STM32F407VG)||defined(STM32F407ZE)||defined(STM32F407ZG)
+#  define MAX_PROG_RAM (96*1024)
+#elif defined(STM32F746IG)
+# define MAX_PROG_RAM (196*1024)
+#elif defined(STM32F767ZI)
+# define MAX_PROG_RAM (256*1024)
+#elif defined(STM32LL476RG)
+# define MAX_PROG_RAM (64*1024)
 #else /*f4/7*/
-# error "please add me!"
+//# error "please add me!"
 #endif
 
-extern const uint16_t codeSegAddr[];
+extern const uint16_t appCodeSegAddr[];
 
 #ifdef __cplusplus
  extern "C" {
@@ -50,6 +57,7 @@ extern const uint16_t codeSegAddr[];
 
 int  UTIL_checkUserCode(uint32_t usrAddr);
 void UTIL_jumpToUser(uint32_t usrAddr);
+void start_application(uintptr_t address);
 
 #ifdef __cplusplus
  } //  extern "C"

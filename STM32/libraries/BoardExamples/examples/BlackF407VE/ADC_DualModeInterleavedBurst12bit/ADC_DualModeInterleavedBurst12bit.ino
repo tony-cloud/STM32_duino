@@ -87,13 +87,16 @@ static void ADC_Config(void);
   * @param  None
   * @retval None
   */
+#define TXPIN PC10  
+#define RXPIN PC11
 void setup()
 {
-  SERIALX.stm32SetTX(PC10); 
-  SERIALX.stm32SetRX(PC11);  
-  SERIALX.begin(115200);
-  delay(200);
-  SERIALX.println("\nADC Demo - Dual Mode 12 bit Interleaved Conversion, DMA Mode 3: ADC1 & ADC2 on PA1");
+  Serial.setPins(TXPIN,RXPIN);
+//  Serial.stm32SetTX(PC10); 
+//  Serial.stm32SetRX(PC11);  
+  Serial.begin(115200);
+  while (!Serial.available()); //wait for usb_serial input a char; 
+  Serial.println("\nADC Demo - Dual Mode 12 bit Interleaved Conversion, DMA Mode 3: ADC1 & ADC2 on PA1");
   
   /* STM32F4xx HAL library initialization:
        - Configure the Flash prefetch, instruction and Data caches
@@ -121,7 +124,7 @@ void loop(void){
  * Remove the HAL_ADCEx_MultiModeStop_DMA() code from HAL_ADC_ConvCpltCallback() 
  * ADC_ResetToIndep() can also be deleted. It is only required if stopping/restarting Interleaved ADC/DMA.
  */
-  SERIALX.println("ADC Reset & Re-config"); 
+  Serial.println("ADC Reset & Re-config"); 
 
   // Reset ADC to Independent mode before triggering a new DMA burst. 
   // Not required for continuous conversions.
@@ -150,24 +153,24 @@ void loop(void){
   delay(100); // wait for sampling to finish
   
   elapsed = finished - started;
-  // SERIALX.print(started);
-  SERIALX.print("Capture took (us) ");
-  SERIALX.print(elapsed);
-  SERIALX.print(", time per sample ");
+  // Serial.print(started);
+  Serial.print("Capture took (us) ");
+  Serial.print(elapsed);
+  Serial.print(", time per sample ");
   tsamp = (float)elapsed/(2*NSAMPLES);
-  SERIALX.print(tsamp);
-  SERIALX.print(", sample frequency ");
-  SERIALX.print(1/tsamp);
-  SERIALX.print(" MHz\nValues:\n");
+  Serial.print(tsamp);
+  Serial.print(", sample frequency ");
+  Serial.print(1/tsamp);
+  Serial.print(" MHz\nValues:\n");
   for(int i=0; i < min(NPRINT, NSAMPLES); i++){ // only print the first few samples to speed things up
-     SERIALX.print(convSamples[i][1]); // pairs in reverse order, as ADC2 was stored in first half word
-     SERIALX.print(", ");
-     SERIALX.print(convSamples[i][0]);
-     SERIALX.print("; ");
-     if(i % 4 == 3) SERIALX.println("");
+     Serial.print(convSamples[i][1]); // pairs in reverse order, as ADC2 was stored in first half word
+     Serial.print(", ");
+     Serial.print(convSamples[i][0]);
+     Serial.print("; ");
+     if(i % 4 == 3) Serial.println("");
   }
   
-  SERIALX.println("***");
+  Serial.println("***");
   delay(1000);
   BSP_LED_Off(LED1); // turn off indicator that DMA is completed
   delay(1000);
@@ -336,11 +339,11 @@ void assert_failed(uint8_t* file, uint32_t line)
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
 
-   SERIALX.print("Assert failed! ");
-   SERIALX.print("File '");
-   SERIALX.print((char*)file);
-   SERIALX.print("', Line ");
-   SERIALX.println(line);
+   Serial.print("Assert failed! ");
+   Serial.print("File '");
+   Serial.print((char*)file);
+   Serial.print("', Line ");
+   Serial.println(line);
   
   /* Rapid blink */
    while(1) { 

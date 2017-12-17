@@ -2,7 +2,7 @@
 #include "variant.h"
 #include "stm32_dma.h"
 #include "stm32_HAL/stm32XXxx_ll_spi.h"
-#include "util/utils_def.h"
+#include "util/toolschain.h"
 
 #if defined(MOSI) || defined(MISO) || defined(SCK)
 	SPIClass SPI(MOSI, MISO, SCK);
@@ -116,11 +116,11 @@ void SPIClass::begin() {
 
 	stm32AfSPIInit(spiHandle.Instance, 
 			       variant_pin_list[mosiPin].port,
-				   variant_pin_list[mosiPin].pin_mask,
+				   variant_pin_list[mosiPin].pinMask,
 		           variant_pin_list[misoPin].port,
-				   variant_pin_list[misoPin].pin_mask,
+				   variant_pin_list[misoPin].pinMask,
 		           variant_pin_list[sckPin].port,
-				   variant_pin_list[sckPin].pin_mask);
+				   variant_pin_list[sckPin].pinMask);
 
 }
 
@@ -210,11 +210,11 @@ HAL_StatusTypeDef SPIClass::setPins(uint8_t mosi,uint8_t miso,uint8_t sck){
 	sckPin  = sck;
     spiHandle.Instance=stm32GetSPIInstance(
 	                    variant_pin_list[mosi].port,
-						variant_pin_list[mosi].pin_mask,
+						variant_pin_list[mosi].pinMask,
 	                    variant_pin_list[miso].port,
-						variant_pin_list[miso].pin_mask,
+						variant_pin_list[miso].pinMask,
 	                    variant_pin_list[sck].port,
-						variant_pin_list[sck].pin_mask);
+						variant_pin_list[sck].pinMask);
 	if(spiHandle.Instance) return HAL_OK;
 	return HAL_ERROR;
 };

@@ -30,7 +30,7 @@ static int FreeStack() {
 void setup() 
 {
   Serial.begin(115200);
-  delay(3000);
+  while (!Serial.available()); //wait for usb_serial input a char; 
   Serial.println("Ram Free Example");
   Serial.println("show the RAM space available");
 }

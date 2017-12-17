@@ -22,12 +22,11 @@
 
 #include "SpiBlockDevice.h"
 #include "MassStorage.h"
-#include <BSP_SpiFlash.h>
 
-W25QXX SPIFLASH;
+SPIFLASH SpiFlash;
 
 bool SpiBlockDevice::begin() {
-	SPIFLASH.begin();    //move to setup() init
+	SpiFlash.begin();    //move to setup() init
     return true;
 };
 
@@ -37,7 +36,7 @@ bool SpiBlockDevice::end() {
 
 
 bool SpiBlockDevice::readBlocks(uint32_t block, uint8_t* dst, size_t blocks) {
-    for(int offset = 0; offset < blocks; offset++) {
+    for(uint32_t offset = 0; offset < blocks; offset++) {
         flashVariables->read(block + offset, dst + offset * 512);
     }
 //   SPIFLASH.read(dst,block*512,blocks*512);   //读取flash
@@ -46,7 +45,7 @@ bool SpiBlockDevice::readBlocks(uint32_t block, uint8_t* dst, size_t blocks) {
 
 bool SpiBlockDevice::writeBlocks(uint32_t block, uint8_t* src, size_t blocks) {
 
-    for(int offset = 0; offset < blocks; offset++) {
+    for(uint32_t offset = 0; offset < blocks; offset++) {
        flashVariables->write(block + offset, src + offset * 512);
    }
 //   SPIFLASH.write(src,block*512,blocks*512);   //读取flash

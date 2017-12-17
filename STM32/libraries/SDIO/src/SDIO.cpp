@@ -13,18 +13,19 @@
                     Serial.println (state, HEX);\
                     Serial.println (__FILE__);\
                     Serial.println (__LINE__);\
-                    Serial.println (__func__);
+                    Serial.println (__func__);\
+					delay(100);
 
-
-#include "stm32_gpio_af.h"
-#include "SDIO.h"
-
-#include "stm32_dma.h"
 
 #include <Arduino.h>
 
-static SDIOClass *_sdio_this;
+#include "SDIO.h"
+#include "stm32_dma.h"
+#include "stm32_gpio_af.h"
 
+static SDIOClass *_sdio_this;
+static uint32_t m_errorLine = 0;
+static uint8_t m_errorCode = 0x64; //TODO cleanup, SdFat errors do not belong to SDIO driver (SD_CARD_ERROR_INIT_NOT_CALLED);
 //=============================================================================
 // Error function and macro.
 #define sdError(code) setSdErrorCode(code, __LINE__)
@@ -88,42 +89,49 @@ uint32_t SDIOClass::cardStatus(){
     return SDIO_GetResponse(hsd.Instance, SDIO_RESP1);
 }
 
-
+static uint8_t inited = 0;
 uint8_t SDIOClass::begin() {
     //GPIO_InitTypeDef GPIO_InitStruct;
-    if (hsd.State == HAL_SD_STATE_READY){
-        /*
+	if(inited) return true;
+	 else inited =1;
+	 if (hsd.State == HAL_SD_STATE_READY){
+       /*
          * TODO: Check card state, may not be in transfer mode.
          */
         return true;
     }
 
     _sdio_this = this;
-
     __HAL_RCC_SDIO_CLK_ENABLE();
-
     stm32AfSDIO4BitInit(SDIO, NULL, 0, NULL, 0,
             NULL, 0, NULL, 0, NULL, 0, NULL, 0);
 
-    hsd.Instance = SDIO;
+	hsd.Instance = SDIO;
     hsd.Init.ClockEdge = SDIO_CLOCK_EDGE_RISING;
     hsd.Init.ClockBypass = SDIO_CLOCK_BYPASS_DISABLE;
     hsd.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
     hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
     hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-
-    hsd.Init.ClockDiv = 0;
+	hsd.Init.ClockDiv = SDIO_TRANSFER_CLK_DIV;
+//    hsd.Init.ClockDiv = 2;
 
     state = HAL_SD_Init(&hsd);
     if (state != HAL_OK) {
         return false;
     }
-    HAL_SD_GetCardStatus(&hsd, &CardStatus);
 
-    state = HAL_SD_ConfigWideBusOperation(&hsd, SDIO_BUS_WIDE_4B);
+    HAL_Delay(50);
+ 	state = HAL_SD_ConfigWideBusOperation(&hsd, SDIO_BUS_WIDE_4B);
+	
+    hsd.Init.BusWide = SDIO_BUS_WIDE_4B;  //F1 add by huaweiwx@sina.com
+	
+    HAL_SD_GetCardStatus(&hsd, &CardStatus);
+			
+    state = HAL_SD_Init(&hsd);            //F1 add by huaweiwx@sina.com
+	
     if (state != HAL_OK) {
-        DBGPRNT;
-        return false;
+      DBGPRNT;
+      return false;
     }
 
     __HAL_RCC_DMA2_CLK_ENABLE();
@@ -137,19 +145,27 @@ uint8_t SDIOClass::begin() {
 
 #ifdef DMA_PFCTRL
     hdma_sdio.Init.Mode = DMA_PFCTRL;
+    hdma_sdio.Init.Priority = DMA_PRIORITY_LOW;
 #else
     hdma_sdio.Init.Mode = DMA_NORMAL;
-#endif
-
     hdma_sdio.Init.Priority = DMA_PRIORITY_LOW;
+#endif
     _SDIOSetDMAFIFO(hdma_sdio);
 
     __HAL_LINKDMA(&hsd, hdmatx, hdma_sdio);
     __HAL_LINKDMA(&hsd, hdmarx, hdma_sdio);
 
+#if defined(STM32F1)
+    HAL_NVIC_SetPriority(SDIO_IRQn, 0x0, 0);
+    HAL_NVIC_EnableIRQ(SDIO_IRQn);
+	
+    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, 0x0, 2);
+    HAL_NVIC_EnableIRQ(DMA2_Channel4_5_IRQn);
+	
+#else
     HAL_NVIC_SetPriority(SDIO_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
-
+#endif
     if (HAL_DMA_Init(&hdma_sdio) != HAL_OK) {
         return false;
     }
@@ -158,9 +174,9 @@ uint8_t SDIOClass::begin() {
      * Up to here
      */
     _useDMA = true;
-
+	
     m_errorCode = 0; //SD_CARD_ERROR_NONE;
-    return true;
+   return true;
 }
 /* TODO: This part needs more work, should set the card to idle state
  *
@@ -171,11 +187,9 @@ uint8_t SDIOClass::end() {
 }
 
 uint8_t SDIOClass::readBlocks(uint32_t block, uint8_t* dst, size_t nb) {
-    bool aligned = ((uint32_t)dst & 0x3U) == 0;
-
+    bool aligned = ((uint32_t)dst & 0x3U) == 0; 
     if (!_useDMA || !aligned) {
         state = HAL_SD_ReadBlocks(&hsd, dst, block, nb, (uint32_t)sd_timeout);
-
         if (state != HAL_OK) {
             DBGPRNT;
             return false;
@@ -200,12 +214,13 @@ uint8_t SDIOClass::readBlocks(uint32_t block, uint8_t* dst, size_t nb) {
             if((HAL_GetTick() - tickstart) >=  sdRdTimeout * nb)
             {
                 /* Abort transfer and send return error */
-                HAL_SD_Abort(&hsd);
-                DBGPRNT;
-                Serial.print ("Timeout on Read, over ");
+               Serial.print ("Timeout on Read, over ");
                 Serial.print (sdRdTimeout * nb);
                 Serial.println ("ms");
-                return false;
+                 DBGPRNT;
+                HAL_SD_Abort(&hsd);
+                 return false;
+
             }
         }
         if (hsd.State != HAL_SD_STATE_READY ) {
@@ -213,7 +228,6 @@ uint8_t SDIOClass::readBlocks(uint32_t block, uint8_t* dst, size_t nb) {
             return false;
         }
         if (__HAL_SD_GET_FLAG(&hsd,SDIO_FLAG_DCRCFAIL)) {
-           //return false;
             DBGPRNT;
             Serial.println ("CRC error on read");
             while (1); //stay here

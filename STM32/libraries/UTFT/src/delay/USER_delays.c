@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 // 不精确，用于软件中延时；
-#if defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_STM32)||defined(ARDUINO_ARCH_MAPLE_STM32F1)||\
+#if defined(STM32GENERIC)||defined(ARDUINO_ARCH_MAPLE_STM32F1)||\
     defined(ARDUINO_ARCH_MAPLE_STM32F3)||defined(ARDUINO_ARCH_MAPLE_STM32F4)||\
     defined(ARDUINO_ARCH_MAPLE_STM32F0)||defined(ARDUINO_ARCH_MAPLE_STM32F7)||\
 	defined(ARDUINO_ARCH_F4_OTTO)||defined(ARDUINO_ARCH_KODUINO)||defined(ARDUINO_ARCH_HALMX_RTOS)

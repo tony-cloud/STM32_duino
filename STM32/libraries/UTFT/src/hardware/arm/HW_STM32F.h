@@ -13,7 +13,7 @@ typedef struct
 } LCD_IO_TypeDef;
 
 
-#if defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_STM32)
+#if defined(STM32GENERIC)
 
 #if __has_include("bsp.h")
 #  include "bsp.h"

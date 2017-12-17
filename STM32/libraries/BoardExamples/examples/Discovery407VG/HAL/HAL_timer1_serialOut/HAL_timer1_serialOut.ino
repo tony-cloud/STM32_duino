@@ -21,6 +21,7 @@ static TIM_HandleTypeDef s_TimerInstance =
 void setup() 
 {
   Serial.begin(115200); // Serial is SerialUSB
+  while (!Serial.available()); //wait for usb_serial input a char; 
 
   __TIM2_CLK_ENABLE();
   s_TimerInstance.Init.Prescaler = 42000 - 1; //APB1 TIM2 has 84MHZ,

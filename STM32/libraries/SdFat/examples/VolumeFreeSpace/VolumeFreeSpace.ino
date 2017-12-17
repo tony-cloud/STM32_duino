@@ -1,7 +1,7 @@
 /*
  * This program demonstrates the freeClusterCount() call.
  */
-#include <SPI.h>
+#include <FreeStack.h>
 #include "SdFat.h"
 /*
  * SD chip select pin.  Common values are:
@@ -11,11 +11,11 @@
  * Adafruit Datalogging shield, pin 10.
  * Default SD chip select is the SPI SS pin.
  */
-const uint8_t chipSelect = SS;
+//const uint8_t chipSelect = SS;
 
 #define TEST_FILE "Cluster.test"
 // file system
-SdFat sd;
+SdFatSdio sd;
 
 // test file
 SdFile file;
@@ -34,12 +34,9 @@ void printFreeSpace() {
 }
 //------------------------------------------------------------------------------
 void setup() {
-  Serial.begin(15200);
-  // Wait for USB Serial 
-  while (!Serial) {
-    SysCall::yield();
-  }
-  if (!MAINTAIN_FREE_CLUSTER_COUNT) {
+  Serial.begin(115200);
+  delay(100);
+   if (!MAINTAIN_FREE_CLUSTER_COUNT) {
     cout << F("Please edit SdFatConfig.h and set\n");
     cout << F("MAINTAIN_FREE_CLUSTER_COUNT nonzero for\n");
     cout << F("maximum freeClusterCount() performance.\n\n");
@@ -47,13 +44,15 @@ void setup() {
   // F stores strings in flash to save RAM
   cout << F("Type any character to start\n");
   while (!Serial.available()) {
-    SysCall::yield();
   }
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
-  if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
-    sd.initErrorHalt();
+  if (!sd.begin()) {
+    cout << "begin err";
+    delay(100);
+ //   sd.initErrorHalt();
   }
+  
   // Insure no TEST_FILE. 
   sd.remove(TEST_FILE);
   

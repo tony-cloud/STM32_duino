@@ -18,7 +18,7 @@ const PinMap *pinmap_function(PinName pin, const PinMap* map);
 
 
 #define STM_PORT(A) variant_pin_list[A].port
-#define STM_GPIO_PIN(A) variant_pin_list[A].pin_mask
+#define STM_GPIO_PIN(A) variant_pin_list[A].pinMask
 
 #define STM_PIN_MODE(A) A->mode
 #define STM_PIN_PUPD(A) A->pupd

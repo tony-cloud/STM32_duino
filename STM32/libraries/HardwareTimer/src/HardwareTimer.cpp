@@ -341,7 +341,7 @@ void HardwareTimer::setMode(int channel, TIMER_MODES mode, uint8_t pin) {
             if (isSameChannel(channel, tim_pin_list[i].signalType)) {
 
                 if (pin == TIMER_DEFAULT_PIN ||
-                        (variant_pin_list[pin].port == tim_pin_list[i].port && variant_pin_list[pin].pin_mask == tim_pin_list[i].pinMask)) {
+                        (variant_pin_list[pin].port == tim_pin_list[i].port && variant_pin_list[pin].pinMask == tim_pin_list[i].pinMask)) {
 
                     stm32GpioClockEnable(tim_pin_list[i].port);
 

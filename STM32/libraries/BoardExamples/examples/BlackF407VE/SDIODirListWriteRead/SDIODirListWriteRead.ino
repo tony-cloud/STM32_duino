@@ -6,9 +6,8 @@
    - read it and print it on the serial monitor
 
 */
-
-#include "Arduino.h"
-#include "SdFat.h"
+#include <SdFatConfig.h>
+#include <SdFat.h>
 
 SdFatSdio sd;
 

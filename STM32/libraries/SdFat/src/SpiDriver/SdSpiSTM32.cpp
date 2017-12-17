@@ -17,7 +17,8 @@
  * along with the Arduino SdSpiAltDriver Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#if defined(ARDUINO_ARCH_STM32)||defined(ARDUINO_ARCH_HALMX)
+#if defined(STM32GENERIC)
+
 #include "SdSpiDriver.h"
 #include "SdCard/SdInfo.h"
 //------------------------------------------------------------------------------

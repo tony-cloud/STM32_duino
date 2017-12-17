@@ -4,27 +4,32 @@
 
 void setup() {
   //  put your setup code here, to run once:
+  Serial.begin(115200);
   Led.Init();
 
-#if BOARD_NR_LED>1
+#ifdef LED1_BUILTIN
   Led1.Init();
 #endif
 
-#if BOARD_NR_LED>2
+#ifdef LED2_BUILTIN
   Led2.Init();
 #endif
+  Serial.println("I'm going to sleep.......");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  Led.flash(10, 990, 1);   
+  if (Led.availablePwm())
+    Led.fade(950);
+  else
+    Led.flash(10, 90, 10);
 
-#if BOARD_NR_LED>1
-  Led1.flash(10, 490, 2);
+#ifdef LED1_BUILTIN
+  Led1.flash(10, 0, 1);
 #endif
 
-#if BOARD_NR_LED>2
+#ifdef LED2_BUILTIN
   Led2.flash(10, 320, 3);
 #endif
 }

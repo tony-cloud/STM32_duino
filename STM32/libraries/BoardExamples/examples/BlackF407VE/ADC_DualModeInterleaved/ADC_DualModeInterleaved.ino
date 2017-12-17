@@ -80,9 +80,9 @@ static void ADC_Config(void);
   */
 void setup()
 {
-  SERIALX.begin(115200);
-  delay(200);
-  SERIALX.println("ADC Demo - Dual Mode 8 bit Interleaved Conversion, ADC1 & ADC2, PA1, DMA Mode 3 ");
+  Serial.begin(115200);
+  while (!Serial.available()); //wait for usb_serial input a char; 
+  Serial.println("ADC Demo - Dual Mode 8 bit Interleaved Conversion, ADC1 & ADC2, PA1, DMA Mode 3 ");
   
   /* STM32F4xx HAL library initialization:
        - Configure the Flash prefetch, instruction and Data caches
@@ -100,14 +100,14 @@ void setup()
   /*##-1- Configure ADC1 and ADC2 peripherals ################################*/
   ADC_Config();
 
-  SERIALX.println("Starting ADC2"); 
+  Serial.println("Starting ADC2"); 
     /*##-2- Enable ADC2 ########################################################*/
   if(HAL_ADC_Start(&AdcHandle2) != HAL_OK)
   {
     /* Start Error */
     Error_Handler(); 
   }
-  SERIALX.println("Starting ADC1 & DMA"); 
+  Serial.println("Starting ADC1 & DMA"); 
   /*##-3- Start ADC1 and ADC2 multimode conversion process and enable DMA ####*/
   /* Note: Considering IT occurring after each number of ADC conversions      */
   /*       (IT by DMA end of transfer), select sampling time and ADC clock    */
@@ -127,13 +127,13 @@ void loop(void){
  
    BSP_LED_Off(LED1); // turn off indicator that DMA is completed
 
-   SERIALX.print("Values = ");
+   Serial.print("Values = ");
    for(int i=0; i < min(32, NSAMPLES); i++){ // only print the first few samples to speed things up
-     SERIALX.print(convBuffer[i]);
-     SERIALX.print(", ");
-     if(i % 8 == 7) SERIALX.println("");
+     Serial.print(convBuffer[i]);
+     Serial.print(", ");
+     if(i % 8 == 7) Serial.println("");
     }
-    SERIALX.println("");
+    Serial.println("");
 }
 
 /**
@@ -254,9 +254,9 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
   /* Turn LED1 on: Transfer process is correct */
   BSP_LED_On(LED1);
-/*  SERIALX.print("X"); 
+/*  Serial.print("X"); 
   if (counter++ % 64 == 0)
-    SERIALX.println(" ");
+    Serial.println(" ");
     */
 }
 
@@ -274,11 +274,11 @@ void assert_failed(uint8_t* file, uint32_t line)
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
 
-   SERIALX.print("Assert failed! ");
-   SERIALX.print("File '");
-   SERIALX.print((char*)file);
-   SERIALX.print("', Line ");
-   SERIALX.println(line);
+   Serial.print("Assert failed! ");
+   Serial.print("File '");
+   Serial.print((char*)file);
+   Serial.print("', Line ");
+   Serial.println(line);
   
   /* Rapid blink */
    while(1) { 

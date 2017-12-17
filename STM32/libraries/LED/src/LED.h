@@ -34,9 +34,15 @@
 #define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN
 #elif defined(LED1_BUILTIN)
 #define LEDS_LIST LED_BUILTIN,LED1_BUILTIN
-#else
+#elif defined(LED_BUILTIN)
 #define LEDS_LIST LED_BUILTIN
+#else
+#warrning  "unstandard arduino board "	
+#define LEDS_LIST 13	
 #endif
+
+#define LED_FADEAMOUNT 5
+#define LED_FADETIME   25
 
 typedef struct {
     uint8_t  pin;
@@ -67,17 +73,20 @@ class LEDClass
 #ifdef STM32GENERIC
 //analogWrite
     void pwm(int val, int frequency=1000, int durationMillis=0);
+    bool availablePwm(void);
+#else
+	bool availablePwm(void){return true;};
 #endif
 	void off(void);
 	void toggle(void);
 	void flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt=1);
-	void fade(void);
+	void fade(uint16_t time = LED_FADETIME);
 	LED_TypeDef* pdata = &sLed;
   private:
     LED_TypeDef  sLed;
-	volatile int brightness;    // how bright the LED is
-    volatile int fadeAmount;    // how many points to fade the LED by
-
+	int brightness=0;    // how bright the LED is
+    int fadeAmount = LED_FADEAMOUNT;    // how many points to fade the LED by
+	int fadeTime = LED_FADETIME;
 };
 
 #ifdef LED_BUILTIN

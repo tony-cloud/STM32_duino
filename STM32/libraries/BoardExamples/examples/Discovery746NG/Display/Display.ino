@@ -15,6 +15,7 @@ LTDC_F746_Discovery tft;
 
 void setup() {
   Serial.begin(115200);
+  while (!Serial.available()); //wait for usb_serial input a char; 
   Serial.println("LTDC Test!");
 
   // The buffer is memory mapped

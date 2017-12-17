@@ -25,7 +25,6 @@
 #include <inttypes.h>
 #include "Stream.h"
 #include "stm32_def.h"
-#include "util/utils_def.h"
 
 #if __has_include("configs/i2cEepromConfig.h")
 #  include "configs/i2cEepromConfig.h"
@@ -166,10 +165,10 @@ class TwoWire : public Stream {
 
     void stm32SetInstance(I2C_TypeDef *instance){pdev->handle.Instance = instance;};
 
-    DEPRECATED("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+    __deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSDA(uint8_t sda){pdev->sda = sda;};
   
-    DEPRECATED("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+	__deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSCL(uint8_t scl){pdev->scl = scl;};
 
     inline size_t write(unsigned long n) { return write((uint8_t)n); }

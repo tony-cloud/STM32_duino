@@ -61,7 +61,7 @@
  
  
 SPIFLASH::SPIFLASH()
-       :SPIClass(SPIFLASH_MOSI,SPIFLASH_MISO, SPIFLASH_SCK){};
+       :SPIClass(SPIFLASH_MOSI,SPIFLASH_MISO,SPIFLASH_SCK){};
 SPIFLASH::SPIFLASH(SPI_TypeDef *instance)
        :SPIClass(instance){};
 SPIFLASH::SPIFLASH(uint8_t mosi, uint8_t miso, uint8_t sck)

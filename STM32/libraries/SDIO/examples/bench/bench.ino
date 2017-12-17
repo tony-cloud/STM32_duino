@@ -2,14 +2,12 @@
  * This program is a simple binary write/read benchmark.
  */
 
-#include "SdFat.h"
-#include "FreeStack.h"
+#include <SdFat.h>
+#include <FreeStack.h>
 
 // Set USE_SDIO to zero for SPI card access. 
 #define USE_SDIO 1
 
-// SD chip select pin
-const uint8_t chipSelect = SS;
 
 // Size of read/write.
 const size_t BUF_SIZE = 32768;
@@ -38,6 +36,9 @@ uint8_t buf[BUF_SIZE];
 SdFatSdio sd;
 //SdFatSdioEX sd;
 #else  // USE_SDIO
+// SD chip select pin
+const uint8_t chipSelect = 0;
+
 SdFat sd;
 #endif  // USE_SDIO
 

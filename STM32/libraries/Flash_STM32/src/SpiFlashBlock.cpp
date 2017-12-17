@@ -21,32 +21,38 @@
   
 */
 
-#include <BSP_SpiFlash.h>
+#include <SpiFlash.h>
 #include "FlashBlock.h"
 #include "SpiFlashBlock.h"
 
-extern W25QXX SPIFLASH;
+extern SPIFLASH SpiFlash;
 #define SPI_SECTOR_SIZE 4096
+
+bool SpiEmbeddedFlashBlock::Init() {
+	SpiFlash.begin();
+    return true;
+}
 
 bool SpiEmbeddedFlashBlock::erase(uint32_t offset, uint32_t size) {
 	uint32_t secadr = (baseAddress+ offset + SPI_SECTOR_SIZE - 1) / SPI_SECTOR_SIZE;
 	uint16_t pages = (size+SPI_SECTOR_SIZE - 1) / SPI_SECTOR_SIZE;
 	for(uint16_t i=0;i<pages;i++,secadr++){
-		SPIFLASH.eraseSector(secadr);
+		SpiFlash.eraseSector(secadr);
 	};
     return true;
 }
 
 bool SpiEmbeddedFlashBlock::write(uint32_t offset, uint32_t size, uint8_t *data) {
 //    PRINT_DEBUG("Writing to flash at %u size %u", offset, size);
-	SPIFLASH.write(data,(baseAddress+offset),(uint16_t)size);
+	SpiFlash.write(data,(baseAddress+offset),(uint16_t)size);
     return true;
 }
 
 bool SpiEmbeddedFlashBlock::read(uint32_t offset, uint32_t size, uint8_t *data) {
 //    PRINT_TRACE("Reading from flash at %u size %u", offset, size);
-	SPIFLASH.read(data,(baseAddress+offset),(uint16_t)size);
+	SpiFlash.read(data,(baseAddress+offset),(uint16_t)size);
     return true;
 }
+
 
 

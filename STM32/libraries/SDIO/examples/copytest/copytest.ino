@@ -6,6 +6,8 @@
  Pito 5/2016, no warranties of any kind
  Pito 5/2017, no warranties of any kind
  */
+ 
+#include <FreeStack.h>
 #include "SdFat.h"
 #include "CRC32.h"
 

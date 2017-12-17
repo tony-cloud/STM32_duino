@@ -34,9 +34,8 @@ uint8_t UB_I2C3_ReadByte(uint8_t addressI2cDevice, uint8_t registerId)
 
 void setup()
 {
-  Wire.stm32SetInstance(I2C3);
-  Wire.stm32SetSDA(PH8);
-  Wire.stm32SetSCL(PH7);
+  Wire.setInstance(I2C3);
+  Wire.setPins(PH8,PH7);
 
   Wire.begin();
 

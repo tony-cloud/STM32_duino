@@ -37,8 +37,6 @@
 
 #include <Wire.h>
 
-#define SERIALINTERFACE Serial
-
 #define AUDIOCODEC_CS PD4
 
 void enableDevices()
@@ -56,9 +54,11 @@ void setup()
   
   enableDevices();
 
-  SERIALINTERFACE.begin(115200);
-  delay(5000);
-  SERIALINTERFACE.println("\nI2C Scanner");
+  Serial.begin(115200);
+  while (!Serial.available()); //wait for serial input a char; 
+  
+//  delay(5000);
+  Serial.println("\nI2C Scanner");
 }
 
 
@@ -67,7 +67,7 @@ void loop()
   byte error, address;
   int nDevices;
 
-  SERIALINTERFACE.println("Scanning...");
+  Serial.println("Scanning...");
   delay(2000);
 
   nDevices = 0;
@@ -82,28 +82,28 @@ void loop()
 
     if (error == 0)
     {
-      SERIALINTERFACE.print("I2C device found at address 0x");
-      if (address < 16)  SERIALINTERFACE.print("0");
-      SERIALINTERFACE.print(address, HEX);
-      SERIALINTERFACE.println("  !");
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)  Serial.print("0");
+      Serial.print(address, HEX);
+      Serial.println("  !");
 
       nDevices++;
 
     }
     else if (error == 4)
     {
-      SERIALINTERFACE.print("no device found at address 0x");
-      if (address < 16) SERIALINTERFACE.print("0");
-      SERIALINTERFACE.println(address, HEX);
+      Serial.print("no device found at address 0x");
+      if (address < 16) Serial.print("0");
+      Serial.println(address, HEX);
     }
   }
   if (nDevices == 0)
   {
-    SERIALINTERFACE.println("No I2C devices found\n");
-    SERIALINTERFACE.println("Did you configure the chip select for your device?\n");
+    Serial.println("No I2C devices found\n");
+    Serial.println("Did you configure the chip select for your device?\n");
   }
   else
-    SERIALINTERFACE.println("done\n");
+    Serial.println("done\n");
 
   delay(5000);           // wait 5 seconds for next scan
 }

@@ -7,13 +7,15 @@
 extern "C" {
 #endif
 
+#define UTIL_isHexStr(x) isHex(x)
+
+uint8_t	 bitMaskPos(uint32_t mask); 
+uint8_t  isHex(char* str);
 uint8_t  UTIL_toDigit(char x);
 int32_t  UTIL_num(char* str);
-uint8_t  UTIL_isHexStr(char* str);
 uint32_t UTIL_hexNum(char* str);
 uint32_t UTIL_getNum(char* str);
 
-uint8_t	 UTIL_maskToPin(uint32_t mask); 
 uint32_t UTIL_Str2PortPin(char* str);
 
 #ifdef __cplusplus

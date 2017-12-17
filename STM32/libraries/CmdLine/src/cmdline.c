@@ -40,7 +40,7 @@
 //
 //*****************************************************************************
 #ifndef CMDLINE_MAX_ARGS
-#define CMDLINE_MAX_ARGS   8
+#define CMDLINE_MAX_ARGS   12
 #endif
 
 //*****************************************************************************
@@ -89,7 +89,7 @@ CmdLineProcess(char *pcCmdLine)
         // If there is a space, then replace it with a zero, and set the flag
         // to search for the next argument.
         //
-        if((*pcChar == ' ')||(*pcChar == '\r')||(*pcChar == '\n')) //2 add CR LF condition hw
+        if((*pcChar == ' ')||(*pcChar == ',')||(*pcChar == '\r')||(*pcChar == '\n')) //2 add , CR LF condition hw
         {
             *pcChar = 0;
             bFindArg = 1;

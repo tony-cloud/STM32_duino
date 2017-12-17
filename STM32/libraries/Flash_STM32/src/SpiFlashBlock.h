@@ -31,6 +31,7 @@ class SpiEmbeddedFlashBlock: public FlashBlock{
 public:
 	SpiEmbeddedFlashBlock(uint32_t baseAddress,uint32_t size): FlashBlock(size), baseAddress(baseAddress){};
 	
+	bool Init();
     bool erase(uint32_t offset, uint32_t size);
     bool write(uint32_t offset, uint32_t size, uint8_t *data);
     bool read(uint32_t offset, uint32_t size, uint8_t *data);

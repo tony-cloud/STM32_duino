@@ -1,4 +1,4 @@
-/* vdos_demo.ino cmdline vdisk/stm32mcu oprater system demo
+/* vdos_demo.ino stm32 vdisk/mcu administer
    USB Mass Storage drive based on spi serial flash or internal flash,
     ---------------------------------------------------------------------------------------
    from the menu
@@ -10,7 +10,8 @@
    type help or h or ? for Display list of commands.
 
    ---------------------------------------------------------------------------------------
-   tested for F103xE  by huaweiwx@sina.com 2017.10
+   tested for F103xE/F407xE  by huaweiwx@sina.com 2017.10
+
    ---------------------------------------------------------------------------------------
 */
 #include <SpiFlash.h>
@@ -55,15 +56,15 @@ void loop() {
       nStatus = CmdLineProcess(cmdline);
       if (nStatus == CMDLINE_BAD_CMD)
       {
-        Serial.println(F("Bad command!"));
+        Serial.println(F("Bad cmd!"));
       }
       else if (nStatus == CMDLINE_TOO_MANY_ARGS)
       {
-        Serial.println(F("Too many arguments for command processor!"));
+        Serial.println(F("Too many args!"));
       }
       else if (nStatus != 0)
       {
-        Serial.print(F("Command returned error code"));
+        Serial.print(F("Cmd rtn err_code"));
         Serial.println(nStatus);
       }
     }
@@ -113,7 +114,7 @@ int Cmd_help(int argc, char *argv[])
     if (pstr[0] == 'P') {
       uint8_t pin = UTIL_Str2PortPin(argv[1]);
       if (pin == 0xff) {
-        Serial << "error: pin name" << argv[1] << "\n";
+        Serial << "err: pinName" << argv[1] << "\n";
         return 0;
       } else {
         Serial << argv[1] << "(" << pin << ") : " << digitalRead(pin) << "\n";
@@ -286,16 +287,16 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
   Serial << "ls files:\n";
   fat.ls();
 
-#if (FLASH_BANK1_END ==  0x0807FFFFU)   //for hight density  xC/D/E
+#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
   if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
     Serial << "\ncodes on slot:\n0# addr:0x20000200 ok\n";
   else
 #endif
     Serial << "\ncodes on slot:\n";
 
-  for (volatile uint32_t i = 0; i < CODESEG_NUM; i++) {
+  for (int i = 0; i < (appCodeSegAddr[0] + 1); i++) {
     if (i > 0)
-      useradr = FLASH_BASE + codeSegAddr[i - 1] * 1024;
+      useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     else {
       useradr = USER_CODE_RAM;
     }
@@ -343,7 +344,7 @@ int Cmd_dispmen (int argc, char *argv[]) {
   return (0);
 }
 
-#if (FLASH_BANK1_END ==  0x0807FFFFU)   //for hight density  xC/D/E
+#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
 //exp: load mydemo.bin
 int Cmd_load(int argc, char *argv[]) {
   volatile uint8_t* prog_ram =  (uint8_t *) USER_CODE_RAM;
@@ -404,7 +405,7 @@ int Cmd_type(int argc, char *argv[])
   char c;
   while (f.available()) {
     c = f.read();
-    if (isprint(c)||(c=='\r')||(c == '\n')) Serial.write(c);
+    if (isprint(c) || (c == '\r') || (c == '\n')) Serial.write(c);
     else Serial.write('.');
   }
   f.close();
@@ -417,28 +418,26 @@ int Cmd_go(int argc, char *argv[])
   if (!(argc == 2)) return 0;
   volatile uint32_t useradr;
   Serial << "go " << argv[1] << "\n";
-  uint32_t i = atoi(argv[1]);
-  //  if ((i < CODESEG_NUM) && (i >  0)) {
-  if (i < CODESEG_NUM) {
+  int i = atoi(argv[1]);
+  if (i < (appCodeSegAddr[0]+1)) {
     if (i == 0) {
-      if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
-        useradr = SERIAL_LOAD_RAM;
-      else
-        useradr =  USER_CODE_RAM;
-
+      useradr =  USER_CODE_RAM;
     } else {
-      useradr = FLASH_BASE + codeSegAddr[i - 1] * 1024;
+      useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     }
 
     if (UTIL_checkUserCode(useradr))
     {
       Serial << "check ok and goto " << _HEX(useradr) << ".....\n" << _endl;
+#if (MENU_USB_SERIAL||MENU_USB_MASS_STORAGE||MENU_USB_IAD)
       USBDeviceFS.end();
-      delay(100); /*wait  serial complated */
+#endif
+      delay(1000); /*wait  serial complated */
 
       //    Serial1.end();  /*if open close it*/
       //    Serial2.end();  /*if open close it*/
-      UTIL_jumpToUser(useradr);
+      //    UTIL_jumpToUser(useradr);
+      start_application(useradr);
     } else {
       Serial << "slot: " << argv[1] << " is unavailed!\n";
     }
@@ -468,7 +467,7 @@ int Cmd_digitalWrite(int argc, char *argv[])
     if (tmp < 0xff) pin = tmp;
   }
   if (pin == 0xff) {
-    Serial << "error: pin name" << argv[1] << "\n";
+    Serial << "err: pinName" << argv[1] << "\n";
     return 0;
   }
 
@@ -495,7 +494,7 @@ static int Cmd_digitalToggle(int argc, char *argv[])
     if (tmp < 0xff) pin = tmp;
   }
   if (pin == 0xff) {
-    Serial << "error: pin name" << argv[1] << "\n";
+    Serial << "err: pinName" << argv[1] << "\n";
     return 0;
   }
   digitalToggle(pin);
@@ -515,7 +514,7 @@ static int Cmd_analogWrite(int argc, char *argv[])
     if (tmp < 0xff) pin = tmp;
   }
   if (pin == 0xff) {
-    Serial << "error: pin name" << argv[1] << "\n";
+    Serial << "err: pinName" << argv[1] << "\n";
     return 0;
   }
 
@@ -538,7 +537,7 @@ static int Cmd_analogRead(int argc, char *argv[])
     if (tmp < 0xff) pin = tmp;
   }
   if (pin == 0xff) {
-    Serial << "error: pin name" << argv[1] << "\n";
+    Serial << "error: pinName" << argv[1] << "\n";
     return 0;
   }
   Serial << stm32PinName(pin) << "(" << pin  << "):"  << analogRead(pin) << "\n";
@@ -557,7 +556,7 @@ static int Cmd_pinMode(int argc, char *argv[])
     if (tmp < 0xff) pin = tmp;
   }
   if (pin == 0xff) {
-    Serial << "error: pin name" << argv[1] << "\n";
+    Serial << "err: pinName" << argv[1] << "\n";
     return 0;
   }
 
@@ -789,7 +788,7 @@ int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
         Serial << "\nfile: " << argv[2] << "no found!";
         return 0;
       }
-      uint32_t fsize = f.fileSize();
+      int fsize = f.fileSize();
       if ( fsize > (ee.pdata->dev + 1)) {
         Serial << "\nfile " << argv[2] << "too larger to fit in eeprom!\n";
         return 0;
@@ -823,7 +822,7 @@ tCmdLineEntry g_sCmdTable[] =
   //vdisk function
   { "dir",    Cmd_dir,      "  : list vdisk files"} ,
   { "ls",     Cmd_dir,      "   : alias for dir"} ,
-#if (FLASH_BANK1_END ==  0x0807FFFFU)   //for hight density  xC/D/E
+#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
   { "load",   Cmd_load,      " : chech bin file and load it if available"} ,
 #endif
   { "type",   Cmd_type,      " : type a txt file(filename)"} ,
@@ -845,4 +844,3 @@ tCmdLineEntry g_sCmdTable[] =
 
   {  0, 0, 0 }
 };
-

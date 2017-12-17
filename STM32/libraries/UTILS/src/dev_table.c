@@ -30,6 +30,28 @@
 #define SZ_128K	0x00020000
 #define SZ_256K	0x00040000
 
+#if defined(STM32F1)  //F0/L0/F1/L1/F3
+#  if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
+#    ifdef GD32F10X
+        const  uint16_t appCodeSegAddr[] = {3,64,2*64,3*64,};
+#    else
+        const  uint16_t appCodeSegAddr[] = {7,64, 2*64,3*64,4*64,5*64,6*64,7*64,};
+#    endif
+#  else  /*128k flash 20k ram for x8/xB*/
+        const uint16_t appCodeSegAddr[] =  {3,16,3*16,5*16,};
+#  endif
+#elif defined(STM32F401CC)
+        const uint16_t appCodeSegAddr[] =  {2,64,2*64};
+#elif defined(STM32F401RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
+        const uint16_t appCodeSegAddr[] =  {3,2*64,4*64,6*64};
+#elif defined(STM32F407ZG)||defined(STM32F407VG)
+        const uint16_t appCodeSegAddr[] =  {7,2*64,4*64,6*64,8*64,10*64,12*64,14*64};
+#else /*f4/7*/
+
+//# error "please add me!"
+
+#endif
+
 /*
  * Page-size for page-by-page flash erase.
  * Arrays are zero terminated; last non-zero value is automatically repeated
@@ -175,7 +197,7 @@ const stm32_dev_t stm32_devices[] = {
 stm32_dev_t* UTIL_getStmDev(uint16_t id){
 	for(uint8_t i=0; i< sizeof(stm32_devices) / sizeof(stm32_devices[0]); i++){
 		if(stm32_devices[i].id == id){
-			return &stm32_devices[i];
+			return (stm32_dev_t*)&stm32_devices[i];
 		}
 	}
 	return (stm32_dev_t*)0;

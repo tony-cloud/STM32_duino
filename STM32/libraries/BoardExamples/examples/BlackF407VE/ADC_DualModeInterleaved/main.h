@@ -85,8 +85,6 @@
 #define LED1 16
 #define LED3 17
 
-// change "Serial" as required
-#define SERIALX Serial
 
 /* Exported functions ------------------------------------------------------- */
 

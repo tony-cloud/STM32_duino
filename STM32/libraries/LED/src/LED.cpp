@@ -19,7 +19,10 @@
 #include <arduino.h>
 #include "LED.h"
 
+
 #ifdef STM32GENERIC
+ #include "stm32_search_pin.h"
+ 
  #if __has_include(<FreeRTOS.h>)   
  #	include <FreeRTOS.h>
  #	define  LED_DELAY(x) vTaskDelay(x)
@@ -30,17 +33,17 @@
  #define  LED_DELAY(x) delay(x)	
 #endif
 
+
 extern "C"{	
   void LEDFlash(uint8_t pin,uint16_t timeon,uint16_t timeoff,uint8_t cnt,uint8_t on){
 	for(uint8_t i=cnt;i>0;i--){
-		if(timeon){
 		  digitalWrite(pin,on);
+		if(timeon)
 		  LED_DELAY(timeon);
-		}  
-		if(timeoff){
+	  
 		  digitalWrite(pin,(on?LOW:HIGH));
+		if(timeoff)
 		  LED_DELAY(timeoff);
-		}   
 	}
  }
 }  //extern "C"{
@@ -61,7 +64,7 @@ LEDClass::LEDClass(uint8_t pin, uint8_t on){
 }
 
 void LEDClass::Init(void){
-	pinMode(pdata->pin,OUTPUT);	
+	pinMode(pdata->pin,OUTPUT);
 }
 
 //digitalWrite
@@ -80,6 +83,10 @@ void LEDClass::on(int val){
 void LEDClass::pwm(int val, int frequency, int durationMillis){
     pwmWrite(pdata->pin, val, frequency, durationMillis);
 }
+
+bool LEDClass:: availablePwm(void){
+	return stm32PinTim(pdata->pin);
+};
 #endif
 
 void LEDClass::off(void){
@@ -98,17 +105,22 @@ void LEDClass::flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt){
 	pdata->status = pdata->off;
 };
 
-void LEDClass::fade(void) {
-  analogWrite(pdata->pin, this->brightness);
+void LEDClass::fade(uint16_t time) {
+  if(time < this->fadeTime) time = this->fadeTime;	
+  for(uint16_t i =0; i< (time/this->fadeTime);i++){
+    analogWrite(pdata->pin, this->brightness);
 
   // change the brightness for next time through the loop:
-  this->brightness = this->brightness + this->fadeAmount;
+    this->brightness = this->brightness + this->fadeAmount;
 
   // reverse the direction of the fading at the ends of the fade:
-  if (this->brightness <= 0 || this->brightness >= 255) {
-    this->fadeAmount = - this->fadeAmount;
+    if (this->brightness <= 0 || this->brightness >= 255) {
+      this->fadeAmount = - this->fadeAmount;
+    }
+    delay(this->fadeTime);
   }
 }
+
 
 #ifdef LED_BUILTIN_MASK
 # define LED_MASK LED_BUILTIN_MASK

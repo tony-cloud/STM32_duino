@@ -23,6 +23,7 @@
  * \file
  * \brief SdFat class
  */
+#include "SdFatConfig.h" 
 #include "SysCall.h"
 #include "BlockDriver.h"
 #include "FatLib/FatLib.h"

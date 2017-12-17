@@ -87,9 +87,10 @@ void setup(void)
        - Global MSP (MCU Support Package) initialization
      */
   HAL_Init();
+#define TXPIN PC10  
+#define RXPIN PC11
+  SERIALX.setPins(TXPIN,RXPIN);
   
-  SERIALX.stm32SetTX(PC10); 
-  SERIALX.stm32SetRX(PC11);   
   SERIALX.begin(15200);
   delay(200);
   SERIALX.println("\n");

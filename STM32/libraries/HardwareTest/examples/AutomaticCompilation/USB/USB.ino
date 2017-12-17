@@ -2,7 +2,7 @@
 
 
 void setup() {
-  SerialUSB.begin(1);
+  SerialUSB.begin(115200);
   SerialUSB.println("test");
 }
 

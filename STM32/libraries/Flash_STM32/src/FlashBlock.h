@@ -99,7 +99,7 @@ public:
 
     bool erase(uint32_t offset, uint32_t size) {
         PRINT_INFO("Erasing ram at %u size %u", offset, size);
-
+		UNUSED(offset);
         memset(buffer, 0xFF, size);
 
         return true;

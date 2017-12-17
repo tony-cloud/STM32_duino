@@ -1,36 +1,29 @@
+#ifndef __INTERNALFLASHDISK_H__
+#define __INTERNALFLASHDISK_H__
+
 #include <Flash_STM32.h>
 #include <FlashBlockFat.h>
 
-#if defined(STM32F103C8)||defined(STM32F103CB)||defined(STM32F103RB)|| defined(STM32L152C8)
-#   define FLASH_LENTH 128
-#elif defined(STM32F103VC)||defined(STM32F103VE)||defined(STM32F103ZE)||defined(STM32F103RE)||defined(STM32F103RC)\
-      ||defined(STM32F407VE)||defined(STM32F407ZE)
-#   define  FLASH_LENTH   512	  
-#elif defined(STM32F407VG)||defined(STM32F407ZG)||defined(STM32F207ZG)
-#   define  FLASH_LENTH   1024	  
+/*
+unused system define FLASH_LENGTH,because of 
+stm32f103x8 stm32L1xxx8 as xB have 128k internalflash and xC/xD as xE have 512k flash (undocmented)
+*/
+
+#if defined(STM32F103C8)||defined(STM32F103R8)||defined(STM32L152C8)
+#   define  _FLASH_LENGTH 128
+#elif defined(STM32F103RC)||defined(STM32F103RD)||\
+    defined(STM32F103VC)||defined(STM32F103VD)||\
+    defined(STM32F407VD)
+#   define  _FLASH_LENGTH 512
+#else 	  
+#   define  _FLASH_LENGTH FLASH_LENGTH	  
 #endif
+#define _FLASH_END (FLASH_BASE+_FLASH_LENGTH)
 
+#define FLASHDIVE_BLOCKS   FLASHDISK_SIZE*1024/512
 
-#if defined(STM32F103C8)||defined(STM32F103CB)||defined(STM32F103RB)||defined(STM32L152C8)\
-    ||defined(STM32F103RC)||defined(STM32F103VC)||defined(STM32F103VE)||defined(STM32F103ZE)||defined(STM32F103RE)
-#	define FLASHDIVE_BLOCKS   FLASHDISK_SIZE*1024/512
-	STM32EmbeddedFlashBlock block0(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE)   * 1024, (FLASHDISK_SIZE/2) * 1024);  //64~96k
-	STM32EmbeddedFlashBlock block1(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE/2) * 1024, (FLASHDISK_SIZE/2) * 1024);  //96~128k
-#elif defined(STM32F407VE)||defined(STM32F407ZE)
-#	define FLASHDIVE_BLOCKS   FLASHDISK_SIZE*1024/512	/*256k*/
-//2 x 128KB flash pages (see reference manual / flash module organization)
-	STM32EmbeddedFlashBlock block0(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE)   * 1024,  (FLASHDISK_SIZE/2) * 1024);
-	STM32EmbeddedFlashBlock block1(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE/2) * 1024,  (FLASHDISK_SIZE/2) * 1024);
-#elif defined(STM32F407VG)||defined(STM32F407ZG)||defined(STM32F207ZG)
-#	define FLASHDIVE_BLOCKS   8*HALFPAGE_SIZE/512	/*512k*/
-//4 x 128KB flash pages (see reference manual / flash module organization)
-	STM32EmbeddedFlashBlock block0(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE)   * 1024,  (FLASHDISK_SIZE/2) * 1024);
-	STM32EmbeddedFlashBlock block1(FLASH_BASE + (FLASH_LENTH-FLASHDISK_SIZE/2) * 1024,  (FLASHDISK_SIZE/2) * 1024);
-#  else
-	
-#  error "undef this chip,please add me"
-#endif
-
+STM32EmbeddedFlashBlock block0(_FLASH_END - FLASHDISK_SIZE * 1024,    (FLASHDISK_SIZE/2) * 1024);  //64~96k
+STM32EmbeddedFlashBlock block1(_FLASH_END - FLASHDISK_SIZE * 1024/2 , (FLASHDISK_SIZE/2) * 1024);  //96~128k
 
 // combine them into one virtual storage of 512 bytes
 FlashVariables<512> storageBackend(&block0, &block1);
@@ -54,3 +47,5 @@ BlockDevice *getMassStorage() {
   //storageBackend.format();
   return &flashBlockDevice;
 }
+
+#endif  /* __INTERNALFLASHDISK_H__ */

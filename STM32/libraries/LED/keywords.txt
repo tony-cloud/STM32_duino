@@ -26,14 +26,14 @@ set	KEYWORD2
 on	KEYWORD2
 off	KEYWORD2
 flash	KEYWORD2
-pin_no	KEYWORD2
+availablePwm	KEYWORD2
 on_val	KEYWORD2
 isOn	KEYWORD2
 fade	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
-BOARD_NR_LED	LITERAL1
+BOARD_NR_LED LITERAL1
 #######################################
 
 

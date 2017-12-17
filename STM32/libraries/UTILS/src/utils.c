@@ -15,7 +15,7 @@ int32_t UTIL_num(char * str) {
   return atol(str);
 }
 
-uint8_t UTIL_isHexStr(char* str) {
+uint8_t isHex(char* str) {
   if (str[0] == '0')
     if ((str[1] == 'x') || (str[1] == 'X')) return 1;
   return 0;
@@ -37,16 +37,14 @@ uint32_t UTIL_hexNum(char* str) {
 }
 
 uint32_t UTIL_getNum(char* str) {
-  return ((UTIL_isHexStr(str)) ? UTIL_hexNum(str) : UTIL_num(str));
+  return ((isHex(str) == 0) ? UTIL_num(str) : UTIL_hexNum(str));
 }
 
 //convert pinmask to num
 //in GPIO_PIN_12
 //return 12
-uint8_t UTIL_maskToPin(uint32_t mask){
-	for (uint8_t i = 0;i<16; i++){
-		if(mask & (0x01U << i)) return i; 
-	}
+uint8_t bitMaskPos(uint32_t mask){
+	if(mask) return (__builtin_ffs(mask)-1); 
 	return 0xff;
 }
 
@@ -94,11 +92,11 @@ uint32_t UTIL_Str2PortPin(char* str) {
 	uint16_t pin = str[2]-'0';
 	if(isdigit(str[3])) pin= pin*10+str[3]-'0';
 	
-	port_pin.pin_mask = 1U << pin;
+	port_pin.pinMask = 1U << pin;
 	
     for(uint8_t i=0; i<sizeof(variant_pin_list)/sizeof(variant_pin_list[0]); i++) {
         if ((port_pin.port == variant_pin_list[i].port)&&
-		    (port_pin.pin_mask == variant_pin_list[i].pin_mask))
+		    (port_pin.pinMask == variant_pin_list[i].pinMask))
 			return i;
     }
 	return 0xffff;

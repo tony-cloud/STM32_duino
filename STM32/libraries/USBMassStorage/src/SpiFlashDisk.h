@@ -19,18 +19,25 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 */
+#ifndef  _SPIFLASHDISK_H_
+#define _SPIFLASHDISK_H_
 
 #include <Flash_STM32.h>
 #include <FlashBlockFat.h>
 
 
 #ifndef SPIFLASHDISK_SIZE
-#  define SPIFLASHDISK_SIZE     ((uint32_t)512)                /*W25X40 512k*/  
+#  define SPIFLASHDISK_SIZE   ((uint32_t)512)                /*W25X40 512k*/
+#else
+#  if  SPIFLASHDISK_SIZE>2040
+#    error "FAT12 SPIFLASHDISK_SIZE must <=2040"
+#  endif	
 #endif
 
 #ifndef SPIFLASHDISK_START
 #  define SPIFLASHDISK_START    ((uint32_t)0)
 #endif
+
 
 //2 x 32KB flash pages (see reference manual / flash module organization)
 # define FLASHDIVE_BLOCKS    SPIFLASHDISK_SIZE*1024/512  /*W25X40 max 512k*/
@@ -60,3 +67,5 @@ BlockDevice *getMassStorage() {
   //storageBackend.format();
   return &SpiBlockDevice;
 }
+
+#endif

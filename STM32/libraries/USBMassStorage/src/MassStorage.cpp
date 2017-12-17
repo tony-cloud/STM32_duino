@@ -47,13 +47,14 @@ const uint8_t MSC_Inquirydata[] = {
 USBD_StorageTypeDef USBD_MSC_Interface_fops_FS = {
     //Init
     [](uint8_t lun) -> int8_t {
+		UNUSED(lun);
         usbBlockDevice = getMassStorage();
-
         return usbBlockDevice->begin() ? USBD_OK : USBD_FAIL;
     },
 
     //GetCapacity
     [](uint8_t lun, uint32_t *block_num, uint16_t *block_size) -> int8_t {
+		UNUSED(lun);
         *block_num  = usbBlockDevice->getBlockCount();
         *block_size = 512;
         return USBD_OK;
@@ -61,21 +62,25 @@ USBD_StorageTypeDef USBD_MSC_Interface_fops_FS = {
 
     //IsReady
     [](uint8_t lun) -> int8_t {
+		UNUSED(lun);
         return USBD_OK;
     },
 
     //IsWriteProtected
     [](uint8_t lun) -> int8_t {
+		UNUSED(lun);
         return USBD_OK;
     },
 
     //Read
     [](uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint16_t blk_len) -> int8_t {
+		UNUSED(lun);
         return usbBlockDevice->readBlocks(blk_addr, buf, blk_len) ? USBD_OK : USBD_FAIL;
     },
 
     //Write
     [](uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint16_t blk_len) -> int8_t {
+		UNUSED(lun);
         return usbBlockDevice->writeBlocks(blk_addr, buf, blk_len) ? USBD_OK : USBD_FAIL;
     },
 

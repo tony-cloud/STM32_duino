@@ -121,7 +121,7 @@ bool STM32F1EmbeddedFlashBlock::erase(uint32_t offset, uint32_t size) {
     #error "Erasing with multiple banks not yet implemented"
 #endif
 
-#ifdef FLASH_BANK_1          /*for L1 Serials huaweiwx@sina.com 2017.9*/
+#ifdef FLASH_BANK_1             /*for L1 Serials huaweiwx@sina.com 2017.9*/
     init.Banks = FLASH_BANK_1;
 #endif	
     init.NbPages = (size + FLASH_PAGE_SIZE - 1) / FLASH_PAGE_SIZE;
@@ -168,9 +168,7 @@ bool STM32F1EmbeddedFlashBlock::write(uint32_t offset, uint32_t size, uint8_t *d
 
 bool STM32F1EmbeddedFlashBlock::read(uint32_t offset, uint32_t size, uint8_t *data) {
     PRINT_TRACE("Reading from flash at %u size %u", offset, size);
-
     memcpy(data, (void*)(baseAddress + offset), size);
-
     return true;
 }
 

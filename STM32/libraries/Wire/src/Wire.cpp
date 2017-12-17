@@ -26,9 +26,9 @@ WIRE_StatusTypeDef TwoWire::setPins(uint8_t _sda,uint8_t _scl) {
     pdev->sda = _sda;
     pdev->scl = _scl;
     pdev->handle.Instance = stm32GetI2CInstance(variant_pin_list[_sda].port,
-	                                      variant_pin_list[_sda].pin_mask,
+	                                      variant_pin_list[_sda].pinMask,
 										  variant_pin_list[_scl].port,
-										  variant_pin_list[_scl].pin_mask);
+										  variant_pin_list[_scl].pinMask);
 	if(pdev->handle.Instance) return WIRE_OK;
 	return WIRE_ERROR;
 }
@@ -67,9 +67,9 @@ void TwoWire::begin(void){
 	
     stm32AfI2CInit(pdev->handle.Instance,
 				   variant_pin_list[pdev->sda].port,
-	               variant_pin_list[pdev->sda].pin_mask,
+	               variant_pin_list[pdev->sda].pinMask,
 				   variant_pin_list[pdev->scl].port,
-				   variant_pin_list[pdev->scl].pin_mask);
+				   variant_pin_list[pdev->scl].pinMask);
 
     pdev->handle.Init.OwnAddress1 = 0;
     pdev->handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -128,9 +128,9 @@ void TwoWire::begin(uint8_t address) {
 
     stm32AfI2CInit (pdev->handle.Instance, 
 					variant_pin_list[pdev->sda].port,
-	                variant_pin_list[pdev->sda].pin_mask,
+	                variant_pin_list[pdev->sda].pinMask,
 					variant_pin_list[pdev->scl].port,
-					variant_pin_list[pdev->scl].pin_mask);
+					variant_pin_list[pdev->scl].pinMask);
 									
     pdev->handle.Init.OwnAddress1 = pdev->address;
     pdev->handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;

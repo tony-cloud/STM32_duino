@@ -45,7 +45,7 @@ class SPIFLASH : public SPIClass
     SPIFLASH(uint8_t mosi, uint8_t miso, uint8_t sck);
 	SPIFLASH(SPI_TypeDef *instance);
     void begin(uint8_t cs = 0xff);
-	uint16_t readID(void);  	    		//¶ÁÈ¡FLASH ID
+	uint16_t readID(void);  	    	//¶ÁÈ¡FLASH ID
     uint32_t capacity(void);
 	uint8_t	 readSR(void);        		//¶ÁÈ¡×´Ì¬¼Ä´æÆ÷ 
     void writeSR(uint8_t sr);  			//Ð´×´Ì¬¼Ä´æÆ÷

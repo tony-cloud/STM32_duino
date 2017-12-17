@@ -1,6 +1,6 @@
 #ifndef _TOUCH_H
 #define _TOUCH_H
-//#include "like51.h"
+//#include "bitband.h"
 
 #if __has_include("ott2001a.h")
   #include("ott2001a.h")

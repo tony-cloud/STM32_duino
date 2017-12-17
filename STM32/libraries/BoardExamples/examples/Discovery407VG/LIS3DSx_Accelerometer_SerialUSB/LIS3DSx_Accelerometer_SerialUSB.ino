@@ -42,6 +42,7 @@ uint8_t spiRead(uint8_t registerAddress)
 void setup() 
 {
   SERIALINTERFACE.begin(115200);
+  while (!SERIALINTERFACE.available()); //wait for usb_serial input a char; 
 
   while(SERIALINTERFACE.available()==0)
   {

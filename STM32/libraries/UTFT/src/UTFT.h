@@ -191,7 +191,7 @@ class UTFT
 {
 	public:
 		UTFT();
-#if defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_HALMX_RTOS)||defined(ARDUINO_ARCH_STM32)
+#if defined(STM32GENERIC)||defined(ARDUINO_ARCH_HALMX_RTOS)
 		UTFT(byte model,uint16_t Xsize,uint16_t Ysize,byte trmodel);
 #endif
 		UTFT(byte model, int RS, int WR, int CS, int RST, int SER=0);
@@ -229,7 +229,7 @@ class UTFT
         int     readID(void);			  
 		int     mode_id;
 		
-#if defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_HALMX_RTOS)||defined(ARDUINO_ARCH_STM32)
+#if defined(STM32GENERIC)||defined(ARDUINO_ARCH_HALMX_RTOS)
 		void	lcdOff();
 		void	lcdOn();
 		void	setContrast(char c);

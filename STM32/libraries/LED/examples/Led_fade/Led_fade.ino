@@ -17,10 +17,19 @@
 // the setup routine runs once when you press reset:
 void setup() {
   // declare pin 9 to be an output:
+ Serial.begin(115200);  
  Led.Init();
+ 
+ if(Led.availablePwm())
+   Serial.println("fade test.");
+ else
+   Serial.println("no pwm define, use flash");
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
- Led.fade();
+  if (Led.availablePwm())
+    Led.fade(950);
+  else
+    Led.flash(10, 90, 10);
 }

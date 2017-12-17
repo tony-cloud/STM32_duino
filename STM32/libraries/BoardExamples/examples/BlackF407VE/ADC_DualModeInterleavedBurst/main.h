@@ -87,8 +87,6 @@
 #define LED1 PA6
 #define LED3 PA7
 
-// change "Serial" as required
-#define SERIALX SerialUART3
 
 /* Exported functions ------------------------------------------------------- */
 

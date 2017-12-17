@@ -1,9 +1,20 @@
 #include "stm32_def.h"
 #include "FlashVariables.h"
 
-#if defined(STM32F1)
+#if defined(STM32F4)
 
-    #warning "Using last 8K of flash for EEPROM emulation"
+    #pragma message "F4 Using flash from 256K to 512K as EEPROM emulation"
+
+    #include "STM32F4FlashBlock.h"
+
+    STM32F4EmbeddedFlashBlock block0(FLASH_BASE + 2 * 128 * 1024, 128 * 1024);
+    STM32F4EmbeddedFlashBlock block1(FLASH_BASE + 3 * 128 * 1024, 128 * 1024);
+
+    FlashVariables<1> storageBackend(&block0, &block1);
+	
+/*#elif defined(STM32F1)||defined(STM32L1)*/
+#else  
+    #pragma message "Using last 8K of flash for EEPROM emulation,F1 Serial tested!"
 
     #include "STM32F1FlashBlock.h"
 
@@ -12,21 +23,9 @@
 
     FlashVariables<1> storageBackend(&block0, &block1);
 
-#elif defined(STM32F4)
+//#else
 
-    #warning "Using flash from 256K to 512K as EEPROM emulation"
-
-    #include "STM32F4FlashBlock.h"
-
-    STM32F4EmbeddedFlashBlock block0(FLASH_BASE + 2 * 128 * 1024, 128 * 1024);
-    STM32F4EmbeddedFlashBlock block1(FLASH_BASE + 3 * 128 * 1024, 128 * 1024);
-
-    FlashVariables<1> storageBackend(&block0, &block1);
-
-#else
-
-    #error "No default EEPROM emulation in flash set"
-
+//    #error "No default EEPROM emulation in flash set"
 #endif
 
 uint8_t stm32ReadEEPROM(const int index) {

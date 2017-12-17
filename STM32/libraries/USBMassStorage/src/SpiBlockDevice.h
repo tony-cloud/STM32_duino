@@ -23,13 +23,13 @@
 #ifndef __SPIBLOCKDEVICE_H__
 #define __SPIBLOCKDEVICE_H__
 
-#include <BSP_SpiFlash.h>
+#include <SpiFlash.h>
 #include "USBDevice.h"
 #include "BlockDevice.h"
 #include "FlashVariables.h"
 
 
-extern W25QXX SPIFLASH;
+extern SPIFLASH SpiFlash;
 
 typedef void (*listener)(uint32_t block, size_t blocks);
 

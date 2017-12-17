@@ -17,11 +17,11 @@ TFTLCD TFT;
 TOUCH  TP;
 
 #ifdef HAVE_24CXX  //HAVE_24CXX defined in boarddef.h  YL136 board not 24cxx 
-AT24XX EEPROM;
+EXTEEPROM EEPROM;
 #endif
 
 #ifdef  HAVE_SPIFLASH
-W25QXX myspiflash;
+SPIFLASH myspiflash;
 #endif
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"

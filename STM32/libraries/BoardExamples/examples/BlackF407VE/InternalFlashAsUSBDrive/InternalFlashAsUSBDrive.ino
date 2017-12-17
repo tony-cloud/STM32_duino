@@ -56,6 +56,7 @@ BlockDevice *getMassStorage() {
 
 void setup() {
     Serial.begin(115200);
+	while (!Serial.available()); //wait for usb_serial input a char; 
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED1_BUILTIN, OUTPUT);

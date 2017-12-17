@@ -8,7 +8,7 @@
 * The result is also available on serial
 */
 
-#include <Arduino.h>
+#include "Arduino.h"
 #include "HardwareTest.h"
 
 #include <SPI.h>

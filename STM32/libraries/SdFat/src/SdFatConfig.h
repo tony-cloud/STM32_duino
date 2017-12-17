@@ -22,11 +22,16 @@
  * \brief configuration definitions
  */
 #ifndef SdFatConfig_h
-#define SdFatConfig_h
-#include <stdint.h>
-#ifdef __AVR__
-#include <avr/io.h>
-#endif  // __AVR__
+# define SdFatConfig_h
+# include <stdint.h>
+
+#if __has_include("configs/sdCardConfig.h")
+#  include "configs/sdCardConfig.h"
+#endif
+	
+# ifdef __AVR__
+#  include <avr/io.h>
+#  endif  // __AVR__
 //------------------------------------------------------------------------------
 /**
  * Set USE_LONG_FILE_NAMES nonzero to use long file names (LFN).
@@ -46,7 +51,9 @@
  *  * (asterisk)
  *
  */
+#ifndef USE_LONG_FILE_NAMES
 #define USE_LONG_FILE_NAMES 1
+#endif
 //------------------------------------------------------------------------------
 /**
  * If the symbol ENABLE_EXTENDED_TRANSFER_CLASS is nonzero, the class SdFatEX
@@ -56,28 +63,36 @@
  * These classes used extended multi-block SD I/O for better performance.
  * the SPI bus may not be shared with other devices in this mode.
  */
+#ifndef ENABLE_EXTENDED_TRANSFER_CLASS
 #define ENABLE_EXTENDED_TRANSFER_CLASS 0
+#endif
 //-----------------------------------------------------------------------------
 /**
  * If the symbol USE_STANDARD_SPI_LIBRARY is nonzero, the classes SdFat and
  * SdFatEX use the standard Arduino SPI.h library. If USE_STANDARD_SPI_LIBRARY
  * is zero, an optimized custom SPI driver is used if it exists.
  */ 
+#ifndef USE_STANDARD_SPI_LIBRARY
 #define USE_STANDARD_SPI_LIBRARY 0
+#endif
 //-----------------------------------------------------------------------------
 /**
  * If the symbol ENABLE_SOFTWARE_SPI_CLASS is nonzero, the class SdFatSoftSpi
  * will be defined. If ENABLE_EXTENDED_TRANSFER_CLASS is also nonzero,
  * the class SdFatSoftSpiEX will be defined.
  */
+#ifndef ENABLE_SOFTWARE_SPI_CLASS
 #define ENABLE_SOFTWARE_SPI_CLASS 0
+#endif
 //------------------------------------------------------------------------------
 /** 
  * Set MAINTAIN_FREE_CLUSTER_COUNT nonzero to keep the count of free clusters
  * updated.  This will increase the speed of the freeClusterCount() call
  * after the first call.  Extra flash will be required.
  */
-#define MAINTAIN_FREE_CLUSTER_COUNT 0
+#ifndef MAINTAIN_FREE_CLUSTER_COUNT
+#define MAINTAIN_FREE_CLUSTER_COUNT 1
+#endif
 //------------------------------------------------------------------------------
 /**
  * To enable SD card CRC checking set USE_SD_CRC nonzero.
@@ -88,7 +103,9 @@
  * Set USE_SD_CRC to 2 to used a larger table driven CRC-CCITT function.  This
  * function is faster for AVR but may be slower for ARM and other processors.
  */
+#ifndef USE_SD_CRC
 #define USE_SD_CRC 0
+#endif
 //------------------------------------------------------------------------------
 /**
  * Handle Watchdog Timer for WiFi modules.
@@ -96,25 +113,31 @@
  * Yield will be called before accessing the SPI bus if it has been more
  * than WDT_YIELD_TIME_MICROS microseconds since the last yield call by SdFat.
  */
-#if defined(PLATFORM_ID) || defined(ESP8266)
+#ifndef WDT_YIELD_TIME_MICROS 
+# if defined(PLATFORM_ID) || defined(ESP8266)
 // If Particle device or ESP8266 call yield.
-#define WDT_YIELD_TIME_MICROS 100000
-#else
-#define WDT_YIELD_TIME_MICROS 0
+#   define WDT_YIELD_TIME_MICROS 100000
+# else
+#   define WDT_YIELD_TIME_MICROS 0
+# endif
 #endif
 //------------------------------------------------------------------------------
 /**
  * Set FAT12_SUPPORT nonzero to enable use if FAT12 volumes.
  * FAT12 has not been well tested and requires additional flash.
  */
+#ifndef FAT12_SUPPORT
 #define FAT12_SUPPORT 1
+#endif
 //------------------------------------------------------------------------------
 /**
  * Set DESTRUCTOR_CLOSES_FILE nonzero to close a file in its destructor.
  *
  * Causes use of lots of heap in ARM.
  */
+#ifndef DESTRUCTOR_CLOSES_FILE
 #define DESTRUCTOR_CLOSES_FILE 0
+#endif
 //------------------------------------------------------------------------------
 /**
  * Call flush for endl if ENDL_CALLS_FLUSH is nonzero
@@ -133,18 +156,22 @@
  * If ENDL_CALLS_FLUSH is zero, you must call flush and/or close to force
  * all data to be written to the SD.
  */
+#ifndef ENDL_CALLS_FLUSH
 #define ENDL_CALLS_FLUSH 0
+#endif
 //------------------------------------------------------------------------------
 /**
  * Set USE_SEPARATE_FAT_CACHE nonzero to use a second 512 byte cache
  * for FAT table entries.  This improves performance for large writes
  * that are not a multiple of 512 bytes.
  */
+#ifndef USE_SEPARATE_FAT_CACHE
 #ifdef __arm__
 #define USE_SEPARATE_FAT_CACHE 1
 #else  // __arm__
 #define USE_SEPARATE_FAT_CACHE 0
 #endif  // __arm__
+#endif
 //------------------------------------------------------------------------------
 /**
  * Set USE_MULTI_BLOCK_IO nonzero to use multi-block SD read/write.
@@ -152,50 +179,58 @@
  * Don't use mult-block read/write on small AVR boards.
  */
 #if defined(RAMEND) && RAMEND < 3000
-#define USE_MULTI_BLOCK_IO 0
+#  define USE_MULTI_BLOCK_IO 0
 #else  // RAMEND
-#define USE_MULTI_BLOCK_IO 1
+#  define USE_MULTI_BLOCK_IO 1
 #endif  // RAMEND
+
 //-----------------------------------------------------------------------------
 /** Enable SDIO driver if available. */
+#if !(defined(ENABLE_SDIO_CLASS)||defined(ENABLE_SDIOEX_CLASS)) 
 #if defined(__MK64FX512__) || defined(__MK66FX1M0__)|| defined(__MK60DN512__)
   #define ENABLE_SDIO_CLASS 1
   #define ENABLE_SDIOEX_CLASS 1
-#else  // ENABLE_SDIO_CLASS
-  #if (defined(ARDUINO_ARCH_STM32))||(defined(ARDUINO_ARCH_HALMX))
-    #include "stm32_def.h"
-    #if defined(SDIO) || defined(SDMMC1)
+#elif defined(STM32GENERIC)
+  #include "stm32_def.h"
+  #if defined(SDIO) || defined(SDMMC1)
       #define ENABLE_SDIO_CLASS 1
-    #else
-      #define ENABLE_SDIO_CLASS 0
-    #endif
+  #elif __has_include("InternalFlashDisk.h")  /* add for F0/L0/1/4 huaweiwx@sina.com 2017.9.28*/
+      #define ENABLE_SDIO_CLASS 1
   #else
-    #define ENABLE_SDIO_CLASS 0
+      #define ENABLE_SDIO_CLASS 0
   #endif
+#else
+    #define ENABLE_SDIO_CLASS 0
+#endif
 #endif
 //------------------------------------------------------------------------------
 /**
  * Determine the default SPI configuration.
  */
-#if defined(__STM32F1__)|| defined(ARDUINO_ARCH_HALMX)||defined(ARDUINO_ARCH_STM32)
+#ifndef  SD_HAS_CUSTOM_SPI
+#if defined(STM32GENERIC)
 // has multiple SPI ports
-#define SD_HAS_CUSTOM_SPI 2
+#  define SD_HAS_CUSTOM_SPI 2
 #elif defined(__AVR__)\
   || defined(__SAM3X8E__) || defined(__SAM3X8H__)\
   || (defined(__arm__) && defined(CORE_TEENSY))\
   || defined(ESP8266)
-#define SD_HAS_CUSTOM_SPI 1
+#  define SD_HAS_CUSTOM_SPI 1
 #else  // SD_HAS_CUSTOM_SPI
 // Use standard SPI library.
-#define SD_HAS_CUSTOM_SPI 0
+#  define SD_HAS_CUSTOM_SPI 0
 #endif  // SD_HAS_CUSTOM_SPI
+#endif
 //------------------------------------------------------------------------------
 /**
  * Check if API to select HW SPI port is needed.
  */
+#ifndef IMPLEMENT_SPI_PORT_SELECTION
 #if (USE_STANDARD_SPI_LIBRARY || SD_HAS_CUSTOM_SPI < 2)
-#define IMPLEMENT_SPI_PORT_SELECTION 0
+#  define IMPLEMENT_SPI_PORT_SELECTION 0
 #else  // USE_STANDARD_SPI_LIBRARY
-#define IMPLEMENT_SPI_PORT_SELECTION 1
+#  define IMPLEMENT_SPI_PORT_SELECTION 1
 #endif  // USE_STANDARD_SPI_LIBRARY
+#endif
+
 #endif  // SdFatConfig_h

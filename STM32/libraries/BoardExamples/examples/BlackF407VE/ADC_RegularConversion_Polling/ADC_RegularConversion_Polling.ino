@@ -79,9 +79,12 @@ void setup()
   /* STM32F4xx HAL library initialization:
    */
   HAL_Init();
+#define RXPIN PC11
+#define TXPIN PC10  
+  SERIALX.setPins(TXPIN,RXPIN);
   
-  SERIALX.stm32SetTX(PC10); 
-  SERIALX.stm32SetRX(PC11); 
+//  SERIALX.stm32SetTX(PC10); 
+//  SERIALX.stm32SetRX(PC11); 
   SERIALX.begin(115200);
   delay(2000);
   SERIALX.println("Hello World - Reg Polling");

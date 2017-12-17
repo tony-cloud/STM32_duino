@@ -189,9 +189,9 @@ class SdSpiAltDriver {
 //------------------------------------------------------------------------------
 #if ENABLE_SOFTWARE_SPI_CLASS || defined(DOXYGEN)
 #ifdef ARDUINO
-#include "SoftSPI.h"
+#  include "SoftSPI.h"
 #elif defined(PLATFORM_ID)  // Only defined if a Particle device
-#include "SoftSPIParticle.h"
+#  include "SoftSPIParticle.h"
 #endif  // ARDUINO
 /**
  * \class SdSpiSoftDriver

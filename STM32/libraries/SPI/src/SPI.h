@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include "stm32_gpio_af.h"
-#include "util/utils_def.h"
 
 #include "stm32_HAL/stm32XXxx_ll_spi.h"
 
@@ -101,13 +100,13 @@ class SPIClass {
 
 	HAL_StatusTypeDef setPins(uint8_t mosi,uint8_t miso,uint8_t sck);
 	
-    DEPRECATED("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
+    __deprecated("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
     void stm32SetMOSI(uint8_t mosi);
 	
-    DEPRECATED("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
+    __deprecated("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
     void stm32SetMISO(uint8_t miso);
 	
-    DEPRECATED("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
+    __deprecated("have a new func instead: setPins(mosipin,misopin,sckpin) add by huaweiwx")
     void stm32SetSCK(uint8_t sck);
 	
     void stm32SetInstance(SPI_TypeDef *instance);

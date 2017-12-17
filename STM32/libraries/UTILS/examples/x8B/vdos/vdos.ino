@@ -1,10 +1,13 @@
-/* vdos_demo.ino cmdline vdisk/stm32mcu oprater system demo
+/* vdos_demo.ino vdisk/stm32mcu oprater system demo
    USB Mass Storage drive based on spi serial flash or internal flash,
     ---------------------------------------------------------------------------------------
    from the menu
    Select USB: Mass Storage / Composite[CDC+MSC]
    Select Serial Communication: SerialUSB/SerialUART1
-   Select Startup adr: flash 3:0x08014000(48k)
+   Select Startup adr: flash 3:0x08014000(48k);
+   And cmd go 3 by appAdminister 
+      
+   enter.
    ---------------------------------------------------------------------------------------
    cmd usage:
    type help or h or ? for Display list of commands.
@@ -287,16 +290,10 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
   Serial << "ls files:\n";
   fat.ls();
 
-#if (FLASH_BANK1_END ==  0x0807FFFFU)   //for hight density  xC/D/E
-  if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
-    Serial << "\ncodes on slot:\n0# addr:0x20000200 ok\n";
-  else
-#endif
-    Serial << "\ncodes on slot:\n";
-
-  for (volatile uint32_t i = 0; i < CODESEG_NUM; i++) {
+  Serial << "\ncodes on slot:\n";
+  for (volatile uint32_t i = 0; i < (appCodeSegAddr[0]+1); i++) {
     if (i > 0)
-      useradr = FLASH_BASE + codeSegAddr[i - 1] * 1024;
+      useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     else {
       useradr = USER_CODE_RAM;
     }
@@ -424,8 +421,7 @@ int Cmd_go(int argc, char *argv[])
   volatile uint32_t useradr;
   Serial << "go " << argv[1] << "\n";
   uint32_t i = atoi(argv[1]);
-  //  if ((i < CODESEG_NUM) && (i >  0)) {
-  if (i < CODESEG_NUM) {
+  if (i < (appCodeSegAddr[0]+1)) {
     if (i == 0) {
       if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
         useradr = SERIAL_LOAD_RAM;
@@ -433,7 +429,7 @@ int Cmd_go(int argc, char *argv[])
         useradr =  USER_CODE_RAM;
 
     } else {
-      useradr = FLASH_BASE + codeSegAddr[i - 1] * 1024;
+      useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     }
 
     if (UTIL_checkUserCode(useradr))
