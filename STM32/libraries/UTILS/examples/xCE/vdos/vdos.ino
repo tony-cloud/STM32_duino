@@ -287,13 +287,7 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
   Serial << "ls files:\n";
   fat.ls();
 
-#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
-  if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
-    Serial << "\ncodes on slot:\n0# addr:0x20000200 ok\n";
-  else
-#endif
-    Serial << "\ncodes on slot:\n";
-
+  Serial << "\ncodes on slot:\n";
   for (int i = 0; i < (appCodeSegAddr[0] + 1); i++) {
     if (i > 0)
       useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
@@ -422,7 +416,7 @@ int Cmd_go(int argc, char *argv[])
   if (i < (appCodeSegAddr[0]+1)) {
     if (i == 0) {
       useradr =  USER_CODE_RAM;
-    } else {
+	} else {
       useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     }
 

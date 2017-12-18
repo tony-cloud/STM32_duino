@@ -116,8 +116,7 @@ int Cmd_go(int argc, char *argv[])//exp:go 1/2/...
   uint32_t i = atoi(argv[1]);
   if (i < (appCodeSegAddr[0]+1)) {
     if (i == 0) {
-      useradr =  USER_CODE_RAM;
-
+        useradr =  USER_CODE_RAM;
     } else {
       useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
     }
