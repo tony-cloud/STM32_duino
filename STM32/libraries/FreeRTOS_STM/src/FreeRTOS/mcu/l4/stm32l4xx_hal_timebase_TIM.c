@@ -130,4 +130,16 @@ void HAL_SuspendTick(void)
   __HAL_TIM_DISABLE_IT(&htim7, TIM_IT_UPDATE);                                                  
 }
 
+void HAL_ResumeTick(void)
+{
+  /* Enable TIM7 Update interrupt */
+  __HAL_TIM_ENABLE_IT(&htim7, TIM_IT_UPDATE);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+ if (htim->Instance == TIM7)
+    HAL_IncTick();
+}
+
 #endif
