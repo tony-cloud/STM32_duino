@@ -240,7 +240,7 @@ DISCOVERY_L053C8.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=Se
 ##################################### Discovery L152RC ###########################################
 # Discovery L152RC board(32M)
 
-DISCOVERY_L152R.name=Discovery L152RC
+DISCOVERY_L152R.name=Discovery L152R
 
 
 DISCOVERY_L152R.build.core=arduino
