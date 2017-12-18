@@ -19,10 +19,10 @@ void setup() {
   if (rtc) {
 
     /*for RTC_CLOCK_SOURCE_LSE, run once only 当选择低频晶振且装有后备电池时仅需运行一次*/
-    rtc.setDataTime(2017, 12, 18, 16, 25, 10);
+    rtc.setDataTime(17, 12, 18, 16, 25, 10);
     rtc.attachEventInterrupt(&showDataTime);
 
-    rtc.setAlarmTime(1, 10, 20, 10);
+    rtc.setAlarmTime(10, 19, 30, 1);
     rtc.attachAlarmInterrupt(&alarm);
   }
   else
@@ -61,4 +61,3 @@ void showDataTime(void)
 void alarm(void) {
   Serial << "alarm!\n";
 }
-

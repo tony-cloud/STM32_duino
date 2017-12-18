@@ -39,7 +39,7 @@ class RTClock {
 	void Init(uint32_t source);
 	HAL_StatusTypeDef
 		setDataTime(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec),
-		setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,uint8_t week=0),
+		setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,uint8_t week=0);
 	void getDataTime(void);
 	uint8_t getWeek(uint16_t year, uint8_t month, uint8_t day);
 	
@@ -62,7 +62,7 @@ class RTClock {
 	RTC_calendar_TypeDef *pCalendar =&calendar;
 	
  private:
-	rtcSource(uint32_t source);
+	HAL_StatusTypeDef rtcSource(uint32_t source);
     uint8_t status = false;
 	RTC_calendar_TypeDef calendar;
 };
