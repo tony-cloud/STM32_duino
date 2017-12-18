@@ -114,8 +114,8 @@ void SystemClock_Config_HSI(void)
   HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
   HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif  
@@ -187,8 +187,8 @@ void SystemClock_Config_HSE(void)
   HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
   HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif  
@@ -267,8 +267,8 @@ void SystemClock_Config_HSE(void)
   HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
   HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);  
+  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
 #else  
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif  
