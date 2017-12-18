@@ -1,5 +1,5 @@
 /*
-   RTClock lib  demo  by huaweiwx@sina.com 2017.12
+   RTClock lib  demo for F1  only  by huaweiwx@sina.com 2017.12
 */
 
 #include <LED.h>
@@ -21,10 +21,8 @@ void setup() {
     /*for RTC_CLOCK_SOURCE_LSE, run once only 当选择低频晶振且装有后备电池时仅需运行一次*/
     rtc.setDataTime(17, 12, 18, 16, 25, 10);
     rtc.attachEventInterrupt(&showDataTime);
-
-    rtc.setAlarmTime(10, 19, 30, 1);
-    rtc.attachAlarmInterrupt(&alarm);
   }
+
   else
     Serial.println("\nRTC init false!");
 
@@ -56,8 +54,4 @@ void showDataTime(void)
   rtc.getDataTime();
   Serial << "data: " << rtc.pCalendar->year << "-"  <<  rtc.pCalendar->month << "-" <<  rtc.pCalendar->day ;
   Serial << "   time: " <<  rtc.pCalendar->hour << ":"  <<  rtc.pCalendar->minute << ":" <<  rtc.pCalendar->second << "  " <<  weekStr[ rtc.pCalendar->week - 1] << "\n";
-}
-
-void alarm(void) {
-  Serial << "alarm!\n";
 }
