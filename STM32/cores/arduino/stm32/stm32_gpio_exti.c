@@ -18,6 +18,8 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
+  modify for L0/F0 by huaweiwx@sina.com 2017.12.18
 */
 
 #include "stm32_gpio.h"
@@ -71,8 +73,13 @@ void attachInterrupt(uint8_t pin, stm32_exti_callback_func callback, int mode) {
 
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(port_pin.port, &GPIO_InitStruct);
-
+	
+#if defined(STM32F0)||defined(STM32L0)  //add by huaweiwx@sina.com 2017.12.18
+    HAL_NVIC_SetPriority(exti_irq[irq], 2, 0);  // F0/L0  0...3 only
+#else
     HAL_NVIC_SetPriority(exti_irq[irq], 6, 0);
+#endif	
+
     HAL_NVIC_EnableIRQ(exti_irq[irq]);
 }
 
@@ -80,6 +87,26 @@ void detachInterrupt(uint8_t pin) {
     callbacks[__builtin_ffs(variant_pin_list[pin].pinMask) - 1] = NULL;
 }
 
+#if defined(STM32F0) || defined(STM32L0) 
+void EXTI0_1_IRQHandler(void) {
+  for(uint32_t pin = GPIO_PIN_0; pin <= GPIO_PIN_1; pin=pin<<1) {
+    HAL_GPIO_EXTI_IRQHandler(pin);
+  }
+}
+
+void EXTI2_3_IRQHandler(void) {
+  for(uint32_t pin = GPIO_PIN_2; pin <= GPIO_PIN_3; pin=pin<<1) {
+    HAL_GPIO_EXTI_IRQHandler(pin);
+  }
+}
+
+void EXTI4_15_IRQHandler(void) {
+  for(uint32_t pin = GPIO_PIN_4; pin <= GPIO_PIN_15; pin=pin<<1) {
+    HAL_GPIO_EXTI_IRQHandler(pin);
+  }
+}
+
+#else 
 void EXTI0_IRQHandler(void) {
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 }
@@ -111,6 +138,7 @@ void EXTI15_10_IRQHandler(void) {
     HAL_GPIO_EXTI_IRQHandler(pin);
   }
 }
+#endif
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     stm32_exti_callback_func callback = callbacks[__builtin_ffs(GPIO_Pin) - 1];
