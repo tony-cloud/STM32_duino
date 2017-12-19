@@ -26,12 +26,16 @@
 #define _BOOTLOADER_H_
 #define USER_CODE_RAM   0x20000000U
 
+//for run in sram by app manager
 #ifdef STM32F1  //F0/L0/F1/L1/F3
 # if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
 # else  /*128k flash 20k ram for x8/xB*/
 #  define MAX_PROG_RAM (16*1024)      /*use 0x20000000~0x20003FFF*/
 # endif
+
+#elif defined(STM32F207ZG)
+#  define MAX_PROG_RAM (96*1024)
 
 #elif defined(STM32F401CC)
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
@@ -55,7 +59,7 @@
 #elif defined(STM32L152RE)||defined(STM32L476RG)
 #  define MAX_PROG_RAM (64*1024)
 
-#else /*f4/7*/
+#else
 //# error "please add me!"
 #endif
 
