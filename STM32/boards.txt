@@ -454,7 +454,7 @@ Nucleo_F767ZI.upload.maximum_data_size=524288
 Nucleo_F767ZI.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
 Nucleo_F767ZI.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 Nucleo_F767ZI.build.series=STM32F7
-Nucleo_F767ZI.build.extra_flags=-DSTM32F767ZI
+Nucleo_F767ZI.build.extra_flags0=-DSTM32F767ZI
 Nucleo_F767ZI.build.ldscript_pre=ld/f767xI
 Nucleo_F767ZI.build.f_cpupre=216000000L
 
