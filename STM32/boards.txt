@@ -73,30 +73,6 @@ NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhse=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.extra_flags=-DSTM32F303RE
 NUCLEO_64.menu.subboard.Nucleo_F303RE.massstorage_drive=NODE_F303RE
 
-NUCLEO_64.menu.subboard.Nucleo_F401RE=Nucleo-F401RE(84M)
-NUCLEO_64.menu.subboard.Nucleo_F401RE.upload.maximum_size=524288
-NUCLEO_64.menu.subboard.Nucleo_F401RE.upload.maximum_data_size=98304
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.series=STM32F4
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.variant=NUCLEO_F401RE
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.board=NUCLEO_F401RE
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.f_cpuhsi=84000000L
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.f_cpuhse=84000000L
-NUCLEO_64.menu.subboard.Nucleo_F401RE.build.extra_flags=-DSTM32F401RE
-NUCLEO_64.menu.subboard.Nucleo_F401RE.massstorage_drive=NODE_F401RE
-
-NUCLEO_64.menu.subboard.Nucleo_F411RE=Nucleo-F411RE(96M)
-NUCLEO_64.menu.subboard.Nucleo_F411RE.upload.maximum_size=524288
-NUCLEO_64.menu.subboard.Nucleo_F411RE.upload.maximum_data_size=131072
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.series=STM32F4
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.variant=NUCLEO_F411RE
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.board=NUCLEO_F411RE
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.f_cpuhsi=96000000L
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.f_cpuhse=96000000L
-NUCLEO_64.menu.subboard.Nucleo_F411RE.build.extra_flags=-DSTM32F411RE
-NUCLEO_64.menu.subboard.Nucleo_F411RE.massstorage_drive=NODE_F411RE
-
 NUCLEO_64.menu.subboard.Nucleo_L152RE=Nucleo-L152RE(32M)
 NUCLEO_64.menu.subboard.Nucleo_L152RE.upload.maximum_size=524288
 NUCLEO_64.menu.subboard.Nucleo_L152RE.upload.maximum_data_size=81920
@@ -268,6 +244,200 @@ Nucleo_F207ZG.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
 Nucleo_F207ZG.menu.log.trace=TRACE
 Nucleo_F207ZG.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
 
+#################################### Nucleo-F401RE(84M) ##########################################
+#Nucleo-F401RE(84M) board
+Nucleo-F401RE.name=Nucleo-F401RE(84M)
+Nucleo-F401RE.vid.0=0x0483
+Nucleo-F401RE.pid.0=0x374B
+
+Nucleo-F401RE.build.core=arduino
+Nucleo-F401RE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART2
+
+Nucleo-F401RE.upload.maximum_size=524288
+Nucleo-F401RE.upload.maximum_data_size=98304
+Nucleo-F401RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+Nucleo-F401RE.build.series=STM32F4
+Nucleo-F401RE.build.variant=NUCLEO_F401RE
+Nucleo-F401RE.build.board=NUCLEO_F401RE
+Nucleo-F401RE.build.f_cpuhsi=84000000L
+Nucleo-F401RE.build.f_cpuhse=84000000L
+Nucleo-F401RE.build.extra_flags0=-DSTM32F401RE
+Nucleo-F401RE.build.ldscript_pre=ld/F401xE
+
+Nucleo-F401RE.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
+Nucleo-F401RE.menu.clock_source.bypass.build.f_cpu={build.f_cpuhse} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+
+Nucleo-F401RE.menu.clock_source.hsi=HSE_Disable(HSI)
+Nucleo-F401RE.menu.clock_source.hsi.build.f_cpu={build.f_cpuhsi} -DUSE_HSI
+
+Nucleo-F401RE.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
+Nucleo-F401RE.menu.clock_source.hse8m.build.f_cpu={build.f_cpuhse} -DUSE_HSE -DHSE_VALUE=8000000
+
+Nucleo-F401RE.menu.startadr.default=flash(default)
+Nucleo-F401RE.menu.startadr.default.build.extra_flags={build.extra_flags0}
+
+#Nucleo-F401RE.menu.startadr.F08010000=flash 1:0x08010000(64k)
+#Nucleo-F401RE.menu.startadr.F08010000.upload.maximum_size=65536
+#Nucleo-F401RE.menu.startadr.F08010000.upload.maximum_data_size=98304
+#Nucleo-F401RE.menu.startadr.F08010000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x10000
+#Nucleo-F401RE.menu.startadr.F08010000.build.ldscript={build.ldscript_pre}_0801.ld
+#Nucleo-F401RE.menu.startadr.F08010000.upload.uploadadr=0x08010000
+#Nucleo-F401RE.menu.startadr.F08010000.upload.vect=0x08010000
+
+Nucleo-F401RE.menu.startadr.F08020000=flash 2:0x08020000(128k)
+Nucleo-F401RE.menu.startadr.F08020000.upload.maximum_size=131072
+Nucleo-F401RE.menu.startadr.F08020000.upload.maximum_data_size=98304
+Nucleo-F401RE.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
+Nucleo-F401RE.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
+Nucleo-F401RE.menu.startadr.F08020000.upload.uploadadr=0x08020000
+Nucleo-F401RE.menu.startadr.F08020000.upload.vect=0x08020000
+
+Nucleo-F401RE.menu.startadr.F08040000=flash 3:0x08040000(128k)
+Nucleo-F401RE.menu.startadr.F08040000.upload.maximum_size=131072
+Nucleo-F401RE.menu.startadr.F08040000.upload.maximum_data_size=98304
+Nucleo-F401RE.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+Nucleo-F401RE.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+Nucleo-F401RE.menu.startadr.F08040000.upload.uploadadr=0x08040000
+Nucleo-F401RE.menu.startadr.F08040000.upload.vect=0x08040000
+
+Nucleo-F401RE.menu.startadr.F08060000=flash 4:0x08060000(128k)
+Nucleo-F401RE.menu.startadr.F08060000.upload.maximum_size=131072
+Nucleo-F401RE.menu.startadr.F08060000.upload.maximum_data_size=98304
+Nucleo-F401RE.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
+Nucleo-F401RE.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
+Nucleo-F401RE.menu.startadr.F08060000.upload.uploadadr=0x08060000
+Nucleo-F401RE.menu.startadr.F08060000.upload.vect=0x08060000
+
+Nucleo-F401RE.menu.startadr.F08000000=flash(WithRamBoot 32kRAM used Only)
+Nucleo-F401RE.menu.startadr.F08000000.upload.maximum_size=131072
+Nucleo-F401RE.menu.startadr.F08000000.upload.maximum_data_size=32768
+Nucleo-F401RE.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
+Nucleo-F401RE.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+Nucleo-F401RE.menu.startadr.F08000000.upload.uploadadr=0x08000000
+Nucleo-F401RE.menu.startadr.F08000000.upload.vect=0x08000000
+
+Nucleo-F401RE.menu.startadr.R20000000=Sram 0:0x20000000(64K+32K BOOT=11 St/Jlink uploader only)
+Nucleo-F401RE.menu.startadr.R20000000.upload.maximum_size=65536
+Nucleo-F401RE.menu.startadr.R20000000.upload.maximum_data_size=32768
+Nucleo-F401RE.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
+Nucleo-F401RE.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
+Nucleo-F401RE.menu.startadr.R20000000.upload.uploadadr=0x20000000
+Nucleo-F401RE.menu.startadr.R20000000.upload.vect=0x20000000
+
+Nucleo-F401RE.upload.protocol=STLink
+Nucleo-F401RE.upload.tool=stlink_upload
+
+Nucleo-F401RE.menu.log.default=NONE
+Nucleo-F401RE.menu.log.fatal=FATAL
+Nucleo-F401RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1
+Nucleo-F401RE.menu.log.error=ERROR
+Nucleo-F401RE.menu.log.error.build.log_level=-D__LOG_LEVEL=2
+Nucleo-F401RE.menu.log.warning=WARNING
+Nucleo-F401RE.menu.log.warning.build.log_level=-D__LOG_LEVEL=3
+Nucleo-F401RE.menu.log.info=INFO
+Nucleo-F401RE.menu.log.info.build.log_level=-D__LOG_LEVEL=4
+Nucleo-F401RE.menu.log.debug=DEBUG
+Nucleo-F401RE.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
+Nucleo-F401RE.menu.log.trace=TRACE
+Nucleo-F401RE.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
+
+#################################### Nucleo-F411RE(96M) #########################################
+# NUCLEO 64 board
+Nucleo-F411RE.name=Nucleo-F411RE(96M)
+Nucleo-F411RE.vid.0=0x0483
+Nucleo-F411RE.pid.0=0x374B
+
+Nucleo-F411RE.build.core=arduino
+Nucleo-F411RE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART2
+
+Nucleo-F411RE.upload.maximum_size=524288
+Nucleo-F411RE.upload.maximum_data_size=131072
+Nucleo-F411RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+Nucleo-F411RE.build.series=STM32F4
+Nucleo-F411RE.build.variant=NUCLEO_F411RE
+Nucleo-F411RE.build.board=NUCLEO_F411RE
+Nucleo-F411RE.build.f_cpuhsi=96000000L
+Nucleo-F411RE.build.f_cpuhse=96000000L
+Nucleo-F411RE.build.extra_flags0=-DSTM32F411RE
+Nucleo-F411RE.build.ldscript_pre=ld/F411xE
+
+Nucleo-F411RE.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
+Nucleo-F411RE.menu.clock_source.bypass.build.f_cpu={build.f_cpuhse} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+
+Nucleo-F411RE.menu.clock_source.hsi=HSE_Disable(HSI)
+Nucleo-F411RE.menu.clock_source.hsi.build.f_cpu={build.f_cpuhsi} -DUSE_HSI
+
+Nucleo-F411RE.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
+Nucleo-F411RE.menu.clock_source.hse8m.build.f_cpu={build.f_cpuhse} -DUSE_HSE -DHSE_VALUE=8000000
+
+Nucleo-F411RE.menu.startadr.default=flash(default)
+Nucleo-F411RE.menu.startadr.default.build.extra_flags={build.extra_flags0}
+
+#Nucleo-F411RE.menu.startadr.F08010000=flash 1:0x08010000(64k)
+#Nucleo-F411RE.menu.startadr.F08010000.upload.maximum_size=65536
+#Nucleo-F411RE.menu.startadr.F08010000.upload.maximum_data_size=131072
+#Nucleo-F411RE.menu.startadr.F08010000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x10000
+#Nucleo-F411RE.menu.startadr.F08010000.build.ldscript={build.ldscript_pre}_0801.ld
+#Nucleo-F411RE.menu.startadr.F08010000.upload.uploadadr=0x08010000
+#Nucleo-F411RE.menu.startadr.F08010000.upload.vect=0x08010000
+
+Nucleo-F411RE.menu.startadr.F08020000=flash 2:0x08020000(128k)
+Nucleo-F411RE.menu.startadr.F08020000.upload.maximum_size=131072
+Nucleo-F411RE.menu.startadr.F08020000.upload.maximum_data_size=131072
+Nucleo-F411RE.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
+Nucleo-F411RE.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
+Nucleo-F411RE.menu.startadr.F08020000.upload.uploadadr=0x08020000
+Nucleo-F411RE.menu.startadr.F08020000.upload.vect=0x08020000
+
+Nucleo-F411RE.menu.startadr.F08040000=flash 3:0x08040000(128k)
+Nucleo-F411RE.menu.startadr.F08040000.upload.maximum_size=131072
+Nucleo-F411RE.menu.startadr.F08040000.upload.maximum_data_size=131072
+Nucleo-F411RE.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+Nucleo-F411RE.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+Nucleo-F411RE.menu.startadr.F08040000.upload.uploadadr=0x08040000
+Nucleo-F411RE.menu.startadr.F08040000.upload.vect=0x08040000
+
+Nucleo-F411RE.menu.startadr.F08060000=flash 4:0x08060000(128k)
+Nucleo-F411RE.menu.startadr.F08060000.upload.maximum_size=131072
+Nucleo-F411RE.menu.startadr.F08060000.upload.maximum_data_size=131072
+Nucleo-F411RE.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
+Nucleo-F411RE.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
+Nucleo-F411RE.menu.startadr.F08060000.upload.uploadadr=0x08060000
+Nucleo-F411RE.menu.startadr.F08060000.upload.vect=0x08060000
+
+Nucleo-F411RE.menu.startadr.F08000000=flash(WithRamBoot 32kRAM used Only)
+Nucleo-F411RE.menu.startadr.F08000000.upload.maximum_size=131072
+Nucleo-F411RE.menu.startadr.F08000000.upload.maximum_data_size=32768
+Nucleo-F411RE.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
+Nucleo-F411RE.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+Nucleo-F411RE.menu.startadr.F08000000.upload.uploadadr=0x08000000
+Nucleo-F411RE.menu.startadr.F08000000.upload.vect=0x08000000
+
+Nucleo-F411RE.menu.startadr.R20000000=Sram 0:0x20000000(96K+32K BOOT=11 St/Jlink uploader only)
+Nucleo-F411RE.menu.startadr.R20000000.upload.maximum_size=98304
+Nucleo-F411RE.menu.startadr.R20000000.upload.maximum_data_size=32768
+Nucleo-F411RE.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
+Nucleo-F411RE.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
+Nucleo-F411RE.menu.startadr.R20000000.upload.uploadadr=0x20000000
+Nucleo-F411RE.menu.startadr.R20000000.upload.vect=0x20000000
+
+Nucleo-F411RE.upload.protocol=STLink
+Nucleo-F411RE.upload.tool=stlink_upload
+
+Nucleo-F411RE.menu.log.default=NONE
+Nucleo-F411RE.menu.log.fatal=FATAL
+Nucleo-F411RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1
+Nucleo-F411RE.menu.log.error=ERROR
+Nucleo-F411RE.menu.log.error.build.log_level=-D__LOG_LEVEL=2
+Nucleo-F411RE.menu.log.warning=WARNING
+Nucleo-F411RE.menu.log.warning.build.log_level=-D__LOG_LEVEL=3
+Nucleo-F411RE.menu.log.info=INFO
+Nucleo-F411RE.menu.log.info.build.log_level=-D__LOG_LEVEL=4
+Nucleo-F411RE.menu.log.debug=DEBUG
+Nucleo-F411RE.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
+Nucleo-F411RE.menu.log.trace=TRACE
+Nucleo-F411RE.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
+
 #################################### Nucleo-F767ZI ############################################
 #Nucleo_F767ZI board
 
@@ -302,7 +472,7 @@ Nucleo_F767ZI.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
 Nucleo_F767ZI.menu.startadr.F08040000=flash 2:0x08040000(256k)
 Nucleo_F767ZI.menu.startadr.F08040000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F08040000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F08040000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
 Nucleo_F767ZI.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
 Nucleo_F767ZI.menu.startadr.F08040000.upload.uploadadr=0x08040000
@@ -310,7 +480,7 @@ Nucleo_F767ZI.menu.startadr.F08040000.upload.vect=0x08040000
 
 Nucleo_F767ZI.menu.startadr.F08080000=flash 3:0x08080000(256k)
 Nucleo_F767ZI.menu.startadr.F08080000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F08080000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F08080000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F08080000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x80000
 Nucleo_F767ZI.menu.startadr.F08080000.build.ldscript={build.ldscript_pre}_0808.ld
 Nucleo_F767ZI.menu.startadr.F08080000.upload.uploadadr=0x08080000
@@ -318,15 +488,15 @@ Nucleo_F767ZI.menu.startadr.F08080000.upload.vect=0x08080000
 
 Nucleo_F767ZI.menu.startadr.F080C0000=flash 3:0x080C0000(256k)
 Nucleo_F767ZI.menu.startadr.F080C0000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F080C0000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F080C0000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F080C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xC0000
 Nucleo_F767ZI.menu.startadr.F080C0000.build.ldscript={build.ldscript_pre}_080C.ld
 Nucleo_F767ZI.menu.startadr.F080C0000.upload.uploadadr=0x080C0000
 Nucleo_F767ZI.menu.startadr.F080C0000.upload.vect=0x080C0000
 
-Nucleo_F767ZI.menu.startadr.F08100000=flash 4:0x08100000(256k use app)
+Nucleo_F767ZI.menu.startadr.F08100000=flash 4:0x08100000(256k)
 Nucleo_F767ZI.menu.startadr.F08100000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F08100000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F08100000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F08100000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x100000
 Nucleo_F767ZI.menu.startadr.F08100000.build.ldscript={build.ldscript_pre}_0810.ld
 Nucleo_F767ZI.menu.startadr.F08100000.upload.uploadadr=0x08100000
@@ -334,7 +504,7 @@ Nucleo_F767ZI.menu.startadr.F08100000.upload.vect=0x08100000
 
 Nucleo_F767ZI.menu.startadr.F08140000=flash 4:0x08140000(256k)
 Nucleo_F767ZI.menu.startadr.F08140000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F08140000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F08140000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F08140000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x140000
 Nucleo_F767ZI.menu.startadr.F08140000.build.ldscript={build.ldscript_pre}_0814.ld
 Nucleo_F767ZI.menu.startadr.F08140000.upload.uploadadr=0x08140000
@@ -342,7 +512,7 @@ Nucleo_F767ZI.menu.startadr.F08140000.upload.vect=0x08140000
 
 Nucleo_F767ZI.menu.startadr.F08180000=flash 3:0x08180000(256k)
 Nucleo_F767ZI.menu.startadr.F08180000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F08180000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F08180000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F08180000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x180000
 Nucleo_F767ZI.menu.startadr.F08180000.build.ldscript={build.ldscript_pre}_0818.ld
 Nucleo_F767ZI.menu.startadr.F08180000.upload.uploadadr=0x08180000
@@ -350,7 +520,7 @@ Nucleo_F767ZI.menu.startadr.F08180000.upload.vect=0x08180000
 
 Nucleo_F767ZI.menu.startadr.F081C0000=flash 3:0x081C0000(256k)
 Nucleo_F767ZI.menu.startadr.F081C0000.upload.maximum_size=262144
-Nucleo_F767ZI.menu.startadr.F081C0000.upload.maximum_data_size=262144
+Nucleo_F767ZI.menu.startadr.F081C0000.upload.maximum_data_size=524288
 Nucleo_F767ZI.menu.startadr.F081C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x1C0000
 Nucleo_F767ZI.menu.startadr.F081C0000.build.ldscript={build.ldscript_pre}_081C.ld
 Nucleo_F767ZI.menu.startadr.F081C0000.upload.uploadadr=0x081C0000
@@ -579,7 +749,7 @@ DISCOVERY_L053C8.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
 ##################################### Discovery L152RC ###########################################
 # Discovery L152RC board(32M)
 
-DISCOVERY_L152R.name=Discovery L152RC
+DISCOVERY_L152R.name=Discovery L152R
 
 DISCOVERY_L152R.build.core=arduino
 DISCOVERY_L152R.build.board=DISCOVERY_L152RC
@@ -2730,7 +2900,7 @@ F407S.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
 #F407S.menu.startadr.F08010000=flash 1:0x08010000(64k)
 #F407S.menu.startadr.F08010000.upload.maximum_size=65536
-#F407S.menu.startadr.F08010000.upload.maximum_data_size=65536
+#F407S.menu.startadr.F08010000.upload.maximum_data_size=131072
 #F407S.menu.startadr.F08010000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x10000
 #F407S.menu.startadr.F08010000.build.ldscript={build.ldscript_pre}_0801.ld
 #F407S.menu.startadr.F08010000.upload.uploadadr=0x08010000
@@ -2738,7 +2908,7 @@ F407S.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
 F407S.menu.startadr.F08020000=flash 2:0x08020000(128k)
 F407S.menu.startadr.F08020000.upload.maximum_size=131072
-F407S.menu.startadr.F08020000.upload.maximum_data_size=65536
+F407S.menu.startadr.F08020000.upload.maximum_data_size=131072
 F407S.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
 F407S.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
 F407S.menu.startadr.F08020000.upload.uploadadr=0x08020000
@@ -2746,7 +2916,7 @@ F407S.menu.startadr.F08020000.upload.vect=0x08020000
 
 F407S.menu.startadr.F08040000=flash 3:0x08040000(128k)
 F407S.menu.startadr.F08040000.upload.maximum_size=131072
-F407S.menu.startadr.F08040000.upload.maximum_data_size=65536
+F407S.menu.startadr.F08040000.upload.maximum_data_size=131072
 F407S.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
 F407S.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
 F407S.menu.startadr.F08040000.upload.uploadadr=0x08040000
@@ -2754,7 +2924,7 @@ F407S.menu.startadr.F08040000.upload.vect=0x08040000
 
 F407S.menu.startadr.F08060000=flash 4:0x08060000(128k)
 F407S.menu.startadr.F08060000.upload.maximum_size=131072
-F407S.menu.startadr.F08060000.upload.maximum_data_size=65536
+F407S.menu.startadr.F08060000.upload.maximum_data_size=131072
 F407S.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
 F407S.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
 F407S.menu.startadr.F08060000.upload.uploadadr=0x08060000
@@ -2783,15 +2953,6 @@ F407S.menu.startadr.R20000000a.build.extra_flags={build.extra_flags0} -DVECT_TAB
 F407S.menu.startadr.R20000000a.build.ldscript={build.ldscript_pre}_RAM1.ld
 F407S.menu.startadr.R20000000a.upload.uploadadr=0x20000000
 F407S.menu.startadr.R20000000a.upload.vect=0x20000000
-
-
-#F407S.menu.startadr.R20003000=Sram 1:0x20003000(84K+32K Serial upload)
-#F407S.menu.startadr.R20003000.upload.maximum_size=86016
-#F407S.menu.startadr.R20003000.upload.maximum_data_size=32768
-#F407S.menu.startadr.R20003000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x3000 -DVECT_TAB_SRAM
-#F407S.menu.startadr.R20003000.build.ldscript={build.ldscript_pre}_RAM3000.ld
-#F407S.menu.startadr.R20003000.upload.uploadadr=0x20003000
-#F407S.menu.startadr.R20003000.upload.vect=0x20003000
 
 F407S.menu.extern_lib.NONE=NONE
 F407S.menu.extern_lib.STemWin=STemWin
@@ -2896,8 +3057,40 @@ F746S.menu.subboard.F746IG=WaveShare F746IG(1024K+320K)
 F746S.menu.startadr.default=flash (default)
 F746S.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
-F746S.menu.startadr.R20000000=Sram 0:0x20000000(196K+128K BOOT=11 ST/Jlink uploader only)
-F746S.menu.startadr.R20000000.upload.maximum_size=200704
+F746S.menu.startadr.F08040000=flash 2:0x08040000(256k)
+F746S.menu.startadr.F08040000.upload.maximum_size=262144
+F746S.menu.startadr.F08040000.upload.maximum_data_size=327680
+F746S.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+F746S.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+F746S.menu.startadr.F08040000.upload.uploadadr=0x08040000
+F746S.menu.startadr.F08040000.upload.vect=0x08040000
+
+F746S.menu.startadr.F08080000=flash 3:0x08080000(256k)
+F746S.menu.startadr.F08080000.upload.maximum_size=262144
+F746S.menu.startadr.F08080000.upload.maximum_data_size=327680
+F746S.menu.startadr.F08080000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x80000
+F746S.menu.startadr.F08080000.build.ldscript={build.ldscript_pre}_0808.ld
+F746S.menu.startadr.F08080000.upload.uploadadr=0x08080000
+F746S.menu.startadr.F08080000.upload.vect=0x08080000
+
+F746S.menu.startadr.F080C0000=flash 3:0x080C0000(256k)
+F746S.menu.startadr.F080C0000.upload.maximum_size=262144
+F746S.menu.startadr.F080C0000.upload.maximum_data_size=327680
+F746S.menu.startadr.F080C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xC0000
+F746S.menu.startadr.F080C0000.build.ldscript={build.ldscript_pre}_080C.ld
+F746S.menu.startadr.F080C0000.upload.uploadadr=0x080C0000
+F746S.menu.startadr.F080C0000.upload.vect=0x080C0000
+
+F746S.menu.startadr.F08000000=flash(WithRamBoot used 128kRAM Only)
+F746S.menu.startadr.F08000000.upload.maximum_size=262144
+F746S.menu.startadr.F08000000.upload.maximum_data_size=131072
+F746S.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
+F746S.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+F746S.menu.startadr.F08000000.upload.uploadadr=0x08000000
+F746S.menu.startadr.F08000000.upload.vect=0x08000000
+
+F746S.menu.startadr.R20000000=Sram 0:0x20000000(192K+128K BOOT=11 ST/Jlink uploader only)
+F746S.menu.startadr.R20000000.upload.maximum_size=196608
 F746S.menu.startadr.R20000000.upload.maximum_data_size=131072
 F746S.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
 F746S.menu.startadr.R20000000.build.ldscript=ld/f746xG_RAM0.ld

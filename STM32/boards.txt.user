@@ -176,6 +176,7 @@ NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.f_cpupre=216000000L
 NUCLEO_144.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
 NUCLEO_144.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
 
+
 NUCLEO_144.menu.clock_source.hsi=HSE_Disable(HSI)
 NUCLEO_144.menu.clock_source.hsi.build.f_cpu={build.f_cpupre} -DUSE_HSI
 
@@ -818,6 +819,8 @@ GD103R.vid.0=0x067B
 GD103R.pid.0=0x2303
 
 
+
+
 GD103R.serial.disableDTR=true
 GD103R.serial.disableRTS=true
 GD103R.upload.uploadadr=0x08000000
@@ -924,6 +927,7 @@ GD103R.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
 GD103R.menu.upload_method.jLinkMethod.upload.protocol=jlink
 GD103R.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
+
 GD103R.menu.upload_method.STLinkMethod=STLink
 GD103R.menu.upload_method.STLinkMethod.upload.protocol=STLink
 GD103R.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
@@ -977,6 +981,13 @@ GD103R.menu.jtag_swd.SWD=SWD [debug pins reserved: PA14, PA13]
 GD103R.menu.jtag_swd.SWD.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 GD103R.menu.jtag_swd.Disabled=Disabled [debug pins free]
 GD103R.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
+
+
+
+
+
+
+
 
 
 
@@ -1835,8 +1846,8 @@ F746S.menu.subboard.F746IG=WaveShare F746IG(1024K+320K)
 F746S.menu.startadr.default=flash (default)
 F746S.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
-F746S.menu.startadr.R20000000=Sram 0:0x20000000(196K+128K BOOT=11 ST/Jlink uploader only)
-F746S.menu.startadr.R20000000.upload.maximum_size=200704
+F746S.menu.startadr.R20000000=Sram 0:0x20000000(192K+128K BOOT=11 ST/Jlink uploader only)
+F746S.menu.startadr.R20000000.upload.maximum_size=196608
 F746S.menu.startadr.R20000000.upload.maximum_data_size=131072
 F746S.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
 F746S.menu.startadr.R20000000.build.ldscript=ld/f746xG_RAM0.ld
