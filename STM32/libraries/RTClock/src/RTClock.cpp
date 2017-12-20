@@ -163,6 +163,7 @@ static HAL_StatusTypeDef RTC_writeAlarmCounter(RTC_HandleTypeDef* hrtc, uint32_t
 
 HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec)
 {
+
 #ifdef STM32F1
   uint16_t t;
   uint32_t seccount = 0;
@@ -199,21 +200,28 @@ HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sda
   }
   __HAL_UNLOCK(&hrtc);
   return HAL_OK;
-#else
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
   RTC_DateTypeDef sdatestructure;
   RTC_TimeTypeDef stimestructure;
 
   /*##-1- Configure the Date #################################################*/
   /* Set Date: Tuesday April 14th 2015 */
-  sdatestructure.Year = syear % 2000;
+  sdatestructure.Year = syear;
   sdatestructure.Month = smon;
   sdatestructure.Date = sday;
   sdatestructure.WeekDay = this->getWeek(((syear<100)?(syear+2000):syear), smon, sday);
-  
-  if(HAL_RTC_SetDate(&hrtc,&sdatestructure,RTC_FORMAT_BCD) != HAL_OK)
+
+  assert_param(IS_RTC_YEAR(syear));
+  assert_param(IS_RTC_MONTH(smon));
+  assert_param(IS_RTC_DATE(sday));
+  assert_param(IS_RTC_HOUR24(RTC_Bcd2ToByte(hour)));
+  assert_param(IS_RTC_MINUTES(RTC_Bcd2ToByte(min)));
+  assert_param(IS_RTC_SECONDS(RTC_Bcd2ToByte(sec)));
+ 
+  if(HAL_RTC_SetDate(&hrtc,&sdatestructure,RTC_FORMAT_BIN) != HAL_OK) //RTC_FORMAT_BCD
   {
     /* Initialization Error */
-	_Error_Handler(__FILE__, __LINE__);
+	_Error_Handler((char *)__FILE__, __LINE__);
   } 
   
   /*##-2- Configure the Time #################################################*/
@@ -225,14 +233,13 @@ HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sda
   stimestructure.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stimestructure.StoreOperation = RTC_STOREOPERATION_RESET;
   
-  if(HAL_RTC_SetTime(&hrtc,&stimestructure,RTC_FORMAT_BCD) != HAL_OK)
+  if(HAL_RTC_SetTime(&hrtc,&stimestructure,RTC_FORMAT_BIN) != HAL_OK) //RTC_FORMAT_BCD
   {
     /* Initialization Error */
 	_Error_Handler(__FILE__, __LINE__);
   }
   
-  /*##-3- Writes a data in a RTC Backup data Register1 #######################*/
-  HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0x32F2);
+  return HAL_OK;
 #endif
 }
 
@@ -250,7 +257,8 @@ HAL_StatusTypeDef RTClock::setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,u
 #ifdef STM32F1
   uint16_t t;
   uint32_t seccount = 0;
-  if (syear < 2000 || syear > 2129)
+  if (syear < 100) syear +=2000;
+  if (syear > 2129)
     return HAL_ERROR;
   for (t = 2000; t < syear; t++)
   {
@@ -283,7 +291,7 @@ HAL_StatusTypeDef RTClock::setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,u
   }
   __HAL_LOCK(&hrtc);
 
-#elif defined(STM32F4)
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
     /**Enable the Alarm A 
     */
   RTC_AlarmTypeDef sAlarm;
@@ -306,7 +314,7 @@ HAL_StatusTypeDef RTClock::setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,u
 	sAlarm.Alarm = RTC_ALARM_A;
 
   
-  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD);
+  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm,RTC_FORMAT_BIN ); //RTC_FORMAT_BCD
   
 #endif
   return HAL_OK;
@@ -370,7 +378,7 @@ void RTClock::getDataTime(void)
   calendar.minute = (temp % 3600) / 60; //分钟
   calendar.second = (temp % 3600) % 60; //秒钟
   calendar.week = this->getWeek(calendar.year, calendar.month, calendar.day); //获取星期
-#else
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
   RTC_DateTypeDef sdatestructureget;
   RTC_TimeTypeDef stimestructureget;	
   /* Get the RTC current Time */
@@ -454,37 +462,39 @@ HAL_StatusTypeDef RTClock::rtcSource(uint32_t source){
   switch (source) {
 	case RTC_CLOCK_SOURCE_LSE: /*LSE*/
         /* Configue LSE as RTC clock soucre */
-        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;
+        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_LSE;
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
         RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+		RCC_OscInitStruct.LSIState = RCC_LSI_OFF;
         PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
      	break;
 	case RTC_CLOCK_SOURCE_LSI:  /*LSI*/
         /* Configue LSI as RTC clock soucre */
-        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI;
+        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_LSE;
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+        RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
         RCC_OscInitStruct.LSIState = RCC_LSI_ON;
         PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
 		break;
 	case RTC_CLOCK_SOURCE_HSE:
         /* Configue HSE as RTC clock soucre */
-        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+        RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE||RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_LSE;
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+        RCC_OscInitStruct.LSEState = RCC_LSE_OFF;
+		RCC_OscInitStruct.LSIState = RCC_LSI_OFF;
         RCC_OscInitStruct.HSEState = RCC_HSE_ON;		
-#ifdef STM32F1
-        PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV128;
-#elif defined(STM32F4)
-		PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_1MHZ;
-#endif
+        PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_HSE;
 		break;
 	default:
-       	return HAL_OK;   //use  board default souce,inited in variant.c 
+       	return HAL_ERROR;   //use  board default souce,inited in variant.c 
   }
   
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) == HAL_OK){
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
     return HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
   }
+  else
+	 _Error_Handler(__FILE__, __LINE__);
   return HAL_ERROR;
 }
 
@@ -494,76 +504,90 @@ void RTClock::Init(uint32_t source)
 {
   /**Initialize RTC Only
   */
-  if(rtcSource(source) == HAL_OK){
+    if(rtcSource(source) != HAL_OK)	 _Error_Handler(__FILE__, __LINE__);
 	hrtc.Instance = RTC;
 	
-#ifdef STM32F4   /*F0/F2/F3/F4/F7/L0/L1/L4*/
+#if defined(STM32F4)||defined(STM32L4)||defined(STM32L0)   /*F0/F2/F3/F4/F7/L0/L1/L4*/
 	hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
 	
-	if(source == RTC_CLOCK_SOURCE_HSE){
-		hrtc.Init.AsynchPrediv = RTC_SYNCH_PREDIV_HSE;//RTC_ASYNCH_PREDIV;
-		hrtc.Init.SynchPrediv = RTC_SYNCH_PREDIV_HSE; //RTC_SYNCH_PREDIV;
-	}else{	
-		hrtc.Init.AsynchPrediv =RTC_ASYNCH_PREDIV; //RTC_ASYNCH_PREDIV;
-		hrtc.Init.SynchPrediv = RTC_SYNCH_PREDIV;  //RTC_SYNCH_PREDIV;
+	if(source == RTC_CLOCK_SOURCE_LSE){
+		hrtc.Init.AsynchPrediv =RTC_ASYNCH_PREDIV_LSE; //RTC_ASYNCH_PREDIV;
+		hrtc.Init.SynchPrediv = RTC_SYNCH_PREDIV_LSE;  //RTC_SYNCH_PREDIV;
+	}else if(source == RTC_CLOCK_SOURCE_LSI){	
+		hrtc.Init.AsynchPrediv = RTC_ASYNCH_PREDIV_LSI;//RTC_ASYNCH_PREDIV;
+		hrtc.Init.SynchPrediv   = RTC_SYNCH_PREDIV_LSI; //RTC_SYNCH_PREDIV;
+	}else if(source == RTC_CLOCK_SOURCE_HSE){	
+		hrtc.Init.AsynchPrediv = RTC_ASYNCH_PREDIV_HSE;//RTC_ASYNCH_PREDIV;
+		hrtc.Init.SynchPrediv   = RTC_SYNCH_PREDIV_HSE; //RTC_SYNCH_PREDIV;
 	}
 	
 	hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
 	hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
 	hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-	if (HAL_RTC_Init(&hrtc) != HAL_OK) return;
-	  
+	__HAL_RTC_RESET_HANDLE_STATE(&hrtc);
+	if (HAL_RTC_Init(&hrtc) != HAL_OK) 	_Error_Handler(__FILE__, __LINE__);
+
+    /* Disable the write protection for RTC registers */
+    __HAL_RTC_WRITEPROTECTION_DISABLE(&hrtc);
+
+    /* Disable the Wake-up Timer */
+    __HAL_RTC_WAKEUPTIMER_DISABLE(&hrtc);
+
+    /* In case of interrupt mode is used, the interrupt source must disabled */ 
+    __HAL_RTC_WAKEUPTIMER_DISABLE_IT(&hrtc,RTC_IT_WUT);
+ 
+	if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0) != 0x32F2) {
+		this->setDataTime(17,12,19,8,18,58);
+		HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR0, 0x32F2);
+	}
+	    /**Enable the Alarm A 
+    */
+	RTC_AlarmTypeDef sAlarm;
+	
+	sAlarm.AlarmTime.Hours = 0x8;
+	sAlarm.AlarmTime.Minutes = 0x8;
+	sAlarm.AlarmTime.Seconds = 0x30;
+	sAlarm.AlarmTime.SubSeconds = 0x0;
+	sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+	sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
+	sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
+	sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
+	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
+	sAlarm.AlarmDateWeekDay = 0x1;
+	sAlarm.Alarm = RTC_ALARM_A;
+	if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
+	{
+	_Error_Handler(__FILE__, __LINE__);
+	}
+	
+	/**Enable the Alarm B 
+	*/
+	sAlarm.AlarmDateWeekDay = 0x1;
+	sAlarm.Alarm = RTC_ALARM_B;
+	if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
+	{
+	_Error_Handler(__FILE__, __LINE__);
+	}
+	
+	if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0, RTC_WAKEUPCLOCK_CK_SPRE_16BITS) != HAL_OK)
+	{
+		_Error_Handler(__FILE__, __LINE__);
+	}
+  
 #elif defined(STM32F1)   /*F1*/
 	hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
 	hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
 	if (HAL_RTC_Init(&hrtc) != HAL_OK) return;
 	HAL_RTCEx_SetSecond_IT(&hrtc);
-#endif
-
 	if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2) {
-		this->setDataTime(17,12,8,8,8,0);
+		this->setDataTime(17,12,19,8,18,58);
 		HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0x32F2);
 	}
-	
-#ifdef STM32F4
-    /**Enable the Alarm A 
-    */
-  RTC_AlarmTypeDef sAlarm;
-  
-  sAlarm.AlarmTime.Hours = 0x8;
-  sAlarm.AlarmTime.Minutes = 0x8;
-  sAlarm.AlarmTime.Seconds = 0x30;
-  sAlarm.AlarmTime.SubSeconds = 0x0;
-  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
-  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
-  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-  sAlarm.AlarmDateWeekDay = 0x1;
-  sAlarm.Alarm = RTC_ALARM_A;
-  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
+#endif
 
-    /**Enable the Alarm B 
-    */
-  sAlarm.AlarmDateWeekDay = 0x1;
-  sAlarm.Alarm = RTC_ALARM_B;
-  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0, RTC_WAKEUPCLOCK_CK_SPRE_16BITS) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-#endif	
 	this->getDataTime();//更新时间
 	this->status = 1;
-  }
+
 }
 
 
@@ -600,7 +624,7 @@ extern "C" {
 	void HAL_RTCEx_RTCEventCallback(RTC_HandleTypeDef* hrtc __unused){
 		if(EventInterruptCallBack) EventInterruptCallBack();
 	}
-#elif defined(STM32F4)
+#elif defined(STM32F4)||defined(STM32L4)
 	void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef* hrtc __unused){
 		if(EventInterruptCallBack) EventInterruptCallBack();
 	}
@@ -622,25 +646,25 @@ extern "C" {
 	void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc __unused){
 		if (hrtc->Instance == RTC)
 		{
-#ifdef STM32F1
+#if defined(STM32F1)||defined(STM32L0)
 			HAL_PWR_EnableBkUpAccess();
 			__HAL_RCC_BKP_CLK_ENABLE();
 			__HAL_RCC_RTC_ENABLE();
  #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-			HAL_NVIC_SetPriority(RTC_IRQn, 5, 0);
+			HAL_NVIC_SetPriority(RTC_IRQn, TickPriority, 0);
 #else
 			HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
 #endif	
 			HAL_NVIC_EnableIRQ(RTC_IRQn);
 
 
-#elif defined(STM32F4)
+#elif defined(STM32F4)||defined(STM32L4)
 			__HAL_RCC_PWR_CLK_ENABLE();
 			HAL_PWR_EnableBkUpAccess();
 			__HAL_RCC_RTC_ENABLE(); 
 # if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 5, 0);
-			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 5, 0);
+			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, TickPriority, 0);
+			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, TickPriority, 0);
 # else
 			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 0, 0);
 			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
@@ -653,14 +677,14 @@ extern "C" {
 #endif	
 		}
 	}
-#if defined(STM32F1)	
+#if defined(STM32F1)||defined(STM32L0)	
 	void RTC_IRQHandler(void){HAL_RTCEx_RTCIRQHandler(&hrtc);};
-#elif defined(STM32F4)
+#elif defined(STM32F4)||defined(STM32L4)
 	void RTC_WKUP_IRQHandler(void){HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);};
 	void RTC_Alarm_IRQHandler(void){HAL_RTC_AlarmIRQHandler(&hrtc);};
 #else
 	
 #error please add me!	
 #endif	
-}
+} //extern "C"
 

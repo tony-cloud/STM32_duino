@@ -2,19 +2,73 @@
 #ifndef _RTCLOCK_H_
 #define _RTCLOCK_H_
 
-#ifdef STM32F4
-	#define RTC_ASYNCH_PREDIV       (0x7f)   // /* 0U 31U 1ms /(127+1)*(255+1) = 32768 1s*/
-	#define RTC_SYNCH_PREDIV        (0xff)    //
-	#define RTC_ASYNCH_PREDIV_HSE   (99)   // 99U 
-	#define RTC_SYNCH_PREDIV_HSE    (99)    // 1000 hz
-	#define RCC_RTCCLKSOURCE_1MHZ   ((uint32_t)((uint32_t)RCC_BDCR_RTCSEL | (uint32_t)((HSE_VALUE/1000000U) << 16U)))	  
+
+#define RTC_ASYNCH_PREDIV_LSE       (0x7f)   /* (127+1)*(255+1)=32768 1s */
+#define RTC_SYNCH_PREDIV_LSE        (0xff)
+
+#if defined(STM32F0)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)   /* (127+1)*(288+1)=37000 1s*/
+	#define RTC_SYNCH_PREDIV_LSI    (0x120)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (9)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV32
+#elif defined(STM32F1)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)  /* (127+1)*(249+1)=32000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0xf9)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (9)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV128
+#elif defined(STM32F2)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)  /* (127+1)*(249+1)=32000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0xf9)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (9)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV31
+#elif defined(STM32F3)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)   /* (127+1)*(311+1)=40000*/
+	#define RTC_SYNCH_PREDIV_LSI    (0x137)
+	#define RTC_ASYNCH_PREDIV_HSE   (49)
+	#define RTC_SYNCH_PREDIV_HSE    (4)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV32
+#elif defined(STM32F4)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)  /* (127+1)*(249+1)=32000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0xf9)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (9)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV31
+#elif defined(STM32F7)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)  /* (127+1)*(249+1)= 32000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0xf9)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (99)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV31
+#elif defined(STM32L0)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)   /* (127+1)*(288+1)=37000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0x120)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (99)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV16
+#elif defined(STM32L1)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)   /* (127+1)*(288+1)=37000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0x120)
+	#define RTC_ASYNCH_PREDIV_HSE   (99)
+	#define RTC_SYNCH_PREDIV_HSE    (99)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV16
+#elif defined(STM32L4)
+	#define RTC_ASYNCH_PREDIV_LSI   (0x7f)  /* (127+1)*(249+1)= 32000 */
+	#define RTC_SYNCH_PREDIV_LSI    (0xf9)
+	#define RTC_ASYNCH_PREDIV_HSE   (49)
+	#define RTC_SYNCH_PREDIV_HSE    (99)
+	#define RCC_RTCCLKSOURCE_HSE	RCC_RTCCLKSOURCE_HSE_DIV32
+#else
+#error !mcu serial line undef!	
 #endif
 
 typedef enum RTC_clockSouce {
-RTC_CLOCK_SOURCE_NO_CLK,
-RTC_CLOCK_SOURCE_LSE,
-RTC_CLOCK_SOURCE_LSI,
-RTC_CLOCK_SOURCE_HSE,
+	RTC_CLOCK_SOURCE_NO_CLK,
+	RTC_CLOCK_SOURCE_LSE,
+	RTC_CLOCK_SOURCE_LSI,
+	RTC_CLOCK_SOURCE_HSE,
 }RTC_clockSouce;
 
 /* USER CODE BEGIN Includes */
@@ -28,6 +82,7 @@ typedef struct
   uint8_t second;
   uint8_t  week;
 } RTC_calendar_TypeDef;
+
 
 #ifdef __cplusplus
 
