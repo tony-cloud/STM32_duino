@@ -12,7 +12,8 @@ set str=%str:/=\%
 set alt=%2
 
 :FLASH
-stlink\ST-LINK_CLI.exe -c SWD -P %str% %6  -Rst %7 -Run
+rem stlink\ST-LINK_CLI.exe -c SWD -P %str% %6 -Run %7
+stlink\ST-LINK_CLI.exe -c SWD -P %str% -Run
 goto EXIT
 
 
@@ -28,5 +29,4 @@ goto EXIT
 
 
 :EXIT
-rem: wait_for_serial.bat %1
 
