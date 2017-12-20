@@ -57,9 +57,15 @@ T*  stm32SearchPin(uint8_t pin,  T* pTable, uint8_t len){
   return stm32SearchPin(port_pin.port,port_pin.pinMask,pTable,len);	
 };
 
+#ifdef TIM2
+# define pwwtable chip_tim2
+#else
+# define pwmtable chip_tim3	
+#endif
+
 bool stm32PinTim(uint8_t pin){
   stm32_port_pin_type port_pin = variant_pin_list[pin];
-  return (stm32SearchPin(port_pin.port,port_pin.pinMask,chip_tim, sizeof(chip_tim) / sizeof(chip_tim[0])))?true:false;	
+  return (stm32SearchPin(port_pin.port,port_pin.pinMask,pwwtable, sizeof(pwwtable) / sizeof(pwwtable[0])))?true:false;	
 }
 
 #endif
