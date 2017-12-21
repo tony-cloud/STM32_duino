@@ -276,11 +276,11 @@ void STM_FSMC_LCD_Init(void)
 
 
 
-void preinitVariant() {
 #ifndef DATA_IN_ExtSRAM
+void preinitVariant() {
 	STM_FSMC_SRAM_Init();
-#endif
 }
+#endif
 
 extern void setHeap(unsigned char* s, unsigned char* e);
 void setHeapAtSram(void){

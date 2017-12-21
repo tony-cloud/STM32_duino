@@ -75,6 +75,13 @@ void SystemClock_Config(void)
     /**Configure the Systick 
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+  
+ #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
+#else  
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+#endif  
 
 }
 #else

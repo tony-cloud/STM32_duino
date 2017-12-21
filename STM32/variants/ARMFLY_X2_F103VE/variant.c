@@ -43,6 +43,5 @@ void SystemClock_Config(void) {
 
 //Armfly_X2 use PB3 pin for DS18B20 DQ_Pin must remaped this pin pins
 void initVariant() {
-//    __HAL_RCC_AFIO_CLK_ENABLE();
-    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+    __HAL_AFIO_REMAP_SWJ_NONJTRST();
 }
