@@ -24,15 +24,18 @@
 #define _RAM_BOOT_H_
 #include "Bootloader.h"
 
-__attribute__(( constructor (101))) void premain(){ 
-  if (UTIL_checkUserCode(SRAM_BASE))
-  {
-#ifdef STM32F7
-    start_application(SRAM_BASE);
-#else	
-    UTIL_jumpToUser(SRAM_BASE);
-#endif
-  }
-}
 
-#endif //_RAM_BOOT_H_
+__attribute__(( constructor (101))) void premain(){ 
+#ifdef SERIAL_LOAD_RAM
+  if (UTIL_checkUserCode(SERIAL_LOAD_RAM))
+  {
+    UTIL_jumpToUser(SERIAL_LOAD_RAM);
+  } 
+  else 
+#endif
+
+  if (UTIL_checkUserCode(0x20000000))
+     UTIL_jumpToUser(0x20000000);
+
+}
+#endif

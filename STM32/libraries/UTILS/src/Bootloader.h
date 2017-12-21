@@ -28,6 +28,7 @@
 
 //for run in sram by app manager
 #ifdef STM32F1  //F0/L0/F1/L1/F3
+
 # if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
 # else  /*128k flash 20k ram for x8/xB*/

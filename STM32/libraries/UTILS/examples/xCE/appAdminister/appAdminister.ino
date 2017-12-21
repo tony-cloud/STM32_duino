@@ -581,7 +581,7 @@ tCmdLineEntry g_sCmdTable[] =
   { "d",      Cmd_dispmen,   "    : disp memory([addr])"} ,
 
   //vdisk function
-  { "ls",    Cmd_dir,      "  : list vdisk files"} ,
+  { "ls",    Cmd_dir,      "  : list apps in mcu"} ,
 
   //go flash addr
   { "go",     Cmd_go,      "   : goto n slot addr running(slot#)"},

@@ -111,13 +111,13 @@ static void start_new_application(void *sp, void *pc)
 int UTIL_checkUserCode(uint32_t usrAddr) {
     uint32_t sp = *(volatile uint32_t *) usrAddr;
 #if defined(STM32F1)||defined(STM32F3)||defined(STM32L1)
-    return ((sp & 0x2FFE0000) == 0x20000000)?1:0;  /*1xxxx*/
+    return ((sp & 0xFFFE0000) == 0x20000000)?1:0;  /*1xxxx*/
 #elif defined(STM32F2)
-    return ((sp & 0x2FFC0000) == 0x20000000)?1:0;  /*3xxxx*/
+    return ((sp & 0xFFFC0000) == 0x20000000)?1:0;  /*3xxxx*/
 #elif defined(STM32F4)||defined(STM32L4)
-    return ((sp & 0x2FF80000) == 0x20000000)?1:0;
+    return ((sp & 0xFFF80000) == 0x20000000)?1:0;
 #elif defined(STM32F7)
-    return ((sp & 0x2FF00000) == 0x20000000)?1:0;
+    return ((sp & 0xFFF00000) == 0x20000000)?1:0;
 #else
 #error  !!for m3/m4/m7 only!!
 #endif
