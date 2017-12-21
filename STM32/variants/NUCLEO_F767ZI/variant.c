@@ -31,7 +31,7 @@ void SystemClock_Config(void) {
 
     RCC_OscInitStruct.PLL.PLLN = 216;
     RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-    RCC_OscInitStruct.PLL.PLLQ = 2;
+    RCC_OscInitStruct.PLL.PLLQ = 9;
     HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
     HAL_PWREx_EnableOverDrive();
@@ -54,10 +54,11 @@ void SystemClock_Config(void) {
 
     /* SysTick_IRQn interrupt configuration */
 #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
+	HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
+	HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
 #else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(PendSV_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif  
 }
 
