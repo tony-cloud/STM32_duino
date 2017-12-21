@@ -12,7 +12,6 @@ static HAL_StatusTypeDef RTC_EnterInitMode(RTC_HandleTypeDef* hrtc);
 static HAL_StatusTypeDef RTC_ExitInitMode(RTC_HandleTypeDef* hrtc);
 static HAL_StatusTypeDef RTC_SetCounter(RTC_HandleTypeDef* hrtc, uint32_t TimeCounter);
 static uint32_t RTC_ReadTimeCounter(RTC_HandleTypeDef* hrtc);
-static HAL_StatusTypeDef  RTC_WriteAlarmCounter(RTC_HandleTypeDef* hrtc, uint32_t AlarmCounter);
 
 //判断是否是闰年函数
 //月份   1  2  3  4  5  6  7  8  9  10 11 12
@@ -124,32 +123,6 @@ static HAL_StatusTypeDef RTC_ExitInitMode(RTC_HandleTypeDef* hrtc)
   return HAL_OK;
 }
 
-static HAL_StatusTypeDef RTC_writeAlarmCounter(RTC_HandleTypeDef* hrtc, uint32_t AlarmCounter)
-{
-  HAL_StatusTypeDef status = HAL_OK;
-
-  /* Set Initialization mode */
-  if (RTC_EnterInitMode(hrtc) != HAL_OK)
-  {
-    status = HAL_ERROR;
-  }
-  else
-  {
-    /* Set RTC COUNTER MSB word */
-    WRITE_REG(hrtc->Instance->ALRH, (AlarmCounter >> 16));
-    /* Set RTC COUNTER LSB word */
-    WRITE_REG(hrtc->Instance->ALRL, (AlarmCounter & RTC_ALRL_RTC_ALR));
-
-    /* Wait for synchro */
-    if (RTC_ExitInitMode(hrtc) != HAL_OK)
-    {
-      status = HAL_ERROR;
-    }
-  }
-
-  return status;
-}
-
 #endif
 //设置时钟
 //把输入的时钟转换为秒钟
@@ -162,14 +135,17 @@ static HAL_StatusTypeDef RTC_writeAlarmCounter(RTC_HandleTypeDef* hrtc, uint32_t
 //const u8 mon_table[12]={31,28,31,30,31,30,31,31,30,31,30,31};
 
 HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec)
-{
-
+{	
 #ifdef STM32F1
   uint16_t t;
   uint32_t seccount = 0;
-  if (syear < 2000 || syear > 2129)
-    return HAL_ERROR;
-  for (t = 2000; t < syear; t++) //°把所有年份的秒钟相加
+  if (syear < 100) 
+	  syear = syear+2000;
+  
+  if (syear > 2099)
+     return HAL_ERROR;
+ 
+  for (t = 2000; t < syear; t++) // 把所有年份的秒钟相加
   {
     if (leapYear(t))
       seccount += 31622400; //闰年的秒钟数
@@ -200,24 +176,19 @@ HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sda
   }
   __HAL_UNLOCK(&hrtc);
   return HAL_OK;
-#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
+  
+#else
+	
+  if (syear > 2000) 
+	  syear = syear - 2000;
   RTC_DateTypeDef sdatestructure;
   RTC_TimeTypeDef stimestructure;
 
-  /*##-1- Configure the Date #################################################*/
-  /* Set Date: Tuesday April 14th 2015 */
   sdatestructure.Year = syear;
   sdatestructure.Month = smon;
   sdatestructure.Date = sday;
   sdatestructure.WeekDay = this->getWeek(((syear<100)?(syear+2000):syear), smon, sday);
 
-  assert_param(IS_RTC_YEAR(syear));
-  assert_param(IS_RTC_MONTH(smon));
-  assert_param(IS_RTC_DATE(sday));
-  assert_param(IS_RTC_HOUR24(RTC_Bcd2ToByte(hour)));
-  assert_param(IS_RTC_MINUTES(RTC_Bcd2ToByte(min)));
-  assert_param(IS_RTC_SECONDS(RTC_Bcd2ToByte(sec)));
- 
   if(HAL_RTC_SetDate(&hrtc,&sdatestructure,RTC_FORMAT_BIN) != HAL_OK) //RTC_FORMAT_BCD
   {
     /* Initialization Error */
@@ -229,10 +200,11 @@ HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sda
   stimestructure.Hours = hour;
   stimestructure.Minutes = min;
   stimestructure.Seconds = sec;
+//#ifndef STM32F1  
   stimestructure.TimeFormat = RTC_HOURFORMAT_24;
   stimestructure.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stimestructure.StoreOperation = RTC_STOREOPERATION_RESET;
-  
+//#endif  
   if(HAL_RTC_SetTime(&hrtc,&stimestructure,RTC_FORMAT_BIN) != HAL_OK) //RTC_FORMAT_BCD
   {
     /* Initialization Error */
@@ -243,67 +215,33 @@ HAL_StatusTypeDef RTClock::setDataTime(uint16_t syear, uint8_t smon, uint8_t sda
 #endif
 }
 
+ /**Enable the Alarm A 
+  */
 HAL_StatusTypeDef RTClock::setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,uint8_t week)
 {
-  uint16_t syear;
-  uint8_t smon;
-  uint8_t sday;
   
   this->getDataTime();
-  syear = calendar.year;
-  smon = calendar.month;
-  sday =calendar.day;
-  
-#ifdef STM32F1
-  uint16_t t;
-  uint32_t seccount = 0;
-  if (syear < 100) syear +=2000;
-  if (syear > 2129)
-    return HAL_ERROR;
-  for (t = 2000; t < syear; t++)
-  {
-    if (leapYear(t))
-      seccount += 31622400; //
-    else
-      seccount += 31536000;     //
-  }
-  smon -= 1;
-  for (t = 0; t < smon; t++) //
-  {
-    seccount += (uint32_t)mon_table[t] * 86400; //
-    if ((syear) && t == 1)
-      seccount += 86400; //
-  }
-  seccount += (uint32_t)(sday - 1) * 86400; //
-  seccount += (uint32_t)hour * 3600; //
-  seccount += (uint32_t)min * 60; //
-  seccount += sec; //
-  hrtc.State = HAL_RTC_STATE_BUSY;
-  __HAL_LOCK(&hrtc);
-  if (RTC_WriteAlarmCounter(&hrtc, seccount) != HAL_OK)
-  {
-    hrtc.State = HAL_RTC_STATE_ERROR;
-    return HAL_ERROR;
-  }
-  else
-  {
-    hrtc.State = HAL_RTC_STATE_READY;
-  }
-  __HAL_LOCK(&hrtc);
-
-#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
-    /**Enable the Alarm A 
-    */
   RTC_AlarmTypeDef sAlarm;
   
   sAlarm.AlarmTime.Hours = hour;
   sAlarm.AlarmTime.Minutes = min;
   sAlarm.AlarmTime.Seconds = sec;
+
+#if !(defined(STM32L1)||defined(STM32F1)||defined(STM32F2))
   sAlarm.AlarmTime.SubSeconds = 0x56;
+#endif
+  
+#if !defined(STM32F1)
   sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
   sAlarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY;
+#endif
+  
+#if !(defined(STM32L1)||defined(STM32F1)||defined(STM32F2))
   sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_NONE;
+#endif 
+
+#if !defined(STM32F1) 
   if(week == 0){
 	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
   	sAlarm.AlarmDateWeekDay = 1;
@@ -311,13 +249,10 @@ HAL_StatusTypeDef RTClock::setAlarmTime(uint8_t hour, uint8_t min, uint8_t sec,u
 	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY;
   	sAlarm.AlarmDateWeekDay = week;
   }	
-	sAlarm.Alarm = RTC_ALARM_A;
-
-  
-  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm,RTC_FORMAT_BIN ); //RTC_FORMAT_BCD
-  
 #endif
-  return HAL_OK;
+
+  sAlarm.Alarm = RTC_ALARM_A;
+  return HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm,RTC_FORMAT_BIN ); 
 }
 
 
@@ -378,7 +313,7 @@ void RTClock::getDataTime(void)
   calendar.minute = (temp % 3600) / 60; //分钟
   calendar.second = (temp % 3600) % 60; //秒钟
   calendar.week = this->getWeek(calendar.year, calendar.month, calendar.day); //获取星期
-#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L0)
+#else
   RTC_DateTypeDef sdatestructureget;
   RTC_TimeTypeDef stimestructureget;	
   /* Get the RTC current Time */
@@ -435,22 +370,6 @@ uint8_t RTClock::getWeek(uint16_t year, uint8_t month, uint8_t day)
   return iweek;
 }
 
-#if 0
-void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate, uint8_t *showweek)
-{
-  /* Display time Format : hh:mm:ss */
-  sprintf((char *)showdate, "%2d年%2d月%2d日---", calendar.year, calendar.month, calendar.day);
-  printf((char*)showdate);
-  sprintf((char *)showtime, "%2d点%2d分%2d秒---", calendar.hour, calendar.minute, calendar.second);
-  printf((char*)showtime);
-  sprintf((char*)showweek, "星期%d", calendar.week);
-  printf((char*)showweek);
-  printf("\r\n");
-  /* Display date Format : mm-dd-yy */
-
-}
-#endif
-
 //#define RCC_RTCCLKSOURCE_NO_CLK  		0x00000000U   /*!< No clock */
 //#define RCC_RTCCLKSOURCE_LSE      	0x00000100U   /*!< LSE oscillator clock used as RTC clock */
 //#define RCC_RTCCLKSOURCE_LSI       	0x00000200U   /*!< LSI oscillator clock used as RTC clock */
@@ -506,8 +425,16 @@ void RTClock::Init(uint32_t source)
   */
     if(rtcSource(source) != HAL_OK)	 _Error_Handler(__FILE__, __LINE__);
 	hrtc.Instance = RTC;
-	
-#if defined(STM32F4)||defined(STM32L4)||defined(STM32L0)   /*F0/F2/F3/F4/F7/L0/L1/L4*/
+#if defined(STM32F1)   /*F1*/
+	hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
+	hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
+	if (HAL_RTC_Init(&hrtc) != HAL_OK) return;
+	HAL_RTCEx_SetSecond_IT(&hrtc);
+	if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2) {
+		this->setDataTime(17,12,19,8,18,58);
+		HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0x32F2);
+	}
+#else   /*F0/F2/F3/F4/F7/L0/L1/L4*/
 	hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
 	
 	if(source == RTC_CLOCK_SOURCE_LSE){
@@ -525,7 +452,8 @@ void RTClock::Init(uint32_t source)
 	hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
 	hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
 	__HAL_RTC_RESET_HANDLE_STATE(&hrtc);
-	if (HAL_RTC_Init(&hrtc) != HAL_OK) 	_Error_Handler(__FILE__, __LINE__);
+
+	if (HAL_RTC_Init(&hrtc) != HAL_OK) _Error_Handler(__FILE__, __LINE__);
 
     /* Disable the write protection for RTC registers */
     __HAL_RTC_WRITEPROTECTION_DISABLE(&hrtc);
@@ -538,7 +466,7 @@ void RTClock::Init(uint32_t source)
  
 	if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0) != 0x32F2) {
 		this->setDataTime(17,12,19,8,18,58);
-		HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR0, 0x32F2);
+	    HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR0, 0x32F2);
 	}
 	    /**Enable the Alarm A 
     */
@@ -547,11 +475,15 @@ void RTClock::Init(uint32_t source)
 	sAlarm.AlarmTime.Hours = 0x8;
 	sAlarm.AlarmTime.Minutes = 0x8;
 	sAlarm.AlarmTime.Seconds = 0x30;
+#if !(defined(STM32L1)||defined(STM32F2))
 	sAlarm.AlarmTime.SubSeconds = 0x0;
+#endif	
 	sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
 	sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
+#if !(defined(STM32L1)||defined(STM32F2))
 	sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
+#endif
 	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
 	sAlarm.AlarmDateWeekDay = 0x1;
 	sAlarm.Alarm = RTC_ALARM_A;
@@ -574,15 +506,6 @@ void RTClock::Init(uint32_t source)
 		_Error_Handler(__FILE__, __LINE__);
 	}
   
-#elif defined(STM32F1)   /*F1*/
-	hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
-	hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
-	if (HAL_RTC_Init(&hrtc) != HAL_OK) return;
-	HAL_RTCEx_SetSecond_IT(&hrtc);
-	if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2) {
-		this->setDataTime(17,12,19,8,18,58);
-		HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0x32F2);
-	}
 #endif
 
 	this->getDataTime();//更新时间
@@ -624,11 +547,10 @@ extern "C" {
 	void HAL_RTCEx_RTCEventCallback(RTC_HandleTypeDef* hrtc __unused){
 		if(EventInterruptCallBack) EventInterruptCallBack();
 	}
-#elif defined(STM32F4)||defined(STM32L4)
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L1)||defined(STM32F7)||defined(STM32F2)||defined(STM32F3)
 	void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef* hrtc __unused){
 		if(EventInterruptCallBack) EventInterruptCallBack();
 	}
-
 #else
 	void HAL_RTCEx_RTCIRQHandler(RTC_HandleTypeDef* hrtc __unused){
 		if(EventInterruptCallBack) EventInterruptCallBack();		
@@ -652,15 +574,16 @@ extern "C" {
 			__HAL_RCC_RTC_ENABLE();
  #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
 			HAL_NVIC_SetPriority(RTC_IRQn, TickPriority, 0);
+			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, TickPriority, 0);
 #else
 			HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
+			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
 #endif	
 			HAL_NVIC_EnableIRQ(RTC_IRQn);
 
-
-#elif defined(STM32F4)||defined(STM32L4)
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L1)||defined(STM32F7)||defined(STM32F2)||defined(STM32F3)
 			__HAL_RCC_PWR_CLK_ENABLE();
-			HAL_PWR_EnableBkUpAccess();
+			 HAL_PWR_EnableBkUpAccess();
 			__HAL_RCC_RTC_ENABLE(); 
 # if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
 			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, TickPriority, 0);
@@ -668,23 +591,20 @@ extern "C" {
 # else
 			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 0, 0);
 			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
-
 # endif	
 			HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
-			HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
-#else
 	
-#endif	
+#endif
+			HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 		}
 	}
 #if defined(STM32F1)||defined(STM32L0)	
 	void RTC_IRQHandler(void){HAL_RTCEx_RTCIRQHandler(&hrtc);};
-#elif defined(STM32F4)||defined(STM32L4)
+#elif defined(STM32F4)||defined(STM32L4)||defined(STM32L1)||defined(STM32F7)||defined(STM32F2)||defined(STM32F3)
 	void RTC_WKUP_IRQHandler(void){HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);};
-	void RTC_Alarm_IRQHandler(void){HAL_RTC_AlarmIRQHandler(&hrtc);};
 #else
-	
 #error please add me!	
 #endif	
+	void RTC_Alarm_IRQHandler(void){HAL_RTC_AlarmIRQHandler(&hrtc);};
 } //extern "C"
 

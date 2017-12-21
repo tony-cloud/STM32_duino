@@ -1,5 +1,5 @@
 /*
-   RTClock lib  demo for F1  only  by huaweiwx@sina.com 2017.12
+   RTClock lib  demo  by huaweiwx@sina.com 2017.12
 */
 
 #include <LED.h>
@@ -36,8 +36,7 @@ void loop() {
   else
     Led.flash(500, 500, 1);
 
-  //  showDataTime();
-}
+ }
 
 const char* weekStr[7] = {
   "Monday",
