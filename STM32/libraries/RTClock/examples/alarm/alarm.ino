@@ -1,5 +1,7 @@
 /*
-   RTClock lib  demo  by huaweiwx@sina.com 2017.12
+   RTClock lib alarm  demo  by huaweiwx@sina.com 2017.12
+   for L0/1/4  F2/3/4/7
+   F1 un complated.
 */
 
 #include <LED.h>
@@ -18,14 +20,18 @@ void setup() {
 
   if (rtc) {
 
-/*--------------------------------------------------------------------------------------*/  
+
+    /*--------------------------------------------------------------------------------------*/
     rtc.setDataTime(2017, 12, 19, 16, 25, 10);
-/*    Run once only When  there is a backup battery and used  RTC_CLOCK_SOURCE_LSE option.
- *    当选择低频晶振且装有后备电池时仅需运行一次
- *--------------------------------------------------------------------------------------*/  
+    /*    Run once only When  there is a backup battery and used  RTC_CLOCK_SOURCE_LSE option.
+          当选择低频晶振且装有后备电池时仅需运行一次
+      --------------------------------------------------------------------------------------*/
 
     rtc.attachEventInterrupt(&showDataTime);
 
+    //test alarm
+    rtc.setAlarmTime(16, 25, 30);
+    rtc.attachAlarmInterrupt(&alarm);
   }
   else
     Serial.println("\nRTC init false!");
@@ -34,9 +40,10 @@ void setup() {
 }
 
 // the loop routine runs over and over again forever:
+volatile uint8_t  alarmdone = 0;
 void loop() {
-  if (Led.availablePwm())
-    Led.fade(1000);
+  if (alarmdone)
+    Led.flash(100, 100, 1);
   else
     Led.flash(500, 500, 1);
 }
@@ -56,4 +63,9 @@ void showDataTime(void)
   rtc.getDataTime();
   Serial << "data: " << rtc.pCalendar->year << "-"  <<  rtc.pCalendar->month << "-" <<  rtc.pCalendar->day ;
   Serial << "   time: " <<  rtc.pCalendar->hour << ":"  <<  rtc.pCalendar->minute << ":" <<  rtc.pCalendar->second << "  " <<  weekStr[ rtc.pCalendar->week - 1] << "\n";
+}
+
+void alarm(void) {
+  Serial << "!!! alarm!!!!\n";
+  alarmdone = 1;
 }
