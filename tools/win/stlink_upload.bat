@@ -12,8 +12,7 @@ set str=%str:/=\%
 set alt=%2
 
 :FLASH
-rem stlink\ST-LINK_CLI.exe -c SWD -P %str% %6 -Run %7
-stlink\ST-LINK_CLI.exe -c SWD -P %str% -Run
+stlink\ST-LINK_CLI.exe -c SWD -Rst -P %str% -Run  < stlink\stlink.quit
 goto EXIT
 
 
