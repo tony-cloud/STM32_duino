@@ -120,26 +120,23 @@ NUCLEO_64.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
 #################################### Nucleo-F207ZG ############################################
 #Nucleo_F207ZG board
 
-Nucleo_F207ZG.name=Nucleo-F207ZG
+Nucleo_F207ZG.name=Nucleo-F207ZG(120M)
 Nucleo_F207ZG.vid.0=0x0483
 Nucleo_F207ZG.pid.0=0x374B
 
-Nucleo_F207ZG.build.core=arduino
-Nucleo_F207ZG.build.board=NUCLEO_144
-Nucleo_F207ZG.upload.tool=nucleoFlasher
 
 Nucleo_F207ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
-
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG=Nucleo-F207ZG(120M)
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.upload.maximum_size=1048576
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.upload.maximum_data_size=131072
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.mcu=cortex-m3
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.series=STM32F2
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.variant=NUCLEO_F207ZG
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.board=NUCLEO_F207ZG
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.extra_flags0=-DSTM32F207ZG
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.massstorage_drive=NODE_F207ZG
-Nucleo_F207ZG.menu.subboard.Nucleo_F207ZG.build.f_cpupre=120000000L
+Nucleo_F207ZG.build.core=arduino
+Nucleo_F207ZG.build.board=NUCLEO_144
+Nucleo_F207ZG.build.mcu=cortex-m3
+Nucleo_F207ZG.build.series=STM32F2
+Nucleo_F207ZG.build.variant=NUCLEO_F207ZG
+Nucleo_F207ZG.build.board=NUCLEO_F207ZG
+Nucleo_F207ZG.build.extra_flags0=-DSTM32F207ZG
+Nucleo_F207ZG.build.f_cpupre=120000000L
+Nucleo_F207ZG.build.ldscript_pre=ld/F207xG
+Nucleo_F207ZG.upload.maximum_size=1048576
+Nucleo_F207ZG.upload.maximum_data_size=131072
 
 Nucleo_F207ZG.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
 Nucleo_F207ZG.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
@@ -432,20 +429,20 @@ Nucleo_F767ZI.pid.0=0x374B
 Nucleo_F767ZI.build.core=arduino
 Nucleo_F767ZI.build.variant=NUCLEO_F767ZI
 Nucleo_F767ZI.build.board=NUCLEO_F767ZI
+Nucleo_F767ZI.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
+Nucleo_F767ZI.build.mcu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard 
+Nucleo_F767ZI.build.series=STM32F7
+Nucleo_F767ZI.build.extra_flags0=-DSTM32F767ZI
+Nucleo_F767ZI.build.ldscript_pre=ld/f767xI
+Nucleo_F767ZI.build.f_cpupre=216000000L
 
 Nucleo_F767ZI.upload.maximum_size=2097152
 Nucleo_F767ZI.upload.maximum_data_size=524288
 Nucleo_F767ZI.upload.uploadadr=0x08000000
 Nucleo_F767ZI.upload.vect=0x08000000
 Nucleo_F767ZI.upload.device=STM32F767ZI
-
-Nucleo_F767ZI.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
-Nucleo_F767ZI.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-#Nucleo_F767ZI.build.mcu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard 
-Nucleo_F767ZI.build.series=STM32F7
-Nucleo_F767ZI.build.extra_flags0=-DSTM32F767ZI
-Nucleo_F767ZI.build.ldscript_pre=ld/f767xI
-Nucleo_F767ZI.build.f_cpupre=216000000L
+Nucleo_F767ZI.upload.protocol=STLink
+Nucleo_F767ZI.upload.tool=stlink_upload
 
 Nucleo_F767ZI.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
 Nucleo_F767ZI.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
@@ -530,9 +527,6 @@ Nucleo_F767ZI.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DV
 Nucleo_F767ZI.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
 Nucleo_F767ZI.menu.startadr.R20000000.upload.uploadadr=0x20000000
 Nucleo_F767ZI.menu.startadr.R20000000.upload.vect=0x20000000
-
-Nucleo_F767ZI.upload.protocol=STLink
-Nucleo_F767ZI.upload.tool=stlink_upload
 
 
 Nucleo_F767ZI.menu.log.default=NONE
@@ -1491,7 +1485,7 @@ GD103RB.build.core=arduino
 GD103RB.build.series=STM32F1
 GD103RB.build.mcu=cortex-m3
 
-GD103RB.menu.subboard.F103RB=ALIENTEK_MINI[F103RB/SWD]
+GD103RB.menu.subboard.F103RB=ALIENTEK_MINI[F103RB]
 GD103RB.menu.subboard.F103RB.upload.maximum_size=131072
 GD103RB.menu.subboard.F103RB.upload.maximum_data_size=20480
 GD103RB.menu.subboard.F103RB.upload.device=STM32F103RB
@@ -1502,7 +1496,7 @@ GD103RB.menu.subboard.F103RB.build.ldscript=ld/f103xB.ld
 GD103RB.menu.subboard.F103RB.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 GD103RB.menu.subboard.F103RB.massstorage_drive=NUCLEO
 
-GD103RB.menu.subboard.F103RB1=GENERIC_F103RB[LED PC13/JTAG]
+GD103RB.menu.subboard.F103RB1=GENERIC_F103RB[LED PC13]
 GD103RB.menu.subboard.F103RB1.upload.maximum_size=131072
 GD103RB.menu.subboard.F103RB1.upload.maximum_data_size=20480
 GD103RB.menu.subboard.F103RB1.upload.device=STM32F103RB
@@ -1665,7 +1659,7 @@ GD103RE.build.core=arduino
 GD103RE.build.series=STM32F1
 GD103RE.build.mcu=cortex-m3
 
-GD103RE.menu.subboard.F103RE=ALIENTEK_MINI[F103RE/SWD]
+GD103RE.menu.subboard.F103RE=ALIENTEK_MINI[F103RE]
 GD103RE.menu.subboard.F103RE.upload.maximum_size=524288
 GD103RE.menu.subboard.F103RE.upload.maximum_data_size=65536
 GD103RE.menu.subboard.F103RE.upload.device=STM32F103RE
@@ -1676,7 +1670,7 @@ GD103RE.menu.subboard.F103RE.build.ldscript=ld/f103xE.ld
 GD103RE.menu.subboard.F103RE.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 GD103RE.menu.subboard.F103RE.massstorage_drive=NUCLEO
 
-GD103RE.menu.subboard.F103RE1=GENERIC_F103RE[LED PC13/JTAG]
+GD103RE.menu.subboard.F103RE1=GENERIC_F103RE[LED PC13]
 GD103RE.menu.subboard.F103RE1.upload.maximum_size=524288
 GD103RE.menu.subboard.F103RE1.upload.maximum_data_size=65536
 GD103RE.menu.subboard.F103RE1.upload.device=STM32F103RE
@@ -1869,7 +1863,7 @@ F103R.menu.subboard.F103RE.massstorage_drive=NUCLEO
 #F103R.menu.subboard.F103RB.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 #F103R.menu.subboard.F103RB.massstorage_drive=NUCLEO
 
-F103R.menu.subboard.F103RC=GENERIC_F103RC[LED PC13/JTAG]
+F103R.menu.subboard.F103RC=GENERIC_F103RC[LED PC13]
 F103R.menu.subboard.F103RC.upload.maximum_size=262144
 F103R.menu.subboard.F103RC.upload.maximum_data_size=49152
 F103R.menu.subboard.F103RC.upload.device=STM32F103RC
@@ -1879,7 +1873,7 @@ F103R.menu.subboard.F103RC.build.board=GENERIC_F103RC
 F103R.menu.subboard.F103RC.build.ldscript=ld/f103xC.ld
 F103R.menu.subboard.F103RC.massstorage_drive=NUCLEO
 
-F103R.menu.subboard.F103RE1=GENERIC_F103RE[LED PC13/JTAG]
+F103R.menu.subboard.F103RE1=GENERIC_F103RE[LED PC13]
 F103R.menu.subboard.F103RE1.upload.maximum_size=524288
 F103R.menu.subboard.F103RE1.upload.maximum_data_size=65536
 F103R.menu.subboard.F103RE1.upload.device=STM32F103RE
@@ -1889,7 +1883,7 @@ F103R.menu.subboard.F103RE1.build.board=GENERIC_F103RE
 F103R.menu.subboard.F103RE1.build.ldscript=ld/f103xE.ld
 F103R.menu.subboard.F103RE1.massstorage_drive=NUCLEO
 
-F103R.menu.subboard.F103RF=GENERIC_F103RF[LED PC13/JTAG]
+F103R.menu.subboard.F103RF=GENERIC_F103RF[LED PC13]
 F103R.menu.subboard.F103RF.upload.maximum_size=786432
 F103R.menu.subboard.F103RF.upload.maximum_data_size=98304
 F103R.menu.subboard.F103RF.upload.device=STM32F103RF
@@ -1899,7 +1893,7 @@ F103R.menu.subboard.F103RF.build.board=GENERIC_F103RF
 F103R.menu.subboard.F103RF.build.ldscript=ld/f103xF.ld
 F103R.menu.subboard.F103RF.massstorage_drive=NUCLEO
 
-F103R.menu.subboard.F103RG=GENERIC_F103RG[LED PC13/JTAG]
+F103R.menu.subboard.F103RG=GENERIC_F103RG[LED PC13]
 F103R.menu.subboard.F103RG.upload.maximum_size=1048576
 F103R.menu.subboard.F103RG.upload.maximum_data_size=98304
 F103R.menu.subboard.F103RG.pload.device=STM32F103RG
@@ -2095,7 +2089,7 @@ F103V.menu.subboard.F103VE.upload.tool=serial_upload
 F103V.menu.subboard.F103VE.upload.altID=PL2303
 F103V.menu.subboard.F103VE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F103V.menu.subboard.F103VC=GENERIC_F103VC[CH430]
+F103V.menu.subboard.F103VC=GENERIC_F103VC
 F103V.menu.subboard.F103VC.upload.maximum_size=262144
 F103V.menu.subboard.F103VC.upload.maximum_data_size=49152
 F103V.menu.subboard.F103VC.upload.device=STM32F103VC
@@ -2109,7 +2103,7 @@ F103V.menu.subboard.F103VC.upload.tool=serial_upload
 F103V.menu.subboard.F103VC.upload.altID=CH340
 F103V.menu.subboard.F103VC.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F103V.menu.subboard.F103VE1=GENERIC_F103VE[CH430]
+F103V.menu.subboard.F103VE1=GENERIC_F103VE
 F103V.menu.subboard.F103VE1.upload.maximum_size=524288
 F103V.menu.subboard.F103VE1.upload.maximum_data_size=65536
 F103V.menu.subboard.F103VE1.upload.device=STM32F103VE
@@ -2122,34 +2116,6 @@ F103V.menu.subboard.F103VE1.upload.protocol=maple_serial
 F103V.menu.subboard.F103VE1.upload.tool=serial_upload
 F103V.menu.subboard.F103VE1.upload.altID=CH340
 F103V.menu.subboard.F103VE1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
-
-#F103V.menu.subboard.F103VF=GENERIC_F103VF[CH340]
-#F103V.menu.subboard.F103VF.upload.maximum_size=786432
-#F103V.menu.subboard.F103VF.upload.maximum_data_size=98304
-#F103V.menu.subboard.F103VF.upload.device=STM32F103VF
-#F103V.menu.subboard.F103VF.build.extra_flags0=-DSTM32F103VF
-#F103V.menu.subboard.F103VF.build.variant=F103V
-#F103V.menu.subboard.F103VF.build.board=GENERIC_F103VF
-#F103V.menu.subboard.F103VF.build.ldscript=ld/f103xF.ld
-#F103V.menu.subboard.F103VF.massstorage_drive=NUCLEO
-#F103V.menu.subboard.F103VF.upload.protocol=maple_serial
-#F103V.menu.subboard.F103VF.upload.tool=serial_upload
-#F103V.menu.subboard.F103VF.upload.altID=CH340
-#F103V.menu.subboard.F103VF.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
-
-#F103V.menu.subboard.F103VG=GENERIC_F103VG[CH340]
-#F103V.menu.subboard.F103VG.upload.maximum_size=1048576
-#F103V.menu.subboard.F103VG.upload.maximum_data_size=98304
-#F103V.menu.subboard.F103VG.upload.device=STM32F103VG
-#F103V.menu.subboard.F103VG.build.extra_flags0=-DSTM32F103VG
-#F103V.menu.subboard.F103VG.build.variant=F103V
-#F103V.menu.subboard.F103VG.build.board=GENERIC_F103VG
-#F103V.menu.subboard.F103VG.build.ldscript=ld/f103xG.ld
-#F103V.menu.subboard.F103VG.massstorage_drive=NUCLEO
-#F103V.menu.subboard.F103VG.upload.protocol=maple_serial
-#F103V.menu.subboard.F103VG.upload.tool=serial_upload
-#F103V.menu.subboard.F103VG.upload.altID=CH340
-#F103V.menu.subboard.F103VG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 F103V.menu.startadr.default=flash(default)
 F103V.menu.startadr.default.build.extra_flags={build.extra_flags0}
@@ -2321,7 +2287,7 @@ F103Z.build.core=arduino
 F103Z.build.series=STM32F1
 F103Z.build.f_cpu=72000000L
 
-F103Z.menu.subboard.F103ZE1=HY_RedBull_V2[F103ZE JLink]
+F103Z.menu.subboard.F103ZE1=HY_RedBull_V2[F103ZE]
 F103Z.menu.subboard.F103ZE1.upload.maximum_size=524288
 F103Z.menu.subboard.F103ZE1.upload.maximum_data_size=524288
 F103Z.menu.subboard.F103ZE1.upload.device=STM32F103ZE
@@ -2335,7 +2301,7 @@ F103Z.menu.subboard.F103ZE1.upload.tool=jlink_upload
 F103Z.menu.subboard.F103ZE1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 
-F103Z.menu.subboard.F103ZE2=HASEE_V3[F103ZE STLink]
+F103Z.menu.subboard.F103ZE2=HASEE_V3[F103ZE]
 F103Z.menu.subboard.F103ZE2.upload.maximum_size=524288
 F103Z.menu.subboard.F103ZE2.upload.maximum_data_size=65536
 F103Z.menu.subboard.F103ZE2.upload.device=STM32F103ZE
@@ -2378,7 +2344,7 @@ F103Z.menu.subboard.BITV30.upload.tool=serial_upload
 F103Z.menu.subboard.BITV30.upload.altID=CH340
 F103Z.menu.subboard.BITV30.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F103Z.menu.subboard.F103ZE=GENERIC_F103ZE[STLink]
+F103Z.menu.subboard.F103ZE=GENERIC_F103ZE
 F103Z.menu.subboard.F103ZE.upload.maximum_size=524288
 F103Z.menu.subboard.F103ZE.upload.maximum_data_size=65536
 F103Z.menu.subboard.F103ZE.upload.device=STM32F103ZE
@@ -2390,33 +2356,6 @@ F103Z.menu.subboard.F103ZE.massstorage_drive=NUCLEO
 F103Z.menu.subboard.F103ZE.upload.protocol=STLink
 F103Z.menu.subboard.F103ZE.upload.tool=stlink_upload
 F103Z.menu.subboard.F103ZE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
-
-#F103Z.menu.subboard.F103ZF=GENERIC_F103ZF[STLink]
-#F103Z.menu.subboard.F103ZF.upload.maximum_size=786432
-#F103Z.menu.subboard.F103ZF.upload.maximum_data_size=98304
-#F103Z.menu.subboard.F103ZF.upload.device=STM32F103ZF
-#F103Z.menu.subboard.F103ZF.build.extra_flags0=-DSTM32F103ZF
-#F103Z.menu.subboard.F103ZF.build.variant=F103Z
-#F103Z.menu.subboard.F103ZF.build.board=GENERIC_F103ZF
-#F103Z.menu.subboard.F103ZF.build.ldscript=ld/f103xF.ld
-#F103Z.menu.subboard.F103ZF.massstorage_drive=NUCLEO
-#F103Z.menu.subboard.F103ZF.upload.protocol=STLink
-#F103Z.menu.subboard.F103ZF.upload.tool=stlink_upload
-#F103Z.menu.subboard.F103ZF.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
-
-#F103Z.menu.subboard.F103ZG=GENERIC_F103ZG[STLink]
-#F103Z.menu.subboard.F103ZG.upload.maximum_size=1048576
-#F103Z.menu.subboard.F103ZG.upload.maximum_data_size=98304
-#F103Z.menu.subboard.F103ZG.upload.device=STM32F103ZG
-#F103Z.menu.subboard.F103ZG.build.extra_flags0=-DSTM32F103ZG
-#F103Z.menu.subboard.F103ZG.build.series=STM32F1
-#F103Z.menu.subboard.F103ZG.build.variant=F103Z
-#F103Z.menu.subboard.F103ZG.build.board=GENERIC_F103ZG
-#F103Z.menu.subboard.F103ZG.build.ldscript=ld/f103xG.ld
-#F103Z.menu.subboard.F103ZG.massstorage_drive=NUCLEO
-#F103Z.menu.subboard.F103ZG.upload.protocol=STLink
-#F103Z.menu.subboard.F103ZG.upload.tool=stlink_upload
-#F103Z.menu.subboard.F103ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 
 F103Z.menu.startadr.default=flash (default)
@@ -2596,7 +2535,7 @@ F401S.build.core=arduino
 F401S.build.board=F401NANO
 F401S.build.series=STM32F4
 
-F401S.menu.subboard.CCU6F=NANO_CCU6(STLink)
+F401S.menu.subboard.CCU6F=NANO_CCU6
 F401S.menu.subboard.CCU6F.upload.maximum_size=262144
 F401S.menu.subboard.CCU6F.upload.maximum_data_size=65536
 F401S.menu.subboard.CCU6F.build.variant=F401C
@@ -2727,249 +2666,421 @@ F401S.menu.log.trace=TRACE
 F401S.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
 
 ################################### F407V/Z/I #############################################
-F407S.name=F407S
+F407xE.name=F407xE
 
-F407S.vid.0=0x1a86
-F407S.pid.0=0x7523
+F407xE.vid.0=0x1a86
+F407xE.pid.0=0x7523
 
-F407S.vid.1=0x1366
-F407S.pid.1=0x0105
+F407xE.vid.1=0x1366
+F407xE.pid.1=0x0105
 
-F407S.serial.disableDTR=true
-F407S.serial.disableRTS=true
-F407S.upload.uploadadr=0x08000000
-F407S.upload.vect=0x08000000
+F407xE.serial.disableDTR=true
+F407xE.serial.disableRTS=true
+F407xE.upload.uploadadr=0x08000000
+F407xE.upload.vect=0x08000000
 
-F407S.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-F407S.build.core=arduino
-F407S.build.board=BLACK_F407VE
-F407S.build.series=STM32F4
-F407S.build.f_cpu=168000000L
+F407xE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+F407xE.build.core=arduino
+F407xE.build.board=BLACK_F407VE
+F407xE.build.series=STM32F4
+F407xE.build.f_cpu=168000000L
 
-F407S.menu.subboard.BLACK_407V=BLACK_F407VE[YL136 JLink]
-F407S.menu.subboard.BLACK_407V.upload.maximum_size=524288
-F407S.menu.subboard.BLACK_407V.upload.maximum_data_size=131072
-F407S.menu.subboard.BLACK_407V.build.variant=BLACK_F407VE
-F407S.menu.subboard.BLACK_407V.build.board=BLACK_F407VE
-F407S.menu.subboard.BLACK_407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
-F407S.menu.subboard.BLACK_407V.build.ldscript_pre=ld/f407xE
-F407S.menu.subboard.BLACK_407V.massstorage_drive=NUCLEO
-F407S.menu.subboard.BLACK_407V.upload.device=STM32F407VE
+F407xE.menu.subboard.BLACK_407V=BLACK_F407VE[YL136]
+F407xE.menu.subboard.BLACK_407V.upload.maximum_size=524288
+F407xE.menu.subboard.BLACK_407V.upload.maximum_data_size=131072
+F407xE.menu.subboard.BLACK_407V.build.variant=BLACK_F407VE
+F407xE.menu.subboard.BLACK_407V.build.board=BLACK_F407VE
+F407xE.menu.subboard.BLACK_407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
+F407xE.menu.subboard.BLACK_407V.build.ldscript_pre=ld/f407xE
+F407xE.menu.subboard.BLACK_407V.massstorage_drive=NUCLEO
+F407xE.menu.subboard.BLACK_407V.upload.device=STM32F407VE
 #default upload method
-F407S.menu.subboard.BLACK_407V.upload.tool=jlink_upload
-F407S.menu.subboard.BLACK_407V.upload.protocol=jlink
-F407S.menu.subboard.BLACK_407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xE.menu.subboard.BLACK_407V.upload.tool=jlink_upload
+F407xE.menu.subboard.BLACK_407V.upload.protocol=jlink
+F407xE.menu.subboard.BLACK_407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.subboard.V11_F407V=F407VE_V11[BLUE  CH340]
-F407S.menu.subboard.V11_F407V.upload.maximum_size=524288
-F407S.menu.subboard.V11_F407V.upload.maximum_data_size=131072
-F407S.menu.subboard.V11_F407V.build.variant=F407VE_V11
-F407S.menu.subboard.V11_F407V.build.board=V11VET6
-F407S.menu.subboard.V11_F407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
-F407S.menu.subboard.V11_F407V.build.ldscript_pre=ld/f407xE
-F407S.menu.subboard.V11_F407V.upload.device=STM32F407VE
+F407xE.menu.subboard.V11_F407V=F407VE_V11[BLUE  CH340]
+F407xE.menu.subboard.V11_F407V.upload.maximum_size=524288
+F407xE.menu.subboard.V11_F407V.upload.maximum_data_size=131072
+F407xE.menu.subboard.V11_F407V.build.variant=F407VE_V11
+F407xE.menu.subboard.V11_F407V.build.board=V11VET6
+F407xE.menu.subboard.V11_F407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
+F407xE.menu.subboard.V11_F407V.build.ldscript_pre=ld/f407xE
+F407xE.menu.subboard.V11_F407V.upload.device=STM32F407VE
 #default upload method
-F407S.menu.subboard.V11_F407V.upload.protocol=maple_serial
-F407S.menu.subboard.V11_F407V.upload.tool=serial_upload
-F407S.menu.subboard.V11_F407V.upload.altID=CH340
-F407S.menu.subboard.V11_F407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xE.menu.subboard.V11_F407V.upload.protocol=maple_serial
+F407xE.menu.subboard.V11_F407V.upload.tool=serial_upload
+F407xE.menu.subboard.V11_F407V.upload.altID=CH340
+F407xE.menu.subboard.V11_F407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.subboard.ArmFly_F4=ArmFly_F407ZG[MassStorage]
-F407S.menu.subboard.ArmFly_F4.upload.maximum_size=1232896
-F407S.menu.subboard.ArmFly_F4.upload.maximum_data_size=131072
-F407S.menu.subboard.ArmFly_F4.build.variant=ARMFLY_F407ZG
-F407S.menu.subboard.ArmFly_F4.build.board=ARMFLY_F4
-F407S.menu.subboard.ArmFly_F4.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
-F407S.menu.subboard.ArmFly_F4.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.ArmFly_F4.massstorage_drive=NUCLEO
-F407S.menu.subboard.ArmFly_F4.upload.device=STM32F407ZG
+F407xE.menu.subboard.GENERIC_F407V=GENERIC_F407VE
+F407xE.menu.subboard.GENERIC_F407V.upload.maximum_size=524288
+F407xE.menu.subboard.GENERIC_F407V.upload.maximum_data_size=131072
+F407xE.menu.subboard.GENERIC_F407V.build.variant=BLUE_F407VE
+F407xE.menu.subboard.GENERIC_F407V.build.board=GENERIC_F407VE
+F407xE.menu.subboard.GENERIC_F407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
+F407xE.menu.subboard.GENERIC_F407V.build.ldscript_pre=ld/f407xG
+F407xE.menu.subboard.GENERIC_F407V.upload.device=STM32F407VE
+F407xE.menu.subboard.GENERIC_F407V.upload.protocol=STLink
+F407xE.menu.subboard.GENERIC_F407V.upload.tool=stlink_upload
+F407xE.menu.subboard.GENERIC_F407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+
+F407xE.menu.subboard.BLACK_F407ZE=GENERIC_F407ZE
+F407xE.menu.subboard.BLACK_F407ZE.upload.maximum_size=1232896
+F407xE.menu.subboard.BLACK_F407ZE.upload.maximum_data_size=131072
+F407xE.menu.subboard.BLACK_F407ZE.build.variant=BLACK_F407ZE
+F407xE.menu.subboard.BLACK_F407ZE.build.board=GENERIC_F407ZE
+F407xE.menu.subboard.BLACK_F407ZE.build.extra_flags0=-DSTM32F407ZE -DHSE_VALUE=8000000
+F407xE.menu.subboard.BLACK_F407ZE.build.ldscript_pre=ld/f407xG
+F407xE.menu.subboard.BLACK_F407ZE.upload.device=STM32F407ZE
+F407xE.menu.subboard.BLACK_F407ZE.upload.protocol=STLink
+F407xE.menu.subboard.BLACK_F407ZE.upload.tool=stlink_upload
+F407xE.menu.subboard.BLACK_F407ZE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+
+
+F407xE.menu.startadr.default=flash(default)
+F407xE.menu.startadr.default.build.extra_flags={build.extra_flags0}
+
+F407xE.menu.startadr.F08020000=flash 1:0x08020000(128k)
+F407xE.menu.startadr.F08020000.upload.maximum_size=131072
+F407xE.menu.startadr.F08020000.upload.maximum_data_size=131072
+F407xE.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
+F407xE.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
+F407xE.menu.startadr.F08020000.upload.uploadadr=0x08020000
+F407xE.menu.startadr.F08020000.upload.vect=0x08020000
+
+F407xE.menu.startadr.F08040000=flash 2:0x08040000(128k)
+F407xE.menu.startadr.F08040000.upload.maximum_size=131072
+F407xE.menu.startadr.F08040000.upload.maximum_data_size=131072
+F407xE.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+F407xE.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+F407xE.menu.startadr.F08040000.upload.uploadadr=0x08040000
+F407xE.menu.startadr.F08040000.upload.vect=0x08040000
+
+F407xE.menu.startadr.F08060000=flash 3:0x08060000(128k)
+F407xE.menu.startadr.F08060000.upload.maximum_size=131072
+F407xE.menu.startadr.F08060000.upload.maximum_data_size=131072
+F407xE.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
+F407xE.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
+F407xE.menu.startadr.F08060000.upload.uploadadr=0x08060000
+F407xE.menu.startadr.F08060000.upload.vect=0x08060000
+
+F407xE.menu.startadr.F08000000=flash(WithRamBoot 32kRAM used Only)
+F407xE.menu.startadr.F08000000.upload.maximum_size=131072
+F407xE.menu.startadr.F08000000.upload.maximum_data_size=32768
+F407xE.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
+F407xE.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+F407xE.menu.startadr.F08000000.upload.uploadadr=0x08000000
+F407xE.menu.startadr.F08000000.upload.vect=0x08000000
+
+F407xE.menu.startadr.R20000000=Sram 0:0x20000000(96K+32K BOOT=11 St/Jlink uploader only)
+F407xE.menu.startadr.R20000000.upload.maximum_size=98304
+F407xE.menu.startadr.R20000000.upload.maximum_data_size=32768
+F407xE.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
+F407xE.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
+F407xE.menu.startadr.R20000000.upload.uploadadr=0x20000000
+F407xE.menu.startadr.R20000000.upload.vect=0x20000000
+
+F407xE.menu.extern_lib.NONE=NONE
+F407xE.menu.extern_lib.STemWin=STemWin
+F407xE.menu.extern_lib.STemWin.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_GCC.a
+F407xE.menu.extern_lib.STemWin.build.extra_flags_os=-DOS_SUPPORT=0
+F407xE.menu.extern_lib.STemWinOS=STemWin_OS
+F407xE.menu.extern_lib.STemWinOS.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_OS_GCC.a
+F407xE.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
+
+F407xE.menu.upload_method.jLinkMethod=JLink
+F407xE.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
+F407xE.menu.upload_method.jLinkMethod.upload.protocol=jlink
+F407xE.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+
+F407xE.menu.upload_method.STLinkMethod=STLink
+F407xE.menu.upload_method.STLinkMethod.upload.protocol=STLink
+F407xE.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
+F407xE.menu.upload_method.STLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+
+F407xE.menu.upload_method.MassStorageMethod=MassStorage [STLINK V2.1]
+F407xE.menu.upload_method.MassStorageMethod.upload.protocol=
+F407xE.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
+
+F407xE.menu.upload_method.serialMethod=Serial [TX/PA9, RX/PA10, BOOT0=1]
+F407xE.menu.upload_method.serialMethod.upload.protocol=maple_serial
+F407xE.menu.upload_method.serialMethod.upload.tool=serial_upload
+F407xE.menu.upload_method.serialMethod.upload.altID=UNUSED
+F407xE.menu.upload_method.serialMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+
+F407xE.menu.upload_method.serialMethod2=Serial [CH340 AutoLoad]
+F407xE.menu.upload_method.serialMethod2.upload.protocol=maple_serial
+F407xE.menu.upload_method.serialMethod2.upload.tool=serial_upload
+F407xE.menu.upload_method.serialMethod2.upload.altID=CH340
+F407xE.menu.upload_method.serialMethod2.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+
+F407xE.menu.upload_method.serialMethod1=Serial [PL2303 AutoLoad]
+F407xE.menu.upload_method.serialMethod1.upload.protocol=maple_serial
+F407xE.menu.upload_method.serialMethod1.upload.tool=serial_upload
+F407xE.menu.upload_method.serialMethod1.upload.altID=PL2303
+F407xE.menu.upload_method.serialMethod1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+
+F407xE.menu.upload_method.BMPMethod=BMP (Black Magic Probe)
+F407xE.menu.upload_method.BMPMethod.upload.protocol=gdb_bmp
+F407xE.menu.upload_method.BMPMethod.upload.tool=bmp_upload
+
+F407xE.menu.usb.Disabled=Disabled USB
+F407xE.menu.usb.SerialUSB=Serial [Virtual COM port,PA11/12]
+F407xE.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
+F407xE.menu.usb.SerialMSC=Mass storage
+F407xE.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F407xE.menu.usb.Composite=Composite[CDC+MSC]
+F407xE.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
+
+F407xE.menu.serial.SerialUART1=SerialUART1
+F407xE.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
+F407xE.menu.serial.SerialUART2=SerialUART2
+F407xE.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+F407xE.menu.serial.SerialUART3=SerialUART3
+F407xE.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
+F407xE.menu.serial.SerialUSB=SerialUSB
+F407xE.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F407xE.menu.serial.Automatic=Automatically selected based on upload method
+
+F407xE.menu.log.default=NONE
+F407xE.menu.log.fatal=FATAL
+F407xE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1
+F407xE.menu.log.error=ERROR
+F407xE.menu.log.error.build.log_level=-D__LOG_LEVEL=2
+F407xE.menu.log.warning=WARNING
+F407xE.menu.log.warning.build.log_level=-D__LOG_LEVEL=3
+F407xE.menu.log.info=INFO
+F407xE.menu.log.info.build.log_level=-D__LOG_LEVEL=4
+F407xE.menu.log.debug=DEBUG
+F407xE.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
+F407xE.menu.log.trace=TRACE
+F407xE.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
+
+################################### F407V/Z/I #############################################
+F407xG.name=F407xG
+
+F407xG.vid.0=0x1a86
+F407xG.pid.0=0x7523
+
+F407xG.vid.1=0x1366
+F407xG.pid.1=0x0105
+
+F407xG.serial.disableDTR=true
+F407xG.serial.disableRTS=true
+F407xG.upload.uploadadr=0x08000000
+F407xG.upload.vect=0x08000000
+
+F407xG.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+F407xG.build.core=arduino
+F407xG.build.board=BLACK_F407VE
+F407xG.build.series=STM32F4
+F407xG.build.f_cpu=168000000L
+
+F407xG.menu.subboard.ArmFly_F4=ArmFly_F407ZG
+F407xG.menu.subboard.ArmFly_F4.upload.maximum_size=1232896
+F407xG.menu.subboard.ArmFly_F4.upload.maximum_data_size=131072
+F407xG.menu.subboard.ArmFly_F4.build.variant=ARMFLY_F407ZG
+F407xG.menu.subboard.ArmFly_F4.build.board=ARMFLY_F4
+F407xG.menu.subboard.ArmFly_F4.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
+F407xG.menu.subboard.ArmFly_F4.build.ldscript_pre=ld/f407xG
+F407xG.menu.subboard.ArmFly_F4.massstorage_drive=NUCLEO
+F407xG.menu.subboard.ArmFly_F4.upload.device=STM32F407ZG
 #default upload method
-F407S.menu.subboard.ArmFly_F4.upload.protocol=
-F407S.menu.subboard.ArmFly_F4.upload.tool=nucleoFlasher
-F407S.menu.subboard.ArmFly_F4.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xG.menu.subboard.ArmFly_F4.upload.protocol=
+F407xG.menu.subboard.ArmFly_F4.upload.tool=nucleoFlasher
+F407xG.menu.subboard.ArmFly_F4.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.subboard.IMT407GV21=ILLUMINATI_F407ZG[JLink SerialUART3]
-F407S.menu.subboard.IMT407GV21.upload.maximum_size=1232896
-F407S.menu.subboard.IMT407GV21.upload.maximum_data_size=131072
-F407S.menu.subboard.IMT407GV21.build.variant=ILLUMINATI_F407ZG
-F407S.menu.subboard.IMT407GV21.build.board=IMT407GV21
-F407S.menu.subboard.IMT407GV21.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
-F407S.menu.subboard.IMT407GV21.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.IMT407GV21.massstorage_drive=NUCLEO
-F407S.menu.subboard.IMT407GV21.upload.device=STM32F407ZG
+F407xG.menu.subboard.IMT407GV21=ILLUMINATI_F407ZG[JLink SerialUART3]
+F407xG.menu.subboard.IMT407GV21.upload.maximum_size=1232896
+F407xG.menu.subboard.IMT407GV21.upload.maximum_data_size=131072
+F407xG.menu.subboard.IMT407GV21.build.variant=ILLUMINATI_F407ZG
+F407xG.menu.subboard.IMT407GV21.build.board=IMT407GV21
+F407xG.menu.subboard.IMT407GV21.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
+F407xG.menu.subboard.IMT407GV21.build.ldscript_pre=ld/f407xG
+F407xG.menu.subboard.IMT407GV21.massstorage_drive=NUCLEO
+F407xG.menu.subboard.IMT407GV21.upload.device=STM32F407ZG
 #default upload method
-F407S.menu.subboard.IMT407GV21.upload.tool=jlink_upload
-F407S.menu.subboard.IMT407GV21.upload.protocol=jlink
-F407S.menu.subboard.IMT407GV21.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
+F407xG.menu.subboard.IMT407GV21.upload.tool=jlink_upload
+F407xG.menu.subboard.IMT407GV21.upload.protocol=jlink
+F407xG.menu.subboard.IMT407GV21.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
 
-F407S.menu.subboard.IGT6_CORE=F407IG_CORE[GREEN MassStorage]
-F407S.menu.subboard.IGT6_CORE.upload.maximum_size=1232896
-F407S.menu.subboard.IGT6_CORE.upload.maximum_data_size=131072
-F407S.menu.subboard.IGT6_CORE.build.variant=F407IG_CORE
-F407S.menu.subboard.IGT6_CORE.build.board=IGT6CORE
-F407S.menu.subboard.IGT6_CORE.build.extra_flags0=-DSTM32F407IG -DHSE_VALUE=8000000
-F407S.menu.subboard.IGT6_CORE.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.IGT6_CORE.massstorage_drive=NUCLEO
-F407S.menu.subboard.IGT6_CORE.upload.device=STM32F407IG
+F407xG.menu.subboard.IGT6_CORE=F407IG_CORE[GREEN]
+F407xG.menu.subboard.IGT6_CORE.upload.maximum_size=1232896
+F407xG.menu.subboard.IGT6_CORE.upload.maximum_data_size=131072
+F407xG.menu.subboard.IGT6_CORE.build.variant=F407IG_CORE
+F407xG.menu.subboard.IGT6_CORE.build.board=IGT6CORE
+F407xG.menu.subboard.IGT6_CORE.build.extra_flags0=-DSTM32F407IG -DHSE_VALUE=8000000
+F407xG.menu.subboard.IGT6_CORE.build.ldscript_pre=ld/f407xG
+F407xG.menu.subboard.IGT6_CORE.massstorage_drive=NUCLEO
+F407xG.menu.subboard.IGT6_CORE.upload.device=STM32F407IG
 #default upload method
-F407S.menu.subboard.IGT6_CORE.upload.protocol=
-F407S.menu.subboard.IGT6_CORE.upload.tool=nucleoFlasher
-F407S.menu.subboard.IGT6_CORE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xG.menu.subboard.IGT6_CORE.upload.protocol=
+F407xG.menu.subboard.IGT6_CORE.upload.tool=nucleoFlasher
+F407xG.menu.subboard.IGT6_CORE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.subboard.GENERIC_F407V=GENERIC_F407VE[STLink]
-F407S.menu.subboard.GENERIC_F407V.upload.maximum_size=524288
-F407S.menu.subboard.GENERIC_F407V.upload.maximum_data_size=131072
-F407S.menu.subboard.GENERIC_F407V.build.variant=BLUE_F407VE
-F407S.menu.subboard.GENERIC_F407V.build.board=GENERIC_F407VE
-F407S.menu.subboard.GENERIC_F407V.build.extra_flags0=-DSTM32F407VE -DHSE_VALUE=8000000
-F407S.menu.subboard.GENERIC_F407V.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.GENERIC_F407V.upload.device=STM32F407VE
-F407S.menu.subboard.GENERIC_F407V.upload.protocol=STLink
-F407S.menu.subboard.GENERIC_F407V.upload.tool=stlink_upload
-F407S.menu.subboard.GENERIC_F407V.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+F407xG.menu.subboard.BLACK_F407ZG=GENERIC_F407ZG
+F407xG.menu.subboard.BLACK_F407ZG.upload.maximum_size=1232896
+F407xG.menu.subboard.BLACK_F407ZG.upload.maximum_data_size=131072
+F407xG.menu.subboard.BLACK_F407ZG.build.variant=BLACK_F407ZG
+F407xG.menu.subboard.BLACK_F407ZG.build.board=GENERIC_F407ZG
+F407xG.menu.subboard.BLACK_F407ZG.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
+F407xG.menu.subboard.BLACK_F407ZG.build.ldscript_pre=ld/f407xG
+F407xG.menu.subboard.BLACK_F407ZG.upload.device=STM32F407ZG
+F407xG.menu.subboard.BLACK_F407ZG.upload.protocol=STLink
+F407xG.menu.subboard.BLACK_F407ZG.upload.tool=stlink_upload
+F407xG.menu.subboard.BLACK_F407ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
-F407S.menu.subboard.BLACK_F407ZE=GENERIC_F407ZE[STLink]
-F407S.menu.subboard.BLACK_F407ZE.upload.maximum_size=1232896
-F407S.menu.subboard.BLACK_F407ZE.upload.maximum_data_size=131072
-F407S.menu.subboard.BLACK_F407ZE.build.variant=BLACK_F407ZE
-F407S.menu.subboard.BLACK_F407ZE.build.board=GENERIC_F407ZE
-F407S.menu.subboard.BLACK_F407ZE.build.extra_flags0=-DSTM32F407ZE -DHSE_VALUE=8000000
-F407S.menu.subboard.BLACK_F407ZE.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.BLACK_F407ZE.upload.device=STM32F407ZE
-F407S.menu.subboard.BLACK_F407ZE.upload.protocol=STLink
-F407S.menu.subboard.BLACK_F407ZE.upload.tool=stlink_upload
-F407S.menu.subboard.BLACK_F407ZE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+F407xG.menu.startadr.default=flash(default)
+F407xG.menu.startadr.default.build.extra_flags={build.extra_flags0}
 
-F407S.menu.subboard.BLACK_F407ZG=GENERIC_F407ZG[ STLink]
-F407S.menu.subboard.BLACK_F407ZG.upload.maximum_size=1232896
-F407S.menu.subboard.BLACK_F407ZG.upload.maximum_data_size=131072
-F407S.menu.subboard.BLACK_F407ZG.build.variant=BLACK_F407ZG
-F407S.menu.subboard.BLACK_F407ZG.build.board=GENERIC_F407ZG
-F407S.menu.subboard.BLACK_F407ZG.build.extra_flags0=-DSTM32F407ZG -DHSE_VALUE=8000000
-F407S.menu.subboard.BLACK_F407ZG.build.ldscript_pre=ld/f407xG
-F407S.menu.subboard.BLACK_F407ZG.upload.device=STM32F407ZG
-F407S.menu.subboard.BLACK_F407ZG.upload.protocol=STLink
-F407S.menu.subboard.BLACK_F407ZG.upload.tool=stlink_upload
-F407S.menu.subboard.BLACK_F407ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+F407xG.menu.startadr.F08020000=flash 1:0x08020000(128k)
+F407xG.menu.startadr.F08020000.upload.maximum_size=131072
+F407xG.menu.startadr.F08020000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
+F407xG.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
+F407xG.menu.startadr.F08020000.upload.uploadadr=0x08020000
+F407xG.menu.startadr.F08020000.upload.vect=0x08020000
 
-F407S.menu.startadr.default=flash(default)
-F407S.menu.startadr.default.build.extra_flags={build.extra_flags0}
+F407xG.menu.startadr.F08040000=flash 2:0x08040000(128k)
+F407xG.menu.startadr.F08040000.upload.maximum_size=131072
+F407xG.menu.startadr.F08040000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+F407xG.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+F407xG.menu.startadr.F08040000.upload.uploadadr=0x08040000
+F407xG.menu.startadr.F08040000.upload.vect=0x08040000
 
-F407S.menu.startadr.F08020000=flash 1:0x08020000(128k)
-F407S.menu.startadr.F08020000.upload.maximum_size=131072
-F407S.menu.startadr.F08020000.upload.maximum_data_size=131072
-F407S.menu.startadr.F08020000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x20000
-F407S.menu.startadr.F08020000.build.ldscript={build.ldscript_pre}_0802.ld
-F407S.menu.startadr.F08020000.upload.uploadadr=0x08020000
-F407S.menu.startadr.F08020000.upload.vect=0x08020000
+F407xG.menu.startadr.F08060000=flash 3:0x08060000(128k)
+F407xG.menu.startadr.F08060000.upload.maximum_size=131072
+F407xG.menu.startadr.F08060000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
+F407xG.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
+F407xG.menu.startadr.F08060000.upload.uploadadr=0x08060000
+F407xG.menu.startadr.F08060000.upload.vect=0x08060000
 
-F407S.menu.startadr.F08040000=flash 2:0x08040000(128k)
-F407S.menu.startadr.F08040000.upload.maximum_size=131072
-F407S.menu.startadr.F08040000.upload.maximum_data_size=131072
-F407S.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
-F407S.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
-F407S.menu.startadr.F08040000.upload.uploadadr=0x08040000
-F407S.menu.startadr.F08040000.upload.vect=0x08040000
+F407xG.menu.startadr.F08080000=flash 4:0x08080000(128k)
+F407xG.menu.startadr.F08080000.upload.maximum_size=131072
+F407xG.menu.startadr.F08080000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F08080000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x80000
+F407xG.menu.startadr.F08080000.build.ldscript={build.ldscript_pre}_0808.ld
+F407xG.menu.startadr.F08080000.upload.uploadadr=0x08080000
+F407xG.menu.startadr.F08080000.upload.vect=0x08080000
 
-F407S.menu.startadr.F08060000=flash 3:0x08060000(128k)
-F407S.menu.startadr.F08060000.upload.maximum_size=131072
-F407S.menu.startadr.F08060000.upload.maximum_data_size=131072
-F407S.menu.startadr.F08060000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x60000
-F407S.menu.startadr.F08060000.build.ldscript={build.ldscript_pre}_0806.ld
-F407S.menu.startadr.F08060000.upload.uploadadr=0x08060000
-F407S.menu.startadr.F08060000.upload.vect=0x08060000
+F407xG.menu.startadr.F080A0000=flash 5:0x080A0000(128k)
+F407xG.menu.startadr.F080A0000.upload.maximum_size=131072
+F407xG.menu.startadr.F080A0000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F080A0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xA0000
+F407xG.menu.startadr.F080A0000.build.ldscript={build.ldscript_pre}_080A.ld
+F407xG.menu.startadr.F080A0000.upload.uploadadr=0x080A0000
+F407xG.menu.startadr.F080A0000.upload.vect=0x080A0000
 
-F407S.menu.startadr.F08000000=flash(WithRamBoot 32kRAM used Only)
-F407S.menu.startadr.F08000000.upload.maximum_size=131072
-F407S.menu.startadr.F08000000.upload.maximum_data_size=32768
-F407S.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
-F407S.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
-F407S.menu.startadr.F08000000.upload.uploadadr=0x08000000
-F407S.menu.startadr.F08000000.upload.vect=0x08000000
+F407xG.menu.startadr.F080C0000=flash 6:0x080C0000(128k)
+F407xG.menu.startadr.F080C0000.upload.maximum_size=131072
+F407xG.menu.startadr.F080C0000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F080C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xC0000
+F407xG.menu.startadr.F080C0000.build.ldscript={build.ldscript_pre}_080C.ld
+F407xG.menu.startadr.F080C0000.upload.uploadadr=0x080C0000
+F407xG.menu.startadr.F080C0000.upload.vect=0x080C0000
 
-F407S.menu.startadr.R20000000=Sram 0:0x20000000(96K+32K BOOT=11 St/Jlink uploader only)
-F407S.menu.startadr.R20000000.upload.maximum_size=98304
-F407S.menu.startadr.R20000000.upload.maximum_data_size=32768
-F407S.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
-F407S.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
-F407S.menu.startadr.R20000000.upload.uploadadr=0x20000000
-F407S.menu.startadr.R20000000.upload.vect=0x20000000
+F407xG.menu.startadr.F080E0000=flash 7:0x080E0000(128k)
+F407xG.menu.startadr.F080E0000.upload.maximum_size=131072
+F407xG.menu.startadr.F080E0000.upload.maximum_data_size=131072
+F407xG.menu.startadr.F080E0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xE0000
+F407xG.menu.startadr.F080E0000.build.ldscript={build.ldscript_pre}_080E.ld
+F407xG.menu.startadr.F080E0000.upload.uploadadr=0x080E0000
+F407xG.menu.startadr.F080E0000.upload.vect=0x080E0000
 
-F407S.menu.extern_lib.NONE=NONE
-F407S.menu.extern_lib.STemWin=STemWin
-F407S.menu.extern_lib.STemWin.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_GCC.a
-F407S.menu.extern_lib.STemWin.build.extra_flags_os=-DOS_SUPPORT=0
-F407S.menu.extern_lib.STemWinOS=STemWin_OS
-F407S.menu.extern_lib.STemWinOS.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_OS_GCC.a
-F407S.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
+F407xG.menu.startadr.F08000000=flash(WithRamBoot 32kRAM used Only)
+F407xG.menu.startadr.F08000000.upload.maximum_size=131072
+F407xG.menu.startadr.F08000000.upload.maximum_data_size=32768
+F407xG.menu.startadr.F08000000.build.extra_flags={build.extra_flags0}  -DCHK_JUMP_TO_SRAM
+F407xG.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+F407xG.menu.startadr.F08000000.upload.uploadadr=0x08000000
+F407xG.menu.startadr.F08000000.upload.vect=0x08000000
 
-F407S.menu.upload_method.jLinkMethod=JLink
-F407S.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
-F407S.menu.upload_method.jLinkMethod.upload.protocol=jlink
-F407S.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+F407xG.menu.startadr.R20000000=Sram 0:0x20000000(96K+32K BOOT=11 St/Jlink uploader only)
+F407xG.menu.startadr.R20000000.upload.maximum_size=98304
+F407xG.menu.startadr.R20000000.upload.maximum_data_size=32768
+F407xG.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x0000 -DVECT_TAB_SRAM
+F407xG.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
+F407xG.menu.startadr.R20000000.upload.uploadadr=0x20000000
+F407xG.menu.startadr.R20000000.upload.vect=0x20000000
 
-F407S.menu.upload_method.STLinkMethod=STLink
-F407S.menu.upload_method.STLinkMethod.upload.protocol=STLink
-F407S.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
-F407S.menu.upload_method.STLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
+F407xG.menu.extern_lib.NONE=NONE
+F407xG.menu.extern_lib.STemWin=STemWin
+F407xG.menu.extern_lib.STemWin.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_GCC.a
+F407xG.menu.extern_lib.STemWin.build.extra_flags_os=-DOS_SUPPORT=0
+F407xG.menu.extern_lib.STemWinOS=STemWin_OS
+F407xG.menu.extern_lib.STemWinOS.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_OS_GCC.a
+F407xG.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
 
-F407S.menu.upload_method.MassStorageMethod=MassStorage [STLINK V2.1]
-F407S.menu.upload_method.MassStorageMethod.upload.protocol=
-F407S.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
+F407xG.menu.upload_method.jLinkMethod=JLink
+F407xG.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
+F407xG.menu.upload_method.jLinkMethod.upload.protocol=jlink
+F407xG.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
-F407S.menu.upload_method.serialMethod=Serial [TX/PA9, RX/PA10, BOOT0=1]
-F407S.menu.upload_method.serialMethod.upload.protocol=maple_serial
-F407S.menu.upload_method.serialMethod.upload.tool=serial_upload
-F407S.menu.upload_method.serialMethod.upload.altID=UNUSED
-F407S.menu.upload_method.serialMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xG.menu.upload_method.STLinkMethod=STLink
+F407xG.menu.upload_method.STLinkMethod.upload.protocol=STLink
+F407xG.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
+F407xG.menu.upload_method.STLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
-F407S.menu.upload_method.serialMethod2=Serial [CH340 AutoLoad]
-F407S.menu.upload_method.serialMethod2.upload.protocol=maple_serial
-F407S.menu.upload_method.serialMethod2.upload.tool=serial_upload
-F407S.menu.upload_method.serialMethod2.upload.altID=CH340
-F407S.menu.upload_method.serialMethod2.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xG.menu.upload_method.MassStorageMethod=MassStorage [STLINK V2.1]
+F407xG.menu.upload_method.MassStorageMethod.upload.protocol=
+F407xG.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
 
-F407S.menu.upload_method.serialMethod1=Serial [PL2303 AutoLoad]
-F407S.menu.upload_method.serialMethod1.upload.protocol=maple_serial
-F407S.menu.upload_method.serialMethod1.upload.tool=serial_upload
-F407S.menu.upload_method.serialMethod1.upload.altID=PL2303
-F407S.menu.upload_method.serialMethod1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+F407xG.menu.upload_method.serialMethod=Serial [TX/PA9, RX/PA10, BOOT0=1]
+F407xG.menu.upload_method.serialMethod.upload.protocol=maple_serial
+F407xG.menu.upload_method.serialMethod.upload.tool=serial_upload
+F407xG.menu.upload_method.serialMethod.upload.altID=UNUSED
+F407xG.menu.upload_method.serialMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.upload_method.BMPMethod=BMP (Black Magic Probe)
-F407S.menu.upload_method.BMPMethod.upload.protocol=gdb_bmp
-F407S.menu.upload_method.BMPMethod.upload.tool=bmp_upload
+F407xG.menu.upload_method.serialMethod2=Serial [CH340 AutoLoad]
+F407xG.menu.upload_method.serialMethod2.upload.protocol=maple_serial
+F407xG.menu.upload_method.serialMethod2.upload.tool=serial_upload
+F407xG.menu.upload_method.serialMethod2.upload.altID=CH340
+F407xG.menu.upload_method.serialMethod2.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.usb.Disabled=Disabled USB
-F407S.menu.usb.SerialUSB=Serial [Virtual COM port,PA11/12]
-F407S.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
-F407S.menu.usb.SerialMSC=Mass storage
-F407S.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
-F407S.menu.usb.Composite=Composite[CDC+MSC]
-F407S.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
+F407xG.menu.upload_method.serialMethod1=Serial [PL2303 AutoLoad]
+F407xG.menu.upload_method.serialMethod1.upload.protocol=maple_serial
+F407xG.menu.upload_method.serialMethod1.upload.tool=serial_upload
+F407xG.menu.upload_method.serialMethod1.upload.altID=PL2303
+F407xG.menu.upload_method.serialMethod1.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
-F407S.menu.serial.SerialUART1=SerialUART1
-F407S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
-F407S.menu.serial.SerialUART2=SerialUART2
-F407S.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
-F407S.menu.serial.SerialUART3=SerialUART3
-F407S.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
-F407S.menu.serial.SerialUSB=SerialUSB
-F407S.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-F407S.menu.serial.Automatic=Automatically selected based on upload method
+F407xG.menu.upload_method.BMPMethod=BMP (Black Magic Probe)
+F407xG.menu.upload_method.BMPMethod.upload.protocol=gdb_bmp
+F407xG.menu.upload_method.BMPMethod.upload.tool=bmp_upload
 
-F407S.menu.log.default=NONE
-F407S.menu.log.fatal=FATAL
-F407S.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1
-F407S.menu.log.error=ERROR
-F407S.menu.log.error.build.log_level=-D__LOG_LEVEL=2
-F407S.menu.log.warning=WARNING
-F407S.menu.log.warning.build.log_level=-D__LOG_LEVEL=3
-F407S.menu.log.info=INFO
-F407S.menu.log.info.build.log_level=-D__LOG_LEVEL=4
-F407S.menu.log.debug=DEBUG
-F407S.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
-F407S.menu.log.trace=TRACE
-F407S.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
+F407xG.menu.usb.Disabled=Disabled USB
+F407xG.menu.usb.SerialUSB=Serial [Virtual COM port,PA11/12]
+F407xG.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
+F407xG.menu.usb.SerialMSC=Mass storage
+F407xG.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
+F407xG.menu.usb.Composite=Composite[CDC+MSC]
+F407xG.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
+
+F407xG.menu.serial.SerialUART1=SerialUART1
+F407xG.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
+F407xG.menu.serial.SerialUART2=SerialUART2
+F407xG.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+F407xG.menu.serial.SerialUART3=SerialUART3
+F407xG.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
+F407xG.menu.serial.SerialUSB=SerialUSB
+F407xG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F407xG.menu.serial.Automatic=Automatically selected based on upload method
+
+F407xG.menu.log.default=NONE
+F407xG.menu.log.fatal=FATAL
+F407xG.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1
+F407xG.menu.log.error=ERROR
+F407xG.menu.log.error.build.log_level=-D__LOG_LEVEL=2
+F407xG.menu.log.warning=WARNING
+F407xG.menu.log.warning.build.log_level=-D__LOG_LEVEL=3
+F407xG.menu.log.info=INFO
+F407xG.menu.log.info.build.log_level=-D__LOG_LEVEL=4
+F407xG.menu.log.debug=DEBUG
+F407xG.menu.log.debug.build.log_level=-D__LOG_LEVEL=5
+F407xG.menu.log.trace=TRACE
+F407xG.menu.log.trace.build.log_level=-D__LOG_LEVEL=6
 
 ###################################### F746S ##########################################
 # Discovery F746IG board
@@ -3065,11 +3176,6 @@ F746S.menu.upload_method.jLinkMethod=JLink
 F746S.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
 F746S.menu.upload_method.jLinkMethod.upload.protocol=jlink
 F746S.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
-
-F746S.menu.upload_method.MassStorageMethod=Mass Storage [STLINK V2.1]
-F746S.menu.upload_method.MassStorageMethod.upload.protocol=
-F746S.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
-F746S.menu.upload_method.MassStorageMethod.massstorage_drive=NUCLEO
 
 F746S.menu.log.default=NONE
 F746S.menu.log.fatal=FATAL
