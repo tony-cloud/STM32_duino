@@ -1,6 +1,5 @@
 #ifndef _ILI93XX_H_
 #define _ILI93XX_H_
-#include "bitband.h"
 #include "stdlib.h"
 #include "lcd_chipid_def.h"
 //////////////////////////////////////////////////////////////////////////////////	 
