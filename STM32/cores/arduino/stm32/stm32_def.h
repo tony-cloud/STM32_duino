@@ -38,7 +38,7 @@
  #include "halSketchConfig.h"
 #endif
 
-//default defines,  overriden by halDefaultConfig.h in sketch path
+//default defines,  overriden by halSketchConfig.h in sketch path
 //OS
 #ifndef FREERTOS
 #define FREERTOS    0
