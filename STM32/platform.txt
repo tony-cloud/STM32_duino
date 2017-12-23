@@ -12,7 +12,7 @@ version=1.8.5
 
 # STM compile variables
 # ----------------------
-compiler.extra_includes="-I{build.core.path}/stm32" "-I{build.core.path}/usb" "-I{build.system.path}/CMSIS" "-I{build.system.path}/{build.series}/CMSIS_Inc" "-I{build.system.path}/{build.series}/CMSIS_Src" "-I{build.system.path}/{build.series}/HAL_Inc" "-I{build.system.path}/{build.series}/HAL_Src"  "-I{build.system.path}/{build.series}/stm32_chip" 
+compiler.extra_includes="-I{build.path}/sketch" "-I{build.core.path}/stm32" "-I{build.core.path}/usb" "-I{build.system.path}/CMSIS" "-I{build.system.path}/{build.series}/CMSIS_Inc" "-I{build.system.path}/{build.series}/CMSIS_Src" "-I{build.system.path}/{build.series}/HAL_Inc" "-I{build.system.path}/{build.series}/HAL_Src"  "-I{build.system.path}/{build.series}/stm32_chip" 
 
 compiler.warning_flags=-w 
 compiler.warning_flags.none=-w {build.log_level}
