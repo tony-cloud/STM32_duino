@@ -66,15 +66,20 @@ void HardwareTimer::resume() {
         }
     }
 
-#ifdef TIM1
+#ifdef TIM1 
     if (handle.Instance == TIM1) {
         __HAL_RCC_TIM1_CLK_ENABLE();
         interruptTimers[0] = this;
         if (hasInterrupt) {
-            HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 0, 0);
-            HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 
-            HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0, 0);
+#if defined(STM32F1)||defined(STM32F2)||defined(STM32F4)||defined(STM32F7)
+            HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+#elif defined(STM32F3)||defined(STM32L4)
+            HAL_NVIC_SetPriority(TIM1_UP_TIM16_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+#endif
+            HAL_NVIC_SetPriority(TIM1_CC_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
         }
 
@@ -84,8 +89,8 @@ void HardwareTimer::resume() {
 
         TIM_MasterConfigTypeDef sMasterConfig;
         sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-          sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-          HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
+        sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+        HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
 
         handle.Init.RepetitionCounter = 0;
     }
@@ -97,7 +102,7 @@ void HardwareTimer::resume() {
         pwm_callback_func = []() { handleInterrupt(interruptTimers[1]); };
         interruptTimers[1] = this;
         if (hasInterrupt) {
-            HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+            HAL_NVIC_SetPriority(TIM2_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM2_IRQn);
         }
     }
@@ -108,7 +113,7 @@ void HardwareTimer::resume() {
         __HAL_RCC_TIM3_CLK_ENABLE();
         interruptTimers[2] = this;
         if (hasInterrupt) {
-            HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+            HAL_NVIC_SetPriority(TIM3_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM3_IRQn);
         }
     }
@@ -119,7 +124,7 @@ void HardwareTimer::resume() {
         __HAL_RCC_TIM4_CLK_ENABLE();
         interruptTimers[3] = this;
         if (hasInterrupt) {
-            HAL_NVIC_SetPriority(TIM4_IRQn, 0, 0);
+            HAL_NVIC_SetPriority(TIM4_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM4_IRQn);
         }
     }
@@ -450,11 +455,12 @@ extern "C" void TIM1_CC_IRQHandler(void) {
 extern "C" void TIM1_UP_IRQHandler(void) {
     if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
 }
+
 #ifndef TIM1_UP_TIM10_IRQHandler
-    extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
-        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
-        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
-    }
+//    extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
+//        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+//        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
+//    }
 #endif
 
 // in stm32_PWM.c
@@ -463,9 +469,13 @@ extern "C" void TIM2_IRQHandler(void) {
     handleInterrupt(interruptTimers[1]);
 }*/
 
+#ifdef TIM2
+// in stm32_PWM.c if have not TIM2 use TIM3 define 
 extern "C" void TIM3_IRQHandler(void) {
     if (interruptTimers[2] != NULL) handleInterrupt(interruptTimers[2]);
 }
+#endif
+
 extern "C" void TIM4_IRQHandler(void) {
     if (interruptTimers[3] != NULL) handleInterrupt(interruptTimers[3]);
 }
