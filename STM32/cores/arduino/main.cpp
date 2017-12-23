@@ -23,10 +23,6 @@
 
 #include <Arduino.h>
 
-#if __has_include("ARDUINOConfig.h")      //test user config ARDUINO huawei (huaweiwx@sina.com)
-# include "ARDUINOConfig.h"
-#endif
-
 #include "USBDevice.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
@@ -41,14 +37,9 @@ void setupUSB() __weak;
 void setupUSB() { }
 
 // Weak empty main may be use CubMX main.c source program.
-#ifndef USE_USERS_MAINPROGRAM
+#if (USERMAIN <1)
 int main(void)
 {
-
-#ifdef STM32F7
-    SCB_EnableICache();
-    SCB_EnableDCache();
-#endif
 
 	init();
 	
@@ -58,6 +49,9 @@ int main(void)
     __HAL_AFIO_REMAP_SWJ_DISABLE();
  #elif defined(MENU_DEBUG_SWD)
     __HAL_AFIO_REMAP_SWJ_NOJTAG();
+ #endif	
+ #if defined(MENU_DEBUG_NONJTRST)
+    __HAL_AFIO_REMAP_SWJ_NONJTRST();
  #endif
 #endif
 

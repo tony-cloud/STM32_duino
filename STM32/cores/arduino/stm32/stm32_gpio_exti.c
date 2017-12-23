@@ -74,11 +74,7 @@ void attachInterrupt(uint8_t pin, stm32_exti_callback_func callback, int mode) {
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(port_pin.port, &GPIO_InitStruct);
 	
-#if defined(STM32F0)||defined(STM32L0)  //add by huaweiwx@sina.com 2017.12.18
-    HAL_NVIC_SetPriority(exti_irq[irq], 2, 0);  // F0/L0  0...3 only
-#else
-    HAL_NVIC_SetPriority(exti_irq[irq], 6, 0);
-#endif	
+    HAL_NVIC_SetPriority(exti_irq[irq], EXTI_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
 
     HAL_NVIC_EnableIRQ(exti_irq[irq]);
 }

@@ -35,12 +35,10 @@ void SystemClock_Config(void) {
     LL_SetSystemCoreClock(48000000);
 
     /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
 #else   //HSE
@@ -91,12 +89,10 @@ void SystemClock_Config(void) {
     //HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
 #endif

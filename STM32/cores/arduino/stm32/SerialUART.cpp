@@ -88,7 +88,7 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef USART1
   if (handle->Instance == USART1) {
     __HAL_RCC_USART1_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 0); 
+    HAL_NVIC_SetPriority(USART1_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART1_IRQn); 
   }
   #endif
@@ -96,7 +96,7 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef USART2
   if (handle->Instance == USART2) {
     __HAL_RCC_USART2_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0); 
+    HAL_NVIC_SetPriority(USART2_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART2_IRQn); 
   }
   #endif
@@ -104,7 +104,7 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef USART3
   if (handle->Instance == USART3) {
     __HAL_RCC_USART3_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0); 
+    HAL_NVIC_SetPriority(USART3_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART3_IRQn); 
   }
   #endif
@@ -112,14 +112,14 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef UART4
   if (handle->Instance == UART4) {
     __HAL_RCC_UART4_CLK_ENABLE();
-    HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(UART4_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(UART4_IRQn);
   }
   #endif
   #ifdef USART4
   if (handle->Instance == USART4) {
     __HAL_RCC_USART4_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART4_IRQn, 0, 0); 
+    HAL_NVIC_SetPriority(USART4_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART4_IRQn); 
   }
   #endif
@@ -127,14 +127,14 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef UART5
   if (handle->Instance == UART5) {
     __HAL_RCC_UART5_CLK_ENABLE();
-    HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(UART5_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(UART5_IRQn);
   }
   #endif
   #ifdef USART5
   if (handle->Instance == USART5) {
     __HAL_RCC_USART5_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART5_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART5_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART5_IRQn);
   }
   #endif
@@ -142,7 +142,7 @@ void SerialUART::begin(const uint32_t baud) {
   #ifdef USART6
   if (handle->Instance == USART6) {
     __HAL_RCC_USART6_CLK_ENABLE();
-    HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART6_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   }
   #endif

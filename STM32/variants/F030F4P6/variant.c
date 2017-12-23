@@ -45,12 +45,10 @@ extern void SystemClock_Config(void)
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(48000000);
   /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
   LL_SYSTICK_EnableIT();  //for STM32F0 add systick enableIT huaweiwx@sina.com 2017.8.5
 }
 
@@ -94,12 +92,10 @@ void SystemClock_Config(void)
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(F_CPU);
   /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
   LL_SYSTICK_EnableIT();  //for STM32F0 add systick enableIT huaweiwx@sina.com 2017.8.5
 }
 #endif

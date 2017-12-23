@@ -71,13 +71,13 @@ static void initTimer(){
 
         #ifdef TIM2 //99% of chips have TIM2
             __HAL_RCC_TIM2_CLK_ENABLE();
-            HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+            HAL_NVIC_SetPriority(TIM2_IRQn, TIM_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
             HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
             handle->Instance = TIM2;
         #else
             __HAL_RCC_TIM3_CLK_ENABLE();
-            HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+            HAL_NVIC_SetPriority(TIM3_IRQn, TIM_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
             HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
             handle->Instance = TIM3;

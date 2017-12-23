@@ -108,17 +108,10 @@ void SystemClock_Config_HSI(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 #elif OSC==12
 void SystemClock_Config_HSE(void)
@@ -181,17 +174,10 @@ void SystemClock_Config_HSE(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
 #elif OSC==8
@@ -261,17 +247,10 @@ void SystemClock_Config_HSE(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-  HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, TICK_INT_PRIORITY, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);  
-#else  
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-#endif  
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
 #else

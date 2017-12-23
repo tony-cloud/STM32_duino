@@ -572,26 +572,16 @@ extern "C" {
 			HAL_PWR_EnableBkUpAccess();
 			__HAL_RCC_BKP_CLK_ENABLE();
 			__HAL_RCC_RTC_ENABLE();
- #if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-			HAL_NVIC_SetPriority(RTC_IRQn, TickPriority, 0);
-			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, TickPriority, 0);
-#else
-			HAL_NVIC_SetPriority(RTC_IRQn, 0, 0);
-			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
-#endif	
+			HAL_NVIC_SetPriority(RTC_IRQn, RTC_PRIORITY, 0);
+			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, RTC_PRIORITY, 0);
 			HAL_NVIC_EnableIRQ(RTC_IRQn);
 
 #elif defined(STM32F4)||defined(STM32L4)||defined(STM32L1)||defined(STM32F7)||defined(STM32F2)||defined(STM32F3)
 			__HAL_RCC_PWR_CLK_ENABLE();
 			 HAL_PWR_EnableBkUpAccess();
 			__HAL_RCC_RTC_ENABLE(); 
-# if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
-			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, TickPriority, 0);
-			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, TickPriority, 0);
-# else
-			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 0, 0);
-			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
-# endif	
+			HAL_NVIC_SetPriority(RTC_WKUP_IRQn, RTC_PRIORITY, 0);
+			HAL_NVIC_SetPriority(RTC_Alarm_IRQn, RTC_PRIORITY, 0);
 			HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 	
 #endif

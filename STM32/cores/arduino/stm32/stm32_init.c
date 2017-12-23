@@ -35,7 +35,7 @@ void init() {
 }
 
 void SysTick_Handler(void) {
-#if __has_include("FreeRTOS.h")  //huawei (huaweiwx@sina.com)
+#if  FREERTOS  //huawei (huaweiwx@sina.com)
   osSystickHandler();	
 #else	
   HAL_IncTick();

@@ -97,7 +97,7 @@ void TwoWire::begin(uint8_t address) {
     if (pdev->handle.Instance == I2C1) {
         slaveTwoWire[0] = this;
         __HAL_RCC_I2C1_CLK_ENABLE();
-        HAL_NVIC_SetPriority(I2C1_EV_IRQn, 1, 0);
+        HAL_NVIC_SetPriority(I2C1_EV_IRQn, I2C_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
     }
     #endif
@@ -105,7 +105,7 @@ void TwoWire::begin(uint8_t address) {
     if (pdev->handle.Instance == I2C2) {
         slaveTwoWire[1] = this;
         __HAL_RCC_I2C2_CLK_ENABLE();
-        HAL_NVIC_SetPriority(I2C2_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C2_EV_IRQn, I2C_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
     }
     #endif
@@ -113,7 +113,7 @@ void TwoWire::begin(uint8_t address) {
     if (pdev->handle.Instance == I2C3) {
         slaveTwoWire[2] = this;
         __HAL_RCC_I2C3_CLK_ENABLE();
-        HAL_NVIC_SetPriority(I2C3_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C3_EV_IRQn, I2C_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(I2C3_EV_IRQn);
     }
     #endif
@@ -121,7 +121,7 @@ void TwoWire::begin(uint8_t address) {
     if (pdev->handle.Instance == I2C4) {
         slaveTwoWire[3] = this;
         __HAL_RCC_I2C4_CLK_ENABLE();
-        HAL_NVIC_SetPriority(I2C4_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C4_EV_IRQn, I2C_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(I2C4_EV_IRQn);
     }
     #endif

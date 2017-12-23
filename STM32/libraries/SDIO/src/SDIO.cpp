@@ -156,14 +156,14 @@ uint8_t SDIOClass::begin() {
     __HAL_LINKDMA(&hsd, hdmarx, hdma_sdio);
 
 #if defined(STM32F1)
-    HAL_NVIC_SetPriority(SDIO_IRQn, 0x0, 0);
+    HAL_NVIC_SetPriority(SDIO_IRQn, SDIO_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
 	
-    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, 0x0, 2);
+    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, DMA_PRIORITY, 2);
     HAL_NVIC_EnableIRQ(DMA2_Channel4_5_IRQn);
 	
 #else
-    HAL_NVIC_SetPriority(SDIO_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(SDIO_IRQn, SDIO_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
 #endif
     if (HAL_DMA_Init(&hdma_sdio) != HAL_OK) {
