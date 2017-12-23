@@ -38,6 +38,5 @@ int stm32SearchPin(uint8_t pin, T* tb);
 
 template<typename T>
 T* stm32SearchPin(GPIO_TypeDef *port,uint32_t pinMask, T* pTable);
-bool stm32PinTim(uint8_t pin);
 #endif  //__cplusplus
 #endif

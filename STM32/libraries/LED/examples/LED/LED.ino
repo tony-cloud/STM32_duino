@@ -20,10 +20,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if (Led.availablePwm())
-    Led.fade(950);
-  else
-    Led.flash(10, 90, 10);
+Led.fade(1000);
 
 #ifdef LED1_BUILTIN
   Led1.flash(10, 0, 1);

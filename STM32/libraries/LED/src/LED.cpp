@@ -16,12 +16,10 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include <arduino.h>
 #include "LED.h"
 
 
 #ifdef STM32GENERIC
- #include "stm32_search_pin.h"
  
  #if __has_include(<FreeRTOS.h>)   
  #	include <FreeRTOS.h>
@@ -60,12 +58,16 @@ void LEDClass::setPin(uint8_t pin, uint8_t on){
 
 LEDClass::LEDClass(uint8_t pin, uint8_t on){
     this->setPin(pin, on);
-
+	
+#ifndef STM32GENERIC
+//	availablepwm = searchPinTim(pdata->pin)?true:false;
+#endif
 }
 
 void LEDClass::Init(void){
 	pinMode(pdata->pin,OUTPUT);
-}
+};
+
 
 //digitalWrite
 void LEDClass::on(void){
@@ -75,19 +77,9 @@ void LEDClass::on(void){
 
 //analogWrite
 void LEDClass::on(int val){
-    analogWrite(pdata->pin, val);
+    analogWrite(pdata->pin, (pdata->on? val:255-val));
 }
 
-#ifdef STM32GENERIC
-//analogWrite
-void LEDClass::pwm(int val, int frequency, int durationMillis){
-    pwmWrite(pdata->pin, val, frequency, durationMillis);
-}
-
-bool LEDClass:: availablePwm(void){
-	return stm32PinTim(pdata->pin);
-};
-#endif
 
 void LEDClass::off(void){
 	digitalWrite(pdata->pin,pdata->off);
@@ -106,19 +98,20 @@ void LEDClass::flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt){
 };
 
 void LEDClass::fade(uint16_t time) {
-  if(time < this->fadeTime) time = this->fadeTime;	
-  for(uint16_t i =0; i< (time/this->fadeTime);i++){
-    analogWrite(pdata->pin, this->brightness);
+    if(time < this->fadeTime) time = this->fadeTime;	
+    for(uint16_t i =0; i<(time/this->fadeTime);i++){
+      analogWrite(pdata->pin, this->brightness);
 
   // change the brightness for next time through the loop:
-    this->brightness = this->brightness + this->fadeAmount;
+      this->brightness +=  this->fadeAmount;
 
   // reverse the direction of the fading at the ends of the fade:
-    if (this->brightness <= 0 || this->brightness >= 255) {
-      this->fadeAmount = - this->fadeAmount;
-    }
-    delay(this->fadeTime);
+      if ((this->brightness <= 0) || (this->brightness >= 255)) {
+        this->fadeAmount *= -1;
+     }
+     LED_DELAY(this->fadeTime);
   }
+  
 }
 
 

@@ -37,7 +37,7 @@ uint32_t UTIL_hexNum(char* str) {
 }
 
 uint32_t UTIL_getNum(char* str) {
-  return ((isHex(str) == 0) ? UTIL_num(str) : UTIL_hexNum(str));
+  return (isHex(str) ? UTIL_hexNum(str):(uint32_t)UTIL_num(str));
 }
 
 //convert pinmask to num

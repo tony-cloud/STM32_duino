@@ -28,8 +28,5 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  if (Led.availablePwm())
-    Led.fade(950);
-  else
-    Led.flash(10, 90, 10);
+    Led.fade();
 }

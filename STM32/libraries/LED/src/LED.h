@@ -16,6 +16,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#include <arduino.h>
 
 #ifndef __LEDLIB_h__
 #define __LEDLIB_h__
@@ -42,7 +43,6 @@
 #endif
 
 #define LED_FADEAMOUNT 5
-#define LED_FADETIME   25
 
 typedef struct {
     uint8_t  pin;
@@ -69,24 +69,25 @@ class LEDClass
 	void on(void);
 //analogWrite
     void on(int val);
-	
+
 #ifdef STM32GENERIC
 //analogWrite
-    void pwm(int val, int frequency=1000, int durationMillis=0);
-    bool availablePwm(void);
-#else
 	bool availablePwm(void){return true;};
+#else
+    bool availablePwm(void){return  availablepwm;} ;
+    bool availablepwm = true;
 #endif
+	
 	void off(void);
 	void toggle(void);
 	void flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt=1);
-	void fade(uint16_t time = LED_FADETIME);
+	void fade(uint16_t time = (1000/(255/LED_FADEAMOUNT)));
 	LED_TypeDef* pdata = &sLed;
   private:
     LED_TypeDef  sLed;
 	int brightness=0;    // how bright the LED is
     int fadeAmount = LED_FADEAMOUNT;    // how many points to fade the LED by
-	int fadeTime = LED_FADETIME;
+	int fadeTime = (1000/(255/LED_FADEAMOUNT));
 };
 
 #ifdef LED_BUILTIN
