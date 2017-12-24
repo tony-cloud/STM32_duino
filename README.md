@@ -20,16 +20,3 @@ TODO create boards manager package
    TEMP=c:\Tmp
    TMP=c:\Tmp
    Because of the Windows command line length limit, we need to modify the environment variables to compile more files (Such as uCGUI)
-
-   
-1  从 [https://github.com/huaweiwx/STM32GENERIC]下载最新版本.
-2  将其解压到 [Arduino]/hardware 文件夹 (Arduino 必须是 ver1.8.5 或更新的)
-3  将 hardware/STM32GENERIC/tools 文件夹中的文件移动到 "hardware/tools " 文件夹, 以便其他 arduino arm 可以共享它。
-4  从板管理菜单安装 Arduino Zero 或 Arduino Sam，目的是自动安装个配置 arm-none-eabi-gcc 编译器工具链；
-5  下载 [GNU ARM Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)。
-   建议使用 GCC 5.4-2016q3, 并解压在系统默认的工具链位置：
-   C:\Users\Administrator\AppData\Local\Arduino15\packages\arduino\tools\arm-none-eabi-gcc \
-   也可在你下载放置的位置，但需要更改 platform.txt中的路径，让系统能找到它；
-   (附注这一般是必须的，因为4 安装的是GCC4，但需要GCC 5 才支持 stm32f7，另外也使用到了GCC 5的新特性);
-6  创建文件夹 c:\Tmp
-7  修改环境变量 TEMP 和 TMP为:  TEMP=c:\Tmp  和 TMP=c:\Tmp ， 这是因为 Windows 命令行有长度限制, 我们需要修改环境变量以编译更多的文件 (如 uCGUI)
