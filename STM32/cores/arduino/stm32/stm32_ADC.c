@@ -53,10 +53,14 @@ void stm32_adc_init(ADC_HandleTypeDef *handle);
 
 
 #ifndef __HAL_RCC_ADC2_CLK_ENABLE
-#define __HAL_RCC_ADC2_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
+ #define __HAL_RCC_ADC2_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
 #endif
 #ifndef __HAL_RCC_ADC3_CLK_ENABLE
-#define __HAL_RCC_ADC3_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
+ #ifdef STM32F3  //for F3  huawei 2017.12.25
+  #define __HAL_RCC_ADC3_CLK_ENABLE __HAL_RCC_ADC34_CLK_ENABLE
+ #else
+  #define __HAL_RCC_ADC3_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
+ #endif
 #endif
  
 static int readResolution = 10;
@@ -116,12 +120,13 @@ int analogRead(uint8_t pin) {
     HAL_GPIO_Init(variant_pin_list[pin].port, &GPIO_InitStruct);
 
     if (handle[instanceIndex].Instance == NULL) {
-        #ifdef __HAL_RCC_ADC1_CLK_ENABLE
+		#ifdef __HAL_RCC_ADC1_CLK_ENABLE   //L4 only undef  huaweiwx@sina.com 2017.12
         __HAL_RCC_ADC1_CLK_ENABLE();
-        #endif
-        #ifdef __HAL_RCC_ADC_CLK_ENABLE
+//        #endif
+//        #ifdef __HAL_RCC_ADC_CLK_ENABLE
+		#else  // __HAL_RCC_ADC_CLK_ENABLE  //L4 only 
         __HAL_RCC_ADC_CLK_ENABLE();
-        #endif
+		#endif
         
         handle[instanceIndex].Instance = config.instance;
         handle[instanceIndex].Init.ScanConvMode = DISABLE;
