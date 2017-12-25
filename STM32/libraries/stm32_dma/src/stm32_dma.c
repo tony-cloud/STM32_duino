@@ -54,7 +54,7 @@ bool stm32DmaAcquire(DMA_HandleTypeDef *handle, dmaRequest request, void *periph
             setDmaInstance(handle, dmaRequestToStream[i]);
 
             if (enableIrq) {
-                HAL_NVIC_SetPriority(dmaRequestToStream[i].irqN, DMA_PRIORITY, 0);
+                HAL_NVIC_SetPriority(dmaRequestToStream[i].irqN, DMAS_PRIORITY, 0);
                 HAL_NVIC_EnableIRQ(dmaRequestToStream[i].irqN);
             }
 

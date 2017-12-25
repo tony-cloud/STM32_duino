@@ -159,7 +159,7 @@ uint8_t SDIOClass::begin() {
     HAL_NVIC_SetPriority(SDIO_IRQn, SDIO_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
 	
-    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, DMA_PRIORITY, 2);
+    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, DMAS_PRIORITY, 2);
     HAL_NVIC_EnableIRQ(DMA2_Channel4_5_IRQn);
 	
 #else
