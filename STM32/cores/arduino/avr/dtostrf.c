@@ -18,12 +18,36 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+  * arm gcc does not support the %f format in sprintf.
+  *	modify for stm32 arduino by huaweiwx@sina.com 2018.1.10
+ */
+
 #include <stdio.h>
 
+/* 
 char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
   char fmt[20];
-  sprintf(fmt, "%%%d.%df", width, prec);
+  sprintf(fmt, "%%%d.%df", width, prec); 
   sprintf(sout, fmt, val);
   return sout;
 }
+*/
+
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
+
+	char fmt[33];
+	if(prec >9) prec = 9;
+    sprintf(fmt, "%%%dd.%%0%dd",width-prec,prec);
+	
+ 	int mul = 1;
+	for(uint8_t i =0; i<prec; i++) mul *=10; /* powf(10, prec) */
+	
+	int32_t frac = (val - (int32_t)val) * mul;
+	if(frac <0) frac = -frac;
+	
+	sprintf(sout, fmt, (int32_t)val, frac);
+	return sout;
+}
+
 
