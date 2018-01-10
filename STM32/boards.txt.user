@@ -60,14 +60,14 @@ NUCLEO_64.menu.subboard.Nucleo_F103RB.build.f_cpuhse=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F103RB.build.extra_flags=-DSTM32F103RB
 NUCLEO_64.menu.subboard.Nucleo_F103RB.massstorage_drive=NODE_F103RB
 
-NUCLEO_64.menu.subboard.Nucleo_F303RE=Nucleo-F303RE(HSI48M/HSE72M)
+NUCLEO_64.menu.subboard.Nucleo_F303RE=Nucleo-F303RE(72M)
 NUCLEO_64.menu.subboard.Nucleo_F303RE.upload.maximum_size=524288
 NUCLEO_64.menu.subboard.Nucleo_F303RE.upload.maximum_data_size=81920
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.series=STM32F3
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.variant=NUCLEO_F303RE
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.board=NUCLEO_F303RE
-NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhsi=48000000L
+NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhsi=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhse=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.extra_flags=-DSTM32F303RE
 NUCLEO_64.menu.subboard.Nucleo_F303RE.massstorage_drive=NODE_F303RE
@@ -175,6 +175,7 @@ NUCLEO_144.menu.subboard.Nucleo_F767ZI.build.f_cpupre=216000000L
 
 NUCLEO_144.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
 NUCLEO_144.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+
 
 
 NUCLEO_144.menu.clock_source.hsi=HSE_Disable(HSI)
@@ -300,7 +301,7 @@ DISCOVERY_L152R.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=Ser
 ####################################### Discovery F303VC #########################################
 # Discovery F303VC board
 
-DISCOVERY_F303VC.name=Discovery F303VC(72M)
+DISCOVERY_F303VC.name=Discovery F303VC(HSI48M/HSE72M)
 
 DISCOVERY_F303VC.upload.maximum_size=524288
 DISCOVERY_F303VC.upload.maximum_data_size=40960
@@ -312,18 +313,17 @@ DISCOVERY_F303VC.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 DISCOVERY_F303VC.build.series=STM32F3
 DISCOVERY_F303VC.build.variant=DISCOVERY_F303VC
 DISCOVERY_F303VC.build.extra_flags=-DSTM32F303VC
-DISCOVERY_F303VC.build.f_cpupre=72000000L
 
 DISCOVERY_F303VC.menu.subboard.F303VC=Discovery F303VC
 
 DISCOVERY_F303VC.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
-DISCOVERY_F303VC.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+DISCOVERY_F303VC.menu.clock_source.bypass.build.f_cpu=72000000L -DUSE_HSEBYPASS -DHSE_VALUE=8000000
 
 DISCOVERY_F303VC.menu.clock_source.hsi=HSE_Disable(HSI)
-DISCOVERY_F303VC.menu.clock_source.hsi.build.f_cpu={build.f_cpupre} -DUSE_HSI
+DISCOVERY_F303VC.menu.clock_source.hsi.build.f_cpu=48000000L -DUSE_HSI
 
 DISCOVERY_F303VC.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
-DISCOVERY_F303VC.menu.clock_source.hse8m.build.f_cpu={build.f_cpupre} -DUSE_HSE -DHSE_VALUE=8000000
+DISCOVERY_F303VC.menu.clock_source.hse8m.build.f_cpu=72000000L -DUSE_HSE -DHSE_VALUE=8000000
 
 DISCOVERY_F303VC.upload.protocol=STLink
 DISCOVERY_F303VC.upload.tool=stlink_upload
@@ -821,6 +821,9 @@ GD103R.pid.0=0x2303
 
 
 
+
+
+
 GD103R.serial.disableDTR=true
 GD103R.serial.disableRTS=true
 GD103R.upload.uploadadr=0x08000000
@@ -928,6 +931,8 @@ GD103R.menu.upload_method.jLinkMethod.upload.protocol=jlink
 GD103R.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 
+
+
 GD103R.menu.upload_method.STLinkMethod=STLink
 GD103R.menu.upload_method.STLinkMethod.upload.protocol=STLink
 GD103R.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
@@ -981,6 +986,15 @@ GD103R.menu.jtag_swd.SWD=SWD [debug pins reserved: PA14, PA13]
 GD103R.menu.jtag_swd.SWD.build.extra_flags_jtag=-DMENU_DEBUG_SWD
 GD103R.menu.jtag_swd.Disabled=Disabled [debug pins free]
 GD103R.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1223,6 +1237,7 @@ F103V.menu.subboard.F103VF.upload.tool=serial_upload
 F103V.menu.subboard.F103VF.upload.altID=CH340
 F103V.menu.subboard.F103VF.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
+
 F103V.menu.subboard.F103VG=GENERIC_F103VG[CH340]
 F103V.menu.subboard.F103VG.upload.maximum_size=1048576
 F103V.menu.subboard.F103VG.upload.maximum_data_size=98304
@@ -1414,6 +1429,7 @@ F103Z.menu.subboard.F103ZF.upload.protocol=STLink
 F103Z.menu.subboard.F103ZF.upload.tool=stlink_upload
 F103Z.menu.subboard.F103ZF.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
+
 F103Z.menu.subboard.F103ZG=GENERIC_F103ZG[STLink]
 F103Z.menu.subboard.F103ZG.upload.maximum_size=1048576
 F103Z.menu.subboard.F103ZG.upload.maximum_data_size=98304
@@ -1427,6 +1443,7 @@ F103Z.menu.subboard.F103ZG.massstorage_drive=NUCLEO
 F103Z.menu.subboard.F103ZG.upload.protocol=STLink
 F103Z.menu.subboard.F103ZG.upload.tool=stlink_upload
 F103Z.menu.subboard.F103ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+
 
 
 F103Z.menu.startadr.default=flash (default)
@@ -1710,6 +1727,7 @@ F407S.menu.subboard.IGT6_CORE.upload.protocol=
 F407S.menu.subboard.IGT6_CORE.upload.tool=nucleoFlasher
 F407S.menu.subboard.IGT6_CORE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
+
 F407S.menu.subboard.GENERIC_F407V=GENERIC_F407VE[STLink]
 F407S.menu.subboard.GENERIC_F407V.upload.maximum_size=524288
 F407S.menu.subboard.GENERIC_F407V.upload.maximum_data_size=131072
@@ -1748,6 +1766,7 @@ F407S.menu.subboard.BLACK_F407ZG.build.extra_flags_serial_auto=-DMENU_SERIAL_AUT
 
 F407S.menu.startadr.default=flash(default)
 F407S.menu.startadr.default.build.extra_flags={build.extra_flags0}
+
 
 F407S.menu.startadr.R20000000=Sram 0:0x20000000(96K+32K BOOT=11 St/Jlink uploader only)
 F407S.menu.startadr.R20000000.upload.maximum_size=98304
@@ -1808,6 +1827,7 @@ F407S.menu.usb.SerialMSC=Mass storage
 F407S.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
 F407S.menu.usb.Composite=Composite[CDC+MSC]
 F407S.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
+
 
 F407S.menu.serial.SerialUART1=SerialUART1
 F407S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1

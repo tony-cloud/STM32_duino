@@ -61,14 +61,14 @@ NUCLEO_64.menu.subboard.Nucleo_F103RB.build.f_cpuhse=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F103RB.build.extra_flags=-DSTM32F103RB
 NUCLEO_64.menu.subboard.Nucleo_F103RB.massstorage_drive=NODE_F103RB
 
-NUCLEO_64.menu.subboard.Nucleo_F303RE=Nucleo-F303RE(HSI48M/HSE72M)
+NUCLEO_64.menu.subboard.Nucleo_F303RE=Nucleo-F303RE(72M)
 NUCLEO_64.menu.subboard.Nucleo_F303RE.upload.maximum_size=524288
 NUCLEO_64.menu.subboard.Nucleo_F303RE.upload.maximum_data_size=81920
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.series=STM32F3
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.variant=NUCLEO_F303RE
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.board=NUCLEO_F303RE
-NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhsi=48000000L
+NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhsi=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.f_cpuhse=72000000L
 NUCLEO_64.menu.subboard.Nucleo_F303RE.build.extra_flags=-DSTM32F303RE
 NUCLEO_64.menu.subboard.Nucleo_F303RE.massstorage_drive=NODE_F303RE
@@ -816,18 +816,17 @@ DISCOVERY_F303VC.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 DISCOVERY_F303VC.build.series=STM32F3
 DISCOVERY_F303VC.build.variant=DISCOVERY_F303VC
 DISCOVERY_F303VC.build.extra_flags=-DSTM32F303VC
-DISCOVERY_F303VC.build.f_cpupre=72000000L
 
-DISCOVERY_F303VC.menu.subboard.F303VC=Discovery F303VC(72M)
+DISCOVERY_F303VC.menu.subboard.F303VC=Discovery F303VC(HSI48M/HSE72M)
 
 DISCOVERY_F303VC.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
-DISCOVERY_F303VC.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+DISCOVERY_F303VC.menu.clock_source.bypass.build.f_cpu=72000000L -DUSE_HSEBYPASS -DHSE_VALUE=8000000
 
 DISCOVERY_F303VC.menu.clock_source.hsi=HSE_Disable(HSI)
-DISCOVERY_F303VC.menu.clock_source.hsi.build.f_cpu={build.f_cpupre} -DUSE_HSI
+DISCOVERY_F303VC.menu.clock_source.hsi.build.f_cpu=48000000L -DUSE_HSI
 
 DISCOVERY_F303VC.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
-DISCOVERY_F303VC.menu.clock_source.hse8m.build.f_cpu={build.f_cpupre} -DUSE_HSE -DHSE_VALUE=8000000
+DISCOVERY_F303VC.menu.clock_source.hse8m.build.f_cpu=72000000L -DUSE_HSE -DHSE_VALUE=8000000
 
 DISCOVERY_F303VC.upload.protocol=STLink
 DISCOVERY_F303VC.upload.tool=stlink_upload

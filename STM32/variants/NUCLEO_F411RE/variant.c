@@ -23,6 +23,8 @@ extern void SystemClock_Config(void) {
 # ifdef USE_HSEBYPASS 
   RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
 # else
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;	
+#endif
   RCC_OscInitStruct.HSICalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
