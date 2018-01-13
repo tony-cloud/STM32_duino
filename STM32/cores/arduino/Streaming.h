@@ -94,6 +94,18 @@ struct _FLOAT
 inline Print &operator <<(Print &obj, const _FLOAT &arg)
 { obj.print(arg.val, arg.digits); return obj; }
 
+//add _DOUBLE by huaweiwx@sina.com
+struct _DOUBLE
+{
+  double val;
+  int digits;
+  _DOUBLE(double v, int d): val(v), digits(d)
+  {}
+};
+
+inline Print &operator <<(Print &obj, const _DOUBLE &arg)
+{ obj.print(arg.val, arg.digits); return obj; }
+
 
 // Specialization for enum _EndLineCode
 // Thanks to Arduino forum user Paul V. who suggested this
