@@ -52,8 +52,10 @@ void yield(void);
 #define SERIAL  0x0
 #define DISPLAY 0x1
 
-#define LSBFIRST 0
-#define MSBFIRST 1
+enum BitOrder {  /*compatible with arduino sam huaweiwx@sina.com 2018.1.12*/
+	LSBFIRST = 0,
+	MSBFIRST = 1
+};
 
 #define CHANGE 1
 #define FALLING 2
@@ -64,7 +66,7 @@ void yield(void);
 #define max(a,b) ((a)>(b)?(a):(b))
 #define abs(x) ((x)>0?(x):-(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define round(x)     ((x)>=0?(long long)((x)+0.5):(long long)((x)-0.5))
 #define radians(deg) ((deg)*DEG_TO_RAD)
 #define degrees(rad) ((rad)*RAD_TO_DEG)
 #define sq(x) ((x)*(x))
@@ -191,7 +193,7 @@ long map(long, long, long, long, long);
 #include <STM32System.h>
 
 //add by huaweiwx@sina.com
-#include "Streaming.h"
+//#include "Streaming.h"
 #include "wiring_pulse.h"  /*copy from Arduino_core_STM32 huaweiwx@sina.com 2017.11*/
 
 #if defined(MENU_SERIAL)
