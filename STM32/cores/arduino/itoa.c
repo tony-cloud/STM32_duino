@@ -14,6 +14,8 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  
+  for arm  ltoa/ultoa support 64bit, modify by huaweiwx@sina.com 2018.1.12
 */
 
 #include "itoa.h"
@@ -71,13 +73,24 @@ extern char* itoa( int value, char *string, int radix )
   return ltoa( value, string, radix ) ;
 }
 
-extern char* ltoa( long value, char *string, int radix )
+//extern char* utoa( unsigned int value, char *string, int radix )
+#if ULTOA64
+extern char* ltoa(long long value, char *string, int radix )
+#else
+extern char* ltoa(long value, char *string, int radix )
+#endif
 {
+#if ULTA64	
+  char tmp[65];
+  long long i;
+  unsigned long long v;
+#else
   char tmp[33];
-  char *tp = tmp;
   long i;
   unsigned long v;
+#endif  
   int sign;
+  char *tp = tmp;
   char *sp;
 
   if ( string == NULL )
@@ -93,11 +106,11 @@ extern char* ltoa( long value, char *string, int radix )
   sign = (radix == 10 && value < 0);
   if (sign)
   {
-    v = -value;
+    v = - value;
   }
   else
   {
-    v = (unsigned long)value;
+    v = value;
   }
 
   while (v || tp == tmp)
@@ -121,17 +134,33 @@ extern char* ltoa( long value, char *string, int radix )
   return string;
 }
 
-extern char* utoa( unsigned long value, char *string, int radix )
+//extern char* utoa( unsigned int value, char *string, int radix )
+#if ULTOA64
+ extern char* utoa( unsigned value, char *string, int radix )
+#else
+ extern char* utoa( unsigned long value, char *string, int radix )
+#endif
 {
-  return ultoa( value, string, radix ) ;
+  return ultoa(value, string, radix ) ;
 }
 
-extern char* ultoa( unsigned long value, char *string, int radix )
+#if ULTOA64
+extern char* ultoa(unsigned long long value, char *string, int radix )
+#else
+extern char* ultoa(unsigned long value, char *string, int radix )
+#endif
 {
+#if ULTOA64
+  char tmp[65];
+  long long i;
+  unsigned long long v = value;
+#else  
   char tmp[33];
-  char *tp = tmp;
   long i;
   unsigned long v = value;
+#endif
+
+  char *tp = tmp;
   char *sp;
 
   if ( string == NULL )
