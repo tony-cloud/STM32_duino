@@ -17,6 +17,8 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  
+  for arm  support 64bit long long type. modify by huaweiwx@sina.com 2018.1.12  
 */
 
 #include "WString.h"
@@ -103,6 +105,22 @@ String::String(unsigned long value, unsigned char base)
 {
 	init();
 	char buf[1 + 8 * sizeof(unsigned long)];
+	ultoa(value, buf, base);
+	*this = buf;
+}
+
+String::String(long long value, unsigned char base)
+{
+	init();
+	char buf[2 + 8 * sizeof(long long)];
+	ltoa(value, buf, base);
+	*this = buf;
+}
+
+String::String(unsigned long long value, unsigned char base)
+{
+	init();
+	char buf[1 + 8 * sizeof(unsigned long long)];
 	ultoa(value, buf, base);
 	*this = buf;
 }
@@ -322,6 +340,20 @@ unsigned char String::concat(unsigned long num)
 	return concat(buf, strlen(buf));
 }
 
+unsigned char String::concat(long long num)
+{
+	char buf[2 + 3 * sizeof(long long)];
+	ltoa(num, buf, 10);
+	return concat(buf, strlen(buf));
+}
+
+unsigned char String::concat(unsigned long long num)
+{
+	char buf[1 + 3 * sizeof(unsigned long long)];
+	ultoa(num, buf, 10);
+	return concat(buf, strlen(buf));
+}
+
 unsigned char String::concat(float num)
 {
 	char buf[20];
@@ -402,6 +434,21 @@ StringSumHelper & operator + (const StringSumHelper &lhs, long num)
 }
 
 StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long num)
+{
+	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+	if (!a.concat(num)) a.invalidate();
+	return a;
+}
+
+
+StringSumHelper & operator + (const StringSumHelper &lhs, long long num)
+{
+	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+	if (!a.concat(num)) a.invalidate();
+	return a;
+}
+
+StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long long num)
 {
 	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
 	if (!a.concat(num)) a.invalidate();
