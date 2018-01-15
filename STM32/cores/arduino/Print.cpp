@@ -26,7 +26,7 @@
 #include <math.h>
 #include "Arduino.h"
 #include <stdarg.h>
-
+#include <limits.h>
 #include "Print.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -121,9 +121,18 @@ size_t Print::print(unsigned long long n, int base)
   else return printNumber(n, base);
 }
 
+size_t Print::print(float n, int digits)
+{
+  if (isnan(number)) return print("nan");
+  if (isinf(number)) return print("inf");
+  return ((n < 0.0)?printFloat(n, LONG_MIN, digits):printFloat(n, LONG_MAX, digits));
+}
+
 size_t Print::print(double n, int digits)
 {
-  return printFloat(n, digits);
+  if (isnan(number)) return print("nan");
+  if (isinf(number)) return print("inf");
+  return ((n < 0.0)?printFloat(n, LONG_LONG_MIN, digits):printFloat(n, LONG_LONG_MAX, digits));
 }
 
 size_t Print::println(const __FlashStringHelper *ifsh)
@@ -249,14 +258,12 @@ size_t Print::printNumber(unsigned long long n, uint8_t base)
   return write(str);
 }
 
-size_t Print::printFloat(double number, uint8_t digits) 
+size_t Print::printFloat(double number, double max, uint8_t digits) 
 { 
   size_t n = 0;
   
-  if (isnan(number)) return print("nan");
-  if (isinf(number)) return print("inf");
-  if (number > 4294967040.0) return print ("ovf");  // constant determined empirically
-  if (number <-4294967040.0) return print ("ovf");  // constant determined empirically
+  if (number >  max) return print ("ovf");  // constant determined empirically
+  if (number <- max) return print ("ovf");  // constant determined empirically
   
   // Handle negative numbers
   if (number < 0.0)
@@ -273,7 +280,7 @@ size_t Print::printFloat(double number, uint8_t digits)
   number += rounding;
 
   // Extract the integer part of the number and print it
-  unsigned long int_part = (unsigned long)number;
+  unsigned long long int_part = (unsigned long long)number;
   double remainder = number - (double)int_part;
   n += print(int_part);
 
