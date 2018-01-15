@@ -123,15 +123,15 @@ size_t Print::print(unsigned long long n, int base)
 
 size_t Print::print(float n, int digits)
 {
-  if (isnan(number)) return print("nan");
-  if (isinf(number)) return print("inf");
+  if (isnan(n)) return print("nan");
+  if (isinf(n)) return print("inf");
   return ((n < 0.0)?printFloat(n, LONG_MIN, digits):printFloat(n, LONG_MAX, digits));
 }
 
 size_t Print::print(double n, int digits)
 {
-  if (isnan(number)) return print("nan");
-  if (isinf(number)) return print("inf");
+  if (isnan(n)) return print("nan");
+  if (isinf(n)) return print("inf");
   return ((n < 0.0)?printFloat(n, LONG_LONG_MIN, digits):printFloat(n, LONG_LONG_MAX, digits));
 }
 
