@@ -85,18 +85,18 @@ size_t Print::print(long n, int base)
     if (n < 0) {
       int t = print('-');
       n = -n;
-      return printNumber(n, 10) + t;
+      return printNumber((unsigned long long)n, 10) + t;
     }
-    return printNumber(n, 10);
+    return printNumber((unsigned long long)n, 10);
   } else {
-    return printNumber(n, base);
+    return printNumber((unsigned long long)n, base);
   }
 }
 
 size_t Print::print(unsigned long n, int base)
 {
   if (base == 0) return write(n);
-  else return printNumber(n, base);
+  else return printNumber((unsigned long long)n, base);
 }
 
 size_t Print::print(long long n, int base)
@@ -107,11 +107,11 @@ size_t Print::print(long long n, int base)
     if (n < 0) {
       int t = print('-');
       n = -n;
-      return printNumber(n, 10) + t;
+      return printNumber((unsigned long long)n, 10) + t;
     }
-    return printNumber(n, 10);
+    return printNumber((unsigned long long)n, 10);
   } else {
-    return printNumber(n, base);
+    return printNumber((unsigned long long)n, base);
   }
 }
 
@@ -123,16 +123,21 @@ size_t Print::print(unsigned long long n, int base)
 
 size_t Print::print(float n, int digits)
 {
+  if (n >  LONG_MAX) return print ("ovf");  // constant determined empirically
+  if (n <  LONG_MIN) return print ("ovf");  // constant determined empirically
   if (isnan(n)) return print("nan");
   if (isinf(n)) return print("inf");
-  return ((n < 0.0)?printFloat(n, LONG_MIN, digits):printFloat(n, LONG_MAX, digits));
+  
+  return printFloat((double)n, digits);
 }
 
 size_t Print::print(double n, int digits)
 {
+  if (n >  LONG_LONG_MAX) return print ("ovf");  // constant determined empirically
+  if (n <  LONG_LONG_MIN) return print ("ovf");  // constant determined empirically
   if (isnan(n)) return print("nan");
   if (isinf(n)) return print("inf");
-  return ((n < 0.0)?printFloat(n, LONG_LONG_MIN, digits):printFloat(n, LONG_LONG_MAX, digits));
+  return printFloat(n, digits);
 }
 
 size_t Print::println(const __FlashStringHelper *ifsh)
@@ -222,6 +227,11 @@ size_t Print::println(unsigned long long num, int base)
   return n;
 }
 
+size_t Print::println(float num, int digits)
+{
+  return println((double)num, digits);
+}
+
 size_t Print::println(double num, int digits)
 {
   size_t n = print(num, digits);
@@ -251,20 +261,16 @@ size_t Print::printNumber(unsigned long long n, uint8_t base)
   do {
     char c = n % base;
     n /= base;
-
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
 
   return write(str);
 }
 
-size_t Print::printFloat(double number, double max, uint8_t digits) 
+size_t Print::printFloat(double number, uint8_t digits) 
 { 
   size_t n = 0;
-  
-  if (number >  max) return print ("ovf");  // constant determined empirically
-  if (number <- max) return print ("ovf");  // constant determined empirically
-  
+   
   // Handle negative numbers
   if (number < 0.0)
   {
