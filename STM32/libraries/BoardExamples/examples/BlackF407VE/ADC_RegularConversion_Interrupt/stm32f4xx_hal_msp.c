@@ -85,7 +85,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
   
   /*##-3- Configure the NVIC #################################################*/
   /* NVIC configuration for DMA transfer complete interrupt (USART1_TX) */
-  HAL_NVIC_SetPriority(ADCx_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(ADCx_IRQn, DMA1_PRIORITY, 0);
   HAL_NVIC_EnableIRQ(ADCx_IRQn);
 }
   

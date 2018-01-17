@@ -1,6 +1,25 @@
-//for stm32 sram/peripheral bitband io opration
-//2017.5.28 for all stm32 chips
-//modify by huawei<huaweiwx@sina.com> 2016.9.18
+/* 
+  huaweiwx@sina.com 2017.  All right reserved.
+
+  for stm32 m3/m4 sram/peripheral bitband io opration
+  for all stm32 chips 2017.5.28
+  add BB functions from maple 2017.10.12 
+  add arduino style class BB_PIN 2017.12.20
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #ifndef __BITBAND_H__
 #define __BITBAND_H__
@@ -117,13 +136,17 @@
 #define PORTI      GPIOI->ODR    //Êä³ö 
 #define PINI       GPIOI->ODR    //ÊäÈë 
 
-//for arduino const pin
+//for arduino const pin add 2017.10
 #define PIN_OUTADDR(n)  BITBAND(((uint32_t)&variant_pin_list[n].port->ODR),\
                               BITMASKPOS(variant_pin_list[n].pinMask))
 							
 #define PIN_INADDR(n)   BITBAND(((uint32_t)&variant_pin_list[n].port->IDR),\
                               BITMASKPOS(variant_pin_list[n].pinMask))
-							
+							  
+#define PINOut(pin)		MEM_ADDR(PIN_OUTADDR(pin))						
+#define PINin(pin)		MEM_ADDR(PIN_OUTADDR(pin))
+
+#define BB_sramVarPtr(x)  __BB_addr((volatile uint32_t*)&(x), 0, SRAM_BB_BASE, SRAM_BASE)
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -214,24 +237,64 @@ static inline uint32_t BB_pinAddr(uint32_t pin,uint8_t mode){
 	return BITBAND(portaddr,bit);
 }
 
-
 #ifdef __cplusplus
-}
-#endif
+} // extern "C"
 
-#else
-# error "BitBand unsuport  F0/L0/F7 mcu!"
-#endif
+template<const uint8_t PinNumber>
+class BB_PIN{
+ public:
+  //----------------------------------------------------------------------------
+  /** Constructor */
+  BB_PIN(){};
 
-#endif
+  inline BB_PIN & operator = (bool value) __attribute__((always_inline)) {
+    MEM_ADDR(PIN_OUTADDR(PinNumber)) = value;
+    return *this;
+  }
 
+   inline operator bool () __attribute__((always_inline)) {
+    return (MEM_ADDR(PIN_INADDR(PinNumber)));
+  }
 
+  inline __attribute__((always_inline))
+  void config(uint8_t mode, bool level) {
+	  pinMode(PinNumber,mode);
+      MEM_ADDR(PIN_OUTADDR(PinNumber)) = level;
+  }
 
+  inline __attribute__((always_inline))
+  void high() {
+	  MEM_ADDR(PIN_OUTADDR(PinNumber)) = 0x1U;}
 
+  inline __attribute__((always_inline))
+  void low() {MEM_ADDR(PIN_OUTADDR(PinNumber)) = 0x0U;}
 
+  inline __attribute__((always_inline))
+  void mode(uint8_t mode) {
+     pinMode(PinNumber,mode);
+  }
 
+  inline __attribute__((always_inline))
+  bool read() const {
+    return MEM_ADDR(PIN_INADDR(PinNumber));
+  }
 
+  inline __attribute__((always_inline))
+  void toggle() {
+    digitalToggle(PinNumber);
+  }
 
+  inline __attribute__((always_inline))
+  void write(bool value) {
+    MEM_ADDR(PIN_OUTADDR(PinNumber)) = value;
+  }
+};
 
+#endif //__cplusplus
 
-
+#else  // L0/F0/F7
+ #warning "BitBand unsuport  F0/L0/F7 mcu! use DigitalPin class"
+ #include "digitalPin.h"
+ #define BB_PIN DigitalPin
+#endif // F1/2/3/4 L1/4
+#endif //__BITBAND_H__

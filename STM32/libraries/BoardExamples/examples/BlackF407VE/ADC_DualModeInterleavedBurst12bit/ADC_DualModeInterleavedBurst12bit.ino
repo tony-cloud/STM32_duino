@@ -413,7 +413,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
   /*##-4- Configure the NVIC for DMA #########################################*/
   /* NVIC configuration for DMA transfer complete interrupt */
-  HAL_NVIC_SetPriority(ADCxy_DMA_IRQn, 0, 0);   
+  HAL_NVIC_SetPriority(ADCxy_DMA_IRQn, DMA1_PRIORITY, 0);   
   HAL_NVIC_EnableIRQ(ADCxy_DMA_IRQn);
 }
   
