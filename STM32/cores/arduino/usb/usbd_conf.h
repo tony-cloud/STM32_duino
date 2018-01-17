@@ -30,6 +30,7 @@
   *
   ******************************************************************************
 */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_CONF__H__
 #define __USBD_CONF__H__
@@ -60,39 +61,64 @@
 
 /*---------- -----------*/
 #ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
-#	define USBD_MAX_NUM_INTERFACES     3
+ #define USBD_MAX_NUM_INTERFACES     3
 #else
-#	define USBD_MAX_NUM_INTERFACES     1
+ #define USBD_MAX_NUM_INTERFACES     1
 #endif
-/*---------- -----------*/
-#define USBD_MAX_NUM_CONFIGURATION     1
-/*---------- -----------*/
+
+#ifndef USBD_MAX_NUM_CONFIGURATION
+ #define USBD_MAX_NUM_CONFIGURATION     1
+#endif
+
+#ifndef USBD_MAX_STR_DESC_SIZ
 #define USBD_MAX_STR_DESC_SIZ     512
-/*---------- -----------*/
+#endif
+
+#ifndef USBD_SUPPORT_USER_STRING
 #define USBD_SUPPORT_USER_STRING     0
-/*---------- -----------*/
+#endif
+
+#ifndef USBD_DEBUG_LEVEL
 #define USBD_DEBUG_LEVEL     0
-/*---------- -----------*/
+#endif
+
+#ifndef USBD_SELF_POWERED
 #define USBD_SELF_POWERED     1
-/*---------- -----------*/
+#endif
+
+#ifndef USBD_CDC_INTERVAL
 #define USBD_CDC_INTERVAL     1000
-/*---------- -----------*/
+#endif
+
+#ifndef MAX_STATIC_ALLOC_SIZE
 #define MAX_STATIC_ALLOC_SIZE     512
+#endif
 /****************************************/
 /* #define for FS and HS identification */
-#define DEVICE_FS 		0
 
+
+#ifndef DEVICE_FS
+#define DEVICE_FS 		0
+#endif
 /** @defgroup USBD_Exported_Macros
   * @{
   */
 
 /* Memory management macros */
 #ifdef MENU_USB_IAD  /*huaweiwx@sina.com 2017.9.15 add*/
-# define USBD_malloc               malloc
-# define USBD_free                 free
+ #ifndef USBD_malloc
+  #define USBD_malloc               malloc
+ #endif
+ #ifndef USBD_free
+  #define USBD_free                 free
+ #endif
 #else
-# define USBD_malloc               (uint32_t *)USBD_static_malloc
-# define USBD_free                 USBD_static_free	
+ #ifndef USBD_malloc
+  #define USBD_malloc               (uint32_t *)USBD_static_malloc
+ #endif
+ #ifndef USBD_free
+  #define USBD_free                 USBD_static_free
+ #endif	
 #endif
 
 #define USBD_memset               /* Not used */
