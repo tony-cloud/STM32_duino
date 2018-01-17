@@ -1,7 +1,7 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
 void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;

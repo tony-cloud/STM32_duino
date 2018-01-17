@@ -1,31 +1,8 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
-// from https://github.com/anfractuosity/stm32f429-lcd/blob/master/Src/main.c
-/**
-  * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
-  *            System Clock source            = PLL (HSE)
-  *            SYSCLK(Hz)                     = 180000000
-  *            HCLK(Hz)                       = 180000000
-  *            AHB Prescaler                  = 1
-  *            APB1 Prescaler                 = 4
-  *            APB2 Prescaler                 = 2
-  *            HSE Frequency(Hz)              = 8000000
-  *            PLL_M                          = 8
-  *            PLL_N                          = 360
-  *            PLL_P                          = 2
-  *            PLL_Q                          = 7
-  *            VDD(V)                         = 3.3
-  *            Main regulator output voltage  = Scale1 mode
-  *            Flash Latency(WS)              = 5
-  * @param  None
-  * @retval None
-  */
-
-// for STM32F429 Discovery
 void _Error_Handler(char* file, uint32_t line);
-extern void SystemClock_Config(void) {
+void SystemClock_Config(void) __weak;
+void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
@@ -33,7 +10,6 @@ extern void SystemClock_Config(void) {
 
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
-  // Enable HSE Oscillator and activate PLL with HSE as source 
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -47,8 +23,6 @@ extern void SystemClock_Config(void) {
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  // Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
-  //   clocks dividers 
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;

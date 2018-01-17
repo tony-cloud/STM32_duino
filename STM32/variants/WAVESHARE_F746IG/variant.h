@@ -19,7 +19,6 @@
 #define  BOTTON4   		  PD5  //
 #define  BOTTON5   		  PI11 //BOTTON_SEL
 #define  BOTTON_MASK      0x01
-#define  KEYS_LIST        BOTTON,BOTTON1,BOTTON2,BOTTON3,BOTTON4,BOTTON5
 
 /*spi*/
 #define MOSI PA7

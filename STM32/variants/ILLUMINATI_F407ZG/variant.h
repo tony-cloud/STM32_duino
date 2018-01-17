@@ -10,13 +10,12 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 /******************** BOTTON ************************/
-#define BUTTONn      4                     
-#define  BOTTON_MASK         0x00
-#define  BOTTON	PF6
+#define  BOARD_NR_KEY		4                     
+#define  BOTTON		PF6
 #define  BOTTON1	PF7
 #define  BOTTON2	PF8
 #define  BOTTON3	PF9
-#define KEYS_LIST  BOTTON,BOTTON1,BOTTON2,BOTTON3
+#define  BOTTON_MASK         0x00
   
 
 #define MOSI PA7

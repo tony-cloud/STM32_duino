@@ -15,7 +15,6 @@
 #define BOTTON1 PE3     // active low
 #define BOTTON2 PE4     // active low
 #define BOTTON_MASK   0x01
-#define KEYS_LIST  BOTTON,BOTTON1,BOTTON2
 
 #define USER_BTN KEY_BUTTON  // STM naming compatibility
 

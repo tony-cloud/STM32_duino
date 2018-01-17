@@ -15,7 +15,6 @@
 #define BOTTON   PA0
 #define USER_BTN BOTTON 
 #define BOTTON_MASK         0x01
-#define KEYS_LIST  BOTTON
 
 // Connected to on board LIS3DSH accelerometer, CS: PE3
 #define MOSI PA7

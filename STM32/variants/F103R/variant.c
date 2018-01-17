@@ -1,8 +1,5 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
-#include "variant.h"
 
-//      2016.9.18 huawei <huaweiwx@sina.com>
 //HSI
 #ifdef USE_HSI
 	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL12
@@ -39,16 +36,17 @@
 #  endif
 #endif
 
+
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
+
 #if defined(USE_HSI)
-void void SystemClock_Config(void)
+void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
-    */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = 16;
@@ -60,8 +58,6 @@ void void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks 
-    */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -81,14 +77,14 @@ void void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time 
-    */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-
-    /**Configure the Systick 
-    */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+    /* SysTick_IRQn interrupt configuration */
 
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 #else
 void SystemClock_Config(void) {
@@ -128,4 +124,4 @@ void SystemClock_Config(void) {
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
-#endif
+#endif  //HSI

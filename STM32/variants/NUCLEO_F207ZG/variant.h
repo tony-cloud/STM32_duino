@@ -14,8 +14,6 @@
 #define  BOTTON              PC13 
 #define  BOTTON_MASK         0x01
 #define KEYS_LIST  	BOTTON
-#define USER_BTN  BOTTON // STM naming compatibility
-
 
 #define MOSI PA7
 #define MISO PA6

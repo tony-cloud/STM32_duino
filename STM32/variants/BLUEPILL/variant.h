@@ -1,28 +1,42 @@
+
+/* default variant infomations can be replaced by halConfig.h or board.txtmenu*/
+
 #ifndef VARIANT_H
 #define VARIANT_H
 
 /*LED*/
 #define BOARD_NR_LED          1 
 #ifndef LED_BUILTIN
-#	define LED_BUILTIN PC13
+ #define LED_BUILTIN PC13
 #endif
 #ifndef LED_BUILTIN_MASK
-#	define LED_BUILTIN_MASK		0x00
+ #define LED_BUILTIN_MASK		0x00
 #endif
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 /*KEY*/
-//#define KEYS_LIST             /*KEY_LIST NUL*/
 
 /*SPI*/
-#define MOSI PA7
-#define MISO PA6
-#define SCK PA5
-#define SS PA4
+#ifndef MOSI
+ #define MOSI PA7
+#endif
+#ifndef MISO
+ #define MISO PA6
+#endif
+#ifndef SCK
+ #define SCK PA5
+#endif
+#ifndef SS
+ #define SS PA4
+#endif
 
 /*I2C*/
-#define SDA PB7
-#define SCL PB6
+#ifndef SDA
+ #define SDA PB7
+#endif
+#ifndef SCL
+ #define SCL PB6
+#endif
 
 /*USB*/
 

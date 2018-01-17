@@ -1,6 +1,6 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
-#include "bsp.h"
+
+void SystemClock_Config(void) __weak;
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -39,4 +39,3 @@ void SystemClock_Config(void) {
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
-

@@ -1,7 +1,7 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
 void SystemClock_Config(void)
 {
 
@@ -70,21 +70,3 @@ void SystemClock_Config(void)
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
-/* USER CODE END 2 */
-
-
-//void SystemClock_Config(void)
-//{
-//#if defined(RUN_HSI)
-//  SystemClock_Config_HSI();
-//#else
-//  SystemClock_Config_HSE();
-//#endif  
-//}
-
-/**
-  * @}
-  * @}
-  */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

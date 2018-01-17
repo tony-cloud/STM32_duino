@@ -1,5 +1,5 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
+
 #ifdef __GNUC__
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
@@ -11,8 +11,9 @@
 /** System Clock Configuration
 */
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
 #if defined(USE_HSI)
-extern void SystemClock_Config(void)
+void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
   if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)

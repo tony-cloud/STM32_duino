@@ -15,7 +15,6 @@
 #define BOTTON2	PE3  //0
 #define BOTTON3	PE2  //0
 #define  BOTTON_MASK    0x01
-#define KEYS_LIST  BOTTON,BOTTON1,BOTTON2,BOTTON3
 
 #define MOSI PA7
 #define MISO PA6

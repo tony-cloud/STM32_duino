@@ -2,7 +2,7 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20000000 + 131072;    /* end of RAM */
+_estack = 0x20000000 + 0x20000;    /* end of RAM */
 
 /* Specify the memory areas */
 MEMORY
