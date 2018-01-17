@@ -1,5 +1,5 @@
 # See: http://code.google.com/p/arduino/wiki/Platforms
-# for developer
+# for developer,copy or rename this file to boards.txt
 
 menu.subboard=Specific Board
 menu.startadr=Startup adr
@@ -15,7 +15,7 @@ menu.log=Debug Log_level
 
 #################################### Nucleo-64 ############################################
 # NUCLEO 64 board
-NUCLEO_64.name=Nucleo-64
+NUCLEO_64.name=Nucleo-64[SerialUART2]
 NUCLEO_64.vid.0=0x0483
 NUCLEO_64.pid.0=0x374B
 
@@ -105,7 +105,7 @@ NUCLEO_64.menu.upload_method.STLinkMethod.upload.protocol=STLink
 NUCLEO_64.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-NUCLEO_64.menu.log.default=Release
+NUCLEO_64.menu.log.default=Release(no-exceptions)
 NUCLEO_64.menu.log.default.build.log_level=-fno-exceptions
 NUCLEO_64.menu.log.fatal=FATAL
 NUCLEO_64.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -123,7 +123,7 @@ NUCLEO_64.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 #################################### Nucleo-F207ZG ############################################
 #Nucleo_F207ZG board
 
-Nucleo_F207ZG.name=Nucleo-F207ZG(120M)
+Nucleo_F207ZG.name=Nucleo-F207ZG(120M)[SerialUART3]
 Nucleo_F207ZG.vid.0=0x0483
 Nucleo_F207ZG.pid.0=0x374B
 
@@ -230,7 +230,7 @@ Nucleo_F207ZG.upload.protocol=STLink
 Nucleo_F207ZG.upload.tool=stlink_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-Nucleo_F207ZG.menu.log.default=Release
+Nucleo_F207ZG.menu.log.default=Release(no-exceptions)
 Nucleo_F207ZG.menu.log.default.build.log_level=-fno-exceptions
 Nucleo_F207ZG.menu.log.fatal=FATAL
 Nucleo_F207ZG.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -247,7 +247,7 @@ Nucleo_F207ZG.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 #################################### Nucleo-F401RE(84M) ##########################################
 #Nucleo-F401RE(84M) board
-Nucleo-F401RE.name=Nucleo-F401RE(84M)
+Nucleo-F401RE.name=Nucleo-F401RE(84M)[SerialUART2]
 Nucleo-F401RE.vid.0=0x0483
 Nucleo-F401RE.pid.0=0x374B
 
@@ -321,7 +321,7 @@ Nucleo-F401RE.upload.protocol=STLink
 Nucleo-F401RE.upload.tool=stlink_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-Nucleo-F401RE.menu.log.default=Release
+Nucleo-F401RE.menu.log.default=Release(no-exceptions)
 Nucleo-F401RE.menu.log.default.build.log_level=-fno-exceptions
 Nucleo-F401RE.menu.log.fatal=FATAL
 Nucleo-F401RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -338,7 +338,7 @@ Nucleo-F401RE.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 #################################### Nucleo-F411RE(96M) #########################################
 # NUCLEO 64 board
-Nucleo-F411RE.name=Nucleo-F411RE(96M)
+Nucleo-F411RE.name=Nucleo-F411RE(96M)[SerialUART2]
 Nucleo-F411RE.vid.0=0x0483
 Nucleo-F411RE.pid.0=0x374B
 
@@ -412,7 +412,7 @@ Nucleo-F411RE.upload.protocol=STLink
 Nucleo-F411RE.upload.tool=stlink_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-Nucleo-F411RE.menu.log.default=Release
+Nucleo-F411RE.menu.log.default=Release(no-exceptions)
 Nucleo-F411RE.menu.log.default.build.log_level=-fno-exceptions
 Nucleo-F411RE.menu.log.fatal=FATAL
 Nucleo-F411RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -430,7 +430,7 @@ Nucleo-F411RE.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 #################################### Nucleo-F767ZI ############################################
 #Nucleo_F767ZI board
 
-Nucleo_F767ZI.name=Nucleo-F767ZI(216M)
+Nucleo_F767ZI.name=Nucleo-F767ZI(216M)[SerialUART3]
 Nucleo_F767ZI.vid.0=0x0483
 Nucleo_F767ZI.pid.0=0x374B
 
@@ -538,7 +538,7 @@ Nucleo_F767ZI.menu.startadr.R20000000.upload.vect=0x20000000
 
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-Nucleo_F767ZI.menu.log.default=Release
+Nucleo_F767ZI.menu.log.default=Release(no-exceptions)
 Nucleo_F767ZI.menu.log.default.build.log_level=-fno-exceptions
 Nucleo_F767ZI.menu.log.fatal=FATAL
 Nucleo_F767ZI.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -555,7 +555,7 @@ Nucleo_F767ZI.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 #################################### NUCLEO_L476 ############################################
 # Nucleo 64 board
-NUCLEO_L476.name=Nucleo-L476RG(80M)
+NUCLEO_L476.name=Nucleo-L476RG(80M)[SerialUART2]
 NUCLEO_L476.vid.0=0x0483
 NUCLEO_L476.pid.0=0x374B
 
@@ -664,7 +664,7 @@ NUCLEO_L476.upload.tool=stlink_upload
 
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-NUCLEO_L476.menu.log.default=Release
+NUCLEO_L476.menu.log.default=Release(no-exceptions)
 NUCLEO_L476.menu.log.default.build.log_level=-fno-exceptions
 NUCLEO_L476.menu.log.fatal=FATAL
 NUCLEO_L476.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -727,7 +727,7 @@ DISCOVERY_L053C8.menu.serial.SerialUSB=SerialUSB (USB connector)
 DISCOVERY_L053C8.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_L053C8.menu.log.default=Release
+DISCOVERY_L053C8.menu.log.default=Release(no-exceptions)
 DISCOVERY_L053C8.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_L053C8.menu.log.fatal=FATAL
 DISCOVERY_L053C8.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -801,7 +801,7 @@ DISCOVERY_L152R.menu.serial.SerialUSB=SerialUSB (USB connector)
 DISCOVERY_L152R.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_L152R.menu.log.default=Release
+DISCOVERY_L152R.menu.log.default=Release(no-exceptions)
 DISCOVERY_L152R.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_L152R.menu.log.fatal=FATAL
 DISCOVERY_L152R.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -859,7 +859,7 @@ DISCOVERY_F303VC.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART2
 #DISCOVERY_F303VC.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_F303VC.menu.log.default=Release
+DISCOVERY_F303VC.menu.log.default=Release(no-exceptions)
 DISCOVERY_F303VC.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_F303VC.menu.log.fatal=FATAL
 DISCOVERY_F303VC.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -924,7 +924,7 @@ DISCOVERY_F407VG.menu.serial.SerialUART2=SerialUART2 [PA2/PA3]
 DISCOVERY_F407VG.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_F407VG.menu.log.default=Release
+DISCOVERY_F407VG.menu.log.default=Release(no-exceptions)
 DISCOVERY_F407VG.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_F407VG.menu.log.fatal=FATAL
 DISCOVERY_F407VG.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -989,7 +989,7 @@ DISCOVERY_F429ZI.upload.protocol=STLink
 DISCOVERY_F429ZI.upload.tool=stlink_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_F429ZI.menu.log.default=Release
+DISCOVERY_F429ZI.menu.log.default=Release(no-exceptions)
 DISCOVERY_F429ZI.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_F429ZI.menu.log.fatal=FATAL
 DISCOVERY_F429ZI.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1054,7 +1054,7 @@ DISCOVERY_F746NG.menu.serial.SerialUSB=SerialUSB
 DISCOVERY_F746NG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-DISCOVERY_F746NG.menu.log.default=Release
+DISCOVERY_F746NG.menu.log.default=Release(no-exceptions)
 DISCOVERY_F746NG.menu.log.default.build.log_level=-fno-exceptions
 DISCOVERY_F746NG.menu.log.fatal=FATAL
 DISCOVERY_F746NG.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1127,7 +1127,7 @@ F030F.menu.upload_method.serialMethod.upload.protocol=maple_serial
 F030F.menu.upload_method.serialMethod.upload.tool=serial_upload
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F030F.menu.log.default=Release
+F030F.menu.log.default=Release(no-exceptions)
 F030F.menu.log.default.build.log_level=-fno-exceptions
 F030F.menu.log.fatal=FATAL
 F030F.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1238,7 +1238,7 @@ MapleMini.menu.jtag_swd.Disabled=Disabled [debug pins free]
 MapleMini.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-MapleMini.menu.log.default=Release
+MapleMini.menu.log.default=Release(no-exceptions)
 MapleMini.menu.log.default.build.log_level=-fno-exceptions
 MapleMini.menu.log.fatal=FATAL
 MapleMini.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1379,7 +1379,7 @@ BluePill.menu.jtag_swd.Disabled=Disabled [debug pins free]
 BluePill.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-BluePill.menu.log.default=Release
+BluePill.menu.log.default=Release(no-exceptions)
 BluePill.menu.log.default.build.log_level=-fno-exceptions
 BluePill.menu.log.fatal=FATAL
 BluePill.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1452,7 +1452,7 @@ L152C.menu.serial.SerialUSB=SerialUSB (USB connector)
 L152C.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-L152C.menu.log.default=Release
+L152C.menu.log.default=Release(no-exceptions)
 L152C.menu.log.default.build.log_level=-fno-exceptions
 L152C.menu.log.fatal=FATAL
 L152C.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1628,7 +1628,7 @@ GD103RB.menu.jtag_swd.Disabled=Disabled [debug pins free]
 GD103RB.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-GD103RB.menu.log.default=Release
+GD103RB.menu.log.default=Release(no-exceptions)
 GD103RB.menu.log.default.build.log_level=-fno-exceptions
 GD103RB.menu.log.fatal=FATAL
 GD103RB.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1804,7 +1804,7 @@ GD103RE.menu.jtag_swd.Disabled=Disabled [debug pins free]
 GD103RE.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-GD103RE.menu.log.default=Release
+GD103RE.menu.log.default=Release(no-exceptions)
 GD103RE.menu.log.default.build.log_level=-fno-exceptions
 GD103RE.menu.log.fatal=FATAL
 GD103RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -1952,7 +1952,7 @@ F103RB.menu.jtag_swd.Disabled=Disabled [debug pins free]
 F103RB.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F103RB.menu.log.default=Release
+F103RB.menu.log.default=Release(no-exceptions)
 F103RB.menu.log.default.build.log_level=-fno-exceptions
 F103RB.menu.log.fatal=FATAL
 F103RB.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -2142,7 +2142,7 @@ F103RE.menu.jtag_swd.Disabled=Disabled [debug pins free]
 F103RE.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F103RE.menu.log.default=Release
+F103RE.menu.log.default=Release(no-exceptions)
 F103RE.menu.log.default.build.log_level=-fno-exceptions
 F103RE.menu.log.fatal=FATAL
 F103RE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -2344,7 +2344,7 @@ F103V.menu.jtag_swd.Disabled=Disabled [debug pins free]
 F103V.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F103V.menu.log.default=Release
+F103V.menu.log.default=Release(no-exceptions)
 F103V.menu.log.default.build.log_level=-fno-exceptions
 F103V.menu.log.fatal=FATAL
 F103V.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -2590,7 +2590,7 @@ F103Z.menu.jtag_swd.Disabled=Disabled [debug pins free]
 F103Z.menu.jtag_swd.Disabled.build.extra_flags_jtag=-DMENU_DEBUG_DISABLED
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F103Z.menu.log.default=Release
+F103Z.menu.log.default=Release(no-exceptions)
 F103Z.menu.log.default.build.log_level=-fno-exceptions
 F103Z.menu.log.fatal=FATAL
 F103Z.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -2740,7 +2740,7 @@ F401S.menu.serial.SerialUSB=SerialUSB
 F401S.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F401S.menu.log.default=Release
+F401S.menu.log.default=Release(no-exceptions)
 F401S.menu.log.default.build.log_level=-fno-exceptions
 F401S.menu.log.fatal=FATAL
 F401S.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -2935,7 +2935,7 @@ F407xE.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 #F407xE.menu.serial.Automatic=Automatically selected based on upload method
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F407xE.menu.log.default=Release
+F407xE.menu.log.default=Release(no-exceptions)
 F407xE.menu.log.default.build.log_level=-fno-exceptions
 F407xE.menu.log.fatal=FATAL
 F407xE.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -3163,7 +3163,7 @@ F407xG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 #F407xG.menu.serial.Automatic=Automatically selected based on upload method
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
-F407xG.menu.log.default=Release
+F407xG.menu.log.default=Release(no-exceptions)
 F407xG.menu.log.default.build.log_level=-fno-exceptions
 F407xG.menu.log.fatal=FATAL
 F407xG.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
@@ -3274,7 +3274,7 @@ F746S.menu.upload_method.jLinkMethod.upload.tool=jlink_upload
 F746S.menu.upload_method.jLinkMethod.upload.protocol=jlink
 F746S.menu.upload_method.jLinkMethod.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUSB
 
-F746S.menu.log.default=Release
+F746S.menu.log.default=Release(no-exceptions)
 F746S.menu.log.default.build.log_level=-fno-exceptions
 F746S.menu.log.fatal=FATAL
 F746S.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
