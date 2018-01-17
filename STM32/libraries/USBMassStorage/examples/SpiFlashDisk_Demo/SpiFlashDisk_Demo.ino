@@ -16,6 +16,7 @@
 #define SPIFLASHDISK_SIZE    2040       /*user define, max 2040k*/
 #include <SpiFlashDisk.h>
 #include <LED.h>
+#include <Streaming.h> /*for Serial << */
 
 void setup() {
   SPIFLASH.begin(); //need while usb unconnected

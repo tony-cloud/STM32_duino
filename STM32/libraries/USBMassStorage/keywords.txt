@@ -25,3 +25,4 @@ setBuffer	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+SPIFLASHDISK_SIZE	LITERAL1
