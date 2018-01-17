@@ -22,11 +22,6 @@
 #ifndef ARDUINO_STREAMING
 #define ARDUINO_STREAMING
 
-// #if defined(ARDUINO) && ARDUINO >= 100
-// #include "Arduino.h"
-// #else
-// #include "WProgram.h"
-// #endif
 #include "Stream.h"
 
 #define STREAMING_LIBRARY_VERSION 5
@@ -95,6 +90,8 @@ inline Print &operator <<(Print &obj, const _FLOAT &arg)
 { obj.print(arg.val, arg.digits); return obj; }
 
 //add _DOUBLE by huaweiwx@sina.com
+// double pi = PI;
+//   Serial << _FLOAT(pi, 14); // 14 digits of precision
 struct _DOUBLE
 {
   double val;
@@ -121,7 +118,7 @@ enum _EndLineCode { endl };
 
 inline Print &operator <<(Print &obj, _EndLineCode arg) 
 {
-    UNUSED(arg);
+    (void)(arg);    //UNUSED
 	obj.println(); 
 	return obj; 
 }
