@@ -165,10 +165,10 @@ class TwoWire : public Stream {
 
     void stm32SetInstance(I2C_TypeDef *instance){pdev->handle.Instance = instance;};
 
-    __deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+    //__deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSDA(uint8_t sda){pdev->sda = sda;};
   
-	__deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
+	//__deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSCL(uint8_t scl){pdev->scl = scl;};
 
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
