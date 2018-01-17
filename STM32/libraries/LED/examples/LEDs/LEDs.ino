@@ -1,5 +1,6 @@
 #include <LED.h>
 
+/*LEDs is predefined in LED.h*/
 void setup() {
   //  put your setup code here, to run once:
   for(uint8_t i=0;i<sizeof(LEDs)/sizeof(LEDs[0];i++)

@@ -16,10 +16,10 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include <arduino.h>
+#ifndef __LIB_LED_h__
+#define __LIB_LED_h__
 
-#ifndef __LEDLIB_h__
-#define __LEDLIB_h__
+#include <Arduino.h>
 
 #ifdef LED7_BUILTIN
 #define LEDS_LIST LED_BUILTIN,LED1_BUILTIN,LED2_BUILTIN,LED3_BUILTIN,LED4_BUILTIN,LED5_BUILTIN,LED6_BUILTIN,LED7_BUILTIN
@@ -38,7 +38,7 @@
 #elif defined(LED_BUILTIN)
 #define LEDS_LIST LED_BUILTIN
 #else
-#warrning  "unstandard arduino board "	
+#warning  "unstandard arduino board "	
 #define LEDS_LIST 13	
 #endif
 
@@ -47,8 +47,11 @@
 typedef struct {
     uint8_t  pin;
     uint8_t  on;
-    uint8_t off;
-    uint8_t status;
+    uint8_t  off;
+    uint8_t  status;
+	int brightness;    // how bright the LED is
+    int fadeAmount;    // how many points to fade the LED by
+	int fadeTime; /* = (1000/(255/LED_FADEAMOUNT));*/
 } LED_TypeDef;
 
 #ifdef __cplusplus
@@ -60,34 +63,61 @@ void LEDFlash(uint8_t pin,uint16_t timeon,uint16_t timeoff,uint8_t cnt,uint8_t o
 #ifdef __cplusplus
 } //extern "C"{
 
-class LEDClass
+class LEDClass 
 {
  public:
 	LEDClass(uint8_t pin=LED_BUILTIN, uint8_t on=LOW);
-	void Init(void);
+	
+	inline void Init(void) __attribute__((always_inline)){
+			pinMode(pdata->pin,OUTPUT);
+	}
+	
     void setPin(uint8_t pin, uint8_t on=LOW);
-	void on(void);
-//analogWrite
-    void on(int val);
 
+	inline void on(void) __attribute__((always_inline)){    //digitalWrite
+		digitalWrite(pdata->pin,pdata->on);
+		pdata->status =pdata->on;
+	}
+    inline void on(int val) __attribute__((always_inline)){ //analogWrite
+		analogWrite(pdata->pin, (pdata->on? val:255-val));
+	}
 #ifdef STM32GENERIC
 //analogWrite
-	bool availablePwm(void){return true;};
+	bool availablePwm(void){return true;};	
+#elif defined(__MSP430__)
+    bool availablePwm(void){return  availablepwm;} ;
+    bool availablepwm;
 #else
     bool availablePwm(void){return  availablepwm;} ;
-    bool availablepwm = true;
+    bool availablepwm = true;   /*fixed me*/
 #endif
-	
-	void off(void);
-	void toggle(void);
-	void flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt=1);
+
+    inline LEDClass &operator = (bool value) __attribute__((always_inline)){
+		digitalWrite(pdata->pin,value);
+		return *this;
+    }
+
+	inline void off(void) __attribute__((always_inline)){
+		digitalWrite(pdata->pin,pdata->off);
+		pdata->status = pdata->off;
+	}
+
+	inline void toggle(void) __attribute__((always_inline)){
+		if(pdata->status == pdata->off) this->on();
+		else this->off();
+	}
+
+	inline void flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt=1) __attribute__((always_inline)){
+		LEDFlash(pdata->pin, timeon,timeoff,cnt,pdata->on);
+		pdata->status = pdata->off;
+	}
+
 	void fade(uint16_t time = (1000/(255/LED_FADEAMOUNT)));
-	LED_TypeDef* pdata = &sLed;
+
+    LED_TypeDef* pdata;
+
   private:
     LED_TypeDef  sLed;
-	int brightness=0;    // how bright the LED is
-    int fadeAmount = LED_FADEAMOUNT;    // how many points to fade the LED by
-	int fadeTime = (1000/(255/LED_FADEAMOUNT));
 };
 
 #ifdef LED_BUILTIN
@@ -123,7 +153,7 @@ extern LEDClass Led6;
 extern LEDClass Led7;
 #endif
 
-
 #endif /*__cplusplus*/
-#endif /*__LEDLIB_h__*/
+
+#endif /*__LIB_LED_h__*/
 
