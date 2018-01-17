@@ -10,7 +10,7 @@ void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 
-  double pi = PI*100000000;
+  double pi = PI;
   Serial.begin(115200);
   delay(2000);
 
