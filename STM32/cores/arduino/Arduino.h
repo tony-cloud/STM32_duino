@@ -29,10 +29,6 @@
 #include "bit_constants.h"
 #include "util/toolschain.h"
 
-// #include <avr/pgmspace.h>
-// #include <avr/io.h>
-// #include <avr/interrupt.h>
-
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -188,12 +184,10 @@ long map(long, long, long, long, long);
 
 #ifdef __cplusplus
 
-#include "SerialUART.h"
+#include "HardwareSerial.h"
 #include <SerialUSB.h>
 #include <STM32System.h>
 
-//add by huaweiwx@sina.com
-//#include "Streaming.h"
 #include "wiring_pulse.h"  /*copy from Arduino_core_STM32 huaweiwx@sina.com 2017.11*/
 
 #if defined(MENU_SERIAL)
