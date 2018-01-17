@@ -18,10 +18,11 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  2018.1.8 change SerialUART to HardwareSerial comptatible with arduino stl libs and some apps huaweiwx@sina.com
 */
 
-#ifndef SERIAL_UART_H
-#define SERIAL_UART_H
+#ifndef _HARDWARESERIAL_H_
+#define _HARDWARESERIAL_H_
 
 #include "stm32_def.h"
 #include "stm32_gpio.h"
@@ -29,9 +30,9 @@
 #include "util/toolschain.h"
 #define BUFFER_SIZE 128
 
-class SerialUART : public Stream  {
+class HardwareSerial : public Stream  {
   public:
-    SerialUART(USART_TypeDef *instance);
+    HardwareSerial(USART_TypeDef *instance);
     void begin(const uint32_t baud);
     void end(void);
     int available(void);
@@ -74,34 +75,40 @@ class SerialUART : public Stream  {
 	
 };
 
-#ifdef USART1
-extern SerialUART SerialUART1;
+#if defined(USART1) && (USE_SERIAL1)
+extern HardwareSerial SerialUART1;
 #define Serial1 SerialUART1
 #endif
 
-#ifdef USART2
-extern SerialUART SerialUART2;
+#if defined(USART2) && (USE_SERIAL2)
+extern HardwareSerial SerialUART2;
 #define Serial2 SerialUART2
 #endif
 
-#ifdef USART3
-extern SerialUART SerialUART3;
+#if defined(USART3) && (USE_SERIAL3)
+extern HardwareSerial SerialUART3;
 #define Serial3 SerialUART3
 #endif
 
 #if defined(USART4) || defined(UART4)
-extern SerialUART SerialUART4;
+#if (USE_SERIAL4)
+extern HardwareSerial SerialUART4;
 #define Serial4 SerialUART4
+#endif
 #endif
 
 #if defined(USART5) || defined(UART5)
-extern SerialUART SerialUART5;
+#if (USE_SERIAL5)
+extern HardwareSerial SerialUART5;
 #define Serial5 SerialUART5
 #endif
+#endif
 
-#ifdef USART6
-extern SerialUART SerialUART6;
+#if defined(USART6) && (USE_SERIAL6)
+extern HardwareSerial SerialUART6;
 #define Serial6 SerialUART6
 #endif
 
-#endif // _UART_CLASS_
+#define SerialUART HardwareSerial  /*comptatible with old version*/
+
+#endif // _HARDWARESERIAL_H_

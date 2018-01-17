@@ -18,6 +18,8 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
+  2018.1.8 change SerialUART to HardwareSerial, comptatible with arduino stl libs and some apps huaweiwx@sina.com
 */
 
 /**
@@ -26,14 +28,14 @@
  * TODO: add alternate pin selection functions
  * TODO: add constructor with custom buffer parameter
  */
-#include "SerialUART.h"
+#include "HardwareSerial.h"
 #include "stm32_gpio_af.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 /**
  * Set the underlying UART instance.
  */
-SerialUART::SerialUART(USART_TypeDef *instance) {
+HardwareSerial::HardwareSerial(USART_TypeDef *instance) {
     this->instance = instance;
 }
 
@@ -42,11 +44,11 @@ SerialUART::SerialUART(USART_TypeDef *instance) {
  *
  * To save memory, this implementation will:
  * - not use any memory if begin() is never called
- * - use statically allocated memory, if begin() is called exactly in one SerialUARTs.
- * - use statically allocated memory for the first, and malloc() for any subsequent calls to begin() on DIFFERENT SerialUARTs.
+ * - use statically allocated memory, if begin() is called exactly in one HardwareSerials.
+ * - use statically allocated memory for the first, and malloc() for any subsequent calls to begin() on DIFFERENT HardwareSerials.
  */
 
-void SerialUART::begin(const uint32_t baud) {
+void HardwareSerial::begin(const uint32_t baud) {
   if (txBuffer == NULL) {
 	static uint8_t tx[BUFFER_SIZE];
 	static uint8_t static_tx_used = 0;
@@ -85,67 +87,67 @@ void SerialUART::begin(const uint32_t baud) {
 
   handle->Instance = instance;
   
-  #ifdef USART1
+#if defined(USART1) && (USE_SERIAL1)
   if (handle->Instance == USART1) {
     __HAL_RCC_USART1_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART1_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART1_IRQn); 
   }
-  #endif
+#endif
   
-  #ifdef USART2
+#if defined(USART2) && (USE_SERIAL2)
   if (handle->Instance == USART2) {
     __HAL_RCC_USART2_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART2_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART2_IRQn); 
   }
-  #endif
+#endif
   
-  #ifdef USART3
+#if defined(USART3) && (USE_SERIAL3)
   if (handle->Instance == USART3) {
     __HAL_RCC_USART3_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART3_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART3_IRQn); 
   }
-  #endif
+#endif
   
-  #ifdef UART4
+#if defined(UART4) && (USE_SERIAL4)
   if (handle->Instance == UART4) {
     __HAL_RCC_UART4_CLK_ENABLE();
     HAL_NVIC_SetPriority(UART4_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(UART4_IRQn);
   }
-  #endif
-  #ifdef USART4
+#endif
+#if defined(USART4) && (USE_SERIAL4)
   if (handle->Instance == USART4) {
     __HAL_RCC_USART4_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART4_IRQn, USART_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART4_IRQn); 
   }
-  #endif
+#endif
   
-  #ifdef UART5
+#if defined(UART5) && (USE_SERIAL5)
   if (handle->Instance == UART5) {
     __HAL_RCC_UART5_CLK_ENABLE();
     HAL_NVIC_SetPriority(UART5_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(UART5_IRQn);
   }
-  #endif
-  #ifdef USART5
+#endif
+#if defined(USART5) && (USE_SERIAL5)
   if (handle->Instance == USART5) {
     __HAL_RCC_USART5_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART5_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART5_IRQn);
   }
-  #endif
+#endif
 
-  #ifdef USART6
+#if defined(USART6) && (USE_SERIAL6)
   if (handle->Instance == USART6) {
     __HAL_RCC_USART6_CLK_ENABLE();
     HAL_NVIC_SetPriority(USART6_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   }
-  #endif
+#endif
   if((txPin < 0xff) && (rxPin <0xff))
     stm32AfUARTInit(instance, 
                   variant_pin_list[rxPin].port,
@@ -168,71 +170,71 @@ void SerialUART::begin(const uint32_t baud) {
     
 }
 
-void SerialUART::end(void) {
-  #ifdef USART1
+void HardwareSerial::end(void) {
+#if defined(USART1) && (USE_SERIAL1)
   if (handle->Instance == USART1) {
     HAL_NVIC_DisableIRQ(USART1_IRQn);
 //    __HAL_RCC_USART1_CLK_DISABLE();
   }
-  #endif
+#endif
   
-  #ifdef USART2
+#if defined(USART2) && (USE_SERIAL2)
   if (handle->Instance == USART2) {
     HAL_NVIC_DisableIRQ(USART2_IRQn); 
     __HAL_RCC_USART2_CLK_DISABLE();
   }
-  #endif
+#endif
   
-  #ifdef USART3
+#if defined(USART3) && (USE_SERIAL3)
   if (handle->Instance == USART3) {
     HAL_NVIC_DisableIRQ(USART3_IRQn); 
     __HAL_RCC_USART3_CLK_DISABLE();
   }
-  #endif
+#endif
   
-  #ifdef UART4
+#if defined(UART4) && (USE_SERIAL4)
   if (handle->Instance == UART4) {
     HAL_NVIC_DisableIRQ(UART4_IRQn);
     __HAL_RCC_UART4_CLK_DISABLE();
   }
-  #endif
-  #ifdef USART4
+#endif
+#if defined(USART4) && (USE_SERIAL4)
   if (handle->Instance == USART4) {
     HAL_NVIC_DisableIRQ(USART4_IRQn); 
     __HAL_RCC_USART4_CLK_DISABLE();
   }
-  #endif
+#endif
   
-  #ifdef UART5
+#if defined(UART5) && (USE_SERIAL5)
   if (handle->Instance == UART5) {
     HAL_NVIC_DisableIRQ(UART5_IRQn);
     __HAL_RCC_UART5_CLK_DISABLE();
   }
-  #endif
-  #ifdef USART5
+#endif
+#if defined(USART5) && (USE_SERIAL5)
   if (handle->Instance == USART5) {
     HAL_NVIC_DisableIRQ(USART5_IRQn);
     __HAL_RCC_USART5_CLK_DISABLE();
   }
-  #endif
+#endif
 
-  #ifdef USART6
+#if defined(USART6) && (USE_SERIAL6)
   if (handle->Instance == USART6) {
     HAL_NVIC_DisableIRQ(USART6_IRQn);
     __HAL_RCC_USART6_CLK_DISABLE();
   }
-  #endif   
+#endif   
 }
 
-int SerialUART::available() {
+int HardwareSerial::available() {
     return rxEnd != rxStart;
 }
 
-int SerialUART::availableForWrite() {  
+int HardwareSerial::availableForWrite() {  
     return txEnd != txStart;  
 }  
 
-int SerialUART::peek() {
+int HardwareSerial::peek() {
     if (available()) {
     return rxBuffer[rxStart % BUFFER_SIZE];
   } else {
@@ -240,12 +242,12 @@ int SerialUART::peek() {
   }
 }
 
-void SerialUART::flush() {
+void HardwareSerial::flush() {
     
     while(txEnd % BUFFER_SIZE != txStart % BUFFER_SIZE);
 }
 
-int SerialUART::read() {
+int HardwareSerial::read() {
   if (available()) {
     return rxBuffer[rxStart++ % BUFFER_SIZE];
   } else {
@@ -253,7 +255,7 @@ int SerialUART::read() {
   }
 }
 
-size_t SerialUART::write(const uint8_t c) {
+size_t HardwareSerial::write(const uint8_t c) {
   while((txEnd + 1) % BUFFER_SIZE == txStart % BUFFER_SIZE);
   
   txBuffer[txEnd % BUFFER_SIZE] = c;
@@ -264,82 +266,98 @@ size_t SerialUART::write(const uint8_t c) {
   return 1;
 }
 
-void SerialUART::stm32SetRX(uint8_t rx) {
+void HardwareSerial::stm32SetRX(uint8_t rx) {
     rxPin = rx;
 }
 
-void SerialUART::stm32SetTX(uint8_t tx) {
+void HardwareSerial::stm32SetTX(uint8_t tx) {
     txPin = tx;
 }
 
-void SerialUART::setPins(uint8_t tx,uint8_t rx) {
+void HardwareSerial::setPins(uint8_t tx,uint8_t rx) {
     txPin = tx;
     rxPin = rx;
 }
 //// Interrupt
 
-SerialUART *interruptUART;
+HardwareSerial *interruptUART;
 
 #ifdef USART1
+#if (USE_SERIAL1)
 extern "C" void USART1_IRQHandler(void) {
   interruptUART = &SerialUART1;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART1(USART1);
+HardwareSerial SerialUART1(USART1);
+#endif
 #endif
 
 #ifdef USART2
+#if (USE_SERIAL2)
 extern "C" void USART2_IRQHandler(void) {
   interruptUART = &SerialUART2;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART2(USART2);
+HardwareSerial SerialUART2(USART2);
+#endif
 #endif
 
 #ifdef USART3
+#if (USE_SERIAL3)
 extern "C" void USART3_IRQHandler(void) {
   interruptUART = &SerialUART3;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART3(USART3);
+HardwareSerial SerialUART3(USART3);
+#endif
 #endif
 
 #ifdef UART4
+#if (USE_SERIAL4)
 extern "C" void UART4_IRQHandler(void) {
   interruptUART = &SerialUART4;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART4(UART4);
+HardwareSerial SerialUART4(UART4);
+#endif
 #endif
 #ifdef USART4
+#if (USE_SERIAL4)
 extern "C" void USART4_IRQHandler(void) {
   interruptUART = &SerialUART4;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART4(USART4);
+HardwareSerial SerialUART4(USART4);
+#endif
 #endif
 
 #ifdef UART5
+#if (USE_SERIAL5)
 extern "C" void UART5_IRQHandler(void) {
   interruptUART = &SerialUART5;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART5(UART5);
+HardwareSerial SerialUART5(UART5);
+#endif
 #endif
 #ifdef USART5
+#if (USE_SERIAL5)
 extern "C" void USART5_IRQHandler(void) {
   interruptUART = &SerialUART5;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART5(USART5);
+HardwareSerial SerialUART5(USART5);
+#endif
 #endif
 
 #ifdef USART6
+#if (USE_SERIAL6)
 extern "C" void USART6_IRQHandler(void) {
   interruptUART = &SerialUART6;
   HAL_UART_IRQHandler(interruptUART->handle);
 }
-SerialUART SerialUART6(USART6);
+HardwareSerial SerialUART6(USART6);
+#endif
 #endif
 
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
