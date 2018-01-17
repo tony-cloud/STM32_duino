@@ -24,14 +24,16 @@
 // Devices with higher bit address might not be seen properly.
 //
 #include <LED.h>
-//#include <Wire.h>
-#include <WireSoft.h>
+#include <Wire.h>
+TwoWire myWire(SDA,SCL);
+
+//#include <WireSoft.h>
+//TwoWireSoft myWire(SDA,SCL);
 
 //#define EE_SDA AT24CXX_SDA //PB7
 //#define EE_SCL AT24CXX_SCL //PB6
 
 //TwoWire Wire;
-TwoWire myWire(SDA,SCL);
 
 void setup() {
   Serial.begin(115200);

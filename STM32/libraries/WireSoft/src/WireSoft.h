@@ -57,7 +57,7 @@
 #define BUFFER_LENGTH 32
 
 
-class CTwoWireSoft : public WireBase {
+class TwoWireSoft : public WireBase {
  public:
     uint8_t	i2c_delay;
     uint8_t	scl_pin;
@@ -126,7 +126,7 @@ class CTwoWireSoft : public WireBase {
      * Accept pin numbers for SCL and SDA lines. Set the delay needed
      * to create the timing for I2C's Standard Mode and Fast Mode.
      */
-    CTwoWireSoft(uint8_t sda=SDA, uint8_t scl=SCL, uint8_t delay=SOFT_STANDARD);
+    TwoWireSoft(uint8_t sda=SDA, uint8_t scl=SCL, uint8_t delay=SOFT_STANDARD);
 
     /*
      * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as
@@ -143,10 +143,10 @@ class CTwoWireSoft : public WireBase {
     /*
      * If object is destroyed, set pin numbers to 0.
      */
-    ~CTwoWireSoft();
+    ~TwoWireSoft();
 };
 
-extern CTwoWireSoft WireSoft;
+extern TwoWireSoft WireSoft;
 
 #endif // _WIRE_H_
 

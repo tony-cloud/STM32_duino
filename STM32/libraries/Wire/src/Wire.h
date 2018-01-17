@@ -22,10 +22,10 @@
 #ifndef TwoWire_h
 #define TwoWire_h
 
+#include "stm32_def.h"
 #include <inttypes.h>
 #include "Stream.h"
-#include "stm32_def.h"
-
+#include "util/toolschain.h"  /*for __deprecated(x)*/
 #if __has_include("configs/i2cEepromConfig.h")
 #  include "configs/i2cEepromConfig.h"
 #endif

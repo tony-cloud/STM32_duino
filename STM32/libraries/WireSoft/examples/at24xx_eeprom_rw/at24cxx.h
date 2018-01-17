@@ -41,7 +41,7 @@
 #define AT24C512	0xffff
 
 
-class EXTEEPROM : public CTwoWireSoft {
+class EXTEEPROM : public TwoWireSoft {
  public:
     EXTEEPROM(uint8_t sda=SDA, uint8_t scl=SCL, uint8_t delay=SOFT_STANDARD);	
     void begin(uint8_t devAdr = 0x50, uint16_t devType = AT24C02);

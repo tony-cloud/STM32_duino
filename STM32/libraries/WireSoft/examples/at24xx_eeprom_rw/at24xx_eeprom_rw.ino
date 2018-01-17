@@ -7,6 +7,7 @@
 
 #include "WireSoft.h"
 #include "at24cxx.h"
+#include <Streaming.h> /*for Serial << */
 
 //my vct6 board config, check and fix me
 
