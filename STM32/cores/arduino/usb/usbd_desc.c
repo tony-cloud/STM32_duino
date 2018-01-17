@@ -36,7 +36,7 @@
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_conf.h"
-
+#if (USER_USBDDESC < 1)
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 //#pragma GCC diagnostic ignored "-Wwrite-strings"
 //#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -416,5 +416,5 @@ USBD_DescriptorsTypeDef MSC_Desc =
   USBD_MSC_InterfaceStrDescriptor,
 };
 
-
+#endif //
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

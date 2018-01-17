@@ -42,8 +42,6 @@
   ******************************************************************************
 */
 /* Includes ------------------------------------------------------------------*/
-#ifdef STM32F7
-
 #include "stm32_def.h"
 
 #include "usbd_def.h"
@@ -775,4 +773,3 @@ void  USBD_LL_Delay (uint32_t Delay)
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
-#endif

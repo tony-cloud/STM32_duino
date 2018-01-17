@@ -41,17 +41,11 @@
   ******************************************************************************
 */
 /* Includes ------------------------------------------------------------------*/
-#ifdef STM32L4
-
 #include "stm32_def.h"
 
 #include "usbd_def.h"
 #include "usbd_core.h"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-//#pragma GCC diagnostic ignored "-Wwrite-strings"
-//#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-//#pragma GCC diagnostic ignored "-Wunused-variable"
-//#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -861,5 +855,3 @@ USBD_StatusTypeDef USBD_LL_BatteryCharging(USBD_HandleTypeDef *pdev)
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-#endif
