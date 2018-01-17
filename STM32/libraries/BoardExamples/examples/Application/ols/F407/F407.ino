@@ -75,7 +75,7 @@ uint16_t     readCount = MAX_CAPTURE_SIZE;
 uint16_t    delayCount = 0;
 uint32_t tus;
 // sampling buffer
-uint8_t  logicdata[65535]  __attribute__((at(0x10000000)));
+uint8_t  logicdata[65535]  __attribute__((at(0x10000000))); //use ccram
 volatile uint32_t delays;
 
 // send 32bit unsigned integer as SUMP metadata

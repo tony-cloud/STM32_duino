@@ -11,7 +11,7 @@
 // Use first SPI port
 SdFat sd1(1);
 // SdFatEX sd1(1);
-const uint8_t SD1_CS = PA4;  // chip select for sd1
+const uint8_t SD1_CS = PA3;  // chip select for sd1
 
 // Use second SPI port
 SdFat sd2(2);

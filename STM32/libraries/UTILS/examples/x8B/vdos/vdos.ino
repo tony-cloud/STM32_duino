@@ -16,6 +16,7 @@
    tested for F103xB  by huaweiwx@sina.com 2017.10
    ---------------------------------------------------------------------------------------
 */
+#include <Streaming.h>
 #include <SpiFlash.h>
 
 #define SPIFLASHDISK_SIZE    512       /*25q40 512k user define, max 2040k,*/
@@ -275,7 +276,13 @@ int Cmd_help(int argc, char *argv[])
 
 #ifdef OB_BASE
   uint32_t UID[3];
+#if defined(STM32F0)||defined(STM32F3)
+  UID[0] = HAL_GetUIDw0();
+  UID[1] = HAL_GetUIDw1();
+  UID[2] = HAL_GetUIDw2();
+#else
   HAL_GetUID(UID);
+#endif
   Serial << "\nUSERID:" << _HEX(UID[0]) << " " << _HEX(UID[1]) << " " <<  _HEX(UID[2]);
 #endif
   return (0);

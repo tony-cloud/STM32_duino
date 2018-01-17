@@ -26,7 +26,7 @@
    for STM32GENERIC 2017.
 */
 
-#ifdef STM32F1
+#ifdef GD32F10X
 # include "stm32f1xx_ll_cortex.h"
 # define DEVICE  "GD32Fv0"
 # define MAX_SAMPLERATE  22800000

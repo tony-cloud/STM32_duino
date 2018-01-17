@@ -1,20 +1,35 @@
-/* appAdminister.ino app administer for have not vdisk
+/* vdos_spisdcard.ino stm32 vdisk/mcu administer
+    ---------------------------------------------------------------------------------------
    from the menu
-   Select Serial Communication: SerialUSB/SerialUART1
-   Select Startup adr:flash(WithRamBoot xxkRAM used Only)
+   Select Startup adr: flash(WhitRamboo xxkRAM used only)
    ---------------------------------------------------------------------------------------
    cmd usage:
    type help or h or ? for Display list of commands.
 
    ---------------------------------------------------------------------------------------
-
-   tested for xE/xG  by huaweiwx@sina.com 2017.12
+   tested for F103xE/F407xE  by huaweiwx@sina.com 2017.10
 
    ---------------------------------------------------------------------------------------
 */
+// include the SD library:
 #include <Streaming.h>
-#include <cmdline.h>
+#include <SPI.h>
+#include <SD.h>
+#include "configs/sdCardConfig.h"
 
+// set up variables using the SD utility library functions:
+Sd2Card card;
+SdVolume volume;
+SdFile root;
+
+// change this to match your SD shield or module;
+// Arduino Ethernet shield: pin SDCARD_CS
+// Adafruit SD shields and modules: pin 10
+// Sparkfun SD shield: pin 8
+// MKRZero SD: SDCARD_CS
+const int chipSelect = SDCARD_CS;
+
+#include <cmdline.h>
 char cmdline[256];
 int ptr;
 
@@ -33,11 +48,20 @@ void setup() {
 #endif
 
   Serial.println(F("\n****************************************"));
-  Serial.println(F("*     STM32 appAdminister demo v1.0    *"));
+  Serial.println(F("*        STM32 vdos demo v1.0          *"));
   Serial.println(F("*  Type help Display list of commands  *"));
   Serial.println(F("****************************************\n"));
 
   ptr = 0;
+  if (!card.init(SPI_HALF_SPEED, chipSelect))
+    Serial.println("initialization failed. Things to check!");
+
+  if (!volume.init(card))
+    Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
+
+  root.openRoot(volume);
+  root.ls(LS_R | LS_DATE | LS_SIZE);
+
   Serial.print(F(">"));
 }
 
@@ -231,26 +255,26 @@ int Cmd_help(int argc, char *argv[])
 
   Serial << "\nPIN list:";
   for (uint8_t i = 0; i < sizeof(variant_pin_list) / sizeof(variant_pin_list[0]); i++)
-    Serial << stm32PinName(i) << ", ";
+    Serial << stm32PinName(i) << "("  << i  << "), ";
 
   uint8_t leds[] = {LEDS_LIST};
   Serial << "\nLED list:\n";
   for (uint8_t i = 0; i < sizeof(leds) / sizeof(leds[0]); i++)
-    Serial << "LED" << i << "_BUILTIN " <<  stm32PinName(leds[i]) << ", ";
+    Serial << "LED" << i << "_BUILTIN(" <<  stm32PinName(leds[i]) << "), ";
 
 #ifdef KEYS_LIST
   uint8_t keys[] = {KEYS_LIST};
   Serial << "\nKEYS list:";
   for (uint8_t i = 0; i < sizeof(keys) / sizeof(keys[0]); i++)
-    Serial << "BUILTIN" << i << " " << stm32PinName(keys[i]) << ", ";
+    Serial << "BUILTIN" << i << "(" << stm32PinName(keys[i]) << "), ";
 #endif
 
 #ifdef MOSI
   Serial << "\nSPI pins:";
-  Serial << "MOSI " <<  stm32PinName(MOSI);
-  Serial << ",MISO " <<  stm32PinName(MISO);
-  Serial << ",SCK " <<  stm32PinName(SCK);
-  Serial << ",SS " <<  stm32PinName(SS);
+  Serial << "MOSI(" <<  stm32PinName(MOSI);
+  Serial << "), MISO(" <<  stm32PinName(MISO);
+  Serial << "), SCK(" <<  stm32PinName(SCK);
+  Serial << "), SS(" <<  stm32PinName(SS) << "),";
 #endif
 
 #ifdef SDA
@@ -282,9 +306,11 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
   UNUSED(argc);  /*unused argc, move warnign*/
   UNUSED(argv);  /*unused argc, move warnign*/
   volatile uint32_t useradr;
+  //  SD.cacheClear();
+  Serial << "ls files:\n";
+  root.ls(LS_R | LS_DATE | LS_SIZE);
 
   Serial << "\ncodes on slot:\n";
-
   for (int i = 0; i < (appCodeSegAddr[0] + 1); i++) {
     if (i > 0)
       useradr = FLASH_BASE + appCodeSegAddr[i] * 1024;
@@ -303,7 +329,6 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
 }
 
 void show_addr(uint32_t addr, uint8_t* data, uint8_t num = 16, uint8_t asc = 1);
-
 void show_addr(uint32_t addr, uint8_t* data, uint8_t num, uint8_t asc) {
   Serial << ((addr < 0x10) ? "000" : ((addr < 0x100) ? "00" : ((addr < 0x1000) ? "0" : ""))) << _HEX(addr) << " :";
   for (uint8_t i = 0; i < num; i++) {
@@ -336,6 +361,74 @@ int Cmd_dispmen (int argc, char *argv[]) {
   return (0);
 }
 
+#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
+//exp: load mydemo.bin
+int Cmd_load(int argc, char *argv[]) {
+  volatile uint8_t* prog_ram =  (uint8_t *) USER_CODE_RAM;
+  for (uint8_t i = 0; i < argc; i++)
+  {
+    Serial.print(argv[i]);
+    Serial.print(F("  "));
+  };
+  Serial.println();
+
+  //  SD.cacheClear();
+  File f = SD.open(argv[1], FILE_READ);
+  if (!f) {
+    Serial << "file: " << argv[1] << "no found!\n";
+    return 0;
+  }
+
+  uint32_t fsize = f.size();
+  if ( fsize > MAX_PROG_RAM) {
+    Serial << "file " << argv[1] << "too larger to fit in ram!\n";
+    return 0;
+  }
+
+  uint16_t i = 0;
+  uint8_t t = 1;
+  char c;
+  while (t) {
+    if (f.available()) {
+      c = f.read();
+    } else {
+      c =  0;
+      t = 0;
+    }
+    prog_ram[i++] = (uint8_t) c;
+  }
+  f.close();
+
+  if (UTIL_checkUserCode(USER_CODE_RAM))
+  {
+    Serial << "load ok! reset run it\n";
+  } else {
+    Serial << "file: " << argv[1] << "is unavailed!\n";
+  }
+  return 0;
+}
+#endif
+
+//exp: typr test.txt
+int Cmd_type(int argc, char *argv[])
+{
+  if (!(argc == 2)) return 0;
+  //  SD.cacheClear();
+  File f = SD.open(argv[1], FILE_READ);
+  if (!f) {
+    Serial << "file: " << argv[1] << "no found!\n";
+    return 0;
+  }
+  char c;
+  while (f.available()) {
+    c = f.read();
+    if (isprint(c) || (c == '\r') || (c == '\n')) Serial.write(c);
+    else Serial.write('.');
+  }
+  f.close();
+  return 0;
+}
+
 //exp:go 1/2/...
 int Cmd_go(int argc, char *argv[])
 {
@@ -357,6 +450,10 @@ int Cmd_go(int argc, char *argv[])
       USBDeviceFS.end();
 #endif
       delay(1000); /*wait  serial complated */
+
+      //    Serial1.end();  /*if open close it*/
+      //    Serial2.end();  /*if open close it*/
+      //    UTIL_jumpToUser(useradr);
       start_application(useradr);
     } else {
       Serial << "slot: " << argv[1] << " is unavailed!\n";
@@ -579,6 +676,158 @@ int Cmd_pulsein(int argc, char *argv[])
   return (0);
 }
 
+/*----------- This function implements the "ee" command. shiftIn------------------------------*/
+#include <exteeprom.h>
+EXTEEPROM ee;
+int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
+{
+  static uint8_t op = 0;  //opration 0 uninit/1 init/2 read/3 write
+  static uint16_t addr = 0;
+  uint8_t  val[16];
+  char c;
+  File f;
+  if (argc > 1) {
+    if (op) {  // inited
+      if (argv[1][0] == 'f')     //flash eeprom from file
+        op = 5;
+      else if (argv[1][0] == 'd') //dump eeprom to file
+        op = 4;
+      else  if (argv[1][0] == 'w') //write datas to addr
+        op = 3;
+      else if (argv[1][0] == 'r')  //view datas
+        op = 2;
+    }
+
+    if (argv[1][0] == 'i')  //init device
+      op = 1;
+  }
+
+  if ((argc > 2) && (op < 4))
+    addr = UTIL_getNum(argv[2]);
+
+  if (argc > 3) {
+    if (op == 1)
+      for (uint8_t i = 0; i < (argc - 3) ; i++)  val[i] = getpin(argv[i + 3]);
+    else
+      for (uint8_t i = 0; i < (argc - 3) ; i++)  val[i] = UTIL_getNum(argv[i + 3]);
+  }
+
+  switch (op) {
+    case 0:
+      Serial << "\nI2C eeprom un Inited!";
+      break;
+    case 1:
+      if (argc > 4) {
+        if ((val[2] < 0xff) && (val[1] < 0xff)) {
+          ee.setPins(val[0], val[1]);
+        } else {
+          Serial << "\nI2C eeprom scl sda pin input err!";
+          return 1;
+          break;
+        }
+      } else {
+        val[2] = 0x50;
+      }
+
+      if (argc > 2) ee.pdata->dev = (uint16_t)(((uint32_t)addr << 7) - 1);
+
+      if (ee.begin(val[2])) {
+        Serial << "\neeprom init err!  dev:24C " << ee.pdata->dev << "  at adr 0x" << _HEX(ee.pdata->adr);
+        op = 0;
+      } else {
+        Serial << "\neeprom init ok!  at adr 0x" << _HEX(ee.pdata->adr) << " is AT24C";
+        switch (ee.pdata->dev) {
+          case AT24C01:
+            Serial << "01";
+            break;
+          case AT24C02:
+            Serial << "02";
+            break;
+          case AT24C04:
+            Serial << "04";
+            break;
+          case AT24C08:
+            Serial << "08";
+            break;
+          case AT24C16:
+            Serial << "16";
+            break;
+          case AT24C32:
+            Serial << "32";
+            break;
+          case AT24C64:
+            Serial << "64";
+            break;
+          case AT24C128:
+            Serial << "128";
+            break;
+          case AT24C256:
+            Serial << "256";
+            break;
+          case AT24C512:
+            Serial << "512";
+            break;
+        } //end switch(dev)
+        op++;
+      } //end if
+      break;
+    case 3:  //write
+      if (argc > 3)
+        ee.write(addr, val, (uint16_t)(argc - 3));
+      Serial << "\nwrite " << argc - 3 << "data ok\n";
+
+    //		break;
+    case 2: //view read
+      addr &= 0xfff0;
+      ee.read(addr, val, (uint16_t)16);
+      show_addr(addr, val);
+      Serial << "\n ";
+      addr += 0x10;
+      break;
+    case 4:  //dump
+      //      SD.cacheClear();
+      f = SD.open(argv[2], FILE_WRITE);
+      if (!f) {
+        Serial << "\nfile: " << argv[2] << " open err!";
+        return 0;
+      }
+      addr = 0;
+      while (addr < (ee.pdata->dev + 1)) {
+        c = ee.readOneByte(addr++);;
+        f.write(c);
+      }
+      f.close();
+      break;
+    case 5:  //flash
+      //      SD.cacheClear();
+      f = SD.open(argv[2], FILE_READ);
+      if (!f) {
+        Serial << "\nfile: " << argv[2] << "no found!";
+        return 0;
+      }
+      int fsize = f.size();
+      if ( fsize > (ee.pdata->dev + 1)) {
+        Serial << "\nfile " << argv[2] << "too larger to fit in eeprom!\n";
+        return 0;
+      }
+
+      addr = 0;
+      while (addr < fsize) {
+        if (f.available()) {
+          c = f.read();
+          ee.writeOneByte(addr++, c);
+        } else {
+          f.close();
+          return (0);
+        }
+      }
+      break;
+  } //end switch(op)
+
+
+  return (0);
+}
+
 tCmdLineEntry g_sCmdTable[] =
 {
   { "help",   Cmd_help,      " : Display list of commands & get mcu info..."} ,
@@ -588,7 +837,12 @@ tCmdLineEntry g_sCmdTable[] =
   { "d",      Cmd_dispmen,   "    : disp memory([addr])"} ,
 
   //vdisk function
-  { "ls",    Cmd_dir,      "  : list apps in mcu"} ,
+  { "dir",    Cmd_dir,      "  : list vdisk files"} ,
+  { "ls",     Cmd_dir,      "   : alias for dir"} ,
+#if defined(STM32F4)||(FLASH_BANK1_END >  0x0801FFFFU)   //for hight density  xC/D/E
+  { "load",   Cmd_load,      " : chech bin file and load it if available"} ,
+#endif
+  { "type",   Cmd_type,      " : type a txt file(filename)"} ,
 
   //go flash addr
   { "go",     Cmd_go,      "   : goto n slot addr running(slot#)"},
@@ -602,6 +856,8 @@ tCmdLineEntry g_sCmdTable[] =
   { "si",     Cmd_shiftin,     "   : shiftIn([dpin cpin order])"} ,
   { "so",     Cmd_shiftout,    "   : shiftOut(val[ dpin cpin order])"},
   { "pulse",  Cmd_pulsein,     ": pulseIn([pin state])"} ,
+
+  { "ee",     Cmd_eeprom,    "   : i2c eeprom read/write[adr ...."},
 
   {  0, 0, 0 }
 };

@@ -1,12 +1,13 @@
 /*
-  Blink_like51  use stm32 sram/peripheral bitband io opration 
-  Turns an LED on for one second, then off for one second, repeatedly.
-  by huaweiwx@sina.com 2017.10
-*/
+ * STM32GENERIC arduino extension sample
+ * bitband macro(宏使用) demo 
+ * bitband for m3/4 位域操作仅 m3/4 支持, 直接对位域地址读写，这是最快的位操作；
+ * huaweiwx@sina.com 2017.12.26
+ */
 
 #if !(defined(STM32F0)||defined(STM32L0)||defined(STM32F7))
 //use bidboud
-# include "utils/bitband.h"
+# include "util/bitband.h"
 #else
 # error "BitBand unsuport this mcu!"
 #endif
