@@ -15,6 +15,7 @@
 #define FLASHDISK_SIZE     64   /*user define, unused default defined*/   
 #include <InternalFlashDisk.h>
 #include <LED.h>
+#include <Streaming.h>
 
 void setup() {
   Serial.begin(115200);

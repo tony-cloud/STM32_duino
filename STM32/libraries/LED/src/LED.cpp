@@ -20,12 +20,11 @@
 
 
 #ifdef STM32GENERIC
- 
  #if __has_include(<FreeRTOS.h>)   
- #	include <FreeRTOS.h>
- #	define  LED_DELAY(x) vTaskDelay(x)
+  #include <FreeRTOS.h>
+  #define  LED_DELAY(x) vTaskDelay(x)
  #else
- #  define  LED_DELAY(x) delay(x)		 
+  #define  LED_DELAY(x) delay(x)		 
  #endif
 #else
  #define  LED_DELAY(x) delay(x)	
@@ -35,11 +34,11 @@
 extern "C"{	
   void LEDFlash(uint8_t pin,uint16_t timeon,uint16_t timeoff,uint8_t cnt,uint8_t on){
 	for(uint8_t i=cnt;i>0;i--){
-		  digitalWrite(pin,on);
+		digitalWrite(pin,on);
 		if(timeon)
 		  LED_DELAY(timeon);
 	  
-		  digitalWrite(pin,(on?LOW:HIGH));
+		digitalWrite(pin,(on?LOW:HIGH));
 		if(timeoff)
 		  LED_DELAY(timeoff);
 	}
@@ -48,68 +47,36 @@ extern "C"{
 
 
 void LEDClass::setPin(uint8_t pin, uint8_t on){
-	pdata->pin = pin;
-	pdata->on =  on?HIGH:LOW;
-	pdata->off = on?LOW:HIGH;
-	pdata->status = pdata->off;
-	this->brightness = 0;    // how bright the LED is
-    this->fadeAmount = 5;    // how many points to fade the LED by
+#ifdef __MSP430__
+    availablepwm = true;   /*fixed me*/
+#endif
+    pdata = &sLed;
+	sLed.pin = pin;
+	sLed.on =  on?HIGH:LOW;
+	sLed.off = on?LOW:HIGH;
+	sLed.status = sLed.off;
+	sLed.fadeTime = (1000/(255/LED_FADEAMOUNT));
+	sLed.brightness = 0;    // how bright the LED is
+    sLed.fadeAmount = LED_FADEAMOUNT;    // how many points to fade the LED by
 }
 
 LEDClass::LEDClass(uint8_t pin, uint8_t on){
     this->setPin(pin, on);
-	
-#ifndef STM32GENERIC
-//	availablepwm = searchPinTim(pdata->pin)?true:false;
-#endif
 }
-
-void LEDClass::Init(void){
-	pinMode(pdata->pin,OUTPUT);
-};
-
-
-//digitalWrite
-void LEDClass::on(void){
-	digitalWrite(pdata->pin,pdata->on);
-	pdata->status =pdata->on;
-}
-
-//analogWrite
-void LEDClass::on(int val){
-    analogWrite(pdata->pin, (pdata->on? val:255-val));
-}
-
-
-void LEDClass::off(void){
-	digitalWrite(pdata->pin,pdata->off);
-	pdata->status = pdata->off;
-}
-
-void LEDClass::toggle(void){
-	if(pdata->status == pdata->off) this->on();
-	else this->off();
-	
-}
-
-void LEDClass::flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt){
-	LEDFlash(pdata->pin, timeon,timeoff,cnt,pdata->on);
-	pdata->status = pdata->off;
-};
 
 void LEDClass::fade(uint16_t time) {
-    if(time < this->fadeTime) time = this->fadeTime;	
-    for(uint16_t i =0; i<(time/this->fadeTime);i++){
-      analogWrite(pdata->pin, this->brightness);
+    if(time < sLed.fadeTime) time = sLed.fadeTime;	
+    for(uint16_t i =0; i<(time/sLed.fadeTime);i++){
+      analogWrite(sLed.pin, sLed.brightness);
 
   // change the brightness for next time through the loop:
-      this->brightness +=  this->fadeAmount;
+      sLed.brightness +=  sLed.fadeAmount;
 
   // reverse the direction of the fading at the ends of the fade:
-      if ((this->brightness <= 0) || (this->brightness >= 255)) {
-        this->fadeAmount *= -1;
+      if ((sLed.brightness <= 0) || (sLed.brightness >= 255)) {
+        sLed.fadeAmount *= -1;
      }
-     LED_DELAY(this->fadeTime);
+     LED_DELAY(sLed.fadeTime);
   }
   
 }

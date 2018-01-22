@@ -23,6 +23,7 @@
 
 
 #include <cmdline.h>
+#include <Streaming.h>
 
 #define LED LED_BUILTIN
 char cmdline[256];

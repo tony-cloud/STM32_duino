@@ -1,13 +1,18 @@
 /* appAdminister.ino app administer demo
-   ---------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------
+   from the menu
+   Select Startup adr: flash(WhitRamboo xxkRAM used only)
+    ---------------------------------------------------------------------------------------  
    cmd usage:
    type help or h or ? for Display list of commands.
    go 1/2/3 to run app1/app2/app3
+
    ---------------------------------------------------------------------------------------
    for F103C8/B  by huaweiwx@sina.com 2017.10
    ---------------------------------------------------------------------------------------
 */
 
+#include <Streaming.h>
 #include <cmdline.h>
  char cmdline[128];
 int ptr;
@@ -124,7 +129,9 @@ int Cmd_go(int argc, char *argv[])//exp:go 1/2/...
     if (UTIL_checkUserCode(useradr))
     {
       Serial << "check ok and goto " << _HEX(useradr) << ".....\n" << _endl;
+#if (MENU_USB_SERIAL||MENU_USB_MASS_STORAGE||MENU_USB_IAD)
       USBDeviceFS.end();
+#endif
       delay(100); /*wait  serial complated */
 
       //    Serial1.end();  /*if open close it*/

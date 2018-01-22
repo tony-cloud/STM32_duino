@@ -1,9 +1,8 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
-
 //96 MHZ  HSI/HSE/HSE_BYPASS
-extern void SystemClock_Config(void) {
+void SystemClock_Config(void) __weak;
+void SystemClock_Config(void) {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 

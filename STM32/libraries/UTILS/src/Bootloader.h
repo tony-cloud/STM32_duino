@@ -38,6 +38,9 @@
 #elif defined(STM32F207ZG)
 #  define MAX_PROG_RAM (96*1024)
 
+#elif defined(STM32F303VC)
+#  define MAX_PROG_RAM (40*1024)
+
 #elif defined(STM32F401CC)
 #  define MAX_PROG_RAM (44*1024)      /*use 0x20000000~0x2000BFFF*/
 

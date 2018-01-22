@@ -6,6 +6,7 @@
 
 #include <LED.h>
 #include <RTClock.h>
+#include <Streaming.h>
 
 RTClock  rtc;
 
@@ -43,9 +44,9 @@ void setup() {
 volatile uint8_t  alarmdone = 0;
 void loop() {
   if (alarmdone)
-    Led.flash(100, 100, 1);
-  else
     Led.flash(500, 500, 1);
+  else
+    Led.fade();
 }
 
 const char* weekStr[7] = {

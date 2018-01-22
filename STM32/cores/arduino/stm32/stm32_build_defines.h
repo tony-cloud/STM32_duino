@@ -3,6 +3,265 @@
 #ifndef STM32_BUILD_DEFINES_H
 #define STM32_BUILD_DEFINES_H
 
+
+#if __has_include("hal_conf.h")
+# include "hal_conf.h"
+#endif
+
+#if __has_include("configs/hal_conf.h")
+#undef __HALSPECELCONFIG_H__
+# include_next "configs/hal_conf.h"
+#endif
+
+/***************  HAL_Conf default here ******************/
+//default defines,  overriden by HAL_Conf.h in sketch path
+//OS
+#ifndef FREERTOS /*running with freertos*/
+#define FREERTOS    0
+#endif
+
+#ifndef UCOSII	/*running with ucosii*/
+#define UCOSII      0
+#endif
+
+#ifndef BOOTLOADER	/*chech & go if avalible */
+#define BOOTLOADER  0
+#endif
+
+//USB
+
+#ifndef USE_USBSERIAL
+# ifdef MENU_USB_SERIAL
+#   define USE_USBSERIAL 1
+#   define USE_USB 1
+# endif
+#endif
+
+#ifndef USE_USBDMSC
+# ifdef MENU_USB_MASS_STORAGE
+#   define USE_USBDMSC  1
+#   define USE_USB 1
+# endif
+#endif
+
+#ifndef USE_USBDCOMPOSITE
+# ifdef MENU_USB_IAD
+#	define USE_USBDCOMPOSITE  1
+#   define USE_USB 1
+# endif
+#endif
+
+#ifndef USE_USBDCONF
+#  define USE_USBDCONF  1
+#endif
+
+//USART
+#ifndef USE_SERIAL1
+#define USE_SERIAL1 1
+#endif
+#ifndef USE_SERIAL2
+#define USE_SERIAL2 1
+#endif
+#ifndef USE_SERIAL3
+#define USE_SERIAL3 1
+#endif
+#ifndef USE_SERIAL4
+#define USE_SERIAL4 1
+#endif
+
+#ifndef USE_SERIAL5
+#define USE_SERIAL5 1
+#endif
+
+#ifndef USE_SERIAL6
+#define USE_SERIAL6 1
+#endif
+
+//SPI
+#ifndef USE_SPI1
+#define USE_SPI1 1
+#endif
+
+#ifndef USE_SPI2
+#define USE_SPI2 1
+#endif
+
+#ifndef USE_SPI3
+#define USE_SPI3 1
+#endif
+
+#ifndef USE_SPI4
+#define USE_SPI4 1
+#endif
+
+#ifndef USE_SPI5
+#define USE_SPI5 1
+#endif
+
+#ifndef USE_SPI6
+#define USE_SPI6 1
+#endif
+
+//I2C
+#ifndef USE_I2C1
+#define USE_I2C1 1
+#endif
+
+#ifndef USE_I2C2
+#define USE_I2C2 1
+#endif
+
+#ifndef USE_I2C3
+#define USE_I2C3 1
+#endif
+
+#ifndef USE_I2C4
+#define USE_I2C4 1
+#endif
+
+//default
+//PRIORITY 
+//Cortex-M0/3/4/7 Processor Exceptions
+#ifndef CORTEX_INT_PRIORITY /* M3 Numbers:  -14 ~ -1*/
+ #define CORTEX_INT_PRIORITY 0
+#endif
+
+#if defined(STM32F0)||defined(STM32L0)
+
+#ifndef MAX_PRIORITY
+ #define MAX_PRIORITY    3
+#endif
+
+#ifndef MIN_PRIORITY
+ #define MIN_PRIORITY    0
+#endif
+
+#ifndef SYSTICK_INT_PRIORITY
+ #if FREERTOS
+  #define SYSTICK_INT_PRIORITY	MAX_PRIORITY
+  #define STM32_INT_PRIORITY	2
+ #else
+  #define SYSTICK_INT_PRIORITY	MIN_PRIORITY
+  #define STM32_INT_PRIORITY	2
+ #endif
+#endif
+
+//STN32 specific Interrupt
+
+#ifndef TAMPER_PRIORITY
+ #define TAMPER_PRIORITY  STM32_INT_PRIORITY
+#endif
+
+#ifndef RTC_PRIORITY  /*3*/
+ #define RTC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef RCC_PRIORITY
+ #define RCC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef EXTI_PRIORITY
+ #define EXTI_PRIORITY    STM32_INT_PRIORITY
+#endif
+#ifndef DMA1_PRIORITY    /*F0 9~11*/
+ #define DMA1_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef ADC_PRIORITY
+ #define ADC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef USB_HP_PRIORITY
+ #define USB_HP_PRIORITY  STM32_INT_PRIORITY
+#endif
+#ifndef USB_LP_PRIORITY
+ #define USB_LP_PRIORITY  STM32_INT_PRIORITY
+#endif
+#ifndef TIM_PRIORITY
+ #define TIM_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef I2C_PRIORITY
+ #define I2C_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef SPI_PRIORITY
+ #define SPI_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef USART_PRIORITY
+ #define USART_PRIORITY   STM32_INT_PRIORITY
+#endif
+#ifndef SDIO_PRIORITY
+ #define SDIO_PRIORITY    STM32_INT_PRIORITY
+#endif
+#ifndef DMA2_PRIORITY
+ #define DMA2_PRIORITY     STM32_INT_PRIORITY
+#endif
+
+#else  //F1/2/3/4/7 L1/4
+
+
+#ifndef MAX_PRIORITY
+ #define MAX_PRIORITY    15
+#endif
+#ifndef MIN_PRIORITY
+ #define MIN_PRIORITY    0
+#endif
+
+#ifndef SYSTICK_INT_PRIORITY
+ #if FREERTOS
+  #define SYSTICK_INT_PRIORITY	MAX_PRIORITY
+  #define STM32_INT_PRIORITY	5
+ #else
+  #define SYSTICK_INT_PRIORITY	MIN_PRIORITY	
+  #define STM32_INT_PRIORITY	5
+ #endif
+#endif
+
+
+#ifndef STM32_INT_PRIORITY
+#endif
+#ifndef TAMPER_PRIORITY  /*f1 2*/
+#define TAMPER_PRIORITY  STM32_INT_PRIORITY
+#endif
+#ifndef RTC_PRIORITY  	/*f1 3*/
+#define RTC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef RCC_PRIORITY	/*f1 5*/
+#define RCC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef EXTI_PRIORITY	/*f1 6~10,23,40*/
+#define EXTI_PRIORITY    MAX_PRIORITY-1  //f1 6~9 botton  use 0x0f
+#endif
+#ifndef DMA1_PRIORITY   /*f1 11~17*/
+#define DMA1_PRIORITY    STM32_INT_PRIORITY+1
+#endif
+#ifndef ADC_PRIORITY    /*f1 18*/
+#define ADC_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef USB_HP_PRIORITY  /*f1 19*/
+#define USB_HP_PRIORITY  STM32_INT_PRIORITY
+#endif
+#ifndef USB_LP_PRIORITY  /*f1 20*/
+#define USB_LP_PRIORITY  STM32_INT_PRIORITY
+#endif
+#ifndef TIM_PRIORITY  /*f1 24~30 43~46 54~55*/
+#define TIM_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef I2C_PRIORITY  /*f1 31~34*/
+#define I2C_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef SPI_PRIORITY  /*f1 35 36 51*/
+#define SPI_PRIORITY     STM32_INT_PRIORITY
+#endif
+#ifndef USART_PRIORITY  /*f1 37~39 52~53*/
+#define USART_PRIORITY   STM32_INT_PRIORITY
+#endif
+#ifndef SDIO_PRIORITY  /*f1 49*/
+#define SDIO_PRIORITY    STM32_INT_PRIORITY-1
+#endif
+#ifndef DMA2_PRIORITY  /*f1 56~59*/
+#define DMA2_PRIORITY    STM32_INT_PRIORITY+1
+#endif
+
+#endif
+
+/***************  HAL_Conf default end  ******************/
+
 #if __IGNORE
 
 #elif defined(STM32F030C6)

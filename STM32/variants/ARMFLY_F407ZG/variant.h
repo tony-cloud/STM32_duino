@@ -10,7 +10,6 @@
 #define BOARD_NR_KEY        1
 #define BOTTON              PA0
 #define BOTTON_MASK         0x01
-#define KEYS_LIST           BOTTON
   
 
 #define MOSI PA7

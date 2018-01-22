@@ -8,7 +8,6 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 /*key*/
-//#define KEYS_LIST             /*KEY_LIST NUL*/
 
 #define MOSI PA7
 #define MISO PA6

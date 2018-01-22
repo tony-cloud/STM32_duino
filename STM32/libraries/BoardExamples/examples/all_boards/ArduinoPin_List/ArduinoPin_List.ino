@@ -3,12 +3,12 @@
   Arduino pin and LED list
   modified 8 Sep 2017
   by huaweiwx@sina.com
-  
   stm32PinName(pin):   see core/arduino/stm32/stm32_debug.c
-  
+
 */
 
 #include <LED.h> /*use LED lib LEDS_LIST define*/
+#include <Streaming.h>
 
 void print_list(void){
   Serial << "\nPIN list:\n";
@@ -19,13 +19,6 @@ void print_list(void){
   Serial << "\nLED list:";
   for (uint8_t i = 0; i < sizeof(leds) / sizeof(leds[0]); i++)
     Serial << "\nLED" << i << "_BUILTIN  " <<  stm32PinName(leds[i]);
-
-#ifdef KEYS_LIST
-  uint8_t keys[] = {KEYS_LIST};
-  Serial << "\n\nKEYS list:";
-  for (uint8_t i = 0; i < sizeof(keys) / sizeof(keys[0]); i++)
-    Serial << "\nBUILTIN" << i << "  " << stm32PinName(keys[i]);
-#endif
 
 #ifdef MOSI	
   Serial << "\n\nSPI pinlist:";

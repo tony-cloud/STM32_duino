@@ -26,23 +26,27 @@ extern void SystemClock_Config(void);
 
 void init() {
   HAL_Init();
-  
+
   SystemClock_Config();
-  
+
 #ifdef STM32F1
   __HAL_RCC_AFIO_CLK_ENABLE();
 #endif
 }
 
+#if  FREERTOS  //huawei (huaweiwx@sina.com)
+void   osSystickHandler(void);
+#endif
+
 void SysTick_Handler(void) {
 #if  FREERTOS  //huawei (huaweiwx@sina.com)
-  osSystickHandler();	
-#else	
+  osSystickHandler();
+#else
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();
 #endif
 }
 
 void Error_Handler() {
-    
+
 }

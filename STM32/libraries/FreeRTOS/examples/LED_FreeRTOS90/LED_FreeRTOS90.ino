@@ -12,6 +12,7 @@
 */
 
 #include <FreeRTOS.h>
+#include <Streaming.h>
 #include <LED.h>   /*LEDClass: Led Led1/2/3/4/5/6/7 has be predefiend */
 
 static void myTask1(void  __attribute__ ((unused)) *argument)

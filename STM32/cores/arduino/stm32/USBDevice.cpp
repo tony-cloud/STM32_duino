@@ -148,6 +148,9 @@ extern "C" void OTG_FS_IRQHandler(void) {
 }
 
 USBD_HandleTypeDef hUsbDeviceFS;
+
+#if (USE_USB)
 USBDeviceClass USBDeviceFS;
+#endif
 
 #endif

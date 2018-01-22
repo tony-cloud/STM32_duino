@@ -12,6 +12,7 @@
 
    ---------------------------------------------------------------------------------------
 */
+#include <Streaming.h>
 #include <cmdline.h>
 
 char cmdline[256];
@@ -264,7 +265,13 @@ int Cmd_help(int argc, char *argv[])
 
 #ifdef OB_BASE
   uint32_t UID[3];
+#if defined(STM32F0)||defined(STM32F3)
+  UID[0] = HAL_GetUIDw0();
+  UID[1] = HAL_GetUIDw1();
+  UID[2] = HAL_GetUIDw2();
+#else
   HAL_GetUID(UID);
+#endif
   Serial << "\nUSERID:" << _HEX(UID[0]) << " " << _HEX(UID[1]) << " " <<  _HEX(UID[2]);
 #endif
   return (0);

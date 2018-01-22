@@ -44,7 +44,7 @@
 #define STM32F407xx 1
 #include "stm32f4xx_hal.h"
 
-#include <SerialUART.h>
+#include <HardwareSerial.h>
 #define SERIALX SerialUART3
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

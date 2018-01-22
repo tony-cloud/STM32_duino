@@ -223,4 +223,6 @@ extern "C" void USBSerial_Rx_Handler(uint8_t *data, uint16_t len){
   SerialUSB.CDC_RxHandler(data, len);
 }
 
+#if (USE_USBSERIAL)
 SerialUSBClass SerialUSB;
+#endif

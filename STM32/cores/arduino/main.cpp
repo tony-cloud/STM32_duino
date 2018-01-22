@@ -34,13 +34,22 @@ void initVariant() __weak;
 void initVariant() { }
 
 void setupUSB() __weak;
-void setupUSB() { }
+void setupUSB() {
+#if defined(USB_BASE) || defined(USB_OTG_DEVICE_BASE)
+    #ifdef MENU_USB_SERIAL
+        USBDeviceFS.beginCDC();
+    #elif defined(MENU_USB_MASS_STORAGE)
+        USBDeviceFS.beginMSC();
+    #elif  defined(MENU_USB_IAD)
+        USBDeviceFS.beginIDA(); /*add by huaweiwx@sina.com 2017.9.15*/
+    #endif
+#endif
+}
 
 // Weak empty main may be use CubMX main.c source program.
-#if (USERMAIN <1)
+int main(void) __weak;
 int main(void)
 {
-
 	init();
 	
 	initVariant();
@@ -49,33 +58,21 @@ int main(void)
     __HAL_AFIO_REMAP_SWJ_DISABLE();
  #elif defined(MENU_DEBUG_SWD)
     __HAL_AFIO_REMAP_SWJ_NOJTAG();
- #endif	
- #if defined(MENU_DEBUG_NONJTRST)
+ #elif defined(MENU_DEBUG_NONJTRST)
     __HAL_AFIO_REMAP_SWJ_NONJTRST();
  #endif
 #endif
 
-#if defined(USB_BASE) || defined(USB_OTG_DEVICE_BASE)
+    setupUSB();
 
-    #ifdef MENU_USB_SERIAL
-        USBDeviceFS.beginCDC();
-    #elif  MENU_USB_MASS_STORAGE
-        USBDeviceFS.beginMSC();
-    #elif  MENU_USB_IAD
-        USBDeviceFS.beginIDA();/*add by huaweiwx@sina.com 2017.9.15*/
-    #endif
-
-#endif
-	
 	setup();
     
 	for (;;) {
 		loop();
 	}
-        
 	return 0;
 }
-#endif
+
 #else
 #error "Please update to GCC ver 5-2016q2 https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads"	
 #endif

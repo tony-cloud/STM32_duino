@@ -1,8 +1,8 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
 //for HSI/HSE/HSE_BYPASS  huaweiwx@sina.com 2017.9.8
 void _Error_Handler(char* file, uint32_t line);  //extern
+void SystemClock_Config(void) __weak;
 void SystemClock_Config(void)
 {
 
@@ -65,7 +65,7 @@ void SystemClock_Config(void)
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
- 
+
 //extern void initVariant() {
      //UART3 is connected to ST-Link V2.1 as Virtual Com port on non-default PD9/PD7 pins
 //}

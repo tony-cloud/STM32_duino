@@ -33,6 +33,7 @@
 #include "cdc/usbd_cdc.h"
 #include "msc/usbd_msc.h"
 
+#if (USER_USBDCOMPOSITE<1)
 #ifdef MENU_USB_IAD
 
 static USBD_CDC_HandleTypeDef *pCDCData;
@@ -438,17 +439,5 @@ uint8_t  *USBD_Composite_GetDeviceQualifierDescriptor (uint16_t *length)
   return USBD_Composite_DeviceQualifierDesc;
 }
 
-#endif
-/**
-  * @}
-  */
-
-
-/**
-  * @}
-  */
-
-
-/**
-  * @}
-  */
+#endif  //MENU_USB_IAD
+#endif // USER_USBDCOMPOSITE

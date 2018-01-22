@@ -63,55 +63,54 @@ void stm32GpioClockEnable(GPIO_TypeDef *port) {
 
 void pinMode(uint8_t pin, uint8_t mode) {
     stm32_port_pin_type port_pin = variant_pin_list[pin];
+    assert_param(IS_GPIO_ALL_INSTANCE(port_pin.port));
+    assert_param(IS_GPIO_PIN(port_pin.pinMask));
     
     if (stm32_pwm_disable_callback != NULL) {
         (*stm32_pwm_disable_callback)(port_pin.port, port_pin.pinMask);
     }
 
     stm32GpioClockEnable(port_pin.port);
-#ifdef STM32F1	
-//    if ((pin == PA15)||(pin == PB3)||(pin == PB4)){  // use this 3 pin must disJTAG  huaweiwx@sina.com 2017.6.9
-//	    __HAL_AFIO_REMAP_SWJ_NOJTAG();
-//    }
-#endif	
+	
     GPIO_InitTypeDef init;
-    
+
     init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     init.Pin = port_pin.pinMask;
-    
+
     switch ( mode ) {
       case INPUT:
         init.Mode = GPIO_MODE_INPUT;
         init.Pull =  GPIO_NOPULL;
         break;
-      
+
       case INPUT_PULLUP:
         init.Mode = GPIO_MODE_INPUT;
         init.Pull =  GPIO_PULLUP;
         break;
-        
+
       case INPUT_PULLDOWN:
         init.Mode = GPIO_MODE_INPUT;
         init.Pull =  GPIO_PULLDOWN;
         break;
-        
+
       case OUTPUT:
         init.Mode = GPIO_MODE_OUTPUT_PP;
         init.Pull =  GPIO_NOPULL;
         break;
-		
+
       case OUTPUT_OD:                    //add by huaweiwx@sina.com 2017.6.9
         init.Mode = GPIO_MODE_OUTPUT_OD;
         init.Pull = GPIO_NOPULL;
         break;
-        
+
       default:
+        assert_param(0);
         return;
         break;
     }
-    
+
     HAL_GPIO_Init(port_pin.port, &init);
-    
+
 }
 
 void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode) {
@@ -145,6 +144,12 @@ void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode) {
           pinMode = LL_GPIO_MODE_OUTPUT;
           outputType = LL_GPIO_OUTPUT_PUSHPULL;
           pull = LL_GPIO_PULL_DOWN;
+        break;
+
+      case OUTPUT_OD:                    //add by huaweiwx@sina.com 2017.12.9
+          pinMode = LL_GPIO_MODE_OUTPUT;
+          outputType = LL_GPIO_OUTPUT_OPENDRAIN;
+          pull = LL_GPIO_PULL_UP;
         break;
 
       default:

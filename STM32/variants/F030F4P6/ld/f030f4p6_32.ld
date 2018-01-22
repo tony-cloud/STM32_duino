@@ -2,12 +2,12 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20000000 + 4096;    /* end of RAM */
+_estack = 0x20000000 + 0x1000;    /* end of RAM */
 
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 32K  /*16k  use 32k huaweiwx@sina.com*/
+FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 32K  /* f0304p6: official 16k flash,  but can use 32k huaweiwx@sina.com*/
 RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 4K
 }
 

@@ -1,14 +1,7 @@
 /*
- Fade
-
- This example shows how to fade an LED on pin 9
+ LED_fade.ino
+ This example shows how to fade an LED
  using the analogWrite() function.
-
- The analogWrite() function uses PWM, so if
- you want to change the pin you're using, be
- sure to use another PWM capable pin. On most
- Arduino, the PWM pins are identified with 
- a "~" sign, like ~3, ~5, ~6, ~9, ~10 and ~11.
 
  This example code is in the public domain.
  */
@@ -16,17 +9,14 @@
 
 // the setup routine runs once when you press reset:
 void setup() {
-  // declare pin 9 to be an output:
- Serial.begin(115200);  
- Led.Init();
- 
- if(Led.availablePwm())
-   Serial.println("fade test.");
- else
-   Serial.println("no pwm define, use flash");
+  //  put your setup code here, to run once:
+  Serial.begin(115200);
+  Led.Init();
+
+  Serial.println("I'm going to sleep.......");
 }
 
-// the loop routine runs over and over again forever:
 void loop() {
-    Led.fade();
+  // put your main code here, to run repeatedly:
+  Led.fade(1000);
 }

@@ -1,4 +1,3 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 #include <Arduino.h>
 #include "syscalls.h"

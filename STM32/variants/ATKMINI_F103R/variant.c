@@ -1,7 +1,5 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 
-//      2016.9.18 huawei <huaweiwx@sina.com>
 //HSI
 #if OSC == 12
      #if F_CPU == 120000000
@@ -28,6 +26,8 @@
 #endif
 
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
+
 #if defined(USE_HSI)
 void SystemClock_Config(void)
 {
@@ -69,14 +69,15 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time 
-    */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-    /**Configure the Systick 
-    */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
+    /* SysTick_IRQn interrupt configuration */
+#if FREERTOS
+  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
+#endif
+  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
 //HSE

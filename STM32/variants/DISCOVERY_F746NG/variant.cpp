@@ -1,8 +1,8 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
 #include <Arduino.h>
 #include "syscalls.h"
 
+extern "C" void SystemClock_Config(void) __weak;
 extern "C" void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;

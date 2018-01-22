@@ -14,7 +14,6 @@
 #define  BOTTON1             PA13    //!!需改成目标板子上的具体KEY 位置!!
 #define  BOTTON2             PA15    //!!需改成目标板子上的具体KEY 位置!!   
 #define  BOTTON_MASK         0x01
-#define  KEYS_LIST  BOTTON,BOTTON1,BOTTON2
 
 //spi
 #define MOSI PA7

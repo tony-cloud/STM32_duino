@@ -279,7 +279,7 @@ void BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
     HAL_GPIO_Init(BUTTON_PORT[Button], &GPIO_InitStruct);
     
     /* Enable and set Button EXTI Interrupt to the lowest priority */
-    HAL_NVIC_SetPriority((IRQn_Type)(BUTTON_IRQn[Button]), 0x0F, 0x00);
+    HAL_NVIC_SetPriority((IRQn_Type)(BUTTON_IRQn[Button]), MAX_PRIORITY, 0x00);
     HAL_NVIC_EnableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
   }
 }
@@ -347,11 +347,11 @@ static void I2Cx_MspInit(I2C_HandleTypeDef *hi2c)
     DISCOVERY_I2Cx_RELEASE_RESET(); 
     
     /* Enable and set Discovery I2Cx Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(DISCOVERY_I2Cx_EV_IRQn, 0x00, 0);
+    HAL_NVIC_SetPriority(DISCOVERY_I2Cx_EV_IRQn, I2C_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(DISCOVERY_I2Cx_EV_IRQn);
     
     /* Enable and set Discovery I2Cx Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(DISCOVERY_I2Cx_ER_IRQn, 0x00, 0);
+    HAL_NVIC_SetPriority(DISCOVERY_I2Cx_ER_IRQn, I2C_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(DISCOVERY_I2Cx_ER_IRQn);  
 
 #ifdef EE_M24LR64

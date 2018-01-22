@@ -12,6 +12,7 @@
 */
 
 #include <FreeRTOS.h>
+#include <Streaming.h>
 
 #ifdef  LED_BUILTIN
 # define LED    LED_BUILTIN

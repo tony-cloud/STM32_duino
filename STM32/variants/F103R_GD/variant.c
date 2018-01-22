@@ -1,6 +1,5 @@
-#include "stm32_build_defines.h"
 #include "stm32_def.h"
-//      2016.9.18 huawei <huaweiwx@sina.com>
+
 //HSI
 #if OSC == 12
      #if F_CPU == 120000000
@@ -27,6 +26,8 @@
 #endif
 
 void _Error_Handler(char* file, uint32_t line);
+void SystemClock_Config(void) __weak;
+
 #if defined(USE_HSI)
 void SystemClock_Config(void)
 {

@@ -36,18 +36,21 @@
 #if defined(STM32F1)  //F0/L0/F1/L1/F3
 #  if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #    ifdef GD32F10X
-        const  uint16_t appCodeSegAddr[] = {3,64,2*64,3*64,};
+        const  uint16_t appCodeSegAddr[] = {3,64,2*64,3*64};
 #    else
-        const  uint16_t appCodeSegAddr[] = {7,64, 2*64,3*64,4*64,5*64,6*64,7*64,};
+        const  uint16_t appCodeSegAddr[] = {7,64, 2*64,3*64,4*64,5*64,6*64,7*64};
 #    endif
 #  else  /*128k flash 20k ram for x8/xB*/
-        const uint16_t appCodeSegAddr[] =  {3,16,3*16,5*16,};
+        const uint16_t appCodeSegAddr[] =  {3,16,3*16,5*16};
 #  endif
 #elif defined(STM32F207ZG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
+#elif defined(STM32F303VC)
+        const uint16_t appCodeSegAddr[] =  {3,64, 2*64,3*64};
 #elif defined(STM32F401CC)
         const uint16_t appCodeSegAddr[] =  {2,64,2*64};
-#elif defined(STM32F401RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
+#elif defined(STM32F303RE)||defined(STM32F303VE)||\
+      defined(STM32F401RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
         const uint16_t appCodeSegAddr[] =  {3,128,2*128,3*128};
 #elif defined(STM32F407ZG)||defined(STM32F407VG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
@@ -59,7 +62,7 @@
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
 #else /*f4/7*/
 
-//# error "please add me!"
+#warning "please add me!"
 
 #endif
 

@@ -51,7 +51,7 @@
  * - always start with i2c_delay rather than end
  */
 
-void CTwoWireSoft::sclPin(bool state) {
+void TwoWireSoft::sclPin(bool state) {
     I2C_DELAY(this->i2c_delay);
     digitalWrite(this->scl_pin,state);
     //Allow for clock stretching - dangerous currently
@@ -60,23 +60,23 @@ void CTwoWireSoft::sclPin(bool state) {
     }
 }
 
-void CTwoWireSoft::sdaPin(bool state) {
+void TwoWireSoft::sdaPin(bool state) {
 	I2C_DELAY(this->i2c_delay);
     digitalWrite(this->sda_pin, state);
 }
 
-void CTwoWireSoft::i2c_start() {
+void TwoWireSoft::i2c_start() {
     sdaPin(LOW);
     sclPin(LOW);
 }
 
-void CTwoWireSoft::i2c_stop() {
+void TwoWireSoft::i2c_stop() {
     sdaPin(LOW);
     sclPin(HIGH);
     sdaPin(HIGH);
 }
 
-bool CTwoWireSoft::i2c_get_ack() {
+bool TwoWireSoft::i2c_get_ack() {
     sclPin(LOW);
     sdaPin(HIGH);
     sclPin(HIGH);
@@ -86,19 +86,19 @@ bool CTwoWireSoft::i2c_get_ack() {
     return ret;
 }
 
-void CTwoWireSoft::i2c_send_ack() {
+void TwoWireSoft::i2c_send_ack() {
     sdaPin(LOW);
     sclPin(HIGH);
     sclPin(LOW);
 }
 
-void CTwoWireSoft::i2c_send_nack() {
+void TwoWireSoft::i2c_send_nack() {
     sdaPin(HIGH);
     sclPin(HIGH);
     sclPin(LOW);
 }
 
-uint8_t CTwoWireSoft::i2c_shift_in() {
+uint8_t TwoWireSoft::i2c_shift_in() {
     uint8_t data = 0;
     sdaPin(HIGH);
 
@@ -112,7 +112,7 @@ uint8_t CTwoWireSoft::i2c_shift_in() {
     return data;
 }
 
-void CTwoWireSoft::i2c_shift_out(uint8_t val) {
+void TwoWireSoft::i2c_shift_out(uint8_t val) {
     int i;
     for (i = 0; i < 8; i++) {
         sdaPin(!!(val & (1 << (7 - i)) ) );
@@ -121,7 +121,7 @@ void CTwoWireSoft::i2c_shift_out(uint8_t val) {
     }
 }
 
-uint8_t CTwoWireSoft::process() {
+uint8_t TwoWireSoft::process() {
     itc_msg.xferred = 0;
 
     uint8_t sla_addr = (itc_msg.adr << 1);
@@ -168,12 +168,12 @@ uint8_t CTwoWireSoft::process() {
 
 // TODO: Add in Error Handling if pins is out of range for other Maples
 // TODO: Make delays more capable
-CTwoWireSoft::CTwoWireSoft(uint8_t sda, uint8_t scl, uint8_t delay) : i2c_delay(delay) {
+TwoWireSoft::TwoWireSoft(uint8_t sda, uint8_t scl, uint8_t delay) : i2c_delay(delay) {
     this->scl_pin=scl;
     this->sda_pin=sda;
 }
 
-void CTwoWireSoft::begin(uint8_t self_addr) {
+void TwoWireSoft::begin(uint8_t self_addr) {
     tx_buf_idx = 0;
     tx_buf_overflow = false;
     rx_buf_idx = 0;
@@ -184,7 +184,7 @@ void CTwoWireSoft::begin(uint8_t self_addr) {
     sdaPin(HIGH);
 }
 
-void CTwoWireSoft::end()  
+void TwoWireSoft::end()  
 {  
 	if (this->scl_pin)  
 	{  
@@ -196,11 +196,11 @@ void CTwoWireSoft::end()
 	}  
 }  
  
-CTwoWireSoft::~CTwoWireSoft() {
+TwoWireSoft::~TwoWireSoft() {
     this->scl_pin=0xff;
     this->sda_pin=0xff;
 }
 
 // Declare the instance that the users of the library can use
-//CTwoWireSoft WireSoft(SCL, SDA, SOFT_STANDARD);
-//CTwoWireSoft WireSoft(PB6, PB7, SOFT_STANDARD);
+//TwoWireSoft WireSoft(SCL, SDA, SOFT_STANDARD);
+//TwoWireSoft WireSoft(PB6, PB7, SOFT_STANDARD);

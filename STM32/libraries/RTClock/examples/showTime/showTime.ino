@@ -4,6 +4,7 @@
 
 #include <LED.h>
 #include <RTClock.h>
+#include <Streaming.h>
 
 RTClock  rtc;
 
@@ -35,10 +36,7 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  if (Led.availablePwm())
-    Led.fade(1000);
-  else
-    Led.flash(500, 500, 1);
+    Led.fade();
 }
 
 const char* weekStr[7] = {
