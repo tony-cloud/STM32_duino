@@ -3,8 +3,8 @@ ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
 _estack = 0x20010000;    /* end of RAM */
-_Min_Heap_Size = 0x800;      /* required amount of heap  */
-_Min_Stack_Size = 0x1000; /* required amount of stack */
+_Min_Heap_Size = 0x200;      /* required amount of heap  */
+_Min_Stack_Size = 0x400; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
@@ -25,7 +25,7 @@ SECTIONS
   } >FLASH
 
   /* The program code and other data goes into FLASH */
-  .text  ALIGN(4) :
+  .text   :
   {
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */
@@ -42,7 +42,7 @@ SECTIONS
   } >FLASH
 
   /* Constant data goes into FLASH */
-  .rodata ALIGN(4) :
+  .rodata  :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
@@ -108,9 +108,11 @@ SECTIONS
     _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
   } >RAM
-  
+
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
-  
+
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {

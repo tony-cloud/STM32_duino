@@ -152,6 +152,8 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
 
   /* Remove information from the standard libraries */

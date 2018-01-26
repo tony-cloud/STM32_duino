@@ -48,7 +48,7 @@ SECTIONS
   } >FLASH
 
   /* Constant data goes into FLASH */
-  .rodata ALIGN(4) :
+  .rodata  :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
@@ -123,6 +123,8 @@ SECTIONS
       *(.HeapMemSection)
   } > SDRAM
 
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
   
   /* Remove information from the standard libraries */

@@ -23,7 +23,7 @@ SECTIONS
   } >FLASH
 
   /* The program code and other data goes into FLASH */
-  .text  ALIGN(4) :
+  .text   :
   {
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */
@@ -40,7 +40,7 @@ SECTIONS
   } >FLASH
 
   /* Constant data goes into FLASH */
-  .rodata ALIGN(4) :
+  .rodata  :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
@@ -107,6 +107,8 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
   
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
   
   /* Remove information from the standard libraries */
