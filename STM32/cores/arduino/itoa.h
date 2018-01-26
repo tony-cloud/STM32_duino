@@ -39,13 +39,11 @@ extern void itoa(int n, char s[] ) ;
 #else
 
 extern char* itoa(int value, char *string, int radix ) ;
-//extern char* utoa( unsigned int value, char *string, int radix ) ;
+extern char* utoa( unsigned int value, char *string, int radix ) ;
 #if  ULTOA64
- extern char* utoa(unsigned value, char *string, int radix ) ;
  extern char* ltoa(long long value, char *string, int radix ) ;
  extern char* ultoa(unsigned long long value, char *string, int radix ) ;
 #else
- extern char* utoa(unsigned long value, char *string, int radix ) ;
  extern char* ltoa(long value, char *string, int radix ) ;
  extern char* ultoa(unsigned long value, char *string, int radix ) ;
 #endif
