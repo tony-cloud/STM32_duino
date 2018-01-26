@@ -485,6 +485,7 @@
     #include "stm32l4xx_hal_tim.c"
     #include "stm32l4xx_hal_tsc.c"
     #include "stm32l4xx_hal_uart.c"
+    #undef USART_CR1_FIELDS  // remove warning "USART_CR1_FIELDS" redefined	by huaweiwx@sina.com 2018.18.26
     #include "stm32l4xx_hal_usart.c"
     #include "stm32l4xx_hal_wwdg.c"
     #include "stm32l4xx_ll_adc.c"
