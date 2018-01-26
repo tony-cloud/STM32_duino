@@ -49,8 +49,9 @@
         const uint16_t appCodeSegAddr[] =  {3,64, 2*64,3*64};
 #elif defined(STM32F401CC)
         const uint16_t appCodeSegAddr[] =  {2,64,2*64};
-#elif defined(STM32F303RE)||defined(STM32F303VE)||\
-      defined(STM32F401RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
+#elif defined(STM32F303RE)||defined(STM32F303VE)||defined(STM32F401RE)||\
+      defined(STM32F411RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
+	  
         const uint16_t appCodeSegAddr[] =  {3,128,2*128,3*128};
 #elif defined(STM32F407ZG)||defined(STM32F407VG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
@@ -211,7 +212,7 @@ const stm32_dev_t stm32_devices[] = {
 };
 
 #if defined(CHIP_INFO)||defined(CHIP_ID)
-static chipInfo_t thisChip = {
+static const chipInfo_t thisChip = {
   CHIP_INFO
 };
 chipInfo_t* pChipInfo = &thisChip;
