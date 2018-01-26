@@ -7,8 +7,9 @@ _estack = 0x20010000;    /* end of RAM */
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 512K
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 64K
+/* FLASH (rx)     : ORIGIN = 0x8000000, LENGTH = 256K*/
+FLASH (rx)     : ORIGIN = 0x20000000, LENGTH = 44K
+RAM (xrw)      : ORIGIN = 0x2000B000, LENGTH = 20K
 }
 
 /* Define output sections */
@@ -23,7 +24,7 @@ SECTIONS
   } >FLASH
 
   /* The program code and other data goes into FLASH */
-  .text ALIGN(4):
+  .text   :
   {
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */

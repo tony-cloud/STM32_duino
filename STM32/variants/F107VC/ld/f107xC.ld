@@ -3,11 +3,13 @@ ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
 _estack = 0x20010000;    /* end of RAM */
+_Min_Heap_Size = 0x200;      /* required amount of heap  */
+_Min_Stack_Size = 0x400; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 512K
+FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 256K
 RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
@@ -23,7 +25,7 @@ SECTIONS
   } >FLASH
 
   /* The program code and other data goes into FLASH */
-  .text ALIGN(4):
+  .text   :
   {
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */
