@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_conf_template.h
   * @author  MCD Application Team
-  * @version V1.2.2
-  * @date    14-April-2017
   * @brief   HAL configuration template file. 
   *          This file should be copied to the application folder and renamed
   *          to stm32f7xx_hal_conf.h.
@@ -55,6 +53,7 @@
 #define HAL_MODULE_ENABLED  
 #define HAL_ADC_MODULE_ENABLED  
 #define HAL_CAN_MODULE_ENABLED
+/* #define HAL_CAN_LEGACY_MODULE_ENABLED */
 #define HAL_CEC_MODULE_ENABLED  
 #define HAL_CRC_MODULE_ENABLED  
 #define HAL_CRYP_MODULE_ENABLED  
@@ -162,8 +161,8 @@
 #define  VDD_VALUE                    3300U /*!< Value of VDD in mv */
 #define  TICK_INT_PRIORITY            0x0FU /*!< tick interrupt priority */
 #define  USE_RTOS                     0U
-#define  PREFETCH_ENABLE              1U
-#define  ART_ACCLERATOR_ENABLE        1U /* To enable instruction cache and prefetch */
+#define  PREFETCH_ENABLE              1U /* To enable prefetch */
+#define  ART_ACCLERATOR_ENABLE        1U /* To enable ART Accelerator */
 
 /* ########################## Assert Selection ############################## */
 /**
@@ -184,7 +183,7 @@
 #define MAC_ADDR4   0U
 #define MAC_ADDR5   0U
 
-/* Definition of the Ethernet driver buffers size and count */
+/* Definition of the Ethernet driver buffers size and count */   
 #define ETH_RX_BUF_SIZE                ETH_MAX_PACKET_SIZE /* buffer size for receive               */
 #define ETH_TX_BUF_SIZE                ETH_MAX_PACKET_SIZE /* buffer size for transmit              */
 #define ETH_RXBUFNB                    4U       /* 4 Rx buffers of size ETH_RX_BUF_SIZE  */
@@ -192,11 +191,9 @@
 
 /* Section 2: PHY configuration section */
 
-/* DP83848 PHY Address*/
+/* DP83848 PHY Address*/ 
 #define DP83848_PHY_ADDRESS             0x01U
-#define LAN8742A_PHY_ADDRESS            0x00U
-
-/* PHY Reset delay these values are based on a 1 ms Systick interrupt*/
+/* PHY Reset delay these values are based on a 1 ms Systick interrupt*/ 
 #define PHY_RESET_DELAY                 0x000000FFU
 /* PHY Configuration delay */
 #define PHY_CONFIG_DELAY                0x00000FFFU
@@ -208,7 +205,7 @@
 
 #define PHY_BCR                         ((uint16_t)0x00U)    /*!< Transceiver Basic Control Register   */
 #define PHY_BSR                         ((uint16_t)0x01U)    /*!< Transceiver Basic Status Register    */
-
+ 
 #define PHY_RESET                       ((uint16_t)0x8000U)  /*!< PHY Reset */
 #define PHY_LOOPBACK                    ((uint16_t)0x4000U)  /*!< Select loop-back mode */
 #define PHY_FULLDUPLEX_100M             ((uint16_t)0x2100U)  /*!< Set the full-duplex mode at 100 Mb/s */
@@ -223,19 +220,22 @@
 #define PHY_AUTONEGO_COMPLETE           ((uint16_t)0x0020U)  /*!< Auto-Negotiation process completed   */
 #define PHY_LINKED_STATUS               ((uint16_t)0x0004U)  /*!< Valid link established               */
 #define PHY_JABBER_DETECTION            ((uint16_t)0x0002U)  /*!< Jabber condition detected            */
-
+  
 /* Section 4: Extended PHY Registers */
 
-#define PHY_SR                          ((uint16_t)0x1FU)    /*!< PHY special control/ status register Offset     */
+#define PHY_SR                          ((uint16_t)0x10U)    /*!< PHY status register Offset                      */
+#define PHY_MICR                        ((uint16_t)0x11U)    /*!< MII Interrupt Control Register                  */
+#define PHY_MISR                        ((uint16_t)0x12U)    /*!< MII Interrupt Status and Misc. Control Register */
+ 
+#define PHY_LINK_STATUS                 ((uint16_t)0x0001U)  /*!< PHY Link mask                                   */
+#define PHY_SPEED_STATUS                ((uint16_t)0x0002U)  /*!< PHY Speed mask                                  */
+#define PHY_DUPLEX_STATUS               ((uint16_t)0x0004U)  /*!< PHY Duplex mask                                 */
 
-#define PHY_SPEED_STATUS                ((uint16_t)0x0004U)  /*!< PHY Speed mask                                  */
-#define PHY_DUPLEX_STATUS               ((uint16_t)0x0010U)  /*!< PHY Duplex mask                                 */
+#define PHY_MICR_INT_EN                 ((uint16_t)0x0002U)  /*!< PHY Enable interrupts                           */
+#define PHY_MICR_INT_OE                 ((uint16_t)0x0001U)  /*!< PHY Enable output interrupt events              */
 
-
-#define PHY_IMR ((uint16_t)0x1E) /*!< PHY Interrupt Mask register Offset              */
-#define PHY_ISFR                        ((uint16_t)0x1DU)    /*!< PHY Interrupt Source Flag register Offset       */
-#define PHY_ISFR_INT4                   ((uint16_t)0x0010U)  /*!< PHY Link down inturrupt                         */
-
+#define PHY_MISR_LINK_INT_EN            ((uint16_t)0x0020U)  /*!< Enable Interrupt on change of link status       */
+#define PHY_LINK_INTERRUPT              ((uint16_t)0x2000U)  /*!< PHY link status interrupt mask                  */
 
 /* ################## SPI peripheral configuration ########################## */
 
@@ -274,6 +274,10 @@
 #ifdef HAL_CAN_MODULE_ENABLED
   #include "stm32f7xx_hal_can.h"
 #endif /* HAL_CAN_MODULE_ENABLED */
+
+#ifdef HAL_CAN_LEGACY_MODULE_ENABLED
+  #include "stm32f7xx_hal_can_legacy.h"
+#endif /* HAL_CAN_LEGACY_MODULE_ENABLED */
 
 #ifdef HAL_CEC_MODULE_ENABLED
   #include "stm32f7xx_hal_cec.h"
@@ -439,13 +443,13 @@
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed function
+  * @param  expr If expr is false, it calls assert_failed function
   *         which reports the name of the source file and the source
   *         line number of the call that failed. 
   *         If expr is true, it returns no value.
   * @retval None
   */
-  #define assert_param(expr) ((expr) ? (void)0U : assert_failed((uint8_t *)__FILE__, __LINE__))
+  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
 /* Exported functions ------------------------------------------------------- */
   void assert_failed(uint8_t* file, uint32_t line);
 #else

@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    system_stm32f4xx.c
   * @author  MCD Application Team
-  * @version V2.6.1
-  * @date    14-February-2017
   * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File.
   *
   *   This file provides two functions and one global variable to be called from 
@@ -109,7 +107,7 @@
      Internal SRAM. */
 /* #define VECT_TAB_SRAM */
 #ifndef VECT_TAB_OFFSET
-#define VECT_TAB_OFFSET  0x00000000U /*!< Vector Table base offset field. 
+#define VECT_TAB_OFFSET  0x00 /*!< Vector Table base offset field. 
                                    This value must be a multiple of 0x200. */
 #endif
 /******************************************************************************/

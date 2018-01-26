@@ -134,12 +134,7 @@ extern char* ltoa(long value, char *string, int radix )
   return string;
 }
 
-//extern char* utoa( unsigned int value, char *string, int radix )
-#if ULTOA64
- extern char* utoa( unsigned value, char *string, int radix )
-#else
- extern char* utoa( unsigned long value, char *string, int radix )
-#endif
+extern char* utoa( unsigned int value, char *string, int radix )
 {
   return ultoa(value, string, radix ) ;
 }
