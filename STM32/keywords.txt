@@ -483,4 +483,5 @@ stm32_clock_freq_list_type	LITERAL1
 __AVR__ 	LITERAL1
 __arm__ 	LITERAL1
 __MSP430__ 	LITERAL1
+constexpr	LITERAL1	Constexpr	RESERVED_WORD_2
 
