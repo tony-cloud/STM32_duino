@@ -44,7 +44,7 @@
         const uint16_t appCodeSegAddr[] =  {3,16,3*16,5*16};
 #  endif
 #elif defined(STM32F207ZG)
-        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
+        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
 #elif defined(STM32F303VC)
         const uint16_t appCodeSegAddr[] =  {3,64, 2*64,3*64};
 #elif defined(STM32F401CC)
@@ -54,13 +54,13 @@
 	  
         const uint16_t appCodeSegAddr[] =  {3,128,2*128,3*128};
 #elif defined(STM32F407ZG)||defined(STM32F407VG)
-        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
+        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
 #elif defined(STM32F746IG)
         const uint16_t appCodeSegAddr[] =  {3,256,2*256,3*256};
 #elif defined(STM32F767ZI)
-        const uint16_t appCodeSegAddr[] =  {7,256,2*256,3*256,4*256,5*256,6*26,7*256};
+        const uint16_t appCodeSegAddr[] =  {7,256,2*256,3*256,4*256,5*256,6*256,7*256};
 #elif defined(STM32L476RG)
-        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*26,7*128};
+        const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
 #else /*f4/7*/
 
 #warning "please add me!"

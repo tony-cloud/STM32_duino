@@ -59,12 +59,16 @@
 #endif
 
 /*USE_SPIx default 1*/
+#ifndef USE_SPI1
+#define USE_SPI1 0 /*0 unused spi2 save space*/
+#endif
+
 #ifndef USE_SPI2
-#define USE_SPI2 1 /*0 unused spi2 save space*/
+#define USE_SPI2 0 /*0 unused spi2 save space*/
 #endif
 
 #ifndef USE_SPI3
-#define USE_SPI3 1 /*0 unused spi2 save space*/
+#define USE_SPI3 0 /*0 unused spi2 save space*/
 #endif
 
 #ifndef USE_SPI4
@@ -80,6 +84,10 @@
 #endif
 
 /*USE_I2Cx default 1*/
+#ifndef USE_I2C1
+#define USE_I2C1 0
+#endif
+
 #ifndef USE_I2C2
 #define USE_I2C2 0
 #endif
