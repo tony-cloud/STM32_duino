@@ -18,6 +18,8 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
+  modify by huaweiwx@sina.com 2018.2.2
 */
 
 #include "stm32_gpio.h"
@@ -32,8 +34,6 @@ static uint32_t waitCycles;
 static uint8_t analogWriteResolutionBits = 8;
 static uint32_t pwmFrequecyHz = PWM_FREQUENCY_HZ;  //add by huaweiwx@sina.com 2017.8.2
 const uint32_t TIMER_MAX_CYCLES = UINT16_MAX;
-
-//const uint32_t PWM_FREQUENCY_HZ = 1000;  /*huaweiwx@sina.com 2018.8.2*/
 
 extern void pinMode(uint8_t, uint8_t);
 
@@ -59,6 +59,7 @@ void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin);
 void analogWriteResolution(int bits) {
     analogWriteResolutionBits = bits;
 }
+
 static void initTimer(){
     static TIM_HandleTypeDef staticHandle;
 
@@ -69,18 +70,18 @@ static void initTimer(){
         stm32_pwm_disable_callback = &stm32_pwm_disable;
 
 
-        #ifdef TIM2 //99% of chips have TIM2
-            __HAL_RCC_TIM2_CLK_ENABLE();
-            HAL_NVIC_SetPriority(TIM2_IRQn, TIM_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
-            HAL_NVIC_EnableIRQ(TIM2_IRQn);
-
-            handle->Instance = TIM2;
-        #else
+        #ifdef TIM3  /*some TIM2 is 32bit, priority to use TIM3. huaweiwx@sina.com 2018.2.2*/
             __HAL_RCC_TIM3_CLK_ENABLE();
-            HAL_NVIC_SetPriority(TIM3_IRQn, TIM_PRIORITY, 0); //define in stm32_def.h huaweiwx@sina.com 2017.12
+            HAL_NVIC_SetPriority(TIM3_IRQn, TIM_PRIORITY, 0); //TIM_PRIORITY define in stm32_def.h huaweiwx@sina.com 2017.12
             HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
             handle->Instance = TIM3;
+        #else  //99% of chips have TIM2
+            __HAL_RCC_TIM2_CLK_ENABLE();
+            HAL_NVIC_SetPriority(TIM2_IRQn, TIM_PRIORITY, 0); //TIM_PRIORITY define in stm32_def.h huaweiwx@sina.com 2017.12
+            HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+            handle->Instance = TIM2;
         #endif
 
         handle->Init.Prescaler = 0;
@@ -94,11 +95,6 @@ static void initTimer(){
     }
 }
 
-#ifdef STM32F0  // there is no pclk2
-#define timerFreq() HAL_RCC_GetPCLK1Freq()
-#else
-#define timerFreq() HAL_RCC_GetPCLK2Freq()
-#endif
 
 void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
     initTimer();
@@ -111,13 +107,18 @@ void pwmWrite(uint8_t pin, int dutyCycle, int frequency, int durationMillis) {
             if (pwm_config[i].port == NULL) {
                 pinMode(pin, OUTPUT);
             }
+#ifdef STM32F0  // there is no pclk2
+			uint32_t timerFreq = HAL_RCC_GetPCLK1Freq();
+#else
+			uint32_t timerFreq = HAL_RCC_GetPCLK2Freq();
+#endif
             pwm_config[i].port = variant_pin_list[pin].port;
             pwm_config[i].pinMask = variant_pin_list[pin].pinMask;
-            pwm_config[i].waveLengthCycles = timerFreq() / frequency;
+            pwm_config[i].waveLengthCycles = timerFreq / frequency;
 		    pwm_config[i].dutyCycle = (uint64_t)pwm_config[i].waveLengthCycles * dutyCycle >> 16;
 
             if (durationMillis > 0) {
-                pwm_config[i].counterCycles = timerFreq() / 1000 * durationMillis;
+                pwm_config[i].counterCycles = timerFreq / 1000 * durationMillis;
             }
 
             break;
@@ -137,6 +138,7 @@ void analogWrite(uint8_t pin, int value) {
 void setPwmFrequency(uint32_t freqHz){
     pwmFrequecyHz = freqHz;
 }
+
 uint32_t getPwmFrequency(void){
     return pwmFrequecyHz;
 }
@@ -148,8 +150,11 @@ void stm32ScheduleMicros(uint32_t microseconds, void (*callback)()) {
         if (pwm_config[i].port == NULL && pwm_config[i].callback == NULL) {
 
             pwm_config[i].callback = callback;
-
-            pwm_config[i].waveLengthCycles = timerFreq() * (uint64_t)microseconds / 1000000;
+#ifdef STM32F0  // there is no pclk2
+            pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK1Freq() * (uint64_t)microseconds / 1000000;
+#else
+            pwm_config[i].waveLengthCycles = HAL_RCC_GetPCLK2Freq() * (uint64_t)microseconds / 1000000;
+#endif
             pwm_config[i].counterCycles = pwm_config[i].waveLengthCycles;
             break;
         }
@@ -225,10 +230,10 @@ void pwm_callback() {
     }
 }
 
-#ifdef TIM2
-  extern void TIM2_IRQHandler(void) {
-#else
+#ifdef TIM3  /*priority to use TIM3. huaweiwx@sina.com 2018.2.2*/
   extern void TIM3_IRQHandler(void) {
+#else
+  extern void TIM2_IRQHandler(void) {
 #endif
 
     if (pwm_callback_func != NULL) {

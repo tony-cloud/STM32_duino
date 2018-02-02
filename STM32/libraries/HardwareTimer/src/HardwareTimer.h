@@ -32,6 +32,9 @@ typedef enum {
 
 #define TIMER_DEFAULT_PIN 0xFF
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 class HardwareTimer {
 public:
     HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_type *pin_list, int pin_list_size);
@@ -91,6 +94,8 @@ private:
     void resumeChannel(int channel, int timChannel);
 
 };
+
+#pragma GCC diagnostic pop
 
 #ifdef TIM1
     extern HardwareTimer Timer1;
