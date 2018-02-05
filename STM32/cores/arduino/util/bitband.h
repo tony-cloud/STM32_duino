@@ -47,10 +47,11 @@
 #define BITBAND(addr, bitnum) (PERIPH_BB_BASE+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
 #define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
 #define BITBAND_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
-  
+
 //n must be less 16!   确保n的值小于16!
 //example:  in = PAin(0);  
 //          PCout(13) = 1;
+
 #ifdef GPIOA
 #define PAout(n)   BITBAND_ADDR((uint32_t)&GPIOA->ODR,n)  //输出 
 #define PAin(n)    BITBAND_ADDR((uint32_t)&GPIOA->IDR,n)  //输入 
@@ -106,17 +107,19 @@
 #define PINI       GPIOI->IDR    //输入 
 #endif
 
-//for arduino const pin add 2017.10
-#define PIN_OUTADDR(n)  BITBAND(((const uint32_t)&variant_pin_list[n].port->ODR),\
+//for arduino pin add 2017.10
+#define PIN_OUTADR(n) BITBAND(((const uint32_t)&variant_pin_list[n].port->ODR),\
                               BITMASKPOS(variant_pin_list[n].pinMask))
-							
-#define PIN_INADDR(n)   BITBAND(((uint32_t)&variant_pin_list[n].port->IDR),\
+
+#define PIN_INADR(n)  BITBAND(((const uint32_t)&variant_pin_list[n].port->IDR),\
                               BITMASKPOS(variant_pin_list[n].pinMask))
-							  
-#define PINOut(pin)		MEM_ADDR(PIN_OUTADDR(pin))						
-#define PINin(pin)		MEM_ADDR(PIN_OUTADDR(pin))
+
+#define PINOut(pin)	MEM_ADDR(PIN_OUTADDR(pin))						
+#define PINin(pin)	MEM_ADDR(PIN_OUTADDR(pin))
 
 #define BB_sramVarPtr(x)  __BB_addr((volatile uint32_t*)&(x), 0, SRAM_BB_BASE, SRAM_BASE)
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -194,71 +197,86 @@ static inline volatile uint32_t* __BB_addr(volatile void *address,
                                          uint32_t bit,
                                          uint32_t bb_base,
                                          uint32_t bb_ref) {
-    return (volatile uint32_t*)(bb_base + ((uint32_t)address - bb_ref) * 32 +
-                              bit * 4);
+    return (volatile uint32_t*)(bb_base + (((uint32_t)address - bb_ref)<<5) +
+                              (bit<<2));
 }
 
-static inline uint32_t BB_pinAddr(uint32_t pin,uint8_t mode){
-	
+static inline uint32_t BB_pinAdr(uint32_t pin,uint8_t mode){
 	uint32_t portaddr =((mode)?((uint32_t) &variant_pin_list[pin].port->ODR)
 	                          :((uint32_t) &variant_pin_list[pin].port->IDR));
-							  
 	uint32_t bit = BITMASKPOS(variant_pin_list[pin].pinMask);
+	return BITBAND(portaddr,bit);
+}
+
+static inline uint32_t BB_pinInAdr(uint32_t pin){
+	uint32_t portaddr = (uint32_t) &variant_pin_list[pin].port->IDR;
+	uint32_t bit = __builtin_ffs(variant_pin_list[pin].pinMask)-1;
+	return BITBAND(portaddr,bit);
+}
+
+static inline uint32_t BB_pinOutAdr(uint32_t pin){
+	uint32_t portaddr = (uint32_t) &variant_pin_list[pin].port->ODR;
+	uint32_t bit = __builtin_ffs(variant_pin_list[pin].pinMask)-1;
 	return BITBAND(portaddr,bit);
 }
 
 #ifdef __cplusplus
 } // extern "C"
 
-template<const uint8_t PinNumber>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+template<const int PinNumber>
 class BB_PIN{
  public:
   //----------------------------------------------------------------------------
-  /** Constructor */
-  BB_PIN(){};
+  constexpr const uint8_t  pos(void){return variant_gpiopin_pos_static[PinNumber];};
+  constexpr const uint32_t base(void){return variant_gpiopin_base_static[PinNumber];};
+#ifdef STM32F1
+  constexpr const uint32_t pinReg(void){return this->base()+8;};
+  constexpr const uint32_t portReg(void){return this->base()+12;};
+#else
+  constexpr const uint32_t pinReg(void){return this->base()+16;};
+  constexpr const uint32_t portReg(void){return this->base()+20;};
+#endif
+  constexpr const uint32_t bb_inadr(void){return BITBAND(this->pinReg(),this->pos());};
+  constexpr const uint32_t bb_outadr(void){return BITBAND(this->portReg(),this->pos());};
 
   inline BB_PIN & operator = (bool value) __attribute__((always_inline)) {
-    MEM_ADDR(PIN_OUTADDR(PinNumber)) = value;
+    MEM_ADDR(this->bb_outadr()) = value;
     return *this;
   }
 
-   inline operator bool () __attribute__((always_inline)) {
-    return (MEM_ADDR(PIN_INADDR(PinNumber)));
+  inline __attribute__((always_inline))
+  void write(bool value){MEM_ADDR(this->bb_outadr()) = value;}
+
+  inline __attribute__((always_inline))
+  void high(){MEM_ADDR(this->bb_outadr()) = 0x1U;}
+
+  inline __attribute__((always_inline))
+  void low(){MEM_ADDR(this->bb_outadr()) = 0x0U;}
+
+  inline operator bool () const __attribute__((always_inline)) {
+    return (MEM_ADDR(this->bb_inadr()));
   }
+
+  inline __attribute__((always_inline))
+  bool read() const{return MEM_ADDR(this->bb_inadr());}
+
+/*----- comptabled with DigitalPin ----------*/
+  inline __attribute__((always_inline))
+  void toggle(){write(!MEM_ADDR(this->bb_outadr()));}
 
   inline __attribute__((always_inline))
   void config(uint8_t mode, bool level) {
-	  pinMode(PinNumber,mode);
-      MEM_ADDR(PIN_OUTADDR(PinNumber)) = level;
+	  this->mode(mode);
+      MEM_ADDR(this->bb_outadr()) = level;
   }
 
   inline __attribute__((always_inline))
-  void high() {
-	  MEM_ADDR(PIN_OUTADDR(PinNumber)) = 0x1U;}
-
-  inline __attribute__((always_inline))
-  void low() {MEM_ADDR(PIN_OUTADDR(PinNumber)) = 0x0U;}
-
-  inline __attribute__((always_inline))
-  void mode(uint8_t mode) {
-     pinMode(PinNumber,mode);
-  }
-
-  inline __attribute__((always_inline))
-  bool read() const {
-    return MEM_ADDR(PIN_INADDR(PinNumber));
-  }
-
-  inline __attribute__((always_inline))
-  void toggle() {
-    digitalToggle(PinNumber);
-  }
-
-  inline __attribute__((always_inline))
-  void write(bool value) {
-    MEM_ADDR(PIN_OUTADDR(PinNumber)) = value;
-  }
+  void mode(uint8_t mode){
+	  pinModeLL((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber), mode);}
 };
+#pragma GCC diagnostic pop
 
 #endif //__cplusplus
 
