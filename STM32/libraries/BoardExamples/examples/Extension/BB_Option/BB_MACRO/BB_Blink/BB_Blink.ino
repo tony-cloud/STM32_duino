@@ -20,7 +20,7 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   //  ledaddr = PIN_OUTADDR(LED_BUILTIN);     //get addr use macro
-  ledaddr = BB_pinAddr(LED_BUILTIN, OUTPUT);  //get addr use functon
+  ledaddr = BB_pinAdr(LED_BUILTIN, OUTPUT);  //get addr use functon
 }
 
 // the loop function runs over and over again forever

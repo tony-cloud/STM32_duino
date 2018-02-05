@@ -1,6 +1,6 @@
 /*
  * STM32GENERIC arduino extension sample
- * bitband class BB_PIN demo 
+ * bitband class BB_PIN function write(HIGH/LOW) demo 
  * bitband for m3/4 位域操作仅 m3/4 支持, 直接对位域地址读写，这是最快的位操作；
  *          对 m0/m7，bitband class 调用 DigitalPin class 实现；
  * huaweiwx@sina.com 2017.12.26
@@ -18,6 +18,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  led.toggle();
-  delay(1000);
+  led.write(HIGH);
+  delay(500);
+  led.write(LOW);
+  delay(500);  
 }
