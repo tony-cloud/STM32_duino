@@ -12,7 +12,7 @@ void setup() {
   //  put your setup code here, to run once:
   Serial.begin(115200);
   Led.Init();
-
+  delay(2000); /*wait for serial ready*/
   Serial.println("I'm going to sleep.......");
 }
 
