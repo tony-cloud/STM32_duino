@@ -107,6 +107,7 @@ void analogReadResolution(int resolution);
 void analogReference(uint8_t mode);
 void analogWrite(uint8_t, int);
 void analogWriteResolution(int bits);
+uint8_t getAnalogWriteResolution(void);
 
 void setPwmFrequency(uint32_t freqHz);/*add huaweiwx@sina.com 2018.8.2*/
 uint32_t getPwmFrequency(void); /*add huaweiwx@sina.com 2018.8.2*/
@@ -151,9 +152,7 @@ void loop(void);
 
 #ifdef __cplusplus
 #include "WCharacter.h"
-//#include "WString.h"
-//#include "HardwareSerial.h"
-//#include "USBAPI.h"
+
 #if defined(HAVE_HWSERIAL0) && defined(HAVE_CDCSERIAL)
 # error "Targets with both UART0 and CDC serial not supported"
 #endif

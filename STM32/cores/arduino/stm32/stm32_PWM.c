@@ -59,6 +59,9 @@ void stm32_pwm_disable(GPIO_TypeDef *port, uint32_t pin);
 void analogWriteResolution(int bits) {
     analogWriteResolutionBits = bits;
 }
+uint8_t getAnalogWriteResolution(void) {
+    return analogWriteResolutionBits;
+}
 
 static void initTimer(){
     static TIM_HandleTypeDef staticHandle;
