@@ -10,7 +10,7 @@
 
 #if __has_include("configs/hal_conf.h")
 #undef __HALSPECELCONFIG_H__
-# include_next "configs/hal_conf.h"
+# include "configs/hal_conf.h"
 #endif
 
 /***************  HAL_Conf default here ******************/
@@ -40,6 +40,13 @@
 #ifndef USE_USBDMSC
 # ifdef MENU_USB_MASS_STORAGE
 #   define USE_USBDMSC  1
+#   define USE_USB 1
+# endif
+#endif
+
+#ifndef USE_USBDDFU
+# ifdef MENU_USB_DFU
+#   define USE_USBDDFU  1
 #   define USE_USB 1
 # endif
 #endif
