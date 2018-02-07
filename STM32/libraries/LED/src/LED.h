@@ -71,21 +71,46 @@ typedef struct {
 	int fadeTime  = (1000/(255/LED_FADEAMOUNT));
 } LED_TypeDef;
 
-template<const int pin,const uint8_t _on>
+struct _FLASH
+{ 
+  int timeon;
+  int timeoff;
+  int count;
+  _FLASH(int on,int off,int cnt=1): timeon(on),timeoff(off),count(cnt) 
+  {}
+};
+
+template<const int pin, const bool onval=false>
 class LEDClass : public BB_PIN<pin>{
  public:
     inline LEDClass &operator = (bool value) __attribute__((always_inline)){
 		this->write(value);
 		return *this;
     }
+
+    inline LEDClass & operator << (bool value) __attribute__((always_inline)) {
+		this->write(value);
+		return *this;
+    }
+
+    inline LEDClass & operator << (int value) __attribute__((always_inline)) {
+		this->write((bool)value);
+		return *this;
+    }
+
+    inline LEDClass & operator << (const _FLASH &arg) __attribute__((always_inline)) {
+		this->flash((uint16_t)arg.timeon,(uint16_t)arg.timeoff,(uint8_t)arg.count);
+		return *this;
+    }
+
 	inline void Init(void){this->mode(OUTPUT);}
-    
+
     inline void on(void) __attribute__((always_inline)){
-		this->write(_on?1:0);
+		this->write(onval?1:0);
     }
 
     inline void off(void) __attribute__((always_inline)){
-		this->write(_on?0:1);
+		this->write(onval?0:1);
     }
 	
 	void flash(uint16_t timeon,uint16_t timeoff,uint8_t cnt=1){
@@ -100,7 +125,10 @@ class LEDClass : public BB_PIN<pin>{
 	}
 
     inline void on(int val) __attribute__((always_inline)){ //analogWrite
-		analogWrite(pin, (_on? val:255-val));
+	    uint8_t res = getAnalogWriteResolution();
+		uint32_t max = (1<<res)-1;
+		val &=max;
+		analogWrite(pin, (onval? val:max-val));
 	}
 
 
