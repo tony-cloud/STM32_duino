@@ -60,11 +60,11 @@
 
 /*USE_SPIx default 1*/
 #ifndef USE_SPI2
-#define USE_SPI2 0 /*0 unused spi2 save space*/
+#define USE_SPI2 1 /*0 unused spi2 save space*/
 #endif
 
 #ifndef USE_SPI3
-#define USE_SPI3 0 /*0 unused spi2 save space*/
+#define USE_SPI3 1 /*0 unused spi2 save space*/
 #endif
 
 #ifndef USE_SPI4

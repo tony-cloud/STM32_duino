@@ -17,6 +17,8 @@
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, see <http://www.gnu.org/licenses/>.
+  
+  2018.1.17 add struct _DOUBLE by huaweiwx@sina.com
 */
 
 #ifndef ARDUINO_STREAMING

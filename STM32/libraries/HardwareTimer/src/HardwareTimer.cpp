@@ -26,7 +26,7 @@
 
 HardwareTimer *interruptTimers[18];
 
-void (*pwm_callback_func)();
+extern void (*pwm_callback_func)();
 static void handleInterrupt(HardwareTimer *timer);
 
 static const uint32_t OCMODE_NOT_USED = 0xFFFF;
@@ -40,11 +40,12 @@ HardwareTimer::HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_typ
     for(int i=0; i<4; i++) {
         channelOC[i].OCMode = OCMODE_NOT_USED;
         channelOC[i].OCPolarity = TIM_OCPOLARITY_HIGH;
-        channelOC[i].OCNPolarity = TIM_OCNPOLARITY_HIGH;
         channelOC[i].OCFastMode = TIM_OCFAST_DISABLE;
         channelOC[i].OCIdleState = TIM_OCIDLESTATE_RESET;
+#ifndef STM32L1		
+        channelOC[i].OCNPolarity = TIM_OCNPOLARITY_HIGH;
         channelOC[i].OCNIdleState = TIM_OCNIDLESTATE_RESET;
-
+#endif
         channelIC[i].ICPolarity = OCMODE_NOT_USED;
         channelIC[i].ICSelection = TIM_ICSELECTION_DIRECTTI;
         channelIC[i].ICPrescaler = TIM_ICPSC_DIV1;
@@ -71,13 +72,15 @@ void HardwareTimer::resume() {
         __HAL_RCC_TIM1_CLK_ENABLE();
         interruptTimers[0] = this;
         if (hasInterrupt) {
-
-#if defined(STM32F1)||defined(STM32F2)||defined(STM32F4)||defined(STM32F7)
-            HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TIM_PRIORITY, 0);
-            HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
-#elif defined(STM32F3)||defined(STM32L4)
+#if (STM32F410Cx || STM32F410Rx || STM32F410Tx)  /*F4 TIM1_UP_TIM10_IRQn. but F410 exception*/
+            HAL_NVIC_SetPriority(TIM1_UP_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);	
+#elif defined(STM32F3)||defined(STM32L4)|| STM32F100xB|| STM32F100xE /*F100 TIM1_UP_TIM16*/
             HAL_NVIC_SetPriority(TIM1_UP_TIM16_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+#elif defined(STM32F1)||defined(STM32F2)||defined(STM32F4)|| defined(STM32F7)
+            HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 #endif
             HAL_NVIC_SetPriority(TIM1_CC_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
@@ -99,7 +102,10 @@ void HardwareTimer::resume() {
 #ifdef TIM2
     if (handle.Instance == TIM2) {
         __HAL_RCC_TIM2_CLK_ENABLE();
+		
+#ifndef TIM3		
         pwm_callback_func = []() { handleInterrupt(interruptTimers[1]); };
+#endif		
         interruptTimers[1] = this;
         if (hasInterrupt) {
             HAL_NVIC_SetPriority(TIM2_IRQn, TIM_PRIORITY, 0);
@@ -111,6 +117,7 @@ void HardwareTimer::resume() {
 #ifdef TIM3
     if (handle.Instance == TIM3) {
         __HAL_RCC_TIM3_CLK_ENABLE();
+        pwm_callback_func = []() { handleInterrupt(interruptTimers[2]); };
         interruptTimers[2] = this;
         if (hasInterrupt) {
             HAL_NVIC_SetPriority(TIM3_IRQn, TIM_PRIORITY, 0);
@@ -132,8 +139,9 @@ void HardwareTimer::resume() {
 
     handle.Init.CounterMode = TIM_COUNTERMODE_UP;
     handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+#ifndef STM32L1  /*huaweiwx*/
     handle.Init.RepetitionCounter = 0;
-
+#endif
     HAL_TIM_Base_Init(&handle);
 
     if (callbacks[0] != NULL) {
@@ -205,6 +213,10 @@ uint32_t HardwareTimer::getBaseFrequency() {
 
 #ifdef STM32F1
     freq2Mul = 1;
+#endif
+
+#ifdef STM32F0
+#define HAL_RCC_GetPCLK2Freq  HAL_RCC_GetPCLK1Freq
 #endif
 
 #ifdef TIM1
@@ -339,6 +351,8 @@ void HardwareTimer::setMode(int channel, TIMER_MODES mode, uint8_t pin) {
             pinMode = GPIO_MODE_AF_PP;
             pull = GPIO_PULLDOWN;
             break;
+		default:
+		    break;
     }
 
     if (pinMode != PIN_NOT_USED) {
@@ -452,27 +466,33 @@ static void handleInterrupt(HardwareTimer *timer) {
 extern "C" void TIM1_CC_IRQHandler(void) {
     if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
 }
-extern "C" void TIM1_UP_IRQHandler(void) {
-    if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
-}
 
-#ifndef TIM1_UP_TIM10_IRQHandler
-//    extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
-//        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
-//        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
-//    }
+#if (STM32F410Cx || STM32F410Rx || STM32F410Tx)  /*F4 TIM1_UP_TIM10_IRQn. but F410 exception*/
+	extern "C" void TIM1_UP_IRQHandler(void) {
+		if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+	}
+#elif defined(STM32F3)||defined(STM32L4)|| STM32F100xB|| STM32F100xE /*F100 TIM1_UP_TIM16*/
+    extern "C" void TIM1_UP_TIM16_IRQHandler(void) {
+        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[15] != NULL) handleInterrupt(interruptTimers[15]);
+    }
+#elif defined(STM32F1)||defined(STM32F2)||defined(STM32F4)||defined(STM32F7) /*F101/103/105/107  TIM1_UP_TIM10 or TIM1_UP*/
+    extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
+        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
+    }
 #endif
 
 // in stm32_PWM.c
 /*
-extern "C" void TIM2_IRQHandler(void) {
-    handleInterrupt(interruptTimers[1]);
+extern "C" void TIM3_IRQHandler(void) {
+    handleInterrupt(interruptTimers[2]);
 }*/
 
-#ifdef TIM2
-// in stm32_PWM.c if have not TIM2 use TIM3 define 
-extern "C" void TIM3_IRQHandler(void) {
-    if (interruptTimers[2] != NULL) handleInterrupt(interruptTimers[2]);
+#ifdef TIM3  /*priority to use TIM3. huaweiwx@sina.com 2018.2.2*/
+// in stm32_PWM.c if have not TIM3 use TIM2 define 
+extern "C" void TIM2_IRQHandler(void) {
+    if (interruptTimers[1] != NULL) handleInterrupt(interruptTimers[1]);
 }
 #endif
 

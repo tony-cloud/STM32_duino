@@ -34,6 +34,7 @@ void init() {
 #endif
 }
 
+
 #if  FREERTOS  //huawei (huaweiwx@sina.com)
 void   osSystickHandler(void);
 #endif
@@ -47,6 +48,7 @@ void SysTick_Handler(void) {
 #endif
 }
 
-void Error_Handler() {
+/*move to hooks.c huawei 2018.1.30*/
+//void Error_Handler() {
 
-}
+//}

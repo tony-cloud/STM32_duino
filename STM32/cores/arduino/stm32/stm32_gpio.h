@@ -24,11 +24,8 @@
 #define STM32_GPIO_H
 
 #include "stm32_def.h"
-
 #include "stm32_pin_list.h"
-
 #include "variant.h"
-
 #include "stm32_HAL/stm32XXxx_ll_gpio.h"
 
 #define INPUT 0x0
@@ -63,6 +60,9 @@ typedef struct {
 
 extern const stm32_port_pin_type variant_pin_list[NUM_DIGITAL_PINS];
 
+inline GPIO_TypeDef* pinToPort(uint8_t pin){return variant_pin_list[pin].port;}  /* equal_to digitalPinToPort(pin)*/
+inline uint32_t pinToBitMask(uint8_t pin){return variant_pin_list[pin].pinMask;} /* equal_to digitalPinToBitMask(pin)*/
+
 /**
  * Start clock for the fedined port
  */
@@ -75,26 +75,22 @@ typedef void (*stm32_pwm_disable_callback_func)(GPIO_TypeDef *port, uint32_t pin
 extern stm32_pwm_disable_callback_func stm32_pwm_disable_callback;
 
 inline void digitalWrite(uint8_t pin, uint8_t value) {
-    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
-        return;
-    }
+//    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
+//        return;
+//    }
     
     stm32_port_pin_type port_pin = variant_pin_list[pin];
-    
     HAL_GPIO_WritePin(port_pin.port, port_pin.pinMask, value ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    
 }
 
 
 inline int digitalRead(uint8_t pin) {
-    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
-        return 0;
-    }
+//    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
+//        return 0;
+//    }
     
     stm32_port_pin_type port_pin = variant_pin_list[pin];
-    
     return HAL_GPIO_ReadPin(port_pin.port, port_pin.pinMask);
-    
 }
 
 //add by huaweiwx@sina.com  2017.6.4
@@ -113,6 +109,17 @@ inline void digitalToggle(uint8_t pin) {
 
 ///////////////////////////////
 // The following functions are meant to be used with compile time constant parameters
+#define PIN(a, b)   b
+static const uint8_t variant_gpiopin_pos_static[] = {
+   PIN_LIST
+};  
+#undef PIN
+ 
+#define PIN(a, b)   GPIO##a##_BASE
+static const uint32_t variant_gpiopin_base_static[] = {
+  PIN_LIST
+};  
+#undef PIN
 
 #define PIN(a, b) { GPIO##a , LL_GPIO_PIN_##b }
 static const stm32_port_pin_type variant_pin_list_ll_static[] = {
@@ -121,6 +128,18 @@ static const stm32_port_pin_type variant_pin_list_ll_static[] = {
 #undef PIN
 
 #ifdef __cplusplus
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+inline constexpr const uint8_t  pinMaskPos(__ConstPin pin){return variant_gpiopin_pos_static[pin];};
+inline constexpr const uint32_t pinToBase(__ConstPin pin){return variant_gpiopin_base_static[pin];}
+inline constexpr const uint32_t pinTollBitMask(__ConstPin pin){return variant_pin_list_ll_static[pin].pinMask;} 
+#ifdef STM32F1
+inline constexpr uint32_t pinToBitMask(__ConstPin pin){return ((variant_pin_list_ll_static[pin].pinMask>>8)&0xffff);}/* equal_to digitalPinToBitMask(pin)*/
+#else
+inline constexpr uint32_t pinToBitMask(__ConstPin pin){return (variant_pin_list_ll_static[pin].pinMask);} /* equal_to digitalPinToBitMask(pin)*/
+#endif
+#pragma GCC diagnostic pop
 
 inline void digitalWrite(__ConstPin pin, uint8_t value) {
     if (value) {
@@ -134,18 +153,37 @@ inline int digitalRead(__ConstPin pin) {
     return LL_GPIO_IsInputPinSet(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 }
 
+
+extern "C" void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode);
+inline static void pinMode(__ConstPin pin, uint8_t mode) {
+    pinModeLL(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask, mode);
+}
+
 //add by huaweiwx@sina.com  2017.6.4
 inline void digitalToggle(__ConstPin pin) {
     LL_GPIO_TogglePin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 }
 
-extern "C" void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode);
-
-inline static void pinMode(__ConstPin pin, uint8_t mode) {
-    pinModeLL(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask, mode);
+//add by huaweiwx@sina.com  2018.2.7
+template<class T> 
+inline void operator << (__ConstPin co, T value){
+  digitalWrite(co, (uint8_t)value);
 }
 
-#endif
+inline void operator << (__ConstPin co, __ConstPin ci){
+  digitalWrite(co, (uint8_t)digitalRead(ci));
+}
+
+template<class T> 
+inline void operator >> (__ConstPin ci, T &value) {
+  value = digitalRead(ci);
+}
+
+inline void operator >> (__ConstPin ci, __ConstPin co){
+  digitalWrite(co, (uint8_t)digitalRead(ci));
+}
+
+#endif //__cplusplus
 
 
-#endif
+#endif //STM32_GPIO_H

@@ -163,6 +163,8 @@ SECTIONS
 
   /* User_heap_stack section, used to check that there is enough RAM left */
 
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
 
   /* Remove information from the standard libraries */

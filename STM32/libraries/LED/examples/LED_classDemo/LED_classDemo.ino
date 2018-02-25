@@ -2,14 +2,14 @@
 //example for LED lib  LEDClass application   by huawei<huaweiwx@sina.com> 2016.10.28
 
 //LEDClass myLed;                  //init LEDClass myLed(default LED_BUILTIN)  HIGH ON;
-LEDClass myLed(LED_BUILTIN, LOW);  //init LEDClass LeD(LED_BUILTIN, LOW)  LOW ON;
+LEDClass<LED_BUILTIN, LOW> myLed;  //init LEDClass LeD(LED_BUILTIN, LOW)  LOW ON;
 
 #ifdef LED1_BUILTIN
-  LEDClass myLed1(LED1_BUILTIN, LOW);   //init LEDClass Led2  LOW ON;
+  LEDClass<LED1_BUILTIN, LOW> myLed1;   //init LEDClass Led2  LOW ON;
 #endif
 
 #ifdef LED2_BUILTIN
-  LEDClass myLed2(LED2_BUILTIN, LOW);   //init LEDClass Led3  LOW ON;
+  LEDClass<LED2_BUILTIN, LOW>myLed2;   //init LEDClass Led3  LOW ON;
 #endif
 
 

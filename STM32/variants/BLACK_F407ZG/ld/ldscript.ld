@@ -2,7 +2,7 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20000000 + 131072;    /* end of RAM */
+_estack = 0x20020000;    /* end of RAM */
 
 /* Specify the memory areas */
 MEMORY
@@ -40,7 +40,7 @@ SECTIONS
   } >FLASH
 
   /* Constant data goes into FLASH */
-  .rodata ALIGN(4) :
+  .rodata  :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
@@ -107,6 +107,8 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
+  . = ALIGN(8);
+  PROVIDE ( end = . );
   PROVIDE ( _end = . );
   
   /* Remove information from the standard libraries */
