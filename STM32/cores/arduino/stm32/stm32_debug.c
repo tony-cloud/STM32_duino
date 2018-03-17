@@ -125,13 +125,8 @@ void _Error_Handler(char* file, uint32_t line){
 
 #ifdef USE_FULL_ASSERT
 //assert_failed() used by stm32_hal. huaweiwx@sina.com  2017.12.8
-# if defined(STM32F0)//||defined(STM32F3)
-void assert_failed(char* file, uint32_t line) __weak;
-void assert_failed(char* file, uint32_t line)
-# else
 void assert_failed(uint8_t* file, uint32_t line) __weak;
 void assert_failed(uint8_t* file, uint32_t line)
-# endif
 {
 	debug("\r\nAssert failed! File: '%s' on Line:%d",(char *)file,line);
 	while(1)

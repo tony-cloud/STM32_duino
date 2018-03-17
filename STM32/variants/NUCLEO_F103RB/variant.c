@@ -40,6 +40,8 @@ void SystemClock_Config(void) {
   HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
+
+  LL_SYSTICK_EnableIT();  //for LL enableIT huaweiwx@sina.com 2018.3.1
 }
 
 #else   //HSE 
@@ -77,6 +79,8 @@ void SystemClock_Config(void) {
   HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
 #endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
+
+  LL_SYSTICK_EnableIT();  //for LL enableIT huaweiwx@sina.com 2018.3.1
 }
 
 #endif
