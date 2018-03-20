@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f1xx_hal_rcc_ex.h
   * @author  MCD Application Team
-  * @version V1.1.1
-  * @date    12-May-2017
   * @brief   Header file of RCC HAL Extension module.
   ******************************************************************************
   * @attention
@@ -412,11 +410,6 @@ typedef struct
 #define RCC_USBCLKSOURCE_PLL              RCC_CFGR_USBPRE
 #define RCC_USBCLKSOURCE_PLL_DIV1_5       0x00000000U
 
-#ifdef GD32F10X
-//  GD32 support div2 and div2.5  huaweiwx@sina.com
-#define RCC_USBCLKSOURCE_PLL_DIV_2   	(0x3 << RCC_CFGR_USBPRE_Pos)
-#define RCC_USBCLKSOURCE_PLL_DIV_2_5 	(0x2 << RCC_CFGR_USBPRE_Pos)
-#endif
 /**
   * @}
   */
