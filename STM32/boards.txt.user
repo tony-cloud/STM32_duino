@@ -14,7 +14,6 @@ menu.upload_method=Upload method
 menu.log=Debug Log_level
 
 #################################### Nucleo-64 ############################################
-# NUCLEO 64 board
 NUCLEO_64.name=Nucleo-64[SerialUART2]
 NUCLEO_64.vid.0=0x0483
 NUCLEO_64.pid.0=0x374B
@@ -131,13 +130,13 @@ NUCLEO_64.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
 NUCLEO_64.menu.clock_source.hse8m.build.f_cpu={build.f_cpuhse} -DUSE_HSE -DHSE_VALUE=8000000
 
 #-------------------------------------- UPLOAD METHODS ----------------------------------------#
-NUCLEO_64.menu.upload_method.MassStorageMethod=Mass Storage
-NUCLEO_64.menu.upload_method.MassStorageMethod.upload.protocol=
-NUCLEO_64.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
-
 NUCLEO_64.menu.upload_method.STLinkMethod=STLink
 NUCLEO_64.menu.upload_method.STLinkMethod.upload.protocol=STLink
 NUCLEO_64.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
+
+NUCLEO_64.menu.upload_method.MassStorageMethod=Mass Storage
+NUCLEO_64.menu.upload_method.MassStorageMethod.upload.protocol=
+NUCLEO_64.menu.upload_method.MassStorageMethod.upload.tool=nucleoFlasher
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 NUCLEO_64.menu.log.default=Release(no-exceptions)
@@ -156,8 +155,6 @@ NUCLEO_64.menu.log.trace=TRACE
 NUCLEO_64.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 #################################### Nucleo-144 ############################################
-# NUCLEO 144 board
-
 NUCLEO_144.name=Nucleo-144[SerialUART3]
 NUCLEO_144.vid.0=0x0483
 NUCLEO_144.pid.0=0x374B
@@ -224,9 +221,69 @@ NUCLEO_144.menu.log.debug.build.log_level=-D__LOG_LEVEL=5 -DUSE_FULL_ASSERT
 NUCLEO_144.menu.log.trace=TRACE
 NUCLEO_144.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
-##################################### Discovery L053C8 ###########################################
-# Discovery L053C8 board(32M)
+#################################### NUCLEO_L4R5 ############################################
+# Nucleo 144 board
+NUCLEO_L4R5.name=Nucleo-L4R5ZI(120M)[LPUART1_bps:230400]
+NUCLEO_L4R5.vid.0=0x0483
+NUCLEO_L4R5.pid.0=0x374B
 
+NUCLEO_L4R5.build.core=arduino
+NUCLEO_L4R5.build.variant=NUCLEO_L4R5ZI
+NUCLEO_L4R5.build.board=NUCLEO_L4R5ZI
+
+NUCLEO_L4R5.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialLPUART1
+
+NUCLEO_L4R5.upload.maximum_size=2097152
+NUCLEO_L4R5.upload.maximum_data_size=655360
+NUCLEO_L4R5.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+NUCLEO_L4R5.build.series=STM32L4
+NUCLEO_L4R5.build.f_cpuhsi=120000000L
+NUCLEO_L4R5.build.f_cpuhse=120000000L
+NUCLEO_L4R5.build.extra_flags=-DSTM32L4R5ZI
+NUCLEO_L4R5.build.ldscript_pre=ld/L4R5xI
+NUCLEO_L4R5.massstorage_drive=NODE_L4R5ZI
+
+NUCLEO_L4R5.menu.clock_source.msi=MSI
+NUCLEO_L4R5.menu.clock_source.msi.build.f_cpu={build.f_cpuhsi} -DUSE_MSI
+
+NUCLEO_L4R5.menu.clock_source.hsi=HSE_Disable(HSI)
+NUCLEO_L4R5.menu.clock_source.hsi.build.f_cpu={build.f_cpuhsi} -DUSE_HSI
+
+NUCLEO_L4R5.menu.clock_source.bypass=HSE_BYPASS_Clock_Source(if SB148 on)
+NUCLEO_L4R5.menu.clock_source.bypass.build.f_cpu={build.f_cpuhse} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+
+NUCLEO_L4R5.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
+NUCLEO_L4R5.menu.clock_source.hse8m.build.f_cpu={build.f_cpuhse} -DUSE_HSE -DHSE_VALUE=8000000
+
+NUCLEO_L4R5.menu.extern_lib.NONE=NONE
+NUCLEO_L4R5.menu.extern_lib.STemWin=STemWin
+NUCLEO_L4R5.menu.extern_lib.STemWin.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_GCC.a
+NUCLEO_L4R5.menu.extern_lib.STemWin.build.extra_flags_os=-DOS_SUPPORT=0
+NUCLEO_L4R5.menu.extern_lib.STemWinOS=STemWin_OS
+NUCLEO_L4R5.menu.extern_lib.STemWinOS.build.extra_lib={build.system.path}/EXTRALIB/STemWin/STemWin532_CM4_OS_GCC.a
+NUCLEO_L4R5.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
+
+NUCLEO_L4R5.upload.protocol=STLink
+NUCLEO_L4R5.upload.tool=stlink_upload
+
+
+#-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
+NUCLEO_L4R5.menu.log.default=Release(no-exceptions)
+NUCLEO_L4R5.menu.log.default.build.log_level=-fno-exceptions
+NUCLEO_L4R5.menu.log.fatal=FATAL
+NUCLEO_L4R5.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
+NUCLEO_L4R5.menu.log.error=ERROR
+NUCLEO_L4R5.menu.log.error.build.log_level=-D__LOG_LEVEL=2 -DUSE_FULL_ASSERT
+NUCLEO_L4R5.menu.log.warning=WARNING
+NUCLEO_L4R5.menu.log.warning.build.log_level=-D__LOG_LEVEL=3 -DUSE_FULL_ASSERT
+NUCLEO_L4R5.menu.log.info=INFO
+NUCLEO_L4R5.menu.log.info.build.log_level=-D__LOG_LEVEL=4 -DUSE_FULL_ASSERT
+NUCLEO_L4R5.menu.log.debug=DEBUG
+NUCLEO_L4R5.menu.log.debug.build.log_level=-D__LOG_LEVEL=5 -DUSE_FULL_ASSERT
+NUCLEO_L4R5.menu.log.trace=TRACE
+NUCLEO_L4R5.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
+
+##################################### Discovery L053C8 ###########################################
 DISCOVERY_L053C8.name=Discovery L053C8
 
 DISCOVERY_L053C8.upload.maximum_size=65536
@@ -289,10 +346,7 @@ DISCOVERY_L053C8.menu.log.trace=TRACE
 DISCOVERY_L053C8.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ##################################### Discovery L152RC ###########################################
-# Discovery L152RC board(32M)
-
 DISCOVERY_L152R.name=Discovery L152R
-
 
 DISCOVERY_L152R.build.core=arduino
 DISCOVERY_L152R.build.board=DISCOVERY_L152RC
@@ -365,8 +419,6 @@ DISCOVERY_L152R.menu.log.trace=TRACE
 DISCOVERY_L152R.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ####################################### Discovery F303VC #########################################
-# Discovery F303VC board
-
 DISCOVERY_F303VC.name=Discovery F303VC(HSI48M/HSE72M)
 
 DISCOVERY_F303VC.upload.maximum_size=524288
@@ -423,8 +475,6 @@ DISCOVERY_F303VC.menu.log.trace=TRACE
 DISCOVERY_F303VC.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ####################################### Discovery F407VG #########################################
-# Discovery F407VG board
-
 DISCOVERY_F407VG.name=Discovery F407VG(168M)
 
 DISCOVERY_F407VG.upload.maximum_size=1048576
@@ -461,16 +511,16 @@ DISCOVERY_F407VG.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
 DISCOVERY_F407VG.upload.protocol=STLink
 DISCOVERY_F407VG.upload.tool=stlink_upload
 
+DISCOVERY_F407VG.menu.serial.SerialUSB=SerialUSB
+DISCOVERY_F407VG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+DISCOVERY_F407VG.menu.serial.SerialUART2=SerialUART2 [PA2/PA3]
+DISCOVERY_F407VG.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+
 DISCOVERY_F407VG.menu.usb.Disabled=Disabled USB
 DISCOVERY_F407VG.menu.usb.SerialUSB=Serial [Virtual COM port]
 DISCOVERY_F407VG.menu.usb.SerialUSB.build.extra_flags_usb=-DMENU_USB_SERIAL
 DISCOVERY_F407VG.menu.usb.SerialMSC=Mass storage
 DISCOVERY_F407VG.menu.usb.SerialMSC.build.extra_flags_usb=-DMENU_USB_MASS_STORAGE
-
-DISCOVERY_F407VG.menu.serial.SerialUSB=SerialUSB
-DISCOVERY_F407VG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-DISCOVERY_F407VG.menu.serial.SerialUART2=SerialUART2 [PA2/PA3]
-DISCOVERY_F407VG.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 DISCOVERY_F407VG.menu.log.default=Release(no-exceptions)
@@ -489,10 +539,7 @@ DISCOVERY_F407VG.menu.log.trace=TRACE
 DISCOVERY_F407VG.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ####################################### Discovery F429ZI #########################################
-# Discovery F429ZI board
-
 DISCOVERY_F429ZI.name=Discovery F429ZI(168M)
-
 
 DISCOVERY_F429ZI.build.core=arduino
 DISCOVERY_F429ZI.build.board=DISCOVERY_F429ZI
@@ -554,8 +601,6 @@ DISCOVERY_F429ZI.menu.log.trace=TRACE
 DISCOVERY_F429ZI.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ######################################## Discovery F746NG ########################################
-# Discovery F746NG board
-
 DISCOVERY_F746NG.name=Discovery F746NG(216M)
 
 DISCOVERY_F746NG.upload.maximum_size=1048576
@@ -804,7 +849,6 @@ MapleMini.menu.log.trace=TRACE
 MapleMini.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ####################################### F103CB#########################################
-# BluePill board
 BluePill.name=F103Cx
 BluePill.upload.uploadadr=0x08000000
 BluePill.upload.vect=0x08000000
@@ -834,7 +878,15 @@ BluePill.menu.subboard.GF103CB.upload.maximum_data_size=20480
 BluePill.menu.subboard.GF103CB.upload.device=STM32F103CB
 BluePill.menu.subboard.GF103CB.build.extra_flags=-DSTM32F103CB  -DLED_BUILTIN=PB8
 BluePill.menu.subboard.GF103CB.build.ldscript=ld/f103xB.ld
-BluePill.menu.subboard.GF103CB.build.board=F103CB_PB8
+BluePill.menu.subboard.GF103CB.build.board=F103C_PB8
+
+BluePill.menu.subboard.BF103CB=GENERIC F103C8/B[LED PB12]
+BluePill.menu.subboard.BF103CB.upload.maximum_size=131072
+BluePill.menu.subboard.BF103CB.upload.maximum_data_size=20480
+BluePill.menu.subboard.BF103CB.upload.device=STM32F103CB
+BluePill.menu.subboard.BF103CB.build.extra_flags0=-DSTM32F103CB -DLED_BUILTIN=PB12
+BluePill.menu.subboard.BF103CB.build.ldscript=ld/f103xB.ld
+BluePill.menu.subboard.BF103CB.build.board=F103C_PB12
 
 BluePill.menu.osc_speed.speed_08m=8M(HSE)_72M
 BluePill.menu.osc_speed.speed_08m.build.f_cpu=72000000L -DHSE_VALUE=8000000
@@ -902,7 +954,6 @@ BluePill.menu.log.trace=TRACE
 BluePill.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
 ##################################### L152C ###########################################
-# L152C board(32M)
 L152C.name=L152Cx(32M)
 L152C.serial.disableDTR=true
 L152C.serial.disableRTS=true
@@ -1422,12 +1473,10 @@ F103V.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F103V.menu.serial.SerialUART1=SerialUART1
 F103V.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
-
-F103V.menu.serial.SerialUSB=SerialUSB
-F103V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-
 F103V.menu.serial.SerialUART2=SerialUART2
 F103V.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+F103V.menu.serial.SerialUSB=SerialUSB
+F103V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 F103V.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4, PB3,PA15,PA14,PA13]
 F103V.menu.jtag_swd.JTAG.build.extra_flags_jtag=-DMENU_DEBUG_JTAG
@@ -1548,10 +1597,10 @@ F107V.menu.usb.Composite.build.extra_flags_usb=-DMENU_USB_IAD
 
 F107V.menu.serial.SerialUART1=SerialUART1
 F107V.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
-F107V.menu.serial.SerialUSB=SerialUSB
-F107V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 F107V.menu.serial.SerialUART2=SerialUART2
 F107V.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+F107V.menu.serial.SerialUSB=SerialUSB
+F107V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
 
 F107V.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4, PB3,PA15,PA14,PA13]
 F107V.menu.jtag_swd.JTAG.build.extra_flags_jtag=-DMENU_DEBUG_JTAG
