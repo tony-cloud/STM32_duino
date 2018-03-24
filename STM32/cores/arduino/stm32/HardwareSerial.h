@@ -109,6 +109,11 @@ extern HardwareSerial SerialUART6;
 #define Serial6 SerialUART6
 #endif
 
+#if defined(LPUART1) && (USE_LPUART1)
+extern HardwareSerial SerialLPUART1;
+#define LPSerial1 SerialLPUART1
+#endif
+
 #define SerialUART HardwareSerial  /*comptatible with old version*/
 
 #endif // _HARDWARESERIAL_H_

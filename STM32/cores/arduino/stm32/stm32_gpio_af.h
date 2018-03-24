@@ -93,6 +93,12 @@ extern "C"{
 void stm32AfUARTInit(const USART_TypeDef *instance,
     GPIO_TypeDef *rxPort, uint32_t rxPin, 
     GPIO_TypeDef *txPort, uint32_t txPin);
+	
+#if defined(LPUART1)
+void stm32AfLPUARTInit(const USART_TypeDef *instance,
+    GPIO_TypeDef *rxPort, uint32_t rxPin,
+    GPIO_TypeDef *txPort, uint32_t txPin);
+#endif
 
 void stm32AfSPIInit(const SPI_TypeDef *instance,
     GPIO_TypeDef *mosiPort, uint32_t mosiPin,

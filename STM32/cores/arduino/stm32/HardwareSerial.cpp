@@ -148,6 +148,24 @@ void HardwareSerial::begin(const uint32_t baud) {
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   }
 #endif
+
+#if defined(LPUART1) && (USE_LPUART1)
+  if (handle->Instance == LPUART1) {
+    __HAL_RCC_LPUART1_CLK_ENABLE();
+    HAL_NVIC_SetPriority(LPUART1_IRQn, USART_PRIORITY, 0);//define in stm32_def.h huaweiwx@sina.com 2017.12
+    HAL_NVIC_EnableIRQ(LPUART1_IRQn);
+	
+    if((txPin < 0xff) && (rxPin <0xff))
+       stm32AfLPUARTInit(instance, 
+                  variant_pin_list[rxPin].port,
+				  variant_pin_list[rxPin].pinMask,
+                  variant_pin_list[txPin].port,
+				  variant_pin_list[txPin].pinMask);
+    else			  
+       stm32AfLPUARTInit(instance, NULL,0,NULL,0);
+
+   }
+#else
   if((txPin < 0xff) && (rxPin <0xff))
     stm32AfUARTInit(instance, 
                   variant_pin_list[rxPin].port,
@@ -156,6 +174,7 @@ void HardwareSerial::begin(const uint32_t baud) {
 				  variant_pin_list[txPin].pinMask);
   else			  
     stm32AfUARTInit(instance, NULL,0,NULL,0);
+#endif
  
   handle->Init.BaudRate = baud; 
   handle->Init.WordLength = UART_WORDLENGTH_8B;
@@ -163,8 +182,26 @@ void HardwareSerial::begin(const uint32_t baud) {
   handle->Init.Parity = UART_PARITY_NONE; 
   handle->Init.Mode = UART_MODE_TX_RX; 
   handle->Init.HwFlowCtl = UART_HWCONTROL_NONE; 
+  
+#if defined(LPUART1) && (USE_LPUART1) && defined(STM32L4)
+  if (handle->Instance == LPUART1) {
+    handle->Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+    handle->AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+#if defined(USART_PRESC_PRESCALER)  /* L4R5/7 */
+    handle->Init.ClockPrescaler = UART_PRESCALER_DIV1;
+    handle->FifoMode = UART_FIFOMODE_DISABLE;
+#endif	
+  }	
+  HAL_UART_Init(handle);
+#if defined(USART_CR1_FIFOEN) /* L4R5/7 */
+  HAL_UARTEx_SetTxFifoThreshold(handle, UART_TXFIFO_THRESHOLD_1_8);
+  HAL_UARTEx_SetRxFifoThreshold(handle, UART_RXFIFO_THRESHOLD_1_8);
+#endif
+
+#else  
   handle->Init.OverSampling = UART_OVERSAMPLING_16; 
   HAL_UART_Init(handle);
+#endif
 
   HAL_UART_Receive_IT(handle, &receive_buffer, 1);
     
@@ -222,6 +259,13 @@ void HardwareSerial::end(void) {
   if (handle->Instance == USART6) {
     HAL_NVIC_DisableIRQ(USART6_IRQn);
     __HAL_RCC_USART6_CLK_DISABLE();
+  }
+#endif
+
+#if defined(LPUART1) && (USE_LPUART1)
+  if (handle->Instance == LPUART1) {
+    HAL_NVIC_DisableIRQ(LPUART1_IRQn);
+    __HAL_RCC_LPUART1_CLK_DISABLE();
   }
 #endif   
 }
@@ -357,6 +401,16 @@ extern "C" void USART6_IRQHandler(void) {
   HAL_UART_IRQHandler(interruptUART->handle);
 }
 HardwareSerial SerialUART6(USART6);
+#endif
+#endif
+
+#ifdef LPUART1
+#if (USE_LPUART1)
+extern "C" void LPUART1_IRQHandler(void) {
+  interruptUART = &SerialLPUART1;
+  HAL_UART_IRQHandler(interruptUART->handle);
+}
+HardwareSerial SerialLPUART1(LPUART1);
 #endif
 #endif
 
