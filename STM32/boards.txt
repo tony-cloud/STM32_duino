@@ -580,6 +580,131 @@ Nucleo_F767ZI.menu.log.debug.build.log_level=-D__LOG_LEVEL=5 -DUSE_FULL_ASSERT
 Nucleo_F767ZI.menu.log.trace=TRACE
 Nucleo_F767ZI.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
 
+#################################### Nucleo-H743ZI ############################################
+#Nucleo_H743ZI board
+
+Nucleo_H743ZI.name=Nucleo-H743ZI(400M)[SerialUART3]
+Nucleo_H743ZI.vid.0=0x0483
+Nucleo_H743ZI.pid.0=0x374B
+
+Nucleo_H743ZI.build.core=arduino
+Nucleo_H743ZI.build.variant=NUCLEO_H743ZI
+Nucleo_H743ZI.build.board=NUCLEO_H743ZI
+Nucleo_H743ZI.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
+Nucleo_H743ZI.build.mcu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard 
+Nucleo_H743ZI.build.series=STM32H7
+Nucleo_H743ZI.build.extra_flags0=-DSTM32H743ZI
+Nucleo_H743ZI.build.ldscript_pre=ld/h743xI
+Nucleo_H743ZI.build.f_cpupre=400000000L
+
+Nucleo_H743ZI.upload.maximum_size=2097152
+Nucleo_H743ZI.upload.maximum_data_size=1015808
+Nucleo_H743ZI.upload.uploadadr=0x08000000
+Nucleo_H743ZI.upload.vect=0x08000000
+Nucleo_H743ZI.upload.device=STM32H743ZI
+Nucleo_H743ZI.upload.protocol=STLink
+Nucleo_H743ZI.upload.tool=stlink_upload
+
+Nucleo_H743ZI.menu.clock_source.bypass=HSE_BYPASS_Clock_Source
+Nucleo_H743ZI.menu.clock_source.bypass.build.f_cpu={build.f_cpupre} -DUSE_HSEBYPASS -DHSE_VALUE=8000000
+
+Nucleo_H743ZI.menu.clock_source.hsi=HSE_Disable(HSI)
+Nucleo_H743ZI.menu.clock_source.hsi.build.f_cpu={build.f_cpupre} -DUSE_HSI
+
+Nucleo_H743ZI.menu.clock_source.hse8m=HSE_Crystal(If 8M crystal is installed)
+Nucleo_H743ZI.menu.clock_source.hse8m.build.f_cpu={build.f_cpupre} -DUSE_HSE -DHSE_VALUE=8000000
+
+Nucleo_H743ZI.menu.startadr.default=flash(2048k+1024k)
+Nucleo_H743ZI.menu.startadr.default.build.extra_flags={build.extra_flags0}
+
+Nucleo_H743ZI.menu.startadr.F08040000=flash 1:0x08040000(256k)
+Nucleo_H743ZI.menu.startadr.F08040000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08040000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F08040000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x40000
+Nucleo_H743ZI.menu.startadr.F08040000.build.ldscript={build.ldscript_pre}_0804.ld
+Nucleo_H743ZI.menu.startadr.F08040000.upload.uploadadr=0x08040000
+Nucleo_H743ZI.menu.startadr.F08040000.upload.vect=0x08040000
+
+Nucleo_H743ZI.menu.startadr.F08080000=flash 2:0x08080000(256k)
+Nucleo_H743ZI.menu.startadr.F08080000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08080000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F08080000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x80000
+Nucleo_H743ZI.menu.startadr.F08080000.build.ldscript={build.ldscript_pre}_0808.ld
+Nucleo_H743ZI.menu.startadr.F08080000.upload.uploadadr=0x08080000
+Nucleo_H743ZI.menu.startadr.F08080000.upload.vect=0x08080000
+
+Nucleo_H743ZI.menu.startadr.F080C0000=flash 3:0x080C0000(256k)
+Nucleo_H743ZI.menu.startadr.F080C0000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F080C0000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F080C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0xC0000
+Nucleo_H743ZI.menu.startadr.F080C0000.build.ldscript={build.ldscript_pre}_080C.ld
+Nucleo_H743ZI.menu.startadr.F080C0000.upload.uploadadr=0x080C0000
+Nucleo_H743ZI.menu.startadr.F080C0000.upload.vect=0x080C0000
+
+Nucleo_H743ZI.menu.startadr.F08100000=flash 4:0x08100000(256k)
+Nucleo_H743ZI.menu.startadr.F08100000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08100000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F08100000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x100000
+Nucleo_H743ZI.menu.startadr.F08100000.build.ldscript={build.ldscript_pre}_0810.ld
+Nucleo_H743ZI.menu.startadr.F08100000.upload.uploadadr=0x08100000
+Nucleo_H743ZI.menu.startadr.F08100000.upload.vect=0x08100000
+
+Nucleo_H743ZI.menu.startadr.F08140000=flash 5:0x08140000(256k)
+Nucleo_H743ZI.menu.startadr.F08140000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08140000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F08140000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x140000
+Nucleo_H743ZI.menu.startadr.F08140000.build.ldscript={build.ldscript_pre}_0814.ld
+Nucleo_H743ZI.menu.startadr.F08140000.upload.uploadadr=0x08140000
+Nucleo_H743ZI.menu.startadr.F08140000.upload.vect=0x08140000
+
+Nucleo_H743ZI.menu.startadr.F08180000=flash 6:0x08180000(256k)
+Nucleo_H743ZI.menu.startadr.F08180000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08180000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F08180000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x180000
+Nucleo_H743ZI.menu.startadr.F08180000.build.ldscript={build.ldscript_pre}_0818.ld
+Nucleo_H743ZI.menu.startadr.F08180000.upload.uploadadr=0x08180000
+Nucleo_H743ZI.menu.startadr.F08180000.upload.vect=0x08180000
+
+Nucleo_H743ZI.menu.startadr.F081C0000=flash 7:0x081C0000(256k)
+Nucleo_H743ZI.menu.startadr.F081C0000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F081C0000.upload.maximum_data_size=1015808
+Nucleo_H743ZI.menu.startadr.F081C0000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x1C0000
+Nucleo_H743ZI.menu.startadr.F081C0000.build.ldscript={build.ldscript_pre}_081C.ld
+Nucleo_H743ZI.menu.startadr.F081C0000.upload.uploadadr=0x081C0000
+Nucleo_H743ZI.menu.startadr.F081C0000.upload.vect=0x081C0000
+
+Nucleo_H743ZI.menu.startadr.F08000000=flash(256k WithRamBoot)
+Nucleo_H743ZI.menu.startadr.F08000000.upload.maximum_size=262144
+Nucleo_H743ZI.menu.startadr.F08000000.upload.maximum_data_size=524288
+Nucleo_H743ZI.menu.startadr.F08000000.build.extra_flags={build.extra_flags0} -DCHK_JUMP_TO_SRAM
+Nucleo_H743ZI.menu.startadr.F08000000.build.ldscript={build.ldscript_pre}_0800.ld
+Nucleo_H743ZI.menu.startadr.F08000000.upload.uploadadr=0x08000000
+Nucleo_H743ZI.menu.startadr.F08000000.upload.vect=0x08000000
+
+Nucleo_H743ZI.menu.startadr.R20000000=Ram_D1 0:0x24000000(512K+512k use bootloader only)
+Nucleo_H743ZI.menu.startadr.R20000000.upload.maximum_size=524288
+Nucleo_H743ZI.menu.startadr.R20000000.upload.maximum_data_size=524288
+Nucleo_H743ZI.menu.startadr.R20000000.build.extra_flags={build.extra_flags0} -DVECT_TAB_OFFSET=0x4000000 -DVECT_TAB_SRAM
+Nucleo_H743ZI.menu.startadr.R20000000.build.ldscript={build.ldscript_pre}_RAM0.ld
+Nucleo_H743ZI.menu.startadr.R20000000.upload.uploadadr=0x24000000
+Nucleo_H743ZI.menu.startadr.R20000000.upload.vect=0x24000000
+
+#-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
+Nucleo_H743ZI.menu.log.default=Release(no-exceptions)
+Nucleo_H743ZI.menu.log.default.build.log_level=-fno-exceptions
+Nucleo_H743ZI.menu.log.fatal=FATAL
+Nucleo_H743ZI.menu.log.fatal.build.log_level=-D__LOG_LEVEL=1 -DUSE_FULL_ASSERT
+Nucleo_H743ZI.menu.log.error=ERROR
+Nucleo_H743ZI.menu.log.error.build.log_level=-D__LOG_LEVEL=2 -DUSE_FULL_ASSERT
+Nucleo_H743ZI.menu.log.warning=WARNING
+Nucleo_H743ZI.menu.log.warning.build.log_level=-D__LOG_LEVEL=3 -DUSE_FULL_ASSERT
+Nucleo_H743ZI.menu.log.info=INFO
+Nucleo_H743ZI.menu.log.info.build.log_level=-D__LOG_LEVEL=4 -DUSE_FULL_ASSERT
+Nucleo_H743ZI.menu.log.debug=DEBUG
+Nucleo_H743ZI.menu.log.debug.build.log_level=-D__LOG_LEVEL=5 -DUSE_FULL_ASSERT
+Nucleo_H743ZI.menu.log.trace=TRACE
+Nucleo_H743ZI.menu.log.trace.build.log_level=-D__LOG_LEVEL=6 -DUSE_FULL_ASSERT
+
 #################################### NUCLEO_L476 ############################################
 # Nucleo 64 board
 NUCLEO_L476.name=Nucleo-L476RG(80M)[SerialUART2]
@@ -3383,8 +3508,8 @@ F407xG.menu.subboard.ArmFly_F4.build.ldscript_pre=ld/f407xG
 F407xG.menu.subboard.ArmFly_F4.massstorage_drive=NUCLEO
 F407xG.menu.subboard.ArmFly_F4.upload.device=STM32F407ZG
 #default upload method
-F407xG.menu.subboard.ArmFly_F4.upload.protocol=
-F407xG.menu.subboard.ArmFly_F4.upload.tool=nucleoFlasher
+F407xG.menu.subboard.ArmFly_F4.upload.protocol=STLink
+F407xG.menu.subboard.ArmFly_F4.upload.tool=stlink_upload
 F407xG.menu.subboard.ArmFly_F4.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 F407xG.menu.subboard.IMT407GV21=ILLUMINATI_F407ZG[JLink SerialUART3]
@@ -3401,6 +3526,18 @@ F407xG.menu.subboard.IMT407GV21.upload.tool=jlink_upload
 F407xG.menu.subboard.IMT407GV21.upload.protocol=jlink
 F407xG.menu.subboard.IMT407GV21.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART3
 
+F407xG.menu.subboard.WAVESHARE_IGT6=WAVESHARE_F407IG
+F407xG.menu.subboard.WAVESHARE_IGT6.upload.maximum_size=1232896
+F407xG.menu.subboard.WAVESHARE_IGT6.upload.maximum_data_size=131072
+F407xG.menu.subboard.WAVESHARE_IGT6.build.variant=WAVESHARE_F407IG
+F407xG.menu.subboard.WAVESHARE_IGT6.build.board=WAVESHARE_F407IGT6
+F407xG.menu.subboard.WAVESHARE_IGT6.build.extra_flags0=-DSTM32F407IG -DHSE_VALUE=8000000
+F407xG.menu.subboard.WAVESHARE_IGT6.build.ldscript_pre=ld/f407xG
+F407xG.menu.subboard.WAVESHARE_IGT6.upload.device=STM32F407IG
+F407xG.menu.subboard.WAVESHARE_IGT6.upload.protocol=STLink
+F407xG.menu.subboard.WAVESHARE_IGT6.upload.tool=stlink_upload
+F407xG.menu.subboard.WAVESHARE_IGT6.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
+
 F407xG.menu.subboard.IGT6_CORE=F407IG_CORE[GREEN]
 F407xG.menu.subboard.IGT6_CORE.upload.maximum_size=1232896
 F407xG.menu.subboard.IGT6_CORE.upload.maximum_data_size=131072
@@ -3408,11 +3545,10 @@ F407xG.menu.subboard.IGT6_CORE.build.variant=F407IG_CORE
 F407xG.menu.subboard.IGT6_CORE.build.board=IGT6CORE
 F407xG.menu.subboard.IGT6_CORE.build.extra_flags0=-DSTM32F407IG -DHSE_VALUE=8000000
 F407xG.menu.subboard.IGT6_CORE.build.ldscript_pre=ld/f407xG
-F407xG.menu.subboard.IGT6_CORE.massstorage_drive=NUCLEO
 F407xG.menu.subboard.IGT6_CORE.upload.device=STM32F407IG
 #default upload method
-F407xG.menu.subboard.IGT6_CORE.upload.protocol=
-F407xG.menu.subboard.IGT6_CORE.upload.tool=nucleoFlasher
+F407xG.menu.subboard.IGT6_CORE.upload.protocol=STLink
+F407xG.menu.subboard.IGT6_CORE.upload.tool=stlink_upload
 F407xG.menu.subboard.IGT6_CORE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
 
 F407xG.menu.subboard.BLACK_F407ZG=GENERIC_F407ZG

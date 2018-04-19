@@ -8,7 +8,6 @@
  
 #include "util/bitband.h"
 
-/*for F0/7 L0 BB_PIN use LL_PIN class*/
 BB_PIN<LED_BUILTIN>led;
 BB_PIN<BOTTON1>botton;
 

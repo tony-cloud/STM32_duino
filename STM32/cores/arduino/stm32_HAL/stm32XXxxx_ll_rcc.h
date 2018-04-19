@@ -31,6 +31,11 @@
 	#include "stm32f7xx_ll_system.h"
 	#include "stm32f7xx_ll_cortex.h"
 #endif
+#ifdef STM32H7
+//	#include "stm32h7xx_ll_rcc.h"
+//	#include "stm32h7xx_ll_system.h"
+//	#include "stm32h7xx_ll_cortex.h"
+#endif
 #ifdef STM32L0
 	#include "stm32l0xx_ll_rcc.h"
 	#include "stm32l0xx_ll_system.h"

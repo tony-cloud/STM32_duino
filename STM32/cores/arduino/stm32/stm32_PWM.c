@@ -198,10 +198,18 @@ void pwm_callback() {
             for(size_t i=0; i<sizeof(pwm_config); i++) {
                 if (pwm_config[i].port != NULL) {
                     if (pwm_config[i].dutyCycle > counter % pwm_config[i].waveLengthCycles) {
-                        pwm_config[i].port->BSRR = pwm_config[i].pinMask;
+                      #ifdef STM32H7
+						pwm_config[i].port->BSRRL = pwm_config[i].pinMask;
+					  #else
+					    pwm_config[i].port->BSRR = pwm_config[i].pinMask;
+					  #endif
                         nextWaitCycles = min(nextWaitCycles, pwm_config[i].dutyCycle - (counter % pwm_config[i].waveLengthCycles));
                     } else {
+                      #ifdef STM32H7
+						pwm_config[i].port->BSRRH = pwm_config[i].pinMask;
+					  #else
                         pwm_config[i].port->BSRR = pwm_config[i].pinMask << 16;
+					  #endif
                         nextWaitCycles = min(nextWaitCycles, pwm_config[i].waveLengthCycles - counter % pwm_config[i].waveLengthCycles);
                     }
 

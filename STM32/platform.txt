@@ -13,7 +13,11 @@ version=1.8.5
 
 # STM compile variables
 # ----------------------
+<<<<<<< HEAD
 compiler.extra_includes="-I{build.path}/sketch" "-I{build.core.path}/stm32" "-I{build.core.path}/usb" "-I{build.system.path}/CMSIS" "-I{build.system.path}/{build.series}/CMSIS_Inc" "-I{build.system.path}/{build.series}/CMSIS_Src" "-I{build.system.path}/{build.series}/HAL_Inc" "-I{build.system.path}/{build.series}/HAL_Src"  "-I{build.system.path}/{build.series}/stm32_chip" 
+=======
+compiler.extra_includes="-I{build.path}/sketch" {includes} "-I{build.core.path}/stm32" "-I{build.core.path}/usb" "-I{build.system.path}/{build.series}/CMSIS" "-I{build.system.path}/CMSIS" "-I{build.system.path}/{build.series}/CMSIS_Inc" "-I{build.system.path}/{build.series}/CMSIS_Src" "-I{build.system.path}/{build.series}/HAL_Inc" "-I{build.system.path}/{build.series}/HAL_Src" "-I{build.system.path}/{build.series}/stm32_chip" 
+>>>>>>> 66705d38406bb0553827c9f6616ce177c3e4b8d3
 
 compiler.warning_flags=-w 
 compiler.warning_flags.none=-w {build.log_level}
@@ -37,7 +41,12 @@ compiler.S.flags={compiler.extra_flags} -c -g -x assembler-with-cpp
 
 compiler.c.flags={compiler.extra_flags} -c -g -MMD -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -Dprintf=iprintf -MMD
 
+<<<<<<< HEAD
 compiler.cpp.flags={compiler.extra_flags} -c -g -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf -MMD
+=======
+#compiler.cpp.flags={compiler.extra_flags} -c -g -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf -MMD
+compiler.cpp.flags={compiler.extra_flags} -c -g -Os {compiler.warning_flags} -std=gnu++11 -fpermissive -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -Dprintf=iprintf -MMD
+>>>>>>> 66705d38406bb0553827c9f6616ce177c3e4b8d3
 
 compiler.ar.flags=rcs
 
@@ -63,6 +72,7 @@ build.extra_flags_jtag=
 build.extra_flags_os=
 build.extra_flags_menu={build.extra_flags_usb} {build.extra_flags_serial} {build.extra_flags_serial_auto} {build.extra_flags_jtag} {build.extra_flags_os}
 build.ldscript=ld/ldscript.ld
+
 
 build.extra_lib=
 
@@ -115,6 +125,8 @@ recipe.output.tmp_file.hex={build.project_name}.hex
 recipe.output.save_file.hex={build.project_name}.{build.variant}.hex
 recipe.output.tmp_file.elf={build.project_name}.elf
 recipe.output.save_file.elf={build.project_name}.{build.variant}.elf
+recipe.output.tmp_file.map={build.project_name}.map
+recipe.output.save_file.map={build.project_name}.{build.variant}.map
 
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"

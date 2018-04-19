@@ -18,6 +18,9 @@
 #ifdef STM32F7
     #include "system_stm32f7xx.c"
 #endif
+#ifdef STM32H7
+    #include "system_stm32h7xx.c"
+#endif
 #ifdef STM32L0
     #include "system_stm32l0xx.c"
 #endif

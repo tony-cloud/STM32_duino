@@ -21,6 +21,9 @@
 #elif defined(STM32F7)
     #include "stm32f7xx.h"
     #include "stm32f7xx_hal.h"
+#elif defined(STM32H7)
+    #include "stm32h7xx.h"
+    #include "stm32h7xx_hal.h"
 #elif defined(STM32L0)
     #include "stm32l0xx.h"
     #include "stm32l0xx_hal.h"

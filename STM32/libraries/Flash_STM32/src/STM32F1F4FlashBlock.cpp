@@ -22,7 +22,7 @@
 
 #include "FlashBlock.h"
 
-#if defined(STM32F2)||defined(STM32F4)||defined(STM32F7)  /*add F2 huaweiwx@sina.com 2017.10.12*/
+#if defined(STM32F2)||defined(STM32F4)||defined(STM32F7)||defined(STM32H7)  /*add F2 huaweiwx@sina.com 2017.10.12*/
 #include "STM32F4FlashBlock.h"
 
 static uint32_t sectors[] = {

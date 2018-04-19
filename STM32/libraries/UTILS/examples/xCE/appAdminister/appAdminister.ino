@@ -295,9 +295,9 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
     if (useradr < 0x10000000) Serial << "0";
     Serial << _HEX(useradr);
     if (UTIL_checkUserCode(useradr))
-      Serial << " ok\n";
+      Serial << " is app.\n";
     else
-      Serial << " is unavailed!\n";
+      Serial << " is free.\n";
   }
   return (0);
 }

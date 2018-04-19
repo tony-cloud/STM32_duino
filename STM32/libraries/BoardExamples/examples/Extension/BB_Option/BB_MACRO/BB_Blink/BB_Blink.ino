@@ -6,7 +6,7 @@
  */
 
 
-#if !(defined(STM32F0)||defined(STM32L0)||defined(STM32F7))
+#if !(defined(STM32F0)||defined(STM32L0)||defined(STM32F7)||defined(STM32H7))
 //use bidboud
 # include "util/bitband.h"
 #else

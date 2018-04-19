@@ -32,10 +32,13 @@ __attribute__(( constructor (101))) void premain(){
     UTIL_jumpToUser(SERIAL_LOAD_RAM);
   } 
   else 
-#endif
-
+#elif defined(STM32H743ZI)
+  if (UTIL_checkUserCode(0x24000000))
+     UTIL_jumpToUser(0x24000000);
+#else
   if (UTIL_checkUserCode(0x20000000))
      UTIL_jumpToUser(0x20000000);
+#endif
 
 }
 #endif

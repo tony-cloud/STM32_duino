@@ -40,7 +40,7 @@
   *
   ******************************************************************************
   */
-#if defined(STM32F7)
+#if defined(STM32F7)|| defined(STM32H7)
 /* Includes ------------------------------------------------------------------*/
 #include <Arduino.h>
 /** @addtogroup STM32F7xx_HAL_Examples
