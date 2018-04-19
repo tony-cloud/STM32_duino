@@ -1,6 +1,0 @@
-boards.txt.developer:  boards.txt for developer.
-	usage: copy boards.txtdeveloper.  boards.txt
-
-board.txt.user:  boards.txt for user
-	usage: copy boards.txt.user  boards.txt
-
