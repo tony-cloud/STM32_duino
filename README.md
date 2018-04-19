@@ -1,3 +1,4 @@
+[中文说明](https://github.com/tony-cloud/STM32GENERIC/blob/board/CHINESE.md)
 # STM32GENERIC
 Generic implementation of Arduino for STM32 boards using STM32 HAL. This is an alternative to the [Official implementation](https://github.com/stm32duino/Arduino_Core_STM32) 
 
