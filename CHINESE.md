@@ -1,8 +1,8 @@
 # STM32GENERIC简介
-STM32GENERIC是STM32通过在Arduino平台上的通用实现(STM32 HAL).这是一个[ST官方项目](https://github.com/stm32duino/Arduino_Core_STM32)的替代方案 
+STM32GENERIC是STM32在Arduino平台上的通用接口(STM32 HAL).这是一个[ST官方项目](https://github.com/stm32duino/Arduino_Core_STM32)的替代方案 
 STM32GENERIC与其他类型的stm32duino相比的优势:
 1.支持更多的开发板。
-2.兼容性更好，Adafruit库不需要任何修改即可直接在STM32GERENIC编译使用。
+2.兼容性更好，例如Adafruit库不需要任何修改即可直接在STM32GERENIC编译使用。
 3.有中文文档支持(建设中)。
 
 英文文档: https://danieleff.github.io/STM32GENERIC/
@@ -13,7 +13,7 @@ STM32GENERIC与其他类型的stm32duino相比的优势:
 ## 安装
 
 ~~未实现 添加开发板管理器的支持~~
-开发板管理器已经成功实现并且测试成功
+开发板管理器文件已经完成并且测试成功
 你只需要添加下面的地址到附加开发板管理器网址（Arduino IDE > 文件 > 首选项 >附加开发板管理器网址 > 好） 
 
 https://raw.githubusercontent.com/tony-cloud/STM32BoardManagerFiles/master/STM32/package_tony_stm32_index.json
