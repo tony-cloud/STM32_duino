@@ -48,7 +48,7 @@
 
 /******************  bsp_SRAM **********************/
 #define SRAM_START            ((uint32_t)(0x60000000 | 0x08000000))
-#define SRAM_LENTH			  ((uint32_t)(1*1024*1024))
+#define SRAM_LENGTH			  ((uint32_t)(1*1024*1024))
 
 
 

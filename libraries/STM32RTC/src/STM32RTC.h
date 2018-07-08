@@ -1,0 +1,280 @@
+/**
+  ******************************************************************************
+  * @file    STM32RTC.h
+  * @author  WI6LABS
+  * @version V1.0.0
+  * @date    12-December-2017
+  * @brief   Provides a RTC interface for Arduino
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  *
+  * Redistribution and use in source and binary forms, with or without modification,
+  * are permitted provided that the following conditions are met:
+  *   1. Redistributions of source code must retain the above copyright notice,
+  *      this list of conditions and the following disclaimer.
+  *   2. Redistributions in binary form must reproduce the above copyright notice,
+  *      this list of conditions and the following disclaimer in the documentation
+  *      and/or other materials provided with the distribution.
+  *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  *      may be used to endorse or promote products derived from this software
+  *      without specific prior written permission.
+  *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  * add setRegister/getRegister by  huaweiwx@sina.com 2018.6.6
+  * add calculateWeekDay by  huaweiwx@sina.com 2018.6.11
+  ******************************************************************************
+  */
+
+#ifndef __STM32_RTC_H
+#define __STM32_RTC_H
+
+#include "Arduino.h"
+#include "stm32_HAL/stm32XXxxx_ll_rtc.h"
+#include <RTC.H>
+
+// Check if RTC HAL enable in variants/board_name/stm32yzxx_hal_conf.h
+#ifndef HAL_RTC_MODULE_ENABLED
+#error "RTC configuration is missing. Check flag HAL_RTC_MODULE_ENABLED in variants/board_name/stm32yzxx_hal_conf.h"
+#endif
+
+typedef void(*voidFuncPtrVoidPtr)(void *);
+
+#define IS_CLOCK_SOURCE(SRC) (((SRC) == STM32RTC::RTC_LSI_CLOCK) || ((SRC) == STM32RTC::RTC_LSE_CLOCK) ||\
+                              ((SRC) == STM32RTC::RTC_HSE_CLOCK))
+#define IS_HOUR_FORMAT(FMT)  (((FMT) == STM32RTC::RTC_HOUR_12) || ((FMT) == STM32RTC::RTC_HOUR_24))
+
+
+class STM32RTC {
+public:
+  
+  enum RTC_Hour_Format : uint8_t
+  {
+    RTC_HOUR_12 = HOUR_FORMAT_12,
+    RTC_HOUR_24 = HOUR_FORMAT_24
+  };
+
+  enum RTC_AM_PM : uint8_t
+  {
+    RTC_AM = AM,
+    RTC_PM = PM
+  };
+
+  enum Alarm_Match: uint8_t
+  {
+    MATCH_OFF          = OFF_MSK,                          // Never
+    MATCH_SS           = SS_MSK,                           // Every Minute
+    MATCH_MMSS         = SS_MSK | MM_MSK,                  // Every Hour
+    MATCH_HHMMSS       = SS_MSK | MM_MSK | HH_MSK,         // Every Day
+    MATCH_DHHMMSS      = SS_MSK | MM_MSK | HH_MSK | D_MSK, // Every Month
+    /* NOTE: STM32 RTC can't assign a month or a year to an alarm. Those enum
+    are kept for compatibility but are ignored inside enableAlarm(). */
+    MATCH_MMDDHHMMSS   = SS_MSK | MM_MSK | HH_MSK | D_MSK | M_MSK,
+    MATCH_YYMMDDHHMMSS = SS_MSK | MM_MSK | HH_MSK | D_MSK | M_MSK | Y_MSK  };
+
+  enum RTC_Source_Clock: uint8_t
+  {
+    RTC_LSI_CLOCK = LSI_CLOCK,
+    RTC_LSE_CLOCK = LSE_CLOCK,
+    RTC_HSE_CLOCK = HSE_CLOCK
+  };
+
+  static STM32RTC& getInstance() {
+    static STM32RTC instance; // Guaranteed to be destroyed.
+                              // Instantiated on first use.
+    return instance;
+  }
+
+  STM32RTC(STM32RTC const&)        = delete;
+  void operator=(STM32RTC const&)  = delete;
+
+  void begin(bool resetTime, RTC_Hour_Format format = RTC_HOUR_24);
+  void begin(RTC_Hour_Format format = RTC_HOUR_24);
+
+  void end(void);
+
+  RTC_Source_Clock getClockSource(void);
+  void setClockSource(RTC_Source_Clock source);
+
+  void enableAlarm(Alarm_Match match);
+  void disableAlarm(void);
+
+  void attachInterrupt(voidFuncPtrVoidPtr callback, void *data = NULL);
+  void detachInterrupt(void);
+
+  // Kept for compatibility: use STM32LowPower library.
+  void standbyMode();
+
+  /* Get Functions */
+
+  uint32_t getSubSeconds(void);
+  uint8_t getSeconds(void);
+  uint8_t getMinutes(void);
+  uint8_t getHours(RTC_AM_PM *period = NULL);
+  void getTime(uint8_t *hours, uint8_t *minutes, uint8_t *seconds, uint32_t *subSeconds, RTC_AM_PM *period = NULL);
+
+  uint8_t getWeekDay(void);
+  uint8_t getDay(void);
+  uint8_t getMonth(void);
+  uint8_t getYear(void);
+  void getDate(uint8_t *weekDay, uint8_t *day, uint8_t *month, uint8_t *year);
+
+  uint32_t getAlarmSubSeconds(void);
+  uint8_t getAlarmSeconds(void);
+  uint8_t getAlarmMinutes(void);
+  uint8_t getAlarmHours(RTC_AM_PM *period = NULL);
+
+  uint8_t getAlarmDay(void);
+
+  // Kept for compatibility with Arduino RTCZero library.
+  uint8_t getAlarmMonth();
+  uint8_t getAlarmYear();
+
+  /* Set Functions */
+
+  void setSubSeconds(uint32_t subSeconds);
+  void setSeconds(uint8_t seconds);
+  void setMinutes(uint8_t minutes);
+  void setHours(uint8_t hours);
+  void setHours(uint8_t hours, RTC_AM_PM period);
+  void setTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
+  void setTime(uint8_t hours, uint8_t minutes, uint8_t seconds, uint32_t subSeconds, RTC_AM_PM period);
+
+  void setWeekDay(uint8_t weekDay);
+  void setDay(uint8_t day);
+  void setMonth(uint8_t month);
+  void setYear(uint8_t year);
+  void setDate(uint8_t day, uint8_t month, uint8_t year);
+  void setDate(uint8_t weekDay, uint8_t day, uint8_t month, uint8_t year);
+
+  void setAlarmSeconds(uint8_t seconds);
+  void setAlarmMinutes(uint8_t minutes);
+  void setAlarmHours(uint8_t hours);
+  void setAlarmHours(uint8_t hours, RTC_AM_PM period);
+  void setAlarmTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
+  void setAlarmTime(uint8_t hours, uint8_t minutes, uint8_t seconds, RTC_AM_PM period);
+
+  void setAlarmDay(uint8_t day);
+
+  // Kept for compatibility with Arduino RTCZero library.
+  void setAlarmMonth(uint8_t month);
+  void setAlarmYear(uint8_t year);
+  void setAlarmDate(uint8_t day, uint8_t month, uint8_t year);
+
+  /* Epoch Functions */
+
+  uint32_t getEpoch(void);
+  uint32_t getY2kEpoch(void);
+  void setEpoch(uint32_t ts);
+  void setY2kEpoch(uint32_t ts);
+  void setAlarmEpoch(uint32_t ts, Alarm_Match match = MATCH_DHHMMSS);
+
+  void getPrediv(int8_t *predivA, int16_t *predivS);
+  void setPrediv(int8_t predivA, int16_t predivS);
+  
+  uint8_t calculateWeekDay(uint8_t y,uint8_t m, uint8_t d);  /*add by huaweiwx@sina.com 2018.6.11*/
+
+  bool isConfigured(void) {
+    return _configured;
+  }
+  bool isAlarmEnabled(void) {
+    return _alarmEnabled;
+  }
+
+#if 0  
+ inline uint8_t rstSource(void){
+#ifdef RCC_FLAG_BORRST // STM32L4
+	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_BORRST)) return  1;
+#else	 
+	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) return  1;
+#endif	 
+	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST)) return  2;
+
+	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) return 3;
+  }
+#endif
+
+  void setRegister(uint32_t index, uint32_t value) /*add by huaweiwx@sina.com 2018.6.6*/
+  {
+#if defined(STM32F1)
+    LL_RTC_BKP_SetRegister(BKP, index, value);
+#elif defined(STM32H7)
+  register uint32_t tmp = 0U;
+
+  tmp = (uint32_t)(&(RTC->BKP0R));
+  tmp += (index * 4U);
+
+  /* Write the specified register */
+  *(__IO uint32_t *)tmp = (uint32_t)value;
+
+//    HAL_RTCEx_BKUPRead(RTC, index, value);
+#else
+    LL_RTC_BAK_SetRegister(RTC, index, value);
+#endif
+  }
+  
+  uint32_t getRegister(uint32_t index) /*add huaweiwx@sina.com 2018.6.6*/
+  {
+#if defined(STM32F1)
+    return LL_RTC_BKP_GetRegister(BKP, index);
+#elif defined(STM32H7)
+  register uint32_t tmp = 0U;
+
+  tmp = (uint32_t)(&(RTC->BKP0R));
+  tmp += (index * 4U);
+
+  /* Read the specified register */
+  return (*(__IO uint32_t *)tmp);
+#else
+    return LL_RTC_BAK_GetRegister(RTC, index);
+#endif
+  }
+  friend class STM32LowPower;
+
+private:
+  STM32RTC(void): _clockSource(RTC_LSI_CLOCK) {}
+  
+  static  bool _configured;
+  
+  RTC_AM_PM   _hoursPeriod;
+  uint8_t     _hours;
+  uint8_t     _minutes;
+  uint8_t     _seconds;
+  uint32_t    _subSeconds;
+  uint8_t     _year;
+  uint8_t     _month;
+  uint8_t     _day;
+  uint8_t     _wday;
+
+  uint8_t     _alarmDay;
+  uint8_t     _alarmHours;
+  uint8_t     _alarmMinutes;
+  uint8_t     _alarmSeconds;
+  uint32_t    _alarmSubSeconds;
+  RTC_AM_PM   _alarmPeriod;
+  Alarm_Match _alarmMatch;
+  bool        _alarmEnabled;
+
+  RTC_Source_Clock _clockSource;
+
+  void configForLowPower(RTC_Source_Clock source);
+
+  void syncTime(void);
+  void syncDate(void);
+  void syncAlarmTime(void);
+  
+};
+
+#endif // __STM32_RTC_H

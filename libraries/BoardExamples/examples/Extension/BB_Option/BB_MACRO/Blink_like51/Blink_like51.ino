@@ -5,12 +5,15 @@
  * huaweiwx@sina.com 2017.12.26
  */
 
-#if !(defined(STM32F0)||defined(STM32L0)||defined(STM32F7))
+#if !(defined(STM32F0)||defined(STM32L0)||defined(STM32F7)||defined(STM32H7))
 //use bidboud
 # include "util/bitband.h"
 #else
 # error "BitBand unsuport this mcu!"
 #endif
+
+//#define LED PDout(2)            /*LED_BUILTIN on PD2*/
+#define LED PINout(LED_BUILTIN)    /*LED_BUILTIN bitband out*/
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -18,7 +21,7 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT); 
 }
 
-#define LED PDout(2)   /*LED_BUILTIN on PD2*/
+
 // the loop function runs over and over again forever
 void loop() { 
   LED = 1;  /* bitband opration set high*/

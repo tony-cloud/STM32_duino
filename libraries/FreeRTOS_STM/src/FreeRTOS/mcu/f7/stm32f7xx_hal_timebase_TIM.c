@@ -3,8 +3,13 @@
   * @file    stm32f7xx_hal_timebase_TIM.c 
   * @brief   HAL time base based on the hardware TIM.
   ******************************************************************************
+  * This notice applies to any and all portions of this file
+  * that are not between comment pairs USER CODE BEGIN and
+  * USER CODE END. Other portions of this file, whether 
+  * inserted by the user or by software development tools
+  * are owned by their respective copyright owners.
   *
-  * Copyright (c) 2016 STMicroelectronics International N.V. 
+  * Copyright (c) 2018 STMicroelectronics International N.V. 
   * All rights reserved.
   *
   * Redistribution and use in source and binary forms, with or without 
@@ -39,10 +44,13 @@
   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
+  *  modify:  huaweiwx@sina.com 2018.5.28
   */
-#if defined(STM32F7)
+#if defined(STM32F7)||defined(STM32H7)
+
 /* Includes ------------------------------------------------------------------*/
 #include <Arduino.h>
+
 /** @addtogroup STM32F7xx_HAL_Examples
   * @{
   */
@@ -50,11 +58,12 @@
 /** @addtogroup HAL_TimeBase
   * @{
   */ 
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef        htim14; 
+TIM_HandleTypeDef        htim7; 
 uint32_t                 uwIncrementState = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -75,41 +84,41 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   uint32_t              uwPrescalerValue = 0;
   uint32_t              pFLatency;
   
-  /*Configure the TIM14 IRQ priority */
-  HAL_NVIC_SetPriority(TIM8_TRG_COM_TIM14_IRQn, TickPriority ,0); 
+  /*Configure the TIM7 IRQ priority */
+  HAL_NVIC_SetPriority(TIM7_IRQn, TickPriority ,0); 
   
-  /* Enable the TIM14 global Interrupt */
-  HAL_NVIC_EnableIRQ(TIM8_TRG_COM_TIM14_IRQn); 
+  /* Enable the TIM7 global Interrupt */
+  HAL_NVIC_EnableIRQ(TIM7_IRQn); 
   
-  /* Enable TIM14 clock */
-  __HAL_RCC_TIM14_CLK_ENABLE();
+  /* Enable TIM7 clock */
+  __HAL_RCC_TIM7_CLK_ENABLE();
   
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
   
-  /* Compute TIM14 clock */
+  /* Compute TIM7 clock */
   uwTimclock = 2*HAL_RCC_GetPCLK1Freq();
    
-  /* Compute the prescaler value to have TIM14 counter clock equal to 1MHz */
+  /* Compute the prescaler value to have TIM7 counter clock equal to 1MHz */
   uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
   
-  /* Initialize TIM14 */
-  htim14.Instance = TIM14;
+  /* Initialize TIM7 */
+  htim7.Instance = TIM7;
   
   /* Initialize TIMx peripheral as follow:
-  + Period = [(TIM14CLK/1000) - 1]. to have a (1/1000) s time base.
+  + Period = [(TIM7CLK/1000) - 1]. to have a (1/1000) s time base.
   + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
   + ClockDivision = 0
   + Counter direction = Up
   */
-  htim14.Init.Period = (1000000 / 1000) - 1;
-  htim14.Init.Prescaler = uwPrescalerValue;
-  htim14.Init.ClockDivision = 0;
-  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  if(HAL_TIM_Base_Init(&htim14) == HAL_OK)
+  htim7.Init.Period = (1000000 / 1000) - 1;
+  htim7.Init.Prescaler = uwPrescalerValue;
+  htim7.Init.ClockDivision = 0;
+  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
+  if(HAL_TIM_Base_Init(&htim7) == HAL_OK)
   {
     /* Start the TIM time Base generation in interrupt mode */
-    return HAL_TIM_Base_Start_IT(&htim14);
+    return HAL_TIM_Base_Start_IT(&htim7);
   }
   
   /* Return function status */
@@ -125,7 +134,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 void HAL_SuspendTick(void)
 {
   /* Disable TIM7 update Interrupt */
-  __HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);                                                  
+  __HAL_TIM_DISABLE_IT(&htim7, TIM_IT_UPDATE);                                                  
 }
 
 /**
@@ -137,28 +146,28 @@ void HAL_SuspendTick(void)
 void HAL_ResumeTick(void)
 {
   /* Enable TIM7 Update interrupt */
-  __HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);
+  __HAL_TIM_ENABLE_IT(&htim7, TIM_IT_UPDATE);
 }
+
 /**
   * @}
-  */ 
+  */
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+extern TIM_HandleTypeDef htim7;
+void TIM7_IRQHandler(void)
 {
-/* USER CODE BEGIN Callback 0 */
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
 
-/* USER CODE END Callback 0 */
-  if (htim->Instance == TIM14)
- { 
-  HAL_IncTick();
- }
-/* USER CODE BEGIN Callback 1 */
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
 
-/* USER CODE END Callback 1 */
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
-
 /**
   * @}
   */ 
-#endif
+  
+#endif // defined(STM32F7)||defined(STM32H7)
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

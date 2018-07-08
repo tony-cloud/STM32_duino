@@ -11,18 +11,21 @@
 */
 
 #include "HardwareTimer.h"
+#define Timerx Timer2
+int testPwmOutputPin = PA5;
+int testChannel = 1;
 
 void setup() {
-    Timer1.setPrescaleFactor(65535);
-    Timer1.setOverflow(99); //Period
+    Timerx.setPrescaleFactor(65535);
+    Timerx.setOverflow(99); //Period
 
-    Timer1.setCompare(1, 10); //Channel / Duty cycle
-    Timer1.setMode(1, TIMER_PWM);
+    Timerx.setCompare(testChannel, 10);  //testChannel / Duty cycle
+    Timerx.setMode(testChannel, TIMER_PWM,testPwmOutputPin);
 
-    //Timer1.setMode(1, TIMER_PWM, PA8);                   // Alternatively for non-default pin. Check chip documentation!
-    //Timer1.setMode(1, TIMER_OUTPUT_COMPARE_TOGGLE);      // Pin toggles when counter reaches compare (effectively 50% PWM)
+    //Timer1.setMode(testChannel, TIMER_PWM, testPwmOutputPin);      // Alternatively for non-default pin. Check chip documentation!
+    //Timer1.setMode(testChannel, TIMER_OUTPUT_COMPARE_TOGGLE);      // Pin toggles when counter reaches compare (effectively 50% PWM)
 
-    Timer1.resume();
+    Timerx.resume(testChannel,TIMER_PWM);
 }
 
 void loop() {

@@ -4,27 +4,27 @@
 #VARIABLES COLOR 			#00979C - BLUE				LITERAL2
 
 
-#Core Class KEYWORD1
-
+#Core Class KEYWORD2
 stm32_dev	KEYWORD1
+
 #Function KEYWORD2 specifies methods and functions
 #UTILS
-UTIL_toDigit	KEYWORD2
-UTIL_num	KEYWORD2
-UTIL_isHexStr	KEYWORD2
-UTIL_hexNum	KEYWORD2
-UTIL_getNum	KEYWORD2
+UTIL_toDigit	KEYWORD1
+UTIL_num	KEYWORD1
+UTIL_isHexStr	KEYWORD1
+UTIL_hexNum	KEYWORD1
+UTIL_getNum	KEYWORD1
 
-bitMaskPos	KEYWORD2
-UTIL_PortPin2Str	KEYWORD2
-UTIL_Str2PortPin	KEYWORD2
+bitMaskPos	KEYWORD1
+UTIL_PortPin2Str	KEYWORD1
+UTIL_Str2PortPin	KEYWORD1
 
 #STM32_DEV
-stm32_getDev	KEYWORD2
+stm32_getDev	KEYWORD1
 
 #bootloader
-UTIL_checkUserCode	KEYWORD2
-UTIL_jumpToUser	KEYWORD2
+UTIL_checkUserCode	KEYWORD1
+UTIL_jumpToUser	KEYWORD1
 # KEYWORD3 specifies structures
 
 

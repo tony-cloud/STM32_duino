@@ -47,14 +47,19 @@ extern "C" void SystemClock_Config(void) {
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
-extern "C" void preinitVariant() {
-    //Set heap to external SDRAM
-    setHeap((unsigned char*)0xC0000000, (unsigned char*)(0xC0000000 + 8 * 1024 * 1024));
-}
+//void preinitVariant() {
 
+//}
+
+extern "C" uint8_t BSP_SDRAM_Init(void);
 #define TXPIN PA9  
 #define RXPIN PB7
-extern "C" void initVariant() {
+
+extern "C" void initVariant(){
+#ifndef DATA_IN_ExtSRAM
+	BSP_SDRAM_Init();
+#endif
+//    setHeap((unsigned char*)0xC0000000, (unsigned char*)(0xC0000000 + 8 * 1024 * 1024));
     //UART1 is connected to ST-Link V2.1 as Virtual Com port on non-default PA9/PB7 pins
     SerialUART1.setPins(TXPIN,RXPIN);
 }

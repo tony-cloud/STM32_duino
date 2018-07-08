@@ -90,11 +90,11 @@ void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds)
 
 //for spfd5420, other must fixed!  
   Timing.AddressSetupTime = _as/14;  // 14ns(1/72M)*1(HCLK) = 14ns
-  Timing.AddressHoldTime = 0;        //  FSMC_ACCESS_MODE_A unused 
+  Timing.AddressHoldTime = 1;        //  FSMC_ACCESS_MODE_A unused 
   Timing.DataSetupTime = _ds/14;     // 14ns(1/72M)*2(HCLK) = 28ns
-  Timing.BusTurnAroundDuration = 0;
-  Timing.CLKDivision = 0;
-  Timing.DataLatency = 0;
+  Timing.BusTurnAroundDuration = 1;
+  Timing.CLKDivision = 2;
+  Timing.DataLatency = 2;
   Timing.AccessMode = FSMC_ACCESS_MODE_A;
   /* ExtTiming */
 

@@ -8,12 +8,11 @@
 
  #include "util/bitband.h"
 
-/*for F0/7 L0 BB_PIN use LL_PIN class replaced */
 BB_PIN<LED_BUILTIN>led;
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(LED_BUILTIN,OUTPUT);
+  led.mode(OUTPUT);
 }
 
 void loop() {

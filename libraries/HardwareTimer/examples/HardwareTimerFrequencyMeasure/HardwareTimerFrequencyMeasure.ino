@@ -7,7 +7,6 @@
 *
 * Check your board pinout which pin it is.
 *
-*
 * Connect the testPwmPin to the previous input capture pin
 *
 * On Serial, you should see default PWM frequency
@@ -15,41 +14,41 @@
 
 #include "HardwareTimer.h"
 
-const int testPwmOutputPin = PA0;
+#define Timerx Timer1
+const int testPwmOutputPin = PA1;
+const int testChannel = 1;  //(TIM1 channel1 is PA8) channel: 1 ~ 6  
 
 void setup() {
     analogWrite(testPwmOutputPin, 128);
 
     Serial.begin(115200);
 
-    Timer1.setPrescaleFactor(100);
-    Timer1.setOverflow(UINT16_MAX);
+    Timerx.setPrescaleFactor(100);
+    Timerx.setOverflow(UINT16_MAX);
 
-    Timer1.setMode(1, TIMER_INPUT_CAPTURE_RISING);
-    Timer1.resume();
+    Timerx.setMode(testChannel, TIMER_INPUT_CAPTURE_RISING); 
+    Timerx.resume();
 }
 
 void loop() {
-
-    uint32_t start = Timer1.getCompare(1);
+    uint32_t start = Timerx.getCompare(testChannel);
     uint32_t end;
     do {
         //Wait for next rising edge
-        end = Timer1.getCompare(1);
+        end = Timerx.getCompare(testChannel);
     } while(end == start);
 
     uint32_t diff;
     if (end > start) {
         diff = end - start;
     } else {
-        diff = (Timer1.getOverflow() - start) + end;
+        diff = (Timerx.getOverflow() - start) + end;
     }
-    uint32_t timerFrequency = Timer1.getBaseFrequency() / (Timer1.getPrescaleFactor() + 1);
+    uint32_t timerFrequency = Timerx.getBaseFrequency() / (Timerx.getPrescaleFactor() + 1);
 
     Serial.print("Input frequency: ");
     Serial.print((float)timerFrequency / diff, 6);
     Serial.println(" Hz");
-
 
     delay(1000);
 }

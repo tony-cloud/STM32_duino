@@ -1,11 +1,11 @@
 /* 
-  huaweiwx@sina.com 2017.  All right reserved.
+  huaweiwx@sina.com 2018.  All right reserved.
 
   for stm32 m3/m4 sram/peripheral bitband io opration
-  for all stm32 chips 2017.5.28
-  add BB functions from maple 2017.10.12 
   add arduino style class BB_PIN 2017.12.20
-  for stm32 m0/7 LL_PIN class 
+  add LL_PIN class for all stm32 chips
+  add class BB_VAR 2018.2.12 
+  support stm32h7x use hallib 2018.4.2 
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -43,49 +43,54 @@
                             (((mask)==bit(14))?14: \
                             (((mask)==bit(15))?15:16))))))))))))))))
 
-#if (defined(STM32F0)||defined(STM32L0)||defined(STM32F7))
-#define BITBAND_OPTION 0
+/* 
+m0 m7 have not bitband
+STM32F3/STM32L4 GPIO unsupport bitband opration 
+*/
+#if defined(STM32F0)||defined(STM32L0)||defined(STM32F7)||defined(STM32H7)||defined(STM32F3)||defined(STM32L4)
+#	define BITBAND_OPTION 0
 #else
-#define BITBAND_OPTION 1 
+#	define BITBAND_OPTION 1 
 #endif
 
 #define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
 
+/*compatable with avr*/
 #ifdef GPIOA
-#define PORTA      GPIOA->ODR    //输出 
-#define PINA       GPIOA->IDR    //输入 
+# define PORTA      GPIOA->ODR    //输出 
+# define PINA       GPIOA->IDR    //输入
 #endif
 #ifdef GPIOB
-#define PORTB      GPIOB->ODR    //输出 
-#define PINB       GPIOB->IDR    //输入 
+# define PORTB      GPIOB->ODR    //输出 
+# define PINB       GPIOB->IDR    //输入 
 #endif
 #ifdef GPIOC
-#define PORTC      GPIOC->ODR                  //输出 
-#define PINC       GPIOC->IDR                  //输入 
+# define PORTC      GPIOC->ODR                  //输出 
+# define PINC       GPIOC->IDR                  //输入 
 #endif
 #ifdef GPIOD
-#define PORTD      GPIOD->ODR    //输出 
-#define PIND       GPIOD->IDR    //输入 
+# define PORTD      GPIOD->ODR    //输出 
+# define PIND       GPIOD->IDR    //输入 
 #endif
 #ifdef GPIOE
-#define PORTE      GPIOE->ODR    //输出 
-#define PINE       GPIOE->IDR    //输入 
+# define PORTE      GPIOE->ODR    //输出 
+# define PINE       GPIOE->IDR    //输入 
 #endif
 #ifdef GPIOF
-#define PORTF      GPIOF->ODR    //输出 
-#define PINF       GPIOF->IDR    //输入 
+# define PORTF      GPIOF->ODR    //输出 
+# define PINF       GPIOF->IDR    //输入 
 #endif
 #ifdef GPIOG
-#define PORTG      GPIOG->ODR    //输出 
-#define PING       GPIOG->IDR    //输入 
+# define PORTG      GPIOG->ODR    //输出 
+# define PING       GPIOG->IDR    //输入 
 #endif
 #ifdef GPIOH
-#define PORTH      GPIOH->ODR    //输出 
-#define PINH       GPIOH->IDR    //输入 
+# define PORTH      GPIOH->ODR    //输出 
+# define PINH       GPIOH->IDR    //输入 
 #endif
 #ifdef GPIOI
-#define PORTI      GPIOI->ODR    //输出 
-#define PINI       GPIOI->IDR    //输入 
+# define PORTI      GPIOI->ODR    //输出 
+# define PINI       GPIOI->IDR    //输入 
 #endif
 
 #if BITBAND_OPTION
@@ -97,61 +102,78 @@
 //example:  in = PAin(0);  
 //          PCout(13) = 1;
 #ifdef GPIOA
-#define PAout(n)   BITBAND_ADDR((uint32_t)&GPIOA->ODR,n)  //输出 
-#define PAin(n)    BITBAND_ADDR((uint32_t)&GPIOA->IDR,n)  //输入 
+# define PAout(n)   BITBAND_ADDR((uint32_t)&PORTA,n)  //输出 
+# define PAin(n)    BITBAND_ADDR((uint32_t)&PINA,n)   //输入 
 #endif
 #ifdef GPIOB
-#define PBout(n)   BITBAND_ADDR((uint32_t)&GPIOB->ODR,n)  //输出 
-#define PBin(n)    BITBAND_ADDR((uint32_t)&GPIOB->IDR,n)  //输入 
+# define PBout(n)   BITBAND_ADDR((uint32_t)&PORTB,n)  //输出 
+# define PBin(n)    BITBAND_ADDR((uint32_t)&PINB,n)   //输入 
 #endif
 #ifdef GPIOC
-#define PCout(n)   BITBAND_ADDR((uint32_t)&GPIOC->ODR,n)  //输出 
-#define PCin(n)    BITBAND_ADDR((uint32_t)&GPIOC->IDR,n)  //输入 
+# define PCout(n)   BITBAND_ADDR((uint32_t)&PORTC,n)  //输出 
+# define PCin(n)    BITBAND_ADDR((uint32_t)&PINC,n)   //输入 
 #endif
 #ifdef GPIOD
-#define PDout(n)   BITBAND_ADDR((uint32_t)&GPIOD->ODR,n)  //输出 
-#define PDin(n)    BITBAND_ADDR((uint32_t)&GPIOD->IDR,n)  //输入 
+# define PDout(n)   BITBAND_ADDR((uint32_t)&PORTD,n)  //输出 
+# define PDin(n)    BITBAND_ADDR((uint32_t)&PIND,n)   //输入 
 #endif
 #ifdef GPIOE
-#define PEout(n)   BITBAND_ADDR((uint32_t)&GPIOE->ODR,n)  //输出 
-#define PEin(n)    BITBAND_ADDR((uint32_t)&GPIOE->IDR,n)  //输入
+# define PEout(n)   BITBAND_ADDR((uint32_t)&PORTE,n)  //输出 
+# define PEin(n)    BITBAND_ADDR((uint32_t)&PINE,n)   //输入
 #endif
 #ifdef GPIOF
-#define PFout(n)   BITBAND_ADDR((uint32_t)&GPIOF->ODR,n)  //输出 
-#define PFin(n)    BITBAND_ADDR((uint32_t)&GPIOF->IDR,n)  //输入
+# define PFout(n)   BITBAND_ADDR((uint32_t)&PORTF,n)  //输出 
+# define PFin(n)    BITBAND_ADDR((uint32_t)&PINF,n)   //输入
 #endif
 #ifdef GPIOG
-#define PGout(n)   BITBAND_ADDR((uint32_t)&GPIOG->ODR,n)  //输出 
-#define PGin(n)    BITBAND_ADDR((uint32_t)&GPIOG->IDR,n)  //输入
+# define PGout(n)   BITBAND_ADDR((uint32_t)&PORTG,n)  //输出 
+# define PGin(n)    BITBAND_ADDR((uint32_t)&PING,n)   //输入
 #endif
 #ifdef GPIOH
-#define PHout(n)   BITBAND_ADDR((uint32_t)&GPIOH->ODR,n)  //输出 
-#define PHin(n)    BITBAND_ADDR((uint32_t)&GPIOH->IDR,n)  //输入
+# define PHout(n)   BITBAND_ADDR((uint32_t)&PORTH,n)  //输出 
+# define PHin(n)    BITBAND_ADDR((uint32_t)&PINH,n)   //输入
 #endif
 #ifdef GPIOI
-#define PIout(n)   BITBAND_ADDR((uint32_t)&GPIOI->ODR,n)  //输出 
-#define PIin(n)    BITBAND_ADDR((uint32_t)&GPIOI->IDR,n)  //输入
+# define PIout(n)   BITBAND_ADDR((uint32_t)&PORTI,n)  //输出 
+# define PIin(n)    BITBAND_ADDR((uint32_t)&PINI,n)   //输入
 #endif
 
 //for arduino pin add 2017.10
-#define PIN_OUTADR(n) BITBAND(((const uint32_t)&variant_pin_list[n].port->ODR),\
-                              BITMASKPOS(variant_pin_list[n].pinMask))
+#ifdef VARIANT_PIN_LIST
+# define PIN_OUTADR(pin) BITBAND(((const uint32_t)&variant_pin_list[pin].port->ODR),BITMASKPOS(variant_pin_list[pin].pinMask))
+# define PIN_INADR(pin)  BITBAND(((const uint32_t)&variant_pin_list[pin].port->IDR),BITMASKPOS(variant_pin_list[pin].pinMask))
+# define PINout(pin)	MEM_ADDR(PIN_OUTADR(pin))						
+# define PINin(pin)	MEM_ADDR(PIN_OUTADR(pin))
 
-#define PIN_INADR(n)  BITBAND(((const uint32_t)&variant_pin_list[n].port->IDR),\
-                              BITMASKPOS(variant_pin_list[n].pinMask))
+#else /*CHIP_PIN_LIST */
+# ifdef STM32F1
+#    define PIN_OUTADR(pin) BITBAND((GPIOA_BASE+(((pin)>>4)&0x0f)*(GPIOB_BASE-GPIOA_BASE)+12),((pin)&0x0f))
+#    define PIN_INADR(pin)  BITBAND((GPIOA_BASE+(((pin)>>4)&0x0f)*(GPIOB_BASE-GPIOA_BASE)+ 8),((pin)&0x0f))
+# else
+#    define PIN_OUTADR(pin) BITBAND((GPIOA_BASE+(((pin)>>4)&0x0f)*(GPIOB_BASE-GPIOA_BASE)+20),((pin)&0x0f))
+#    define PIN_INADR(pin)  BITBAND((GPIOA_BASE+(((pin)>>4)&0x0f)*(GPIOB_BASE-GPIOA_BASE)+16),((pin)&0x0f))
+# endif /*STM32F1*/
 
-#define PINOut(pin)	MEM_ADDR(PIN_OUTADDR(pin))						
-#define PINin(pin)	MEM_ADDR(PIN_OUTADDR(pin))
+# ifdef __cplusplus  /*for __ConstPin*/
+#   ifdef STM32F1
+#     define PINout(pin)	BITBAND_ADDR((pinToBase(pin)+12),	pinMaskPos(pin))			
+#     define PINin(pin)		BITBAND_ADDR((pinToBase(pin)+8) ,	pinMaskPos(pin))
+#   else
+#     define PINout(pin)	BITBAND_ADDR((pinToBase(pin)+20),	pinMaskPos(pin))			
+#     define PINin(pin)		BITBAND_ADDR((pinToBase(pin)+16),	pinMaskPos(pin))
+#   endif
+# else
+#  define PINout(pin)	MEM_ADDR(PIN_OUTADR(pin))						
+#  define PINin(pin)	MEM_ADDR(PIN_OUTADR(pin))
+# endif /*__cplusplus*/
+#endif /*VARIANT_PIN_LIST*/
 
 #define BB_sramVarPtr(x)  __BB_addr((volatile uint32_t*)&(x), 0, SRAM_BB_BASE, SRAM_BASE)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-static inline volatile uint32_t* __BB_addr(volatile void*,
-                                         uint32_t,
-                                         uint32_t,
-                                         uint32_t);
+static inline volatile uint32_t* __BB_addr(volatile void*,uint32_t,uint32_t,uint32_t);
 
 /**
  * @brief Obtain a pointer to the bit-band address corresponding to a
@@ -159,7 +181,7 @@ static inline volatile uint32_t* __BB_addr(volatile void*,
  * @param address Address in the bit-banded SRAM region
  * @param bit     Bit in address to bit-band
  */
-static inline volatile uint32_t* BB_sramp(volatile void *address, uint32_t bit) {
+static inline volatile uint32_t* BB_sramp(volatile void *address, uint32_t bit){
     return __BB_addr(address, bit, SRAM_BB_BASE, SRAM_BASE);
 }
 
@@ -169,7 +191,7 @@ static inline volatile uint32_t* BB_sramp(volatile void *address, uint32_t bit) 
  * @param bit Bit in address to read
  * @return bit's value in address.
  */
-static inline uint8_t BB_sramGetBit(volatile void *address, uint32_t bit) {
+static inline uint8_t BB_sramGetBit(volatile void *address, uint32_t bit){
     return *BB_sramp(address, bit);
 }
 
@@ -179,9 +201,7 @@ static inline uint8_t BB_sramGetBit(volatile void *address, uint32_t bit) {
  * @param bit Bit in address to write to
  * @param val Value to write for bit, either 0 or 1.
  */
-static inline void BB_sramSetBit(volatile void *address,
-                                   uint32_t bit,
-                                   uint8_t val) {
+static inline void BB_sramSetBit(volatile void *address,uint32_t bit,uint8_t val){
     *BB_sramp(address, bit) = val;
 }
 
@@ -211,16 +231,11 @@ static inline uint8_t BB_periGetBit(volatile void *address, uint32_t bit) {
  * @param bit Bit in address to write to
  * @param val Value to write for bit, either 0 or 1.
  */
-static inline void BB_periSetBit(volatile void *address,
-                                   uint32_t bit,
-                                   uint8_t val) {
+static inline void BB_periSetBit(volatile void *address,uint32_t bit,uint8_t val) {
     *BB_perip(address, bit) = val;
 }
 
-static inline volatile uint32_t* __BB_addr(volatile void *address,
-                                         uint32_t bit,
-                                         uint32_t bb_base,
-                                         uint32_t bb_ref) {
+static inline volatile uint32_t* __BB_addr(volatile void *address,uint32_t bit,uint32_t bb_base,uint32_t bb_ref) {
     return (volatile uint32_t*)(bb_base + (((uint32_t)address - bb_ref)<<5) +
                               (bit<<2));
 }
@@ -259,7 +274,9 @@ class LL_PIN{
   //----------------------------------------------------------------------------
   constexpr const uint8_t  pos(void){return variant_gpiopin_pos_static[PinNumber];};
   constexpr const uint32_t base(void){return variant_gpiopin_base_static[PinNumber];};
-
+  constexpr const uint32_t pinMask(void){return (uint32_t)(1<<(this->pos()));};
+  constexpr GPIO_TypeDef* port(void){return (GPIO_TypeDef *)(this->base());};
+  
   inline LL_PIN & operator = (bool value) __attribute__((always_inline)) {
     this->write(value);
     return *this;
@@ -270,6 +287,11 @@ class LL_PIN{
     return *this;
   }
   
+  inline LL_PIN & operator << (int value) __attribute__((always_inline)) {
+    this->write((bool)value);
+    return *this;
+  }
+
   template<class T> 
   inline LL_PIN & operator >> (T &value){
     value = this->read();
@@ -278,39 +300,93 @@ class LL_PIN{
 
   inline __attribute__((always_inline))
   void write(bool value){
+#ifdef STM32H7
+//    HAL_GPIO_WritePin((GPIO_TypeDef *)(this->base()),this->pinMask(),(GPIO_PinState)value);
+    if(value != GPIO_PIN_RESET)
+    {
+      ((GPIO_TypeDef *)(this->base()))->BSRRL = this->pinMask();
+    }else{
+      ((GPIO_TypeDef *)(this->base()))->BSRRH = this->pinMask() ;
+    }
+#else	
     if (value) {
         LL_GPIO_SetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
     } else {
         LL_GPIO_ResetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
     }
+#endif
   }
 
   inline __attribute__((always_inline))
-  void high(){LL_GPIO_SetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));}
+  void high(){
+#ifdef STM32H7
+    ((GPIO_TypeDef *)(this->base()))->BSRRL = this->pinMask();
+#else		  
+	LL_GPIO_SetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
+#endif  
+  }
 
   inline __attribute__((always_inline))
-  void low(){LL_GPIO_ResetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));}
+  void low(){
+#ifdef STM32H7
+     ((GPIO_TypeDef *)(this->base()))->BSRRH = this->pinMask() ;
+#else		  
+	 LL_GPIO_ResetOutputPin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
+#endif
+  }
 
   inline operator bool () const __attribute__((always_inline)) {
     return this->read();
   }
 
   inline __attribute__((always_inline))
-  bool read() const{return LL_GPIO_IsInputPinSet((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));}
+  bool read() const{
+#ifdef STM32H7
+    return HAL_GPIO_ReadPin((GPIO_TypeDef *)(this->base()),this->pinMask());
+#else	 
+	return LL_GPIO_IsInputPinSet((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
+#endif
+  }
+
+  inline void operator  !() __attribute__((always_inline)) {
+    this->toggle();
+  }
 
 /*----- comptabled with DigitalPin ----------*/
   inline __attribute__((always_inline))
-  void toggle(){LL_GPIO_TogglePin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));}
-
+  void toggle(){
+#ifdef STM32H7
+    ((GPIO_TypeDef *)(this->base()))->ODR ^= this->pinMask() ;
+#else
+	LL_GPIO_TogglePin((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber));
+#endif  
+  }
+  
   inline __attribute__((always_inline))
-  void config(uint8_t mode, bool level) {
-      this->write(level);
+  void config(uint8_t mode, bool level) {  /*compatale with digitalPin*/
 	  this->mode(mode);
+      this->write(level);
   }
 
   inline __attribute__((always_inline))
   void mode(uint8_t mode){
-	  pinModeLL((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber), mode);}
+#ifdef STM32H7
+    pinMode(PinNumber,mode);
+#else 
+	pinModeLL((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber), mode);
+#endif
+  }
+
+  inline __attribute__((always_inline))
+  void attach(voidFuncPtr callback, uint8_t mode){
+	  attachInterrupt(PinNumber, callback, mode);
+  }
+  
+  inline __attribute__((always_inline))
+  void detach(void){
+	  detachInterrupt(PinNumber);
+  }
+
 };
 
 #if BITBAND_OPTION
@@ -320,6 +396,8 @@ class BB_PIN{
   //----------------------------------------------------------------------------
   constexpr const uint8_t  pos(void){return variant_gpiopin_pos_static[PinNumber];};
   constexpr const uint32_t base(void){return variant_gpiopin_base_static[PinNumber];};
+  constexpr const uint32_t pinMask(void){return (uint32_t)(1<<(this->pos()));};
+
 #ifdef STM32F1
   constexpr const uint32_t pinReg(void){return this->base()+8;};
   constexpr const uint32_t portReg(void){return this->base()+12;};
@@ -337,6 +415,11 @@ class BB_PIN{
   
   inline BB_PIN & operator << (bool value) __attribute__((always_inline)) {
     this->write(value);
+    return *this;
+  }
+  
+  inline BB_PIN & operator << (int value) __attribute__((always_inline)) {
+    this->write((bool)value);
     return *this;
   }
 
@@ -362,12 +445,16 @@ class BB_PIN{
   inline __attribute__((always_inline))
   bool read() const{return MEM_ADDR(this->bb_inadr());}
 
+  inline void operator  !() __attribute__((always_inline)) {
+    this->toggle();
+  }
+
 /*----- comptabled with DigitalPin ----------*/
   inline __attribute__((always_inline))
   void toggle(){write(!MEM_ADDR(this->bb_outadr()));}
 
   inline __attribute__((always_inline))
-  void config(uint8_t mode, bool value) {
+  void config(uint8_t mode, bool value) {  /*compatale with digitalPin*/
 	  this->mode(mode);
       this->write(value);
   }
@@ -375,12 +462,39 @@ class BB_PIN{
   inline __attribute__((always_inline))
   void mode(uint8_t mode){
 	  pinModeLL((GPIO_TypeDef *)(this->base()), pinTollBitMask(PinNumber), mode);}
+	  
+  inline __attribute__((always_inline))
+  void attach(voidFuncPtr callback, uint8_t mode){
+	  attachInterrupt(PinNumber, callback, mode);
+  }
+  
+  inline __attribute__((always_inline))
+  void detach(void){
+	  detachInterrupt(PinNumber);
+  }
+
 };
 
 #else
 #  define BB_PIN LL_PIN  /*m0/7 use LL_PIN class*/
 #endif //BITBAND_OPTION
 #pragma GCC diagnostic pop
+
+#define FAST_PIN BB_PIN
+
+#if BITBAND_OPTION
+template<class T> 
+class BB_VAR{
+  public:	
+	T val;
+    inline  operator T() __attribute__((always_inline)) { return this->val;};
+	inline  BB_VAR& operator = (T value) __attribute__((always_inline)){
+		this->val =value; 
+		return *this;
+	};
+	volatile  uint32_t* pos = BB_sramVarPtr(val);
+};
+#endif
 
 #endif //__cplusplus
 #endif //__BITBAND_H__

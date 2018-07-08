@@ -96,11 +96,11 @@ void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds)
 //  fsmcLcdHandle.Init.PageSize = FSMC_PAGE_SIZE_NONE;
   /* Timing */
   rwTiming.AddressSetupTime = _as/14;	//   1000/72(HCLK) =14ns
-  rwTiming.AddressHoldTime =     0;
+  rwTiming.AddressHoldTime =     1;
   rwTiming.DataSetupTime =    _ds/14;	//   1000/72(HCLK) =14ns
-  rwTiming.BusTurnAroundDuration = 0;
-  rwTiming.CLKDivision = 0;
-  rwTiming.DataLatency = 0;
+  rwTiming.BusTurnAroundDuration = 1;
+  rwTiming.CLKDivision = 2;
+  rwTiming.DataLatency = 2;
   rwTiming.AccessMode = FSMC_ACCESS_MODE_A;
 
 

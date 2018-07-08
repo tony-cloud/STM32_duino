@@ -53,8 +53,13 @@ void stm32_adc_init(ADC_HandleTypeDef *handle);
 
 
 #ifndef __HAL_RCC_ADC2_CLK_ENABLE
- #define __HAL_RCC_ADC2_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
+  #ifdef STM32H7
+     #define __HAL_RCC_ADC2_CLK_ENABLE __HAL_RCC_ADC12_CLK_DISABLE
+  #else
+     #define __HAL_RCC_ADC2_CLK_ENABLE __HAL_RCC_ADC_CLK_ENABLE
+  #endif
 #endif
+
 #ifndef __HAL_RCC_ADC3_CLK_ENABLE
  #ifdef STM32F3  //for F3  huawei 2017.12.25
   #define __HAL_RCC_ADC3_CLK_ENABLE __HAL_RCC_ADC34_CLK_ENABLE
@@ -120,20 +125,23 @@ int analogRead(uint8_t pin) {
     HAL_GPIO_Init(variant_pin_list[pin].port, &GPIO_InitStruct);
 
     if (handle[instanceIndex].Instance == NULL) {
-		#ifdef __HAL_RCC_ADC1_CLK_ENABLE   //L4 only undef  huaweiwx@sina.com 2017.12
+	 #ifdef __HAL_RCC_ADC1_CLK_ENABLE   //L4 only undef  huaweiwx@sina.com 2017.12
         __HAL_RCC_ADC1_CLK_ENABLE();
-//        #endif
-//        #ifdef __HAL_RCC_ADC_CLK_ENABLE
-		#else  // __HAL_RCC_ADC_CLK_ENABLE  //L4 only 
+	 #elif defined(__HAL_RCC_ADC12_CLK_ENABLE) //H4 
+        __HAL_RCC_ADC12_CLK_ENABLE();		
+	 #else  // __HAL_RCC_ADC_CLK_ENABLE  //L4 only 
         __HAL_RCC_ADC_CLK_ENABLE();
-		#endif
+	 #endif
         
         handle[instanceIndex].Instance = config.instance;
         handle[instanceIndex].Init.ScanConvMode = DISABLE;
         handle[instanceIndex].Init.ContinuousConvMode = ENABLE;
         handle[instanceIndex].Init.DiscontinuousConvMode = DISABLE;
+		
+		#if !defined(STM32H7)
         handle[instanceIndex].Init.DataAlign = ADC_DATAALIGN_RIGHT;
-
+		#endif
+		
         #ifdef STM32L0
             handle[instanceIndex].Init.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
         #endif
@@ -181,7 +189,9 @@ int analogRead(uint8_t pin) {
         sConfig.SamplingTime = ADC_SAMPLETIME_16CYCLES;
     #elif defined(ADC_SAMPLETIME_12CYCLES_5)
         sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
-    #else
+    #elif defined(STM32H7)
+	    //H7 none
+	#else
         #error "unknown sampleing time"
     #endif
 

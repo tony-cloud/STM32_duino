@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map SPI
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+HardwareBaseTimer	KEYWORD1
+Timer6	KEYWORD1
+Timer7	KEYWORD1
+
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+pause	KEYWORD2
+resume	KEYWORD2
+
+getPrescaleFactor	KEYWORD2
+setPrescaleFactor	KEYWORD2
+getOverflow	KEYWORD2
+setOverflow	KEYWORD2
+getCount	KEYWORD2
+setCount	KEYWORD2
+refresh	KEYWORD2
+getBaseFrequency	KEYWORD2
+setPeriod	KEYWORD2
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+
+#######################################

@@ -320,6 +320,11 @@ typedef struct
 #if defined(RCC_CFGR_USBPRE)
 #define LL_RCC_USB_CLKSOURCE_PLL             RCC_CFGR_USBPRE        /*!< PLL clock is not divided */
 #define LL_RCC_USB_CLKSOURCE_PLL_DIV_1_5     0x00000000U            /*!< PLL clock is divided by 1.5 */
+#ifdef GD32F10X
+//  GD32 support div2 and div2.5  huaweiwx@sina.com
+ #define LL_RCC_USB_CLKSOURCE_PLL_DIV_2       (0x3 << RCC_CFGR_USBPRE_Pos)
+ #define LL_RCC_USB_CLKSOURCE_PLL_DIV_2_5     (0x2 << RCC_CFGR_USBPRE_Pos)
+#endif
 #endif /*RCC_CFGR_USBPRE*/                   
 #if defined(RCC_CFGR_OTGFSPRE)               
 #define LL_RCC_USB_CLKSOURCE_PLL_DIV_2       RCC_CFGR_OTGFSPRE      /*!< PLL clock is divided by 2 */

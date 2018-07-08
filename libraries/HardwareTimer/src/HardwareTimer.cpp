@@ -18,6 +18,9 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+
+  2018.5.18  add TIM5/8~22 by huaweiwx
+  2018.5.28  for F3/F7/L4/H7 support channel5&6 by huaweiwx
 */
 
 #include "HardwareTimer.h"
@@ -37,12 +40,16 @@ HardwareTimer::HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_typ
 
     handle.Instance = instance;
 
-    for(int i=0; i<4; i++) {
+    for(int i=0; i < TIMER_CHANNELS; i++) {
         channelOC[i].OCMode = OCMODE_NOT_USED;
         channelOC[i].OCPolarity = TIM_OCPOLARITY_HIGH;
         channelOC[i].OCFastMode = TIM_OCFAST_DISABLE;
+		
+#if  !defined(STM32L0)
         channelOC[i].OCIdleState = TIM_OCIDLESTATE_RESET;
-#ifndef STM32L1		
+#endif
+
+#if !defined(STM32L1) && !defined(STM32L0)
         channelOC[i].OCNPolarity = TIM_OCNPOLARITY_HIGH;
         channelOC[i].OCNIdleState = TIM_OCNIDLESTATE_RESET;
 #endif
@@ -51,14 +58,13 @@ HardwareTimer::HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_typ
         channelIC[i].ICPrescaler = TIM_ICPSC_DIV1;
         channelIC[i].ICFilter = 0;
     }
-
 }
 
 void HardwareTimer::pause() {
     HAL_TIM_Base_Stop(&handle);
 }
 
-void HardwareTimer::resume() {
+void HardwareTimer::resume(int channel, TIMER_MODES mode) {
     bool hasInterrupt = false;
     for(size_t i=0; i<sizeof(callbacks) / sizeof(callbacks[0]); i++) {
         if (callbacks[i] != NULL) {
@@ -78,7 +84,7 @@ void HardwareTimer::resume() {
 #elif defined(STM32F3)||defined(STM32L4)|| STM32F100xB|| STM32F100xE /*F100 TIM1_UP_TIM16*/
             HAL_NVIC_SetPriority(TIM1_UP_TIM16_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
-#elif defined(STM32F1)||defined(STM32F2)||defined(STM32F4)|| defined(STM32F7)
+#elif defined(STM32F1)||defined(STM32F2)||defined(STM32F4)|| defined(STM32F7)||defined(STM32H7)
             HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TIM_PRIORITY, 0);
             HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 #endif
@@ -137,9 +143,165 @@ void HardwareTimer::resume() {
     }
 #endif
 
+//add by huaweiwx@sina.com 2018.5.28
+#ifdef TIM5
+    if (handle.Instance == TIM5) {
+        __HAL_RCC_TIM5_CLK_ENABLE();
+        interruptTimers[4] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM5_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM5_IRQn);
+        }
+    }
+#endif
+
+#ifdef TIM8
+    if (handle.Instance == TIM8) {
+        __HAL_RCC_TIM8_CLK_ENABLE();
+        interruptTimers[7] = this;
+        if (hasInterrupt) {
+#if defined(STM32F2)||defined(STM32F4)||defined(STM32F7)||defined(STM32H7)
+            HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);	
+#else
+            HAL_NVIC_SetPriority(TIM8_UP_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM8_UP_IRQn);
+#endif
+            HAL_NVIC_SetPriority(TIM8_CC_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM8_CC_IRQn);
+        }
+
+        TIM_ClockConfigTypeDef sClockSourceConfig;
+        sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+        HAL_TIM_ConfigClockSource(&handle, &sClockSourceConfig);
+
+        TIM_MasterConfigTypeDef sMasterConfig;
+        sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+        sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+        HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
+
+        handle.Init.RepetitionCounter = 0;
+    }
+#endif
+#ifdef TIM9
+    if (handle.Instance == TIM9) {
+        __HAL_RCC_TIM9_CLK_ENABLE();
+        interruptTimers[8] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM1_BRK_TIM9_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
+        }
+    }
+#endif
+#ifdef TIM10
+    if (handle.Instance == TIM10) {
+        __HAL_RCC_TIM10_CLK_ENABLE();
+        interruptTimers[9] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+        }
+    }
+#endif
+#ifdef TIM11
+    if (handle.Instance == TIM11) {
+        __HAL_RCC_TIM11_CLK_ENABLE();
+        interruptTimers[10] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM1_TRG_COM_TIM11_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
+        }
+    }
+#elif defined(TIM21)
+    if (handle.Instance == TIM21) {
+        __HAL_RCC_TIM21_CLK_ENABLE();
+        interruptTimers[10] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM21_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM21_IRQn);
+        }
+    }
+#endif
+#ifdef TIM12
+    if (handle.Instance == TIM12) {
+        __HAL_RCC_TIM12_CLK_ENABLE();
+        interruptTimers[11] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM8_BRK_TIM12_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM8_BRK_TIM12_IRQn);
+        }
+    }
+#elif defined(TIM22)
+    if (handle.Instance == TIM22) {
+        __HAL_RCC_TIM22_CLK_ENABLE();
+        interruptTimers[11] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM22_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM22_IRQn);
+        }
+    }
+#endif
+#ifdef TIM13
+    if (handle.Instance == TIM13) {
+        __HAL_RCC_TIM13_CLK_ENABLE();
+        interruptTimers[12] = this;
+        if (hasInterrupt) {
+            HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
+        }
+    }
+#endif
+#ifdef TIM15
+    if (handle.Instance == TIM15) {
+        __HAL_RCC_TIM15_CLK_ENABLE();
+        interruptTimers[14] = this;		
+        if (hasInterrupt) {
+  #if defined(STM32H7)
+            HAL_NVIC_SetPriority(TIM15_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM15_IRQn);  
+  #else  
+            HAL_NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_BRK_TIM15_IRQn);
+  #endif			
+        }
+    }
+#endif
+#ifdef TIM16
+    if (handle.Instance == TIM16) {
+        __HAL_RCC_TIM16_CLK_ENABLE();
+        interruptTimers[15] = this;
+        if (hasInterrupt) {
+  #if defined(STM32H7)
+            HAL_NVIC_SetPriority(TIM16_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM16_IRQn);  
+  #else  
+            HAL_NVIC_SetPriority(TIM1_UP_TIM16_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+  #endif
+        }
+    }
+#endif
+#ifdef TIM17
+    if (handle.Instance == TIM17) {
+        __HAL_RCC_TIM17_CLK_ENABLE();
+        interruptTimers[16] = this;
+        if (hasInterrupt) {
+  #if defined(STM32H7)
+            HAL_NVIC_SetPriority(TIM17_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM17_IRQn);  
+  #else  
+            HAL_NVIC_SetPriority(TIM1_TRG_COM_TIM17_IRQn, TIM_PRIORITY, 0);
+            HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM17_IRQn);
+  #endif
+        }
+    }
+#endif
+//add
+
     handle.Init.CounterMode = TIM_COUNTERMODE_UP;
     handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-#ifndef STM32L1  /*huaweiwx*/
+
+#if !defined(STM32L1) && !defined(STM32L0)  /*huaweiwx*/
     handle.Init.RepetitionCounter = 0;
 #endif
     HAL_TIM_Base_Init(&handle);
@@ -150,18 +312,47 @@ void HardwareTimer::resume() {
 
         HAL_TIM_Base_Start(&handle);
     }
-
-    resumeChannel(1, TIM_CHANNEL_1);
-    resumeChannel(2, TIM_CHANNEL_2);
-    resumeChannel(3, TIM_CHANNEL_3);
-    resumeChannel(4, TIM_CHANNEL_4);
+	
+    if ( channel &&(mode == TIMER_PWM)){
+		resumePwm(channel);
+	} else {
+		resumeChannel(1);
+		resumeChannel(2);
+		resumeChannel(3);
+		resumeChannel(4);
+#if defined(TIM_CHANNEL_6) // Some chip(F3/7 L4 H7) there are 6 channels.  huaweiwx 2018.5.28
+		resumeChannel(5);
+		resumeChannel(6);
+#endif
+	}
 }
 
-void HardwareTimer::resumeChannel(int channel, int timChannel) {
+int HardwareTimer::getChannel(int channel){
+	if(channel == 1) return TIM_CHANNEL_1;
+	if(channel == 2) return TIM_CHANNEL_2;
+	if(channel == 3) return TIM_CHANNEL_3;
+	if(channel == 4) return TIM_CHANNEL_4;
+#if defined(TIM_CHANNEL_6) // Some chip(F3/7 L4 H7) there are 6 channels.  huaweiwx 2018.5.28
+	if(channel == 5) return TIM_CHANNEL_5;
+	if(channel == 6) return TIM_CHANNEL_6;
+#endif
+	return -1;
+}
+
+void HardwareTimer::resumePwm(int channel) {
+	int timChannel = getChannel(channel);
+	if(timChannel == -1) return;
+
+	HAL_TIM_PWM_ConfigChannel(&handle, &channelOC[channel - 1], timChannel);
+	HAL_TIM_PWM_Start(&handle, timChannel);
+}
+
+void HardwareTimer::resumeChannel(int channel) {
+	int timChannel = getChannel(channel);
+	if(timChannel == -1) return;
 
     if (channelOC[channel - 1].OCMode != OCMODE_NOT_USED) {
         HAL_TIM_OC_ConfigChannel(&handle, &channelOC[channel - 1], timChannel);
-
         if (callbacks[channel] != NULL) {
             HAL_TIM_OC_Start_IT(&handle, timChannel);
         } else {
@@ -207,50 +398,24 @@ void HardwareTimer::setCount(uint32_t counter) {
 #define MAX_RELOAD ((1 << 16) - 1) // Not always! 32 bit timers!
 
 uint32_t HardwareTimer::getBaseFrequency() {
-    int freqMul = 2;
-    int freq2Mul = 2;
-    uint32_t pFreq = HAL_RCC_GetPCLK1Freq();
-
-#ifdef STM32F1
-    freq2Mul = 1;
+#if defined(STM32F0)
+    return HAL_RCC_GetPCLK1Freq();
+#elif defined(STM32L0)||defined(STM32L1)
+    return HAL_RCC_GetHCLKFreq();   /* hclk/timdiv(default 1) */
+#elif defined(STM32F3)
+    if((handle.Instance == TIM2)||(handle.Instance == TIM3)||(handle.Instance == TIM4))
+       return 2*HAL_RCC_GetPCLK1Freq();
+    else
+       return HAL_RCC_GetPCLK2Freq();
+#elif defined(STM32L4) // L/4
+  #if defined(STM32L4R5xx)  
+     return 2*HAL_RCC_GetPCLK1Freq();
+  #else 
+     return HAL_RCC_GetPCLK1Freq();  //L476
+  #endif
+#else  //F1/2/4/7
+    return 2*HAL_RCC_GetPCLK1Freq();
 #endif
-
-#ifdef STM32F0
-#define HAL_RCC_GetPCLK2Freq  HAL_RCC_GetPCLK1Freq
-#endif
-
-#ifdef TIM1
-    if (handle.Instance == TIM1) {
-        pFreq = HAL_RCC_GetPCLK2Freq();
-        freqMul = freq2Mul;
-    }
-#endif
-#ifdef TIM8
-    if (handle.Instance == TIM8) {
-        pFreq = HAL_RCC_GetPCLK2Freq();
-        freqMul = freq2Mul;
-    }
-#endif
-#ifdef TIM9
-    if (handle.Instance == TIM9) {
-        pFreq = HAL_RCC_GetPCLK2Freq();
-        freqMul = freq2Mul;
-    }
-#endif
-#ifdef TIM10
-    if (handle.Instance == TIM10) {
-        pFreq = HAL_RCC_GetPCLK2Freq();
-        freqMul = freq2Mul;
-    }
-#endif
-#ifdef TIM11
-    if (handle.Instance == TIM11) {
-        pFreq = HAL_RCC_GetPCLK2Freq();
-        freqMul = freq2Mul;
-    }
-#endif
-
-    return pFreq * freqMul;
 }
 
 uint32_t HardwareTimer::setPeriod(uint32_t microseconds) {
@@ -285,7 +450,7 @@ static bool isSameChannel(int channel, uint8_t signal) {
         case TIM_CH4:
         case TIM_CH4N:
             return channel == 4;
-    }
+	}
     return false;
 }
 
@@ -394,6 +559,11 @@ uint32_t HardwareTimer::getCompare(int channel) {
     if (channel == 2) return __HAL_TIM_GET_COMPARE(&handle, TIM_CHANNEL_2);
     if (channel == 3) return __HAL_TIM_GET_COMPARE(&handle, TIM_CHANNEL_3);
     if (channel == 4) return __HAL_TIM_GET_COMPARE(&handle, TIM_CHANNEL_4);
+#if defined(TIM_CHANNEL_6) // Some chip(F3/7 L4 H7) there are 6 channels.  huaweiwx 2018.5.28
+    if (channel == 5) return __HAL_TIM_GET_COMPARE(&handle, TIM_CHANNEL_5);
+    if (channel == 6) return __HAL_TIM_GET_COMPARE(&handle, TIM_CHANNEL_6);
+#endif
+
     return 0;
 }
 
@@ -442,25 +612,58 @@ static void handleInterrupt(HardwareTimer *timer) {
         __HAL_TIM_CLEAR_IT(&timer->handle, TIM_IT_CC4);
         if (timer->callbacks[4] != NULL) timer->callbacks[4]();
     }
+//channel 5/6 not it interrupt	
 }
 
 #ifdef TIM1
     HardwareTimer Timer1(TIM1, chip_tim1, sizeof(chip_tim1) / sizeof(chip_tim1[0]));
 #endif
-
 #ifdef TIM2
     HardwareTimer Timer2(TIM2, chip_tim2, sizeof(chip_tim2) / sizeof(chip_tim2[0]));
 #endif
-
 #ifdef TIM3
     HardwareTimer Timer3(TIM3, chip_tim3, sizeof(chip_tim3) / sizeof(chip_tim3[0]));
 #endif
-
 #ifdef TIM4
     HardwareTimer Timer4(TIM4, chip_tim4, sizeof(chip_tim4) / sizeof(chip_tim4[0]));
 #endif
-
-
+#ifdef TIM5
+    HardwareTimer Timer5(TIM5, chip_tim5, sizeof(chip_tim5) / sizeof(chip_tim5[0]));
+#endif
+#ifdef TIM8
+    HardwareTimer Timer8(TIM8, chip_tim8, sizeof(chip_tim8) / sizeof(chip_tim8[0]));
+#endif
+#ifdef TIM9
+    HardwareTimer Timer9(TIM9, chip_tim9, sizeof(chip_tim9) / sizeof(chip_tim9[0]));
+#endif
+#ifdef TIM10
+    HardwareTimer Timer10(TIM10, chip_tim10, sizeof(chip_tim10) / sizeof(chip_tim10[0]));
+#endif
+#ifdef TIM11
+    HardwareTimer Timer11(TIM11, chip_tim11, sizeof(chip_tim11) / sizeof(chip_tim11[0]));
+#elif defined(TIM21)	/*L0 only not TIM11*/
+    HardwareTimer Timer21(TIM21, chip_tim21, sizeof(chip_tim21) / sizeof(chip_tim21[0]));	
+#endif
+#ifdef TIM12
+    HardwareTimer Timer12(TIM12, chip_tim12, sizeof(chip_tim12) / sizeof(chip_tim12[0]));
+#elif defined(TIM22)	/*L0 only not TIM12*/
+    HardwareTimer Timer22(TIM22, chip_tim22, sizeof(chip_tim22) / sizeof(chip_tim22[0]));	
+#endif
+#ifdef TIM13
+    HardwareTimer Timer13(TIM13, chip_tim13, sizeof(chip_tim13) / sizeof(chip_tim13[0]));
+#endif
+#ifdef TIM14
+    HardwareTimer Timer14(TIM14, chip_tim14, sizeof(chip_tim14) / sizeof(chip_tim14[0]));
+#endif
+#ifdef TIM15
+    HardwareTimer Timer15(TIM15, chip_tim15, sizeof(chip_tim15) / sizeof(chip_tim15[0]));
+#endif
+#ifdef TIM16
+    HardwareTimer Timer16(TIM16, chip_tim16, sizeof(chip_tim16) / sizeof(chip_tim16[0]));
+#endif
+#ifdef TIM17
+    HardwareTimer Timer17(TIM17, chip_tim17, sizeof(chip_tim17) / sizeof(chip_tim17[0]));
+#endif
 //Timer interrupts:
 
 extern "C" void TIM1_CC_IRQHandler(void) {
@@ -471,17 +674,41 @@ extern "C" void TIM1_CC_IRQHandler(void) {
 	extern "C" void TIM1_UP_IRQHandler(void) {
 		if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
 	}
-#elif defined(STM32F3)||defined(STM32L4)|| STM32F100xB|| STM32F100xE /*F100 TIM1_UP_TIM16*/
+#elif defined(STM32F0)||defined(STM32F3)||defined(STM32L4)|| defined(STM32F100xB)|| defined(STM32F100xE) /*F100 TIM1_UP_TIM16*/
+    extern "C" void TIM1_BRK_TIM15_IRQHandler(void) {
+        if (interruptTimers[14] != NULL) handleInterrupt(interruptTimers[14]);
+    }
     extern "C" void TIM1_UP_TIM16_IRQHandler(void) {
         if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
         if (interruptTimers[15] != NULL) handleInterrupt(interruptTimers[15]);
     }
-#elif defined(STM32F1)||defined(STM32F2)||defined(STM32F4)||defined(STM32F7) /*F101/103/105/107  TIM1_UP_TIM10 or TIM1_UP*/
+    extern "C" void TIM1_TRG_COM_TIM17_IRQHandler(void) {
+        if (interruptTimers[16] != NULL) handleInterrupt(interruptTimers[16]);
+    }
+#elif defined(STM32F2)||defined(STM32F4)||defined(STM32F7)||defined(STM32H7)||defined(STM32L1)  /*F4  TIM1_UP_TIM10 or TIM1_UP*/
+    extern "C" void TIM1_BRK_TIM9_IRQHandler(void) {
+//        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[8] != NULL) handleInterrupt(interruptTimers[8]);
+    }
+    extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
+        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
+    }
+    extern "C" void TIM1_TRG_COM_TIM11_IRQHandler(void) {
+//        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[10] != NULL) handleInterrupt(interruptTimers[10]);
+    }
+#elif defined(STM32F1)/*F101/103/105/107  TIM1_UP_TIM10 or TIM1_UP*/
+    extern "C" void TIM1_BRK_TIM9_IRQHandler(void) {
+        if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
+        if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
+    }
     extern "C" void TIM1_UP_TIM10_IRQHandler(void) {
         if (interruptTimers[0] != NULL) handleInterrupt(interruptTimers[0]);
         if (interruptTimers[9] != NULL) handleInterrupt(interruptTimers[9]);
     }
 #endif
+
 
 // in stm32_PWM.c
 /*
@@ -499,3 +726,66 @@ extern "C" void TIM2_IRQHandler(void) {
 extern "C" void TIM4_IRQHandler(void) {
     if (interruptTimers[3] != NULL) handleInterrupt(interruptTimers[3]);
 }
+
+//TIM5/8 add by huaweiwx 
+#ifdef TIM5
+extern "C" void TIM5_IRQHandler(void) {
+    if (interruptTimers[4] != NULL) handleInterrupt(interruptTimers[4]);
+}
+#endif
+
+#ifdef TIM8
+extern "C" void TIM8_CC_IRQHandler(void) {
+    if (interruptTimers[7] != NULL) handleInterrupt(interruptTimers[7]);
+}
+
+#if defined(STM32F2)||defined(STM32F4)||defined(STM32F7)||defined(STM32H7)||defined(STM32L1)
+extern "C" void TIM8_BRK_TIM12_IRQHandler(void) {
+//    if (interruptTimers[7] != NULL) handleInterrupt(interruptTimers[7]);
+    if (interruptTimers[11] != NULL) handleInterrupt(interruptTimers[11]);
+}
+
+extern "C" void TIM8_UP_TIM13_IRQHandler(void) {
+    if (interruptTimers[7] != NULL) handleInterrupt(interruptTimers[7]);
+    if (interruptTimers[12] != NULL) handleInterrupt(interruptTimers[12]);
+}
+extern "C" void TIM8_TRG_COM_TIM14_IRQHandler(void) {
+//    if (interruptTimers[7] != NULL) handleInterrupt(interruptTimers[7]);
+    if (interruptTimers[13] != NULL) handleInterrupt(interruptTimers[13]);
+}
+#else
+extern "C" void TIM8_UP_IRQHandler(void) {
+    if (interruptTimers[7] != NULL) handleInterrupt(interruptTimers[7]);
+}
+#endif
+#endif //TIM8
+
+#if defined(STM32H7)
+#ifdef TIM15
+    extern "C" void TIM15_IRQHandler(void) {
+        if (interruptTimers[14] != NULL) handleInterrupt(interruptTimers[14]);
+    }
+#endif	
+#ifdef TIM16
+    extern "C" void TIM16_IRQHandler(void) {
+        if (interruptTimers[15] != NULL) handleInterrupt(interruptTimers[15]);
+    }
+#endif	
+#ifdef TIM17
+    extern "C" void TIM17_IRQHandler(void) {
+        if (interruptTimers[16] != NULL) handleInterrupt(interruptTimers[16]);
+    }
+#endif
+#endif
+
+//L0 only
+#ifdef TIM21
+extern "C" void TIM21_IRQHandler(void) {
+    if (interruptTimers[10] != NULL) handleInterrupt(interruptTimers[10]); 
+}
+#endif
+#ifdef TIM22
+extern "C" void TIM22_IRQHandler(void) {
+    if (interruptTimers[11] != NULL) handleInterrupt(interruptTimers[11]); 
+}
+#endif

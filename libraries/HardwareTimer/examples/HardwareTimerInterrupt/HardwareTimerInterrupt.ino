@@ -1,8 +1,11 @@
 /*
-* This example sets timer1 software interrupt
+* This example sets timerx software interrupt
+* add TIM5/8~17 for all chip if have by huaweiwx@sina.com  
 */
 
 #include "HardwareTimer.h"
+//#define Timerx Timer1
+#define Timerx Timer13
 
 void interrupt() {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
@@ -13,22 +16,26 @@ void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
 
-    Timer1.setPeriod(1000000); // in microseconds = 1 second
+    Timerx.setPeriod(1000000); // in microseconds = 1 second
 
-    Timer1.attachInterrupt(interrupt);
-    Timer1.resume();
+    Timerx.attachInterrupt(interrupt);
+    Timerx.resume();
 }
 
 void loop() {
     delay(5000);
 
     Serial.println("----");
+    
+    Serial.print("PCLK1Freq: ");
+    Serial.println(HAL_RCC_GetPCLK1Freq());
+    
     Serial.print("Timer base frequency:");
-    Serial.println(Timer1.getBaseFrequency());
+    Serial.println(Timerx.getBaseFrequency());
 
     Serial.print("Timer prescaler:");
-    Serial.println(Timer1.getPrescaleFactor());
+    Serial.println(Timerx.getPrescaleFactor());
 
     Serial.print("Timer period:");
-    Serial.println(Timer1.getOverflow());
+    Serial.println(Timerx.getOverflow());
 }

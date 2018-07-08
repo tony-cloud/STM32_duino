@@ -40,7 +40,7 @@
   *
   ******************************************************************************
   */
-#if defined(STM32F1)||defined(STM32L1)
+#if defined(STM32F1)||defined(STM32F2)||defined(STM32L1)
 /* Includes ------------------------------------------------------------------*/
 #include <Arduino.h>
 /** @addtogroup STM32F1xx_HAL_Examples
@@ -142,9 +142,33 @@ void HAL_ResumeTick(void)
   __HAL_TIM_ENABLE_IT(&htim7, TIM_IT_UPDATE);
 }
 
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+/* USER CODE BEGIN Callback 0 */
+
+/* USER CODE END Callback 0 */
+  if (htim->Instance == TIM7) {
+    HAL_IncTick();
+  }
+/* USER CODE BEGIN Callback 1 */
+
+/* USER CODE END Callback 1 */
+}
+
 /**
   * @}
   */ 
+void TIM7_IRQHandler(void)
+ {
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
+ }
 
 /**
   * @}
@@ -221,7 +245,32 @@ void HAL_ResumeTick(void)
 {
   /* Enable TIM1 Update interrupt */
   __HAL_TIM_ENABLE_IT(&htim1, TIM_IT_UPDATE);
-}	
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+/* USER CODE BEGIN Callback 0 */
+
+/* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+/* USER CODE BEGIN Callback 1 */
+
+/* USER CODE END Callback 1 */
+}
+
+void TIM1_UP_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  /* USER CODE BEGIN TIM1_UP_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_IRQn 1 */
+}
+
 #endif	
 #endif  
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -49,14 +49,14 @@
 // SRAM BANK1_3
 #ifdef HAVE_SRAM
 #define SRAM_START	LCD_BASE_BK13
-#define SRAM_LENTH	((uint32_t)(1*512*1024))
+#define SRAM_LENGTH	((uint32_t)(1*512*1024))
 #endif
 
 //nor
 #ifdef HAVE_NOR
 #define NOR_DEVICE_ADDR	LCD_BASE_BK12
+#define NOR_DEVICE_LENGTH    ((uint32_t)(2*1024*1024)) /* 39VF160 */
 #define NOR_WAIT_PIN    PD6
-
 #endif
 
 //nand

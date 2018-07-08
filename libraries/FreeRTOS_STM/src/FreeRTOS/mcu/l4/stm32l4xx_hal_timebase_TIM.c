@@ -46,9 +46,9 @@
   ******************************************************************************
   *  modify:  huaweiwx@sina.com 2017.5.4
   */
-#if (STM32L4)
-
 /* Includes ------------------------------------------------------------------*/
+#if defined(STM32L4)
+
 #include <Arduino.h>
 
 
@@ -140,6 +140,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
  if (htim->Instance == TIM7)
     HAL_IncTick();
+}
+
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 #endif

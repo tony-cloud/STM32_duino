@@ -1,8 +1,19 @@
+/*
+  2018.5.18  add TIM5/8~17 by huaweiwx
+  2018.5.28  for F3/F7/L4/H7 support channel5&6 by huaweiwx
+*/
+
 #ifndef HARDWARETIMER_H_
 #define HARDWARETIMER_H_
 
 #include <Arduino.h>
 #include "stm32_gpio_af.h"
+
+#if defined(TIM_CHANNEL_6) // Some chip(F3/7 L4 H7) there are 6 channels.  huaweiwx 2018.5.28
+#define  TIMER_CHANNELS 6
+#else
+#define  TIMER_CHANNELS 4
+#endif
 
 typedef enum {
     //libmaple:                             // HAL compatible
@@ -37,11 +48,11 @@ typedef enum {
 
 class HardwareTimer {
 public:
-    HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_type *pin_list, int pin_list_size);
+    HardwareTimer(TIM_TypeDef *instance, const stm32_tim_pin_list_type *pin_list, int pin_list_size = 0);
 
     void pause(void);
 
-    void resume(void);
+    void resume(int channel = 0, TIMER_MODES mode = TIMER_DISABLED);
 
     uint32_t getPrescaleFactor();
 
@@ -79,10 +90,10 @@ public:
 
     TIM_HandleTypeDef handle = {0};
 
-    TIM_OC_InitTypeDef channelOC[4];
+    TIM_OC_InitTypeDef channelOC[TIMER_CHANNELS];
 
-    TIM_IC_InitTypeDef channelIC[4];
-
+    TIM_IC_InitTypeDef channelIC[TIMER_CHANNELS];
+	
     //Callbacks: 0 for update, 1-4 for channels
     void (*callbacks[5])(void);
 
@@ -91,8 +102,9 @@ public:
     int tim_pin_list_size;
 
 private:
-    void resumeChannel(int channel, int timChannel);
-
+    int  getChannel(int channel);
+    void resumeChannel(int channel);
+    void resumePwm(int channel);
 };
 
 #pragma GCC diagnostic pop
@@ -113,4 +125,47 @@ private:
     extern HardwareTimer Timer4;
 #endif
 
+#ifdef TIM5
+    extern HardwareTimer Timer5;
 #endif
+
+#ifdef TIM8
+    extern HardwareTimer Timer8;
+#endif
+
+//F2/4/7 H7 L1
+#ifdef TIM9
+    extern HardwareTimer Timer9;
+#endif
+#ifdef TIM10
+    extern HardwareTimer Timer10;
+#endif
+#ifdef TIM11
+    extern HardwareTimer Timer11;
+#elif defined(TIM21)	/*L0 only*/
+    extern HardwareTimer Timer21;
+#endif
+#ifdef TIM12
+    extern HardwareTimer Timer12;
+#elif defined(TIM22)	/*L0 only*/
+    extern HardwareTimer Timer22;
+#endif
+#ifdef TIM13
+    extern HardwareTimer Timer13;
+#endif
+#ifdef TIM14
+    extern HardwareTimer Timer13;
+#endif
+
+// F0/3 L4 H7
+#ifdef TIM15
+    extern HardwareTimer Timer15;
+#endif
+#ifdef TIM16
+    extern HardwareTimer Timer16;
+#endif
+#ifdef TIM17
+    extern HardwareTimer Timer17;
+#endif
+
+#endif //HARDWARETIMER_H_

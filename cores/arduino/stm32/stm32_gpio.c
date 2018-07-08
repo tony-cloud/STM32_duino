@@ -112,7 +112,7 @@ void pinMode(uint8_t pin, uint8_t mode) {
     HAL_GPIO_Init(port_pin.port, &init);
 
 }
-
+#ifndef STM32H7
 void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode) {
 
     stm32GpioClockEnable(port);
@@ -163,3 +163,4 @@ void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode) {
     LL_GPIO_SetPinSpeed(port, ll_pin, LL_GPIO_SPEED_FREQ_HIGH);
 
 }
+#endif

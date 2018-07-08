@@ -1,5 +1,5 @@
 /*
-  stm32flash - Open Source ST STM32 flash program for *nix
+  stm32_devices cut from stm32flash - Open Source ST STM32 flash program for *nix
   Copyright (C) 2010 Geoffrey McRae <geoff@spacevs.com>
   Copyright (C) 2014-2015 Antonio Borneo <borneo.antonio@gmail.com>
 
@@ -16,6 +16,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+  for appAdminister huaweiwx@sina.com 2017 2018
 */
 
 #include <Arduino.h>
@@ -32,8 +34,7 @@
 #define SZ_128K	0x00020000
 #define SZ_256K	0x00040000
 
-//for appAdminister
-#if defined(STM32F1)  //F0/L0/F1/L1/F3
+#if defined(STM32F1)
 #  if (FLASH_BANK1_END >  0x0801FFFFU) /*512k flash 64k ram for xC/xE*/
 #    ifdef GD32F10X
         const  uint16_t appCodeSegAddr[] = {3,64,2*64,3*64};
@@ -51,13 +52,12 @@
         const uint16_t appCodeSegAddr[] =  {2,64,2*64};
 #elif defined(STM32F303RE)||defined(STM32F303VE)||defined(STM32F401RE)||\
       defined(STM32F411RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
-	  
         const uint16_t appCodeSegAddr[] =  {3,128,2*128,3*128};
-#elif defined(STM32F407ZG)||defined(STM32F407VG)
+#elif defined(STM32F407VG)||defined(STM32F407ZG)||(STM32F407IG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
 #elif defined(STM32F746IG)
         const uint16_t appCodeSegAddr[] =  {3,256,2*256,3*256};
-#elif defined(STM32F767ZI)
+#elif defined(STM32F767ZI)||defined(STM32H743ZI)
         const uint16_t appCodeSegAddr[] =  {7,256,2*256,3*256,4*256,5*256,6*256,7*256};
 #elif defined(STM32L476RG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
@@ -215,9 +215,9 @@ const stm32_dev_t stm32_devices[] = {
 static const chipInfo_t thisChip = {
   CHIP_INFO
 };
-chipInfo_t* pChipInfo = &thisChip;
+const chipInfo_t* pChipInfo = &thisChip;
 #else
-chipInfo_t* pChipInfo = NULL;	
+const chipInfo_t* pChipInfo = NULL;	
 #endif 
 
 

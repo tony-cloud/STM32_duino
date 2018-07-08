@@ -23,7 +23,7 @@
 #include "stm32_def.h"
 #include "stm32_dma.h"
 
-#if defined(STM32F2) || defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F2) || defined(STM32F4) || defined(STM32F7)||defined(STM32H7)
 #include "stm32_dma_F2F4F7.h"
 #elif defined(STM32F0) || defined(STM32F1) || defined(STM32F3) || defined(STM32L1)
 #include "stm32_dma_F0F1F3L1.h"
