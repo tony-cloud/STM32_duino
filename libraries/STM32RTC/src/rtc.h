@@ -41,6 +41,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_def.h"
+#include "getdatetime.h"
 
 #ifdef HAL_RTC_MODULE_ENABLED
 

@@ -42,7 +42,7 @@
   */
 #if defined(STM32F1)||defined(STM32F2)||defined(STM32L1)
 /* Includes ------------------------------------------------------------------*/
-#include <Arduino.h>
+#include "../../Source/include/FreeRTOS.h"
 /** @addtogroup STM32F1xx_HAL_Examples
   * @{
   */
@@ -68,7 +68,7 @@ uint32_t                 uwIncrementState = 0;
   * @param  TickPriority: Tick interrupt priorty.
   * @retval HAL status
   */
-#if defined(TIM7)
+#if defined(TIM7) && (portTickUSE_TIMx == 7)
 TIM_HandleTypeDef        htim7; 
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -173,104 +173,6 @@ void TIM7_IRQHandler(void)
 /**
   * @}
   */ 
-#else
-TIM_HandleTypeDef        htim1; 	
-HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
-{
-  RCC_ClkInitTypeDef    clkconfig;
-  uint32_t              uwTimclock = 0;
-  uint32_t              uwPrescalerValue = 0;
-  uint32_t              pFLatency;
-  
-  /*Configure the TIM1 IRQ priority */
-  HAL_NVIC_SetPriority(TIM1_UP_IRQn, TickPriority ,0); 
-  
-  /* Enable the TIM1 global Interrupt */
-  HAL_NVIC_EnableIRQ(TIM1_UP_IRQn); 
-  
-  /* Enable TIM1 clock */
-  __HAL_RCC_TIM1_CLK_ENABLE();
-  
-  /* Get clock configuration */
-  HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
-  
-  /* Compute TIM1 clock */
-  uwTimclock = HAL_RCC_GetPCLK2Freq();
-   
-  /* Compute the prescaler value to have TIM1 counter clock equal to 1MHz */
-  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
-  
-  /* Initialize TIM1 */
-  htim1.Instance = TIM1;
-  
-  /* Initialize TIMx peripheral as follow:
-  + Period = [(TIM1CLK/1000) - 1]. to have a (1/1000) s time base.
-  + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
-  + ClockDivision = 0
-  + Counter direction = Up
-  */
-  htim1.Init.Period = (1000000 / 1000) - 1;
-  htim1.Init.Prescaler = uwPrescalerValue;
-  htim1.Init.ClockDivision = 0;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  if(HAL_TIM_Base_Init(&htim1) == HAL_OK)
-  {
-    /* Start the TIM time Base generation in interrupt mode */
-    return HAL_TIM_Base_Start_IT(&htim1);
-  }
-  
-  /* Return function status */
-  return HAL_ERROR;
-}
-
-/**
-  * @brief  Suspend Tick increment.
-  * @note   Disable the tick increment by disabling TIM1 update interrupt.
-  * @param  None
-  * @retval None
-  */
-void HAL_SuspendTick(void)
-{
-  /* Disable TIM1 update Interrupt */
-  __HAL_TIM_DISABLE_IT(&htim1, TIM_IT_UPDATE);                                                  
-}
-
-/**
-  * @brief  Resume Tick increment.
-  * @note   Enable the tick increment by Enabling TIM1 update interrupt.
-  * @param  None
-  * @retval None
-  */
-void HAL_ResumeTick(void)
-{
-  /* Enable TIM1 Update interrupt */
-  __HAL_TIM_ENABLE_IT(&htim1, TIM_IT_UPDATE);
-}
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-/* USER CODE BEGIN Callback 0 */
-
-/* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
-    HAL_IncTick();
-  }
-/* USER CODE BEGIN Callback 1 */
-
-/* USER CODE END Callback 1 */
-}
-
-void TIM1_UP_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-
-  /* USER CODE END TIM1_UP_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_UP_IRQn 1 */
-
-  /* USER CODE END TIM1_UP_IRQn 1 */
-}
-
-#endif	
+#endif  /* portTickUSE_TIMx */
 #endif  
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -30,16 +30,16 @@ int ptr = 0;
 #include <STM32RTC.h>
 STM32RTC& rtc = STM32RTC::getInstance(); /* Get the rtc object */
 
-/* Change these values to set the current initial time */
-byte seconds = 0;
-byte minutes = 0;
-byte hours = 18;
+/* get compute datetime to set the current initial time */
+byte seconds = BUILD_SEC;
+byte minutes = BUILD_MIN;
+byte hours = BUILD_HOUR;
 
-/* Change these values to set the current initial date */
-/* Menday  19th June 2018 */
-byte day = 19;
-byte month = 5;
-byte year = 18;
+/* get compute datetime to set the current initial date */
+byte days = BUILD_DAY;
+byte months = BUILD_MONTH;
+byte years = (BUILD_YEAR) % 100;
+
 
 
 void setup()
@@ -72,7 +72,7 @@ void setup()
   }
   // you can use also
   //rtc.setTime(hours, minutes, seconds);
-  //rtc.setDate(day, month, year);
+  //rtc.setDate(days, months, years);
 }
 
 boolean stringComplete = false;  // whether the string is complete
@@ -142,9 +142,9 @@ void settime(void) {
 
 // Set the date
 void setdata(void) {
-  rtc.setDay(day);
-  rtc.setMonth(month);
-  rtc.setYear(year);
+  rtc.setDay(days);
+  rtc.setMonth(months);
+  rtc.setYear(years);
 }
 
 /*example: set 18 6 9 22 18 54*/
@@ -152,22 +152,22 @@ int Cmd_set(int argc, char *argv[])
 {
   switch (argc) {
     case 7:
-      year = atoi(argv[1]);
-      month = atoi(argv[2]);
-      day = atoi(argv[3]);
+      years = atoi(argv[1]);
+      months = atoi(argv[2]);
+      days = atoi(argv[3]);
       hours = atoi(argv[4]);
       minutes = atoi(argv[5]);
       seconds = atoi(argv[6]);
       break;
     case 6:
-      month = atoi(argv[1]);
-      day = atoi(argv[2]);
+      months = atoi(argv[1]);
+      days = atoi(argv[2]);
       hours = atoi(argv[3]);
       minutes = atoi(argv[4]);
       seconds = atoi(argv[5]);
       break;
     case 5:
-      day = atoi(argv[1]);
+      days = atoi(argv[1]);
       hours = atoi(argv[2]);
       minutes = atoi(argv[3]);
       seconds = atoi(argv[4]);
@@ -187,9 +187,9 @@ int Cmd_set(int argc, char *argv[])
     default:
       return 0;
   }
-  rtc.setYear(year);
-  rtc.setMonth(month);
-  rtc.setDay(day);
+  rtc.setYear(years);
+  rtc.setMonth(months);
+  rtc.setDay(days);
   rtc.setHours(hours);
   rtc.setMinutes(minutes);
   rtc.setSeconds(seconds);
@@ -215,23 +215,23 @@ int Cmd_ymd(int argc, char *argv[])
 {
   switch (argc) {
     case 4:
-      year = atoi(argv[1]);
-      month = atoi(argv[2]);
-      day = atoi(argv[3]);
+      years = atoi(argv[1]);
+      months = atoi(argv[2]);
+      days = atoi(argv[3]);
       break;
     case 3:
-      month = atoi(argv[1]);
-      day = atoi(argv[2]);
+      months = atoi(argv[1]);
+      days = atoi(argv[2]);
       break;
     case 2:
-      day = atoi(argv[1]);
+      days = atoi(argv[1]);
       break;
     default:
       return 0;
   }
-  rtc.setYear(year);
-  rtc.setMonth(month);
-  rtc.setDay(day);
+  rtc.setYear(years);
+  rtc.setMonth(months);
+  rtc.setDay(days);
   return 0;
 }
 

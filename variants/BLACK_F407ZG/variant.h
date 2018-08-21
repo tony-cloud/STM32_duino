@@ -7,6 +7,8 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 /*KEY*/
+/*WKUP*/
+#define SYS_WKUP1 	PA0 /*for lowPower*/
 
 /*SPI*/
 #define MOSI PA7

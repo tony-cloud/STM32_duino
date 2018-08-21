@@ -7,10 +7,10 @@
 #include <Keys.h>  
  
 #ifdef KEY_LIST
-	BOTTONClass myKeys(KEY_LIST);  //KEY_LIST defined in variant.h
+	BUTTONClass myKeys(KEY_LIST);  //KEY_LIST defined in variant.h
 #else
-//    BOTTONClass myKeys(mask,botton1,botton2,.....)
-    BOTTONClass myKeys(0x01,PA0,PE3,PE4);  //PA0 PE3 PE4 as key for stm32f407 V11 & YL136
+//    BUTTONClass myKeys(mask,button1,button2,.....)
+    BUTTONClass myKeys(0x01,PA0,PE3,PE4);  //PA0 PE3 PE4 as key for stm32f407 V11 & YL136
 #endif
 
 #define LED LED_BUILTIN

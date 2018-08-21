@@ -1,12 +1,12 @@
 #######################################
-# Syntax Coloring Map For BOTTONClass
+# Syntax Coloring Map For BUTTONClass
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-BOTTONClass	KEYWORD1
+BUTTONClass	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

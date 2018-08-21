@@ -44,9 +44,9 @@
 #if defined(STM32F4)
 
 /* Includes ------------------------------------------------------------------*/
-#include <Arduino.h>
+#include "../../Source/include/FreeRTOS.h"
 
-#ifdef TIM7
+#if defined(TIM7)&& (portTickUSE_TIMx == 7)
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
   */
@@ -159,14 +159,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM7)
  { 
   HAL_IncTick();
-  
  }
 /* USER CODE BEGIN Callback 1 */
 
 /* USER CODE END Callback 1 */
 }	
 
-#elif defined(TIM11) /*401C*/
+#elif defined(TIM11) && (portTickUSE_TIMx == 11)
+ /*401C*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -289,9 +289,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /* USER CODE END Callback 1 */
 }
-#else
-#error " NOT FOUND TIM7/11 ??"
-#endif //TIM7
+#endif //portTickUSE_TIMx
 
 /**
   * @}

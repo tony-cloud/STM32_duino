@@ -1,1 +1,1 @@
-defined USE_HEAP_x to use heap_x.c in file FreeRTOSConfig.h
+defined portUSE_HEAP x to use heap_x.c in file FreeRTOSConfig.h

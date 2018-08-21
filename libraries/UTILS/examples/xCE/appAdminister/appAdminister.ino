@@ -231,7 +231,7 @@ int Cmd_help(int argc, char *argv[])
 
   Serial << "\nPIN list:";
   for (uint8_t i = 0; i < sizeof(variant_pin_list) / sizeof(variant_pin_list[0]); i++)
-    Serial << stm32PinName(i) << ", ";
+    Serial << stm32PinName(i) <<"(" << i << "), ";
 
   uint8_t leds[] = {LEDS_LIST};
   Serial << "\nLED list:\n";
@@ -588,13 +588,13 @@ tCmdLineEntry g_sCmdTable[] =
   { "d",      Cmd_dispmen,   "    : disp memory([addr])"} ,
 
   //vdisk function
-  { "ls",    Cmd_dir,      "  : list apps in mcu"} ,
+  { "ls",    Cmd_dir,      "   : list apps in mcu"} ,
 
   //go flash addr
   { "go",     Cmd_go,      "   : goto n slot addr running(slot#)"},
 
   //arduino
-  { "pm",     Cmd_pinMode, "   : Set pinMode(pin,mode" } ,
+  { "pm",     Cmd_pinMode, "   : Set pinMode(pin,mode)" } ,
   { "dw",     Cmd_digitalWrite, "   : digitalWrite(pin,val)" } ,
   { "dt",     Cmd_digitalToggle, "   : digitalToggle(pin)"  },
   { "aw",     Cmd_analogWrite, "   : analogWrite(pin,val)"} ,

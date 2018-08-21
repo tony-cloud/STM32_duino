@@ -9,8 +9,24 @@
 #define  STM32_LED_BUILTIN_ACTIVE_HIGH
 
 #define  BOARD_NR_KEY        1
-#define  BOTTON              PC13 
-#define  BOTTON_MASK         0x01
+#define  BUTTON              PC13 
+#define  BUTTON_MASK         0x01
+/*wkup_pins def*/
+#ifdef PWR_WAKEUP_PIN1
+#define  SYS_WKUP1 PA0
+#endif
+#ifdef PWR_WAKEUP_PIN2
+#define  SYS_WKUP2 PC13
+#endif
+#ifdef PWR_WAKEUP_PIN3
+#define  SYS_WKUP3 PE6 /* manually updated */
+#endif
+#ifdef PWR_WAKEUP_PIN4
+#define  SYS_WKUP4 PA2
+#endif
+#ifdef PWR_WAKEUP_PIN5
+#define  SYS_WKUP5 PC5
+#endif
 
 #define MOSI PA7
 #define MISO PA6

@@ -10,9 +10,10 @@
 
 //On-board user button
 #define BOARD_NR_KEY	1
-#define BOTTON			PA0  // 2
-#define USER_BTN		BOTTON  // 2
-#define BOTTON_MASK		0x01
+#define BUTTON			PA0  // 2
+#define SYS_WKUP1	PA0 /*for lowPower*/
+#define USER_BTN		BUTTON  // 2
+#define BUTTON_MASK		0x01
 
 #define MOSI PA7
 #define MISO PA6

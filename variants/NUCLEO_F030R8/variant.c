@@ -1,4 +1,4 @@
-#include "stm32_def.h"
+#include "Arduino.h"
 
 #ifdef __GNUC__
   #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -18,7 +18,7 @@ void SystemClock_Config(void)
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
   if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
   {
-  _Error_Handler(__FILE__, __LINE__);
+  _Error_Handler(__FILENAME__, __LINE__);
   }
   LL_RCC_HSI_Enable();
    /* Wait till HSI is ready */
@@ -43,9 +43,6 @@ void SystemClock_Config(void)
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(F_CPU);
   /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
   LL_SYSTICK_EnableIT();  //for STM32F0 add systick enableIT huaweiwx@sina.com 2017.8.5
 }
@@ -57,7 +54,7 @@ void SystemClock_Config(void)
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
   if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
   {
-  _Error_Handler(__FILE__, __LINE__);
+  _Error_Handler(__FILENAME__, __LINE__);
   }
 #ifdef  USE_HSEBYPASS
   LL_RCC_HSE_EnableBypass();
@@ -85,9 +82,6 @@ void SystemClock_Config(void)
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(F_CPU);
   /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
   LL_SYSTICK_EnableIT();  //for STM32F0 add systick enableIT huaweiwx@sina.com 2017.8.5
 }

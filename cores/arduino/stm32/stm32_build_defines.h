@@ -3,33 +3,46 @@
 #ifndef STM32_BUILD_DEFINES_H
 #define STM32_BUILD_DEFINES_H
 
-
-#if __has_include("hal_conf.h")
-# include "hal_conf.h"
-#endif
-
-#if __has_include("configs/hal_conf.h")
-#undef __HALSPECELCONFIG_H__
-# include "configs/hal_conf.h"
+#if __has_include("HAL_Conf.h")
+# include "HAL_Conf.h"
+#elif __has_include("configs/HAL_Conf.h")
+# include "configs/HAL_Conf.h"
 #endif
 
 /***************  HAL_Conf default here ******************/
 //default defines,  overriden by HAL_Conf.h in sketch path
 //OS
 #ifndef FREERTOS /*running with freertos*/
-#define FREERTOS    0
+# define FREERTOS    0
 #endif
 
-#ifndef UCOSII	/*running with ucosii*/
-#define UCOSII      0
+#ifndef  UCOSII	/*running with ucosii*/
+# define UCOSII      0
 #endif
 
 #ifndef BOOTLOADER	/*chech & go if avalible */
-#define BOOTLOADER  0
+# define BOOTLOADER  0
 #endif
 
-//USB
+//core
+#ifndef USE_BITCONSTANTS
+# define USE_BITCONSTANTS 1
+#endif
 
+#ifndef USE_ERRORBLINK
+#  ifdef USE_FULL_ASSERT
+    #define USE_ERRORBLINK 1
+#  else
+    #define USE_ERRORBLINK 0
+#  endif
+#endif	
+
+#ifndef USE_EXTRAMSYSMALLOC
+# define USE_EXTRAMSYSMALLOC 1
+#endif
+
+//devices
+//USB
 #ifndef USE_USBSERIAL
 # ifdef MENU_USB_SERIAL
 #   define USE_USBSERIAL 1
@@ -82,6 +95,22 @@
 
 #ifndef USE_SERIAL6
 #define USE_SERIAL6 1
+#endif
+
+#ifndef USE_SERIAL7
+#define USE_SERIAL7 0
+#endif
+
+#ifndef USE_SERIAL8
+#define USE_SERIAL8 0
+#endif
+
+#ifndef USE_SERIAL9
+#define USE_SERIAL9 0
+#endif
+
+#ifndef USE_SERIAL10
+#define USE_SERIAL10 0
 #endif
 
 #ifndef USE_LPUART1
@@ -174,7 +203,7 @@
  #define RCC_PRIORITY     STM32_INT_PRIORITY
 #endif
 #ifndef EXTI_PRIORITY
- #define EXTI_PRIORITY    STM32_INT_PRIORITY
+ #define EXTI_PRIORITY    MAX_PRIORITY
 #endif
 #ifndef DMA1_PRIORITY    /*F0 9~11*/
  #define DMA1_PRIORITY     STM32_INT_PRIORITY
@@ -204,7 +233,7 @@
  #define SDIO_PRIORITY    STM32_INT_PRIORITY-1
 #endif
 #ifndef DMA2_PRIORITY
- #define DMA2_PRIORITY     STM32_INT_PRIORITY
+ #define DMA2_PRIORITY    STM32_INT_PRIORITY
 #endif
 
 #else  //F1/2/3/4/7 L1/4
@@ -240,7 +269,7 @@
 #define RCC_PRIORITY     STM32_INT_PRIORITY
 #endif
 #ifndef EXTI_PRIORITY	/*f1 6~10,23,40*/
-#define EXTI_PRIORITY    MAX_PRIORITY+1  //f1 6~9 botton  use 0x0f
+#define EXTI_PRIORITY    MAX_PRIORITY  //f1 6~9 button  use 0x0f
 #endif
 #ifndef DMA1_PRIORITY   /*f1 11~17*/
 #define DMA1_PRIORITY    STM32_INT_PRIORITY

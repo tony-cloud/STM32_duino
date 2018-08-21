@@ -8,7 +8,8 @@
 
 #define BOARD_NR_KEY        1         
 #define BOARD_BUTTON_PIN    PA0
-#define BOTTON_MASK         0x01
+#define SYS_WKUP1	PA0 /*for lowPower*/
+#define BUTTON_MASK         0x01
 
 #define MOSI PA7
 #define MISO PA6

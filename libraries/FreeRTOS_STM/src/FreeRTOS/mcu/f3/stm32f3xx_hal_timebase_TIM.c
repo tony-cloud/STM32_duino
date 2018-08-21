@@ -44,7 +44,9 @@
 #if defined(STM32F3)
 
 /* Includes ------------------------------------------------------------------*/
-#include <Arduino.h>
+#include "../../Source/include/FreeRTOS.h"
+
+#if defined(TIM7)&& (portTickUSE_TIMx == 7)
 
 TIM_HandleTypeDef        htim7; 
 uint32_t                 uwIncrementState = 0;
@@ -157,5 +159,5 @@ void TIM7_IRQHandler(void)
 
   /* USER CODE END TIM7_IRQn 1 */
 }
-
+#endif /*portTickUSE_TIMx */
 #endif //defined(STM32F3)

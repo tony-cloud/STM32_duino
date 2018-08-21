@@ -10,10 +10,11 @@
 
 //key
 #define BOARD_NR_KEY              3
-#define  BOTTON              PA0
-#define  BOTTON1             PA13    //!!需改成目标板子上的具体KEY 位置!!
-#define  BOTTON2             PA15    //!!需改成目标板子上的具体KEY 位置!!   
-#define  BOTTON_MASK         0x01
+#define  BUTTON              PA0
+#define  SYS_WKUP1 			 PA0 /*for lowPower*/
+#define  BUTTON1             PA13    //!!需改成目标板子上的具体KEY 位置!!
+#define  BUTTON2             PA15    //!!需改成目标板子上的具体KEY 位置!!   
+#define  BUTTON_MASK         0x01
 
 //spi
 #define MOSI PA7

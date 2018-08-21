@@ -5,6 +5,10 @@
 #define LED_BUILTIN_MASK 1
 #define STM32_LED_BUILTIN_ACTIVE_HIGH
 
+#define BUTTON			PA0  // 2
+#define BUTTON_MASK		0x01
+#define SYS_WKUP1 	 PA0 /*for lowPower*/
+
 #define MOSI PB5
 #define MISO PB4
 #define SCK PB3

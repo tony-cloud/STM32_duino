@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map BSP
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+#extram
+STM32EXTRAM	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+#BSP sram
+getRamBaseAddress	KEYWORD2  
+getRamByteLength	KEYWORD2
+setHeapAtExtRam	KEYWORD2
+perused	KEYWORD2
+deInit	KEYWORD2
+setBank	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+#SRAM
+SRAM_START	LITERAL1
+SDRAM_START	LITERAL1
+SRAM_LENGTH	LITERAL1
+SDRAM_LENGTH	LITERAL1

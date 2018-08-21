@@ -362,7 +362,7 @@ void RTC_init(hourFormat_t format, sourceClock_t source, uint8_t reset)
   RTC_getPrediv((int8_t*)&(RtcHandle.Init.AsynchPrediv), (int16_t*)&(RtcHandle.Init.SynchPrediv));
 #if defined(STM32L0) || defined(STM32L4) || defined(STM32H7)
   RtcHandle.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
-#endif /* STM32L0 || STM32L4 */
+#endif /* STM32L0 || STM32L4 ||STM32H7 */
   RtcHandle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
   RtcHandle.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
 #endif /* STM32F1 */
@@ -381,7 +381,7 @@ void RTC_init(hourFormat_t format, sourceClock_t source, uint8_t reset)
   HAL_RTCEx_EnableBypassShadow(&RtcHandle);
 #endif /* !STM32F1 && !STM32F2 */
 
-  HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 2, 0);
+  HAL_NVIC_SetPriority(RTC_Alarm_IRQn, RTC_PRIORITY, 0);
   HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
@@ -723,6 +723,11 @@ void RTC_Alarm_IRQHandler(void)
   HAL_RTC_AlarmIRQHandler(&RtcHandle);
 }
 
+void RTC_WKUP_IRQHandler(void)
+{
+  HAL_RTCEx_WakeUpTimerIRQHandler(&RtcHandle);
+}
+
 
 /*for fatfs huaweiwx@sina.com 2018.6.20
 * get_fattiime with __weak  in diskio.c
@@ -732,7 +737,8 @@ typedef unsigned long	DWORD;
 DWORD get_fattime (void)
 {
  DWORD RetVal;
- uint8_t year, month, day,wday,hours, minutes, seconds, subSeconds;
+ uint8_t  year, month, day,wday,hours, minutes, seconds;
+ uint32_t subSeconds;
  hourAM_PM_t period;
  
  RTC_GetDate(&year, &month, &day, &wday);

@@ -55,7 +55,7 @@
 #define SPI_MODE2 0x02
 #define SPI_MODE3 0x03
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F4) || defined(STM32F7)||defined(STM32H7)
 	#define _SPISetDMAFIFO(hdma_handler)	do { hdma_handler.Init.FIFOMode = DMA_FIFOMODE_DISABLE; \
 								hdma_handler.Init.FIFOMode = DMA_FIFOMODE_ENABLE; \
 								hdma_handler.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL; \
@@ -229,12 +229,12 @@ class SPIClass {
 
 
 inline uint8_t SPIClass::transfer(uint8_t data) {
-    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_TXE) == RESET);
+    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_TXE) == RESET){};
 
 	*(volatile uint8_t*)&spiHandle.Instance->DR = data;
 
-	while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_RXNE) == RESET);
-	while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_BSY) == SET);
+	while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_RXNE) == RESET){};
+	while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_BSY) == SET){};
 
 	return *(volatile uint8_t*)&spiHandle.Instance->DR;
 }
@@ -247,12 +247,12 @@ inline uint8_t SPIClass::transfer(uint8_t data) {
 inline uint16_t SPIClass::transfer16(uint16_t data) {
     LL_SPI_SetDataWidth(spiHandle.Instance, LL_SPI_DATAWIDTH_16BIT);
 
-    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_TXE) == RESET);
+    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_TXE) == RESET){};
 
     *(volatile uint16_t*)&spiHandle.Instance->DR = data;
 
-    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_RXNE) == RESET);
-    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_BSY) == SET);
+    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_RXNE) == RESET){};
+    while(__HAL_SPI_GET_FLAG(&spiHandle, SPI_FLAG_BSY) == SET){};
 
     uint16_t ret = *(volatile uint16_t*)&spiHandle.Instance->DR;
 

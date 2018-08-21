@@ -20,6 +20,7 @@ extern "C" void SystemClock_Config(void) {
     RCC_OscInitStruct.PLL.PLLN = 432;
     RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
     RCC_OscInitStruct.PLL.PLLQ = 9;
+    RCC_OscInitStruct.PLL.PLLR = 2;
     HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
     HAL_PWREx_EnableOverDrive();
@@ -41,9 +42,6 @@ extern "C" void SystemClock_Config(void) {
     HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 
@@ -59,7 +57,7 @@ extern "C" void initVariant(){
 #ifndef DATA_IN_ExtSRAM
 	BSP_SDRAM_Init();
 #endif
-//    setHeap((unsigned char*)0xC0000000, (unsigned char*)(0xC0000000 + 8 * 1024 * 1024));
     //UART1 is connected to ST-Link V2.1 as Virtual Com port on non-default PA9/PB7 pins
     SerialUART1.setPins(TXPIN,RXPIN);
 }
+#endif

@@ -19,7 +19,7 @@
 #include <Streaming.h> /*for Serial << */
 
 void setup() {
-  SPIFLASH.begin(); //need while usb unconnected
+  SpiFlash.begin(); //need while usb unconnected
   Serial.begin(115200);
   Led.Init();
   while (!Serial.available()) {

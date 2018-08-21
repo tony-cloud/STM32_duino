@@ -6,6 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 SPIClass	KEYWORD1
+SoftSPI	KEYWORD1
 SPI	KEYWORD1
 
 #######################################
@@ -25,6 +26,7 @@ setDataMode	KEYWORD2
 setClockDivider	KEYWORD2
 flush	KEYWORD2
 done	KEYWORD2
+
 #######################################
 # Constants (LITERAL1)
 #######################################

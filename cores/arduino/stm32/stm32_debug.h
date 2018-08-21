@@ -43,6 +43,8 @@
 extern "C" {
 #endif
 
+void errorLedBlink(int n);
+
 //Returns the name of the pin: "PA4" or "1 (PB3)"
 char *stm32PinName(uint8_t pin);
 
@@ -56,14 +58,16 @@ void print_log(const char *level, const char *format, const char *file, const in
 void debug(const char *format, ...);
 void debug_if(int condition, const char *format, ...);
 
+void _Error_Handler(char* file, uint32_t line);
+
 #ifdef __cplusplus
 }
 #endif
 
 #if __unix__
-#define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
+#define __FILENAME__ (char *)(__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
 #else
-#define __FILENAME__ (__builtin_strrchr(__FILE__, '\\') ? __builtin_strrchr(__FILE__, '\\') + 1 : __FILE__)	
+#define __FILENAME__ (char *)(__builtin_strrchr(__FILE__, '\\') ? __builtin_strrchr(__FILE__, '\\') + 1 : __FILE__)	
 #endif
 
 #define PRINT_LOG(level, format, ...) print_log(level, format, __FILENAME__, __LINE__, ##__VA_ARGS__)

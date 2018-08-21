@@ -8,9 +8,11 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 #define BOARD_NR_KEY        1
-#define BOTTON              PA0
-#define BOTTON_MASK         0x01
-  
+#define BUTTON              PA0
+#define SYS_WKUP1 			PA0 /*for lowPower*/
+#define BUTTON_MASK         0x01
+
+
 
 #define MOSI PA7
 #define MISO PA6

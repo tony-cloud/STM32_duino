@@ -26,7 +26,7 @@ IO_StatusTypeDef	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-#BSP led & botton
+#BSP led & button
 BSP_GetVersion	KEYWORD2  
 BSP_LED_Init	KEYWORD2
 BSP_LED_On	KEYWORD2
@@ -193,7 +193,7 @@ TS_OK	LITERAL1
 TS_ERROR	LITERAL1
 TS_TIMEOUT	LITERAL1
 
-#LED  &BOTTON
+#LED  &BUTTON
 LED1	LITERAL1
 LED2	LITERAL1
 BUTTON_KEY	LITERAL1

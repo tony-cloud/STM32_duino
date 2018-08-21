@@ -9,23 +9,25 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 #define BOARD_NR_KEY 8
-#define BOTTON	 PA0
-#define BOTTON_LEFT	 BOTTON
-#define BOTTON1	 PA1
-#define BOTTON_UP	 BOTTON1
-#define BOTTON2 PC2
-#define BOTTON_RIGHT BOTTON2
-#define BOTTON3	 PC3
-#define BOTTON_DOWN	 BOTTON3
-#define BOTTON4	 PC4
-#define BOTTON_SEL	 BOTTON4
-#define BOTTON5	 PC1
-#define BOTTON_KEY1	 BOTTON5
-#define BOTTON6	 PE2
-#define BOTTON_KEY2	 BOTTON6
-#define BOTTON7	 PE3
-#define BOTTON_KEY3	 BOTTON7
-#define BOTTON_MASK  0x01
+#define BUTTON	 PA0
+#define SYS_WKUP1 			PA0 /*for lowPower*/
+
+#define BUTTON_LEFT	 BUTTON
+#define BUTTON1	 PA1
+#define BUTTON_UP	 BUTTON1
+#define BUTTON2 PC2
+#define BUTTON_RIGHT BUTTON2
+#define BUTTON3	 PC3
+#define BUTTON_DOWN	 BUTTON3
+#define BUTTON4	 PC4
+#define BUTTON_SEL	 BUTTON4
+#define BUTTON5	 PC1
+#define BUTTON_KEY1	 BUTTON5
+#define BUTTON6	 PE2
+#define BUTTON_KEY2	 BUTTON6
+#define BUTTON7	 PE3
+#define BUTTON_KEY3	 BUTTON7
+#define BUTTON_MASK  0x01
 
 /******************** SPI ************************/
 #define MOSI PA7

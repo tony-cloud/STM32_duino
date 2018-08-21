@@ -1,127 +1,84 @@
 #include "stm32_def.h"
+#include "stm32f1xx_ll_rcc.h"
+#include "stm32f1xx_ll_system.h"
+#include "stm32f1xx_ll_cortex.h"
+#include "stm32f1xx_ll_utils.h"
 
-//HSI
-#ifdef USE_HSI
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL12
-       #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
-#else
-#  if OSC == 12
-     #if F_CPU == 120000000
-       #define BOARD_RCC_PLLMUL RCC_PLL_MUL10
-	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2_5
-	 #elif F_CPU == 96000000
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL8
-	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2
-	 #elif F_CPU == 72000000
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL6
-	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
-	 #else
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL4
-	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL
-     #endif
-#  else
-     #if F_CPU == 120000000
-       #define BOARD_RCC_PLLMUL RCC_PLL_MUL15
-       #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2_5	   
-	 #elif F_CPU == 96000000
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL12
-       #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV2
-	 #elif F_CPU == 72000000
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL9
-       #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL_DIV1_5
-	 #else
-	   #define BOARD_RCC_PLLMUL RCC_PLL_MUL6
-	   #define BOARD_USB_PLLDIV RCC_USBCLKSOURCE_PLL
-     #endif
-#  endif
-#endif
-
-
-void _Error_Handler(char* file, uint32_t line);
 void SystemClock_Config(void) __weak;
-
 #if defined(USE_HSI)
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInit;
-
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = 16;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
-  RCC_OscInitStruct.PLL.PLLMUL = BOARD_RCC_PLLMUL;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-  PeriphClkInit.UsbClockSelection = BOARD_USB_PLLDIV;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-    /* SysTick_IRQn interrupt configuration */
-
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
-  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
-}
-#else
 void SystemClock_Config(void) {
-    RCC_OscInitTypeDef RCC_OscInitStruct;
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
-    RCC_PeriphCLKInitTypeDef PeriphClkInit;
+#if F_CPU == 8000000L
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
+#else
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
+#endif	
 
-//for RTC selected LSI(0)/LSE(1)/BYPASS(2)
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.HSICalibrationValue = 16;
-    RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLMUL = BOARD_RCC_PLLMUL;
-    HAL_RCC_OscConfig(&RCC_OscInitStruct);
+    LL_RCC_HSI_SetCalibTrimming(16);
+    LL_RCC_HSI_Enable();
+	
+	while(LL_RCC_HSI_IsReady() != 1)
+	{   
+	}
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                                |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-    HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
+#if F_CPU == 8000000L
+    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
+    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_2);
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
+    while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI);
+ #else
+    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI_DIV_2, LL_RCC_PLL_MUL_12);
+    LL_RCC_PLL_Enable();
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
+    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
+    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+    LL_RCC_SetUSBClockSource(LL_RCC_USB_CLKSOURCE_PLL);
+    while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
+#endif
 
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB; 
-    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5; 
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
+ 
+	LL_Init1msTick(F_CPU);
+	
+    LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
-    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-
-    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+    LL_SetSystemCoreClock(F_CPU);
 
     /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
-  HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
+    HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
+    LL_SYSTICK_EnableIT();  //for LL enableIT huaweiwx@sina.com 2018.3.1
 }
-#endif  //HSI
+
+#else   //HSE
+//HSE
+void SystemClock_Config(void) {
+
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
+	
+    LL_RCC_HSE_Enable();
+
+    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE_DIV_1, LL_RCC_PLL_MUL_9);
+
+    LL_RCC_PLL_Enable();
+
+    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
+    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
+
+
+    LL_RCC_SetUSBClockSource(LL_RCC_USB_CLKSOURCE_PLL_DIV_1_5);
+
+    while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL){};
+
+	LL_Init1msTick(F_CPU);
+    LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
+    LL_SetSystemCoreClock(F_CPU);
+
+    /* SysTick_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
+    LL_SYSTICK_EnableIT();   //for LL enableIT huaweiwx@sina.com 2018.3.1
+}
+
+#endif

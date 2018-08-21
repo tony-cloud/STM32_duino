@@ -48,11 +48,8 @@
 #  define MAX_PROG_RAM (64*1024)
 
 #elif defined(STM32F407VE)||defined(STM32F407VG)||defined(STM32F407ZE)||\
-      defined(STM32F407ZG)||defined(STM32F407IG)||defined(STM32F411RE)
+      defined(STM32F407ZG)||defined(STM32F407IG)||defined(STM32F411RE)||defined(STM32F429ZI)||defined(STM32F429IG)
 #  define MAX_PROG_RAM (96*1024)
-
-#elif defined(STM32F429ZI)
-#  define MAX_PROG_RAM (128*1024)
 
 #elif defined(STM32F746IG)
 #  define MAX_PROG_RAM (196*1024)

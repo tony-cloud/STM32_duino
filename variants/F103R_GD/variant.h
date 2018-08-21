@@ -12,6 +12,10 @@
 #define LED_BUILTIN_MASK	0x00
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
+/*KEYS*/
+/*WKUP*/
+#define SYS_WKUP1 	PA0 /*for lowPower*/
+
 /*SPI*/
 #ifndef MOSI
  #define MOSI	PA7

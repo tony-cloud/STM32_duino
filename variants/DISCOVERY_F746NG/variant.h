@@ -5,6 +5,13 @@
 #define LED_BUILTIN_MASK		0x01
 #define STM32_LED_BUILTIN_ACTIVE_HIGH
 
+//*************** on board buttons*************************
+#define BOARD_NR_KEY   2
+#define BUTTON	PA0    	/* wakeup, active high*/
+#define SYS_WKUP1	PA0 /*for lowPower*/
+#define BUTTON1	I11     /* active low*/
+#define BUTTON_MASK   0x01
+
 // SPI on SPI2
 #define MOSI PB15
 #define MISO PB14

@@ -100,9 +100,9 @@ EndDependencies */
 #define SDRAM_MEMORY_WIDTH               FMC_SDRAM_MEM_BUS_WIDTH_16
 
 #define SDCLOCK_PERIOD                   FMC_SDRAM_CLOCK_PERIOD_2
-/* #define SDCLOCK_PERIOD                FMC_SDRAM_CLOCK_PERIOD_3 */   
+ //#define SDCLOCK_PERIOD                FMC_SDRAM_CLOCK_PERIOD_3
 
-#define REFRESH_COUNT                    ((uint32_t)0x0603)   /* SDRAM refresh counter (100Mhz SD clock) */
+#define REFRESH_COUNT                    ((uint32_t)0x0603)   /* SDRAM refresh counter (108Mhz SD clock) */
    
 #define SDRAM_TIMEOUT                    ((uint32_t)0xFFFF)
 
@@ -160,25 +160,25 @@ uint8_t BSP_SDRAM_Init(void)
   /* SDRAM device configuration */
   sdramHandle.Instance = FMC_SDRAM_DEVICE;
     
-  /* Timing configuration for 100Mhz as SD clock frequency (System clock is up to 200Mhz) */
+  /* Timing configuration for 108Mhz as SD clock frequency (System clock is up to 216Mhz) */
   Timing.LoadToActiveDelay    = 2;
   Timing.ExitSelfRefreshDelay = 7;
-  Timing.SelfRefreshTime      = 4;
+  Timing.SelfRefreshTime      = 5;
   Timing.RowCycleDelay        = 7;
   Timing.WriteRecoveryTime    = 2;
-  Timing.RPDelay              = 2;
+  Timing.RPDelay              = 3;
   Timing.RCDDelay             = 2;
   
-  sdramHandle.Init.SDBank             = FMC_SDRAM_BANK1;
+  sdramHandle.Init.SDBank             = FMC_SDRAM_BANK2;
   sdramHandle.Init.ColumnBitsNumber   = FMC_SDRAM_COLUMN_BITS_NUM_8;
   sdramHandle.Init.RowBitsNumber      = FMC_SDRAM_ROW_BITS_NUM_12;
-  sdramHandle.Init.MemoryDataWidth    = SDRAM_MEMORY_WIDTH;
+  sdramHandle.Init.MemoryDataWidth    = FMC_SDRAM_MEM_BUS_WIDTH_16;
   sdramHandle.Init.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_4;
-  sdramHandle.Init.CASLatency         = FMC_SDRAM_CAS_LATENCY_2;
+  sdramHandle.Init.CASLatency         = FMC_SDRAM_CAS_LATENCY_3;
   sdramHandle.Init.WriteProtection    = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
   sdramHandle.Init.SDClockPeriod      = SDCLOCK_PERIOD;
   sdramHandle.Init.ReadBurst          = FMC_SDRAM_RBURST_ENABLE;
-  sdramHandle.Init.ReadPipeDelay      = FMC_SDRAM_RPIPE_DELAY_0;
+  sdramHandle.Init.ReadPipeDelay      = FMC_SDRAM_RPIPE_DELAY_1;
   
   /* SDRAM controller initialization */
 
@@ -235,7 +235,7 @@ void BSP_SDRAM_Initialization_sequence(uint32_t RefreshCount)
   
   /* Step 1: Configure a clock configuration enable command */
   Command.CommandMode            = FMC_SDRAM_CMD_CLK_ENABLE;
-  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK1;
+  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK2;
   Command.AutoRefreshNumber      = 1;
   Command.ModeRegisterDefinition = 0;
 
@@ -248,7 +248,7 @@ void BSP_SDRAM_Initialization_sequence(uint32_t RefreshCount)
     
   /* Step 3: Configure a PALL (precharge all) command */ 
   Command.CommandMode            = FMC_SDRAM_CMD_PALL;
-  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK1;
+  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK2;
   Command.AutoRefreshNumber      = 1;
   Command.ModeRegisterDefinition = 0;
 
@@ -257,8 +257,8 @@ void BSP_SDRAM_Initialization_sequence(uint32_t RefreshCount)
   
   /* Step 4: Configure an Auto Refresh command */ 
   Command.CommandMode            = FMC_SDRAM_CMD_AUTOREFRESH_MODE;
-  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK1;
-  Command.AutoRefreshNumber      = 8;
+  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK2;
+  Command.AutoRefreshNumber      = 4;
   Command.ModeRegisterDefinition = 0;
 
   /* Send the command */
@@ -267,12 +267,12 @@ void BSP_SDRAM_Initialization_sequence(uint32_t RefreshCount)
   /* Step 5: Program the external memory mode register */
   tmpmrd = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1          |\
                      SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |\
-                     SDRAM_MODEREG_CAS_LATENCY_2           |\
+                     SDRAM_MODEREG_CAS_LATENCY_3           |\
                      SDRAM_MODEREG_OPERATING_MODE_STANDARD |\
                      SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
   
   Command.CommandMode            = FMC_SDRAM_CMD_LOAD_MODE;
-  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK1;
+  Command.CommandTarget          = FMC_SDRAM_CMD_TARGET_BANK2;
   Command.AutoRefreshNumber      = 1;
   Command.ModeRegisterDefinition = tmpmrd;
 
@@ -386,6 +386,7 @@ uint8_t BSP_SDRAM_Sendcmd(FMC_SDRAM_CommandTypeDef *SdramCmd)
 __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 {  
   static DMA_HandleTypeDef dma_handle;
+  UNUSED(Params);
   GPIO_InitTypeDef gpio_init_structure;
   
   /* Enable FMC clock */
@@ -395,7 +396,6 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   __DMAx_CLK_ENABLE();
 
   /* Enable GPIOs clock */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
@@ -408,10 +408,6 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   gpio_init_structure.Speed     = GPIO_SPEED_FAST;
   gpio_init_structure.Alternate = GPIO_AF12_FMC;
   
-  /* GPIOC configuration */
-  gpio_init_structure.Pin   = GPIO_PIN_3;
-  HAL_GPIO_Init(GPIOC, &gpio_init_structure);
-
   /* GPIOD configuration */
   gpio_init_structure.Pin   = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_8 | GPIO_PIN_9 |
                               GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15;
@@ -435,7 +431,7 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   HAL_GPIO_Init(GPIOG, &gpio_init_structure);
 
   /* GPIOH configuration */  
-  gpio_init_structure.Pin   = GPIO_PIN_3 | GPIO_PIN_5;
+  gpio_init_structure.Pin   = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
   HAL_GPIO_Init(GPIOH, &gpio_init_structure); 
   
   /* Configure common DMA parameters */
@@ -464,7 +460,7 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   HAL_DMA_Init(&dma_handle); 
   
   /* NVIC configuration for DMA transfer complete interrupt */
-  HAL_NVIC_SetPriority(SDRAM_DMAx_IRQn, 0x0F, 0);
+  HAL_NVIC_SetPriority(SDRAM_DMAx_IRQn, DMA2_PRIORITY, 0);
   HAL_NVIC_EnableIRQ(SDRAM_DMAx_IRQn);
 }
 
@@ -477,7 +473,8 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 __weak void BSP_SDRAM_MspDeInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 {  
     static DMA_HandleTypeDef dma_handle;
-  
+    UNUSED(hsdram);
+    UNUSED(Params);
     /* Disable NVIC configuration for DMA interrupt */
     HAL_NVIC_DisableIRQ(SDRAM_DMAx_IRQn);
 
@@ -494,16 +491,18 @@ __weak void BSP_SDRAM_MspDeInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 //}
 
   
-#ifndef DATA_IN_ExtSRAM
+#ifndef DATA_IN_ExtSDRAM
 void initVariant() {
 	BSP_SDRAM_Init();
 //  setHeapAtSram();
 }
 #endif
 
+#if USE_EXTRAMSYSMALLOC
 extern void setHeap(unsigned char* s, unsigned char* e);
 void setHeapAtSram(void){
  setHeap((unsigned char*)SDRAM_START, (unsigned char*)(SDRAM_END));
 }
-  
+#endif
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

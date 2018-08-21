@@ -42,16 +42,16 @@
 /* Get the rtc object */
 STM32RTC& rtc = STM32RTC::getInstance();
 
-/* Change these values to set the current initial time */
-const byte seconds = 0;
-const byte minutes = 0;
-const byte hours = 16;
+/* get compute datetime to set the current initial time */
+const byte seconds = BUILD_SEC;
+const byte minutes = BUILD_MIN;
+const byte hours = BUILD_HOUR;
 
-/* Change these values to set the current initial date */
-/* 15th June 2015 */
-const byte day = 15;
-const byte month = 6;
-const byte year = 15;
+/* get compute datetime to set the current initial date */
+const byte days = BUILD_DAY;
+const byte months = BUILD_MONTH;
+const byte years = (BUILD_YEAR) % 100;
+
 
 void setup()
 {
@@ -71,48 +71,49 @@ void setup()
     rtc.setSeconds(seconds);
 
     // Set the date
-    rtc.setDay(day);
-    rtc.setMonth(month);
-    rtc.setYear(year);
+    rtc.setDay(days);
+    rtc.setMonth(months);
+    rtc.setYear(years);
     rtc.setRegister(RTC_BKP_DR1, 0x32F2);
-#else
+  } else {
 #ifdef STM32F1
     // Set the date
-    rtc.setDay(day);
-    rtc.setMonth(month);
-    rtc.setYear(year);
-#endif
+    rtc.setDay(days);
+    rtc.setMonth(months);
+    rtc.setYear(years);
 #endif
     // you can use also
     //rtc.setTime(hours, minutes, seconds);
-    //rtc.setDate(day, month, year);
+    //rtc.setDate(day, month, years);
   }
+}
 
-  void loop()
-  {
-    // Print date...
-    print2digits(rtc.getDay());
-    Serial.print("/");
-    print2digits(rtc.getMonth());
-    Serial.print("/");
-    print2digits(rtc.getYear());
-    Serial.print(" ");
+void loop()
+{
+  // Print date...
+  print2digits(rtc.getDay());
+  Serial.print("/");
+  print2digits(rtc.getMonth());
+  Serial.print("/");
+  print2digits(rtc.getYear());
+  Serial.print(" ");
 
-    // ...and time
-    print2digits(rtc.getHours());
-    Serial.print(":");
-    print2digits(rtc.getMinutes());
-    Serial.print(":");
-    print2digits(rtc.getSeconds());
+  // ...and time
+  print2digits(rtc.getHours());
+  Serial.print(":");
+  print2digits(rtc.getMinutes());
+  Serial.print(":");
+  print2digits(rtc.getSeconds());
 
-    Serial.println();
+  Serial.println();
 
-    delay(1000);
+  delay(1000);
+}
+
+void print2digits(int number) {
+  if (number < 10) {
+    Serial.print("0");
   }
+  Serial.print(number);
+}
 
-  void print2digits(int number) {
-    if (number < 10) {
-      Serial.print("0");
-    }
-    Serial.print(number);
-  }

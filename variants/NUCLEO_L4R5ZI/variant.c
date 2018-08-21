@@ -91,9 +91,6 @@ void SystemClock_Config(void) {
   HAL_RCCEx_EnableMSIPLLMode();
 #endif  
   /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
   
   HAL_PWREx_EnableVddIO2();

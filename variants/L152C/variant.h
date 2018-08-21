@@ -17,11 +17,11 @@
 
 /*KEY*/
 #define BOARD_NR_KEY	1
-#ifndef BOTTON
- #define BOTTON			PC13  // 2
+#ifndef BUTTON
+ #define BUTTON			PC13  // 2
 #endif
-#ifndef BOTTON_MASK
- #define BOTTON_MASK		0x01
+#ifndef BUTTON_MASK
+ #define BUTTON_MASK		0x01
 #endif
 
 /*SPI*/

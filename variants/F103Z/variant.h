@@ -7,14 +7,19 @@
 /*LED*/
 #define BOARD_NR_LED          1 
 #ifndef LED_BUILTIN
- #define LED_BUILTIN PC13
+# ifdef ARDUINO_F103Z_CORE
+ #define LED_BUILTIN PF6
 #endif
+#endif
+
 #ifndef LED_BUILTIN_MASK
- #define LED_BUILTIN_MASK		0x00
+ #define LED_BUILTIN_MASK		0x01
 #endif
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
-/*KEY*/
+/*KEYS*/
+/*WKUP*/
+#define SYS_WKUP1 	PA0 /*for lowPower*/
 
 /*SPI*/
 #ifndef MOSI
@@ -39,5 +44,11 @@
 #endif
 
 /*usb*/
+/******************** USB DIC ************************/
+#ifndef USB_DISC_PIN
+# ifdef ARDUINO_F103Z_CORE
+#   define USB_DISC_PIN      PF10  //103Zet6 core is PF10
+# endif
+#endif
 
 #endif

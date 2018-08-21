@@ -7,11 +7,11 @@
 void setup() {
   //  put your setup code here, to run once:
   pinMode(LED_BUILTIN,OUTPUT);
-  pinMode(BOTTON,INPUT);
+  pinMode(BUTTON,INPUT);
 }
 
 void loop() {
   static uint8_t status;
-  BOTTON >> status;   
+  BUTTON >> status;   
   LED_BUILTIN << status;
 }

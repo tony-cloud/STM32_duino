@@ -47,8 +47,8 @@
 #define TOUCH_XYCHG 1
 
 /******************  bsp_SRAM **********************/
-#define SRAM_START            ((uint32_t)(0x60000000 | 0x08000000))
-#define SRAM_LENGTH			  ((uint32_t)(1*1024*1024))
+#define SRAM_START            (0x60000000 | 0x08000000)
+#define SRAM_LENGTH			  (1*1024*1024)
 
 
 
@@ -64,6 +64,10 @@ void STM_FSMC_SRAM_Init(void);
 
 #ifdef __cplusplus
 } //extern "C"
+#endif
+
+#if USE_EXTRAMSYSMALLOC
+void setHeapAtSram(void);
 #endif
 
 #endif   //__BSP_H__

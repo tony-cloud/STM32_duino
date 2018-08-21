@@ -9,9 +9,9 @@
 
 //On-board user button
 #define BOARD_NR_KEY	1
-#define BOTTON			PC13  // 2
-#define USER_BTN		BOTTON  // 2
-#define BOTTON_MASK		0x00
+#define BUTTON			PC13  // 2
+#define USER_BTN		BUTTON  // 2
+#define BUTTON_MASK		0x00
 
 #define MOSI PA7
 #define MISO PA6

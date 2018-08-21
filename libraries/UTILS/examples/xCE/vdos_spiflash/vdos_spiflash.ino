@@ -4,14 +4,12 @@
    from the menu
    Select USB: Mass Storage / Composite[CDC+MSC]
    Select Serial Communication: SerialUSB/SerialUART1
-   Select Startup adr: flash(WhitRamboo xxkRAM used only)
+   Select Startup adr: flash(WhitRamboot xxkRAM used only)
    ---------------------------------------------------------------------------------------
    cmd usage:
    type help or h or ? for Display list of commands.
-
    ---------------------------------------------------------------------------------------
-   tested for F103xE/F407xE  by huaweiwx@sina.com 2017.10
-
+   tested for F103xC/F103xE/F407xE  by huaweiwx@sina.com 2017.10
    ---------------------------------------------------------------------------------------
 */
 #include <Streaming.h>
@@ -305,9 +303,9 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
     if (useradr < 0x10000000) Serial << "0";
     Serial << _HEX(useradr);
     if (UTIL_checkUserCode(useradr))
-      Serial << " ok\n";
+      Serial << " is app.\n";
     else
-      Serial << " is unavailed!\n";
+      Serial << " is free.\n";
   }
   return (0);
 }
@@ -757,13 +755,13 @@ int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
       break;
     case 3:  //write
       if (argc > 3)
-        ee.write(addr, val, (uint16_t)(argc - 3));
+        ee.writeBuf(addr, val, (uint16_t)(argc - 3));
       Serial << "\nwrite " << argc - 3 << "data ok\n";
 
     //		break;
     case 2: //view read
       addr &= 0xfff0;
-      ee.read(addr, val, (uint16_t)16);
+      ee.readBuf(addr, val, (uint16_t)16);
       show_addr(addr, val);
       Serial << "\n ";
       addr += 0x10;
@@ -777,7 +775,7 @@ int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
       }
       addr = 0;
       while (addr < (ee.pdata->dev + 1)) {
-        c = ee.readOneByte(addr++);;
+        c = ee.read(addr++);;
         f.write(c);
       }
       f.close();
@@ -799,7 +797,7 @@ int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
       while (addr < fsize) {
         if (f.available()) {
           c = f.read();
-          ee.writeOneByte(addr++, c);
+          ee.write(addr++, c);
         } else {
           f.close();
           return (0);

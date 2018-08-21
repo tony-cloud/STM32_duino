@@ -1,20 +1,20 @@
 #include <Arduino.h>
 #include "Keys.h"
 
-//typedef struct botton_led_type {
+//typedef struct button_led_type {
 //    uint8 pins[16];             /**< pin max 8*/
 //    uint8 nr;             /**< keys num. */
 //    uint16 on;             /**< on state, 1 high or 0 low on. */
 //    uint16_t mode;
-//} botton_led_type;
+//} button_led_type;
 
-BOTTONClass::BOTTONClass() {
+BUTTONClass::BUTTONClass() {
   pdata->nr = 0;
   pdata->on = 0;
   pdata->mode = 0
 }
 
-BOTTONClass::BOTTONClass (uint16_t mask,uint8_t k0,uint8_t k1, uint8_t k2, uint8_t k3,
+BUTTONClass::BUTTONClass (uint16_t mask,uint8_t k0,uint8_t k1, uint8_t k2, uint8_t k3,
                             uint8_t k4, uint8_t k5, uint8_t k6, uint8_t k7,
                             uint8_t k8, uint8_t k9, uint8_t k10,uint8_t k11,
 						    uint8_t k12,uint8_t k13,uint8_t k14,uint8_t k15)
@@ -46,7 +46,7 @@ BOTTONClass::BOTTONClass (uint16_t mask,uint8_t k0,uint8_t k1, uint8_t k2, uint8
   pdata->nr = nr;
 }
 
-void BOTTONClass::setKey(uint8_t pin,uint8_t on,uint8_t mode){
+void BUTTONClass::setKey(uint8_t pin,uint8_t on,uint8_t mode){
   uint8_t nr = pdata->nr;
   uint8_t mask = on? 0x01:0x0;
   uint8_t mode = mode? 0x01:0x0;
@@ -59,7 +59,7 @@ void BOTTONClass::setKey(uint8_t pin,uint8_t on,uint8_t mode){
   }
 }
 
-void  BOTTONClass::Init()
+void  BUTTONClass::Init()
 {
   for (uint8_t i = 0; i < 16; i++) {
 	if(pdata->pins[i] < 0xff){   
@@ -73,7 +73,7 @@ void  BOTTONClass::Init()
 }
 
 
-uint8_t BOTTONClass::getKey(uint8_t key) {
+uint8_t BUTTONClass::getKey(uint8_t key) {
   uint8_t rtn = 0;
   if (key <(pdata->nr)){
       rtn = digitalRead(pdata->pins[key]);
@@ -85,7 +85,7 @@ uint8_t BOTTONClass::getKey(uint8_t key) {
   return 0;
 }
 
-uint16_t BOTTONClass::scan(uint8_t mode)
+uint16_t BUTTONClass::scan(uint8_t mode)
 {
   static uint8_t key_up = 1;
   uint16_t keypress = 0;

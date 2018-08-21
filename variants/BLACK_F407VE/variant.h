@@ -17,12 +17,13 @@
 #endif
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
-/******************** BOTTON **********************/
+/******************** BUTTON **********************/
 #define BOARD_NR_KEY      3
-#define BOTTON           PA0    //1
-#define BOTTON1          PE3    //0
-#define BOTTON2          PE4    //0
-#define BOTTON_MASK      0x01
+#define BUTTON           PA0    //1
+#define SYS_WKUP1 		 PA0  /*for lowPower*/
+#define BUTTON1          PE3    //0
+#define BUTTON2          PE4    //0
+#define BUTTON_MASK      0x01
 
 /*SPI*/
 #ifndef MOSI

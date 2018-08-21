@@ -211,17 +211,20 @@ public:
 #if defined(STM32F1)
     LL_RTC_BKP_SetRegister(BKP, index, value);
 #elif defined(STM32H7)
-  register uint32_t tmp = 0U;
-
-  tmp = (uint32_t)(&(RTC->BKP0R));
-  tmp += (index * 4U);
-
-  /* Write the specified register */
-  *(__IO uint32_t *)tmp = (uint32_t)value;
+    register uint32_t tmp = 0U;
+    
+    tmp = (uint32_t)(&(RTC->BKP0R));
+    tmp += (index * 4U);
+    
+    /* Write the specified register */
+    *(__IO uint32_t *)tmp = (uint32_t)value;
 
 //    HAL_RTCEx_BKUPRead(RTC, index, value);
-#else
+#elif defined(RTC_BACKUP_SUPPORT)
     LL_RTC_BAK_SetRegister(RTC, index, value);
+#else
+    UNUSED(index);
+	UNUSED(value);
 #endif
   }
   
@@ -230,17 +233,21 @@ public:
 #if defined(STM32F1)
     return LL_RTC_BKP_GetRegister(BKP, index);
 #elif defined(STM32H7)
-  register uint32_t tmp = 0U;
-
-  tmp = (uint32_t)(&(RTC->BKP0R));
-  tmp += (index * 4U);
-
-  /* Read the specified register */
-  return (*(__IO uint32_t *)tmp);
-#else
+    register uint32_t tmp = 0U;
+    
+    tmp = (uint32_t)(&(RTC->BKP0R));
+    tmp += (index * 4U);
+    
+    /* Read the specified register */
+    return (*(__IO uint32_t *)tmp);
+#elif defined(RTC_BACKUP_SUPPORT)
     return LL_RTC_BAK_GetRegister(RTC, index);
+#else
+    UNUSED(index);
+	return 0;
 #endif
   }
+  
   friend class STM32LowPower;
 
 private:

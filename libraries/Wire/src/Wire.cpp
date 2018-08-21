@@ -11,7 +11,17 @@
 
 /** TwoWire object used when in slave interrupt
  */
-TwoWire *slaveTwoWire[4];
+#if defined(I2C4)
+# define I2C_PORT_NR 4
+#elif defined(I2C3)
+# define I2C_PORT_NR 3
+#elif defined(I2C2)
+# define I2C_PORT_NR 2
+#else
+# define I2C_PORT_NR 1
+#endif
+
+TwoWire *slaveTwoWire[I2C_PORT_NR];
 
 
 TwoWire::TwoWire(I2C_TypeDef *instance) {
@@ -49,7 +59,7 @@ void TwoWire::begin(void){
         __HAL_RCC_I2C1_CLK_ENABLE();
     }
 #endif
-#ifdef defined(I2C2) && (USE_I2C2)
+#if defined(I2C2) && (USE_I2C2)
     if (pdev->handle.Instance == I2C2) {
         __HAL_RCC_I2C2_CLK_ENABLE();
     }
@@ -162,7 +172,7 @@ void TwoWire::setClock(uint32_t frequency) {
         pdev->handle.Init.ClockSpeed = frequency;
         pdev->handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
 #else
-
+        UNUSED(frequency);
         // I2C1_100KHZ_TIMING needs to be #defined in variant.h for these boards
         // Open STM32CubeMX, select your chip, clock configuration according to systemclock_config.c
         // Enable all I2Cs, go to I2Cx configuration, parameter settings, copy the Timing value.
@@ -188,26 +198,27 @@ void TwoWire::setClock(uint32_t frequency) {
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t __attribute__ ((unused)) sendStop) {
   if (pdev->isMaster == true) {
     if (isize > 0) {
-    // send internal address; this mode allows sending a repeated start to access
-    // some devices' internal registers. This function is executed by the hardware
-    // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
-
-    beginTransmission(address);
-
-    // the maximum size of internal address is 3 bytes
-    if (isize > 3){
-      isize = 3;
-    }
-
-    // write internal register address - most significant byte first
-    while (isize-- > 0)
-      write((uint8_t)(iaddress >> (isize*8)));
-      endTransmission(false);
+		// send internal address; this mode allows sending a repeated start to access
+		// some devices' internal registers. This function is executed by the hardware
+		// TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
+		
+		beginTransmission(address);
+		
+		// the maximum size of internal address is 3 bytes
+		if (isize > 3){
+			isize = 3;
+		}
+		
+		// write internal register address - most significant byte first
+		while (isize-- > 0){
+		   write((uint8_t)(iaddress >> (isize*8)));
+		}
+		endTransmission(false);
     }
 
     // clamp to buffer length
     if(quantity > BUFFER_LENGTH){
-      quantity = BUFFER_LENGTH;
+		quantity = BUFFER_LENGTH;
     }
 
     // perform blocking read into buffer

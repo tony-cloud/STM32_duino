@@ -56,12 +56,12 @@ void setup() {
   if (!card.init(SPI_HALF_SPEED, chipSelect))
     Serial.println("initialization failed. Things to check!");
 
-  if (!volume.init(card))
+  else if (!volume.init(card))
     Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
-
-  root.openRoot(volume);
-  root.ls(LS_R | LS_DATE | LS_SIZE);
-
+  else  {
+	root.openRoot(volume);
+	root.ls(LS_R | LS_DATE | LS_SIZE);
+  }
   Serial.print(F(">"));
 }
 
@@ -321,9 +321,9 @@ int Cmd_dir(int argc, char *argv[])  //exp: dir/ls
     if (useradr < 0x10000000) Serial << "0";
     Serial << _HEX(useradr);
     if (UTIL_checkUserCode(useradr))
-      Serial << " ok\n";
+      Serial << " is app.\n";
     else
-      Serial << " is unavailed!\n";
+      Serial << " is free.\n";
   }
   return (0);
 }
@@ -793,7 +793,7 @@ int Cmd_eeprom(int argc, char *argv[])// Usage: so val dpin cpin order
       }
       addr = 0;
       while (addr < (ee.pdata->dev + 1)) {
-        c = ee.readOneByte(addr++);;
+        c = ee.read(addr++);;
         f.write(c);
       }
       f.close();

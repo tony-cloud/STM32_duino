@@ -1,7 +1,25 @@
-#ifndef __KEYS_H__
-#define __KEYS_H__
+#ifndef __LIB_KEYS_H__
+#define __LIB_KEYS_H__
 
-#ifdef __cplusplus
+#include <Arduino.h>
+
+#ifdef BUTTON7
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2,BUTTON3,BUTTON4,BUTTON5,BUTTON6,BUTTON7
+#elif defined(BUTTON6)
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2,BUTTON3,BUTTON4,BUTTON5,BUTTON6
+#elif defined(BUTTON5)
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2,BUTTON3,BUTTON4,BUTTON5
+#elif defined(BUTTON4)
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2,BUTTON3,BUTTON4
+#elif defined(BUTTON3)
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2,BUTTON3
+#elif defined(BUTTON2)
+#define BUTTONS_LIST BUTTON,BUTTON1,BUTTON2
+#elif defined(BUTTON1)
+#define BUTTONS_LIST BUTTON,BUTTON1
+#elif defined(BUTTON)
+#define BUTTONS_LIST BUTTON
+#endif
 
 #define KEY0	bit(0)
 #define KEY1	bit(1)
@@ -15,6 +33,9 @@
 #define KEY_UNPRESED 0
 #define KEY_PRESED	 1
 
+
+#ifdef __cplusplus
+
 typedef enum 
 {  
   BUTTON_MODE_GPIO = 0,
@@ -26,14 +47,14 @@ typedef struct {
     uint8_t  nr;             /**< keys num. */
     uint16_t on;             /**< on state, 1 high or 0 low on. */
     uint16_t mode;       /*mode bit 1/0 exti/gpio*/
-} BOTTON_TypeDef;
+} BUTTON_TypeDef;
 
 
-class BOTTONClass
+class BUTTONClass
 {
   public:
-    BOTTONClass();
-    BOTTONClass(uint16_t mask, uint8_t k0,
+    BUTTONClass();
+    BUTTONClass(uint16_t mask, uint8_t k0,
 			    uint8_t k1=0xff, uint8_t k2=0xff, uint8_t k3=0xff,
 			    uint8_t k4=0xff, uint8_t k5=0xff, uint8_t k6=0xff, uint8_t k7=0xff,
 			    uint8_t k8=0xff, uint8_t k9=0xff, uint8_t k10=0xff,uint8_t k11=0xff,
@@ -42,9 +63,9 @@ class BOTTONClass
     void Init();
     uint8_t  getKey(uint8_t key);
     uint16_t scan(uint8_t mode = 1);
-	BOTTON_TypeDef *pdata = &bottons;
+	BUTTON_TypeDef *pdata = &BUTTONs;
   private:
-    BOTTON_TypeDef bottons;
+    BUTTON_TypeDef BUTTONs;
 };
 #endif
 

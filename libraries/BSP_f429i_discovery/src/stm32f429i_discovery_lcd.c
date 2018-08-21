@@ -220,9 +220,6 @@ uint8_t BSP_LCD_Init(void)
     /* LCD Init */	 
     LcdDrv->Init();
 
-    /* Initialize the SDRAM */
-    BSP_SDRAM_Init();
-
     /* Initialize the font */
     BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
 

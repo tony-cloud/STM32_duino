@@ -11,13 +11,17 @@
 #define LED_BUILTIN_MASK		0x00
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
-/******************** BOTTON ********************************/
+/******************** BUTTON ********************************/
 #define BOARD_NR_KEY 4
-#define BOTTON  PA0
-#define BOTTON1	PC13
-#define BOTTON2	PA8
-#define BOTTON3	PD3
-#define BOTTON_MASK         0x00
+#define BUTTON  PA0
+#define BUTTON1	PC13
+#define BUTTON2	PA8
+#define BUTTON3	PD3
+#define BUTTON_MASK         0x00
+
+
+/*WKUP*/
+#define SYS_WKUP1 	PA0 /*for lowPower*/
 
 /*spi*/
 #define MOSI PA7

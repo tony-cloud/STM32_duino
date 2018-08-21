@@ -27,6 +27,67 @@
 #pragma GCC diagnostic ignored "-Wformat"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
+//------------------------------------------------------------------------------
+/** calibration factor for delayMS */
+#if defined(STM32F7)||defined(STM32H7)
+# define CAL_FACTOR (F_CPU/2000)
+#else
+# define CAL_FACTOR (F_CPU/7000)
+#endif
+/** delay between led error flashes
+ * \param[in] millis milliseconds to delay
+ */
+static void delayMS(uint32_t millis) {
+  uint32_t iterations = millis * CAL_FACTOR;
+  uint32_t i;
+  for(i = 0; i < iterations; ++i) {
+    asm volatile("nop\n\t");
+  }
+}
+
+static void nblink(int n, int l){
+  if(l){	
+	for  (uint8_t i = 0; i < 2*n; i++) {
+      digitalToggle(LED_BUILTIN);
+      delayMS(250);
+    }
+  }else{
+    for (uint8_t i = 0; i < n; i++) {
+      digitalToggle(LED_BUILTIN);
+      delayMS(10);
+      digitalToggle(LED_BUILTIN);
+      delayMS(240);
+    }
+  }
+}
+
+void errorLedBlink(int n) {
+  noInterrupts();
+  pinMode(LED_BUILTIN, OUTPUT);
+#if (LED_BUILTIN_MASK & 0x01)
+  digitalWrite(LED_BUILTIN,LOW);
+#else
+  digitalWrite(LED_BUILTIN,HIGH);
+#endif
+
+  int t = n / 1000;
+  int h = n % 1000;
+  int d = h % 100;
+  int l = n % 10;
+
+  h /= 100;
+  d /= 10;
+
+  if(l == 0) l = 10;
+  
+  for (;;) {
+	nblink(t,1);	  
+	nblink(h,0);
+	nblink(d,1);
+    nblink(l,0);
+	delayMS(1000);
+  }
+}
 
 //debug_if add by huaweiwx@sina.com  2017.12.8
 void debug(const char *format, ...) {
@@ -35,6 +96,7 @@ void debug(const char *format, ...) {
     vfprintf(stderr, format, args);
     va_end(args);
 }
+
 
 //debug_if add by huaweiwx@sina.com  2017.12.8
 void debug_if(int condition, const char *format, ...) {	
@@ -117,10 +179,14 @@ char *stm32PinName(uint8_t pin) {
 void _Error_Handler(char* file, uint32_t line) __weak;
 void _Error_Handler(char* file, uint32_t line){
 #ifdef USE_FULL_ASSERT
+  #if USE_ERRORBLINK
+    errorLedBlink(line);
+  #else	
 	debug("\r\nerrFailed! File:'%s' on Line:%d",file,line);
-#endif
 	while(1)
 		yield();	
+  #endif
+#endif
 }
 
 #ifdef USE_FULL_ASSERT
@@ -128,8 +194,60 @@ void _Error_Handler(char* file, uint32_t line){
 void assert_failed(uint8_t* file, uint32_t line) __weak;
 void assert_failed(uint8_t* file, uint32_t line)
 {
+#if USE_ERRORBLINK
+    errorLedBlink(line);
+#else	
 	debug("\r\nAssert failed! File: '%s' on Line:%d",(char *)file,line);
 	while(1)
 		yield();
+#endif
 };
 #endif
+
+ /**
+* @brief This function handles Hard fault interrupt.
+*/
+void HardFault_Handler(void)
+{
+#if USE_ERRORBLINK
+	errorLedBlink(31);
+#else
+    while(1);	
+#endif
+}
+
+/**
+* @brief This function handles Memory management fault.
+*/
+void MemManage_Handler(void)
+{
+#if USE_ERRORBLINK
+	errorLedBlink(32);
+#else
+    while(1);	
+#endif
+}
+
+/**
+* @brief This function handles Pre-fetch fault, memory access fault.
+*/
+void BusFault_Handler(void)
+{
+#if USE_ERRORBLINK
+	errorLedBlink(33);
+#else
+    while(1);	
+#endif
+}
+
+/**
+* @brief This function handles Undefined instruction or illegal state.
+*/
+void UsageFault_Handler(void)
+{
+#if USE_ERRORBLINK
+	errorLedBlink(34);
+#else
+    while(1);	
+#endif
+}

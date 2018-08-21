@@ -7,14 +7,17 @@
 /*LED*/
 #define BOARD_NR_LED          1 
 #ifndef LED_BUILTIN
- #define LED_BUILTIN PC13
+ #define LED_BUILTIN PC13 
 #endif
+
 #ifndef LED_BUILTIN_MASK
  #define LED_BUILTIN_MASK		0x00
 #endif
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
-/*KEY*/
+/*KEYS*/
+/*WKUP*/
+#define SYS_WKUP1 	PA0 /*for lowPower*/
 
 /*SPI*/
 #ifndef MOSI

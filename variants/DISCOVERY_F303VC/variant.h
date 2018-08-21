@@ -14,9 +14,10 @@
 #define LED_BUILTIN_MASK        0xFF   //ON 1
 #define STM32_LED_BUILTIN_ACTIVE_HIGH
 
-#define BOARD_NR_KEY               1
-#define KEY0_BUILTIN             PA0
-#define KEY0_BUILTIN_MASK        0x01    //PRESED 1
+#define BOARD_NR_KEY       1
+#define BUTTON             PA0
+#define SYS_WKUP1		   PA0 /*for lowPower*/
+#define BUTTON_MASK        0x01    //PRESED 1
 
 //On-board user button
 #define USER_BTN                  PA0  // 2

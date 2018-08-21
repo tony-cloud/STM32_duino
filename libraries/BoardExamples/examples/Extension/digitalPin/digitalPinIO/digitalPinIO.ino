@@ -4,7 +4,7 @@
 #include "util/digitalPin.h"
 
 DigitalPin<LED_BUILTIN>led;
-DigitalPin<BOTTON1>bott1;
+DigitalPin<BUTTON1>butt1;
 
 bool state=false;
 
@@ -14,10 +14,10 @@ void setup()
   Serial.println("Blink use DigitalPin class");
   
   led.mode(OUTPUT);
-  bott1.mode(INPUT);
+  butt1.mode(INPUT);
 }
 
 void loop()                    
 {
-    led = bott1;  
+    led = butt1;  
 }

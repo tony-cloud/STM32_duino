@@ -37,21 +37,18 @@
 */
 
 #include <STM32RTC.h>
-#include <Streaming.h>
-
 /* Get the rtc object */
 STM32RTC& rtc = STM32RTC::getInstance();
 
-/* Change these values to set the current initial time */
-const byte seconds = 0;
-const byte minutes = 0;
-const byte hours = 18;
+/* get compute datetime to set the current initial time */
+const byte seconds = BUILD_SEC;
+const byte minutes = BUILD_MIN;
+const byte hours = BUILD_HOUR;
 
-/* Change these values to set the current initial date */
-/* 19th June 2018 */
-const byte day = 19;
-const byte month = 5;
-const byte year = 18;
+/* get compute datetime to set the current initial date */
+const byte days = BUILD_DAY;
+const byte months = BUILD_MONTH;
+const byte years = (BUILD_YEAR) % 100;
 
 void setup()
 {
@@ -118,7 +115,7 @@ void settime(void) {
 
 // Set the date
 void setdata(void) {
-  rtc.setDay(day);
-  rtc.setMonth(month);
-  rtc.setYear(year);
+  rtc.setDay(days);
+  rtc.setMonth(months);
+  rtc.setYear(years);
 }

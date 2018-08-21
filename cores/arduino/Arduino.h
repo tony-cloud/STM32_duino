@@ -26,8 +26,13 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include "bit_constants.h"
+#include "stm32_def.h"
 #include "util/toolschain.h"
+
+/*C including option*/
+#if USE_BITCONSTANTS
+  #include "bit_constants.h"
+#endif
 
 #ifdef __cplusplus
 extern "C"{
@@ -165,8 +170,8 @@ uint16_t makeWord(byte h, byte l);
 //unsigned long pulseIn(uint32_t pin, uint32_t state, unsigned long timeout = 1000000L);
 //unsigned long pulseInLong(uint32_t pin, uint32_t state, unsigned long timeout = 1000000L);
 
-extern "C" void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
-void noTone(uint8_t _pin);
+extern "C" void tone(uint8_t pin, unsigned int frequency, unsigned long duration = 0);
+extern "C" void noTone(uint8_t pin);
 
 // WMath prototypes
 long random(long);
@@ -176,7 +181,6 @@ long map(long, long, long, long, long);
 
 #endif
 
-#include "stm32_def.h"
 #include "stm32_clock.h"
 #include "stm32_gpio.h"
 #include "stm32_debug.h"
@@ -186,13 +190,19 @@ long map(long, long, long, long, long);
 #include "HardwareSerial.h"
 #include <SerialUSB.h>
 #include <STM32System.h>
-
 #include "wiring_pulse.h"  /*copy from Arduino_core_STM32 huaweiwx@sina.com 2017.11*/
 
-#if defined(MENU_SERIAL)
-# define Serial MENU_SERIAL
-#elif defined(MENU_SERIAL_AUTO)
-# define Serial MENU_SERIAL_AUTO
+/*C++ including option*/
+#if USE_ARDUINOSTREAMING
+#  include <Streaming.h>
+#endif
+
+#ifndef Serial /*cal overload by HAL_Config.h*/
+# if defined(MENU_SERIAL)
+#   define Serial MENU_SERIAL
+# elif defined(MENU_SERIAL_AUTO)
+#   define Serial MENU_SERIAL_AUTO
+# endif
 #endif
 
 #endif

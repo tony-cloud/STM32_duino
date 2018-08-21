@@ -36,11 +36,11 @@ void initVariant() { }
 void setupUSB() __weak;
 void setupUSB() {
 #if defined(USB_BASE) || defined(USB_OTG_DEVICE_BASE)
-    #ifdef MENU_USB_SERIAL
+    #if (USE_USBSERIAL)
         USBDeviceFS.beginCDC();
-    #elif defined(MENU_USB_MASS_STORAGE)
+    #elif (USE_USBDMSC)
         USBDeviceFS.beginMSC();
-    #elif  defined(MENU_USB_IAD)
+    #elif  (USE_USBDCOMPOSITE)
         USBDeviceFS.beginIDA(); /*add by huaweiwx@sina.com 2017.9.15*/
     #endif
 #endif
@@ -63,8 +63,11 @@ int main(void)
  #endif
 #endif
 
+#if defined(USB_BASE) || defined(USB_OTG_DEVICE_BASE)
+#if (USE_USBSERIAL)||(USE_USBDMSC)||(USE_USBDCOMPOSITE)
     setupUSB();
-
+#endif
+#endif
 	setup();
     
 	for (;;) {

@@ -39,7 +39,7 @@
 #endif
 #endif
 
-#if defined(ARDUINO_NUCLEO_F207ZG)||defined(ARDUINO_NUCLEO_F767ZI)||defined(ARDUINO_NUCLEO_H743ZI)
+#if defined(ARDUINO_NUCLEO_F207ZG)||defined(ARDUINO_NUCLEO_F767ZI)||defined(ARDUINO_NUCLEO_H743ZI)||defined(ARDUINO_IMT407GV21)
 #ifndef USE_SERIAL3
 #define USE_SERIAL3 1
 #endif
@@ -61,7 +61,9 @@
 #endif
 
 #ifndef USE_USBSERIAL
-#define USE_USBSERIAL 0 /*0 if use serial1,unused serialusb save space*/
+#ifndef MENU_USB_IAD
+#  define USE_USBSERIAL  0 /*0 if use serial1,unused serialusb save space*/
+#endif
 #endif
 
 /*USE_SPIx default 1*/

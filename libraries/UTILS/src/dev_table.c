@@ -53,11 +53,11 @@
 #elif defined(STM32F303RE)||defined(STM32F303VE)||defined(STM32F401RE)||\
       defined(STM32F411RE)||defined(STM32F401ZE)||defined(STM32F407ZE)||defined(STM32F407VE)
         const uint16_t appCodeSegAddr[] =  {3,128,2*128,3*128};
-#elif defined(STM32F407VG)||defined(STM32F407ZG)||(STM32F407IG)
+#elif defined(STM32F407VG)||defined(STM32F407ZG)||(STM32F407IG)||(STM32F429IG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};
 #elif defined(STM32F746IG)
         const uint16_t appCodeSegAddr[] =  {3,256,2*256,3*256};
-#elif defined(STM32F767ZI)||defined(STM32H743ZI)
+#elif defined(STM32F767ZI)||defined(STM32H743ZI)||defined(STM32L4R5ZI)
         const uint16_t appCodeSegAddr[] =  {7,256,2*256,3*256,4*256,5*256,6*256,7*256};
 #elif defined(STM32L476RG)
         const uint16_t appCodeSegAddr[] =  {7,128,2*128,3*128,4*128,5*128,6*128,7*128};

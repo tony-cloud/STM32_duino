@@ -38,7 +38,7 @@
 
 
 #define WRITEPIN LED_BUILTIN
-#define READPIN  BOTTON
+#define READPIN  BUTTON
 
 char versionNumber[ ] = "v1.1.3e";
 unsigned long numberOfIterations = 1000000; // Increase if the benchmarks complete too quickly

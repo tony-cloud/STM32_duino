@@ -49,9 +49,9 @@
 /* Includes ------------------------------------------------------------------*/
 #if defined(STM32L4)
 
-#include <Arduino.h>
+#include "../../Source/include/FreeRTOS.h"
 
-
+#if defined(TIM7)&& (portTickUSE_TIMx == 7)
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -152,5 +152,5 @@ void TIM7_IRQHandler(void)
 
   /* USER CODE END TIM7_IRQn 1 */
 }
-
+#endif /* portTickUSE_TIMx */
 #endif

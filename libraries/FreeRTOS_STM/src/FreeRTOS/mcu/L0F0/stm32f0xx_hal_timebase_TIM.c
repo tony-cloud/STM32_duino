@@ -41,11 +41,13 @@
   ******************************************************************************
   *  modify:  huaweiwx@sina.com 2017.5.4
   */
+
 #if defined(STM32L0)||defined(STM32F0)
   
-#include <Arduino.h>
+#include "../../Source/include/FreeRTOS.h"
 
-#ifdef TIM6
+#if defined(TIM6) ||  (portTickUSE_TIMx == 6)
+
 TIM_HandleTypeDef        htim6; 
 uint32_t                 uwIncrementState = 0;
 /* Private function prototypes -----------------------------------------------*/
@@ -156,7 +158,7 @@ void TIM6_IRQHandler(void)
 
   /* USER CODE END TIM17_IRQn 1 */
 }
-#else
+#elif defined(TIM17)&& (portTickUSE_TIMx == 17)
 TIM_HandleTypeDef        htim17; 
 uint32_t                 uwIncrementState = 0;
 /* Private function prototypes -----------------------------------------------*/

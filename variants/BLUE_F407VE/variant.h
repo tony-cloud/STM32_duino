@@ -11,10 +11,11 @@
 #define STM32_LED_BUILTIN_ACTIVE_LOW
 
 //*************** on board buttons*************************
-#define BOTTON PA0      // wakeup, active high
-#define BOTTON1 PE3     // active low
-#define BOTTON2 PE4     // active low
-#define BOTTON_MASK   0x01
+#define BUTTON	PA0    	/* wakeup, active high*/
+#define SYS_WKUP1	PA0 /*for lowPower*/
+#define BUTTON1	PE3     /* active low*/
+#define BUTTON2 PE4     /* active low*/
+#define BUTTON_MASK   0x01
 
 #define USER_BTN KEY_BUTTON  // STM naming compatibility
 

@@ -24,15 +24,16 @@ volatile int alarmMatch_counter = 0;
 /* Change this value to set alarm match offset */
 static uint32_t atime = 5;
 
-/* Change these values to set the current initial time */
-const byte seconds = 0;
-const byte minutes = 0;
-const byte hours = 16;
+/* get compute datetime to set the current initial time */
+const byte seconds = BUILD_SEC;
+const byte minutes = BUILD_MIN;
+const byte hours =   BUILD_HOUR;
 
-/* Change these values to set the current initial date */
-const byte day = 28;
-const byte month = 5;
-const byte year = 18;
+/* get compute datetime to set the current initial date */
+const byte days = BUILD_DAY;
+const byte months = BUILD_MONTH;
+const byte years = (BUILD_YEAR) % 100;
+
 
 void setup()
 {
@@ -41,17 +42,16 @@ void setup()
   rtc.begin(); // initialize RTC 24H format
 
   rtc.setTime(hours, minutes, seconds);
-  rtc.setDate(day, month, year);
+  rtc.setDate(days, months, years);
 
   rtc.attachInterrupt(alarmMatch, &atime);
-  rtc.setAlarmDay(day);
-  rtc.setAlarmTime(16, 0, 10);
+  rtc.setAlarmDay(days);
+  rtc.setAlarmTime(hours, minutes, seconds + 10);
   rtc.enableAlarm(rtc.MATCH_DHHMMSS);
 }
 
 void loop()
 {
-
 }
 
 void alarmMatch(void *data)

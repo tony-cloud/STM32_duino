@@ -1,4 +1,4 @@
-#include "stm32_def.h"
+#include "Arduino.h"
 
 //for HSI/HSE/HSE_BYPASS  huaweiwx@sina.com 2017.9.8
 void _Error_Handler(char* file, uint32_t line);  //extern
@@ -34,7 +34,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+    _Error_Handler(__FILENAME__, __LINE__);
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
@@ -48,7 +48,7 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+    _Error_Handler(__FILENAME__, __LINE__);
   }
 
     /**Configure the Systick interrupt time 
@@ -60,9 +60,6 @@ void SystemClock_Config(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }
 

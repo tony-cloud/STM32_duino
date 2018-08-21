@@ -102,7 +102,7 @@ EndDependencies */
 #define SDCLOCK_PERIOD                   FMC_SDRAM_CLOCK_PERIOD_2
 /* #define SDCLOCK_PERIOD                FMC_SDRAM_CLOCK_PERIOD_3 */   
 
-#define REFRESH_COUNT                    ((uint32_t)0x0603)   /* SDRAM refresh counter (100Mhz SD clock) */
+#define REFRESH_COUNT                    ((uint32_t)0x0603)   /* SDRAM refresh counter (108Mhz SD clock) */
    
 #define SDRAM_TIMEOUT                    ((uint32_t)0xFFFF)
 
@@ -385,6 +385,8 @@ uint8_t BSP_SDRAM_Sendcmd(FMC_SDRAM_CommandTypeDef *SdramCmd)
   */
 __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 {  
+  UNUSED(hsdram);
+  UNUSED(Params);
   static DMA_HandleTypeDef dma_handle;
   GPIO_InitTypeDef gpio_init_structure;
   
@@ -464,7 +466,7 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   HAL_DMA_Init(&dma_handle); 
   
   /* NVIC configuration for DMA transfer complete interrupt */
-  HAL_NVIC_SetPriority(SDRAM_DMAx_IRQn, 0x0F, 0);
+  HAL_NVIC_SetPriority(SDRAM_DMAx_IRQn, DMA2_PRIORITY, 0);
   HAL_NVIC_EnableIRQ(SDRAM_DMAx_IRQn);
 }
 
@@ -476,6 +478,8 @@ __weak void BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
   */
 __weak void BSP_SDRAM_MspDeInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 {  
+    UNUSED(hsdram);
+    UNUSED(Params);
     static DMA_HandleTypeDef dma_handle;
   
     /* Disable NVIC configuration for DMA interrupt */
@@ -490,10 +494,12 @@ __weak void BSP_SDRAM_MspDeInit(SDRAM_HandleTypeDef  *hsdram, void *Params)
 }
 
 
+#if USE_EXTRAMSYSMALLOC
 extern void setHeap(unsigned char* s, unsigned char* e);
 void setHeapAtSram(void){
 //    setHeap((unsigned char*)0xC0000000, (unsigned char*)(0xC0000000 + 8 * 1024 * 1024));
  setHeap((unsigned char*)SDRAM_START, (unsigned char*)(SDRAM_END));
 }
-  
+#endif
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

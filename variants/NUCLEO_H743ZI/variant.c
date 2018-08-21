@@ -30,11 +30,6 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
   
-  /* Enable I-Cache */
-  SCB_EnableICache();
-  /* Enable D-Cache */
-  SCB_EnableDCache();
-  
   /*!< Supply configuration update enable */
   MODIFY_REG(PWR->CR3, PWR_CR3_SCUEN, 0);
 
@@ -83,9 +78,6 @@ void SystemClock_Config(void)
 
 //  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
-    /* SysTick_IRQn interrupt configuration */
-#if FREERTOS
-  HAL_NVIC_SetPriority(PendSV_IRQn, SYSTICK_INT_PRIORITY, 0);
-#endif
+  /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, SYSTICK_INT_PRIORITY, 0);
 }

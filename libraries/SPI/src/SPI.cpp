@@ -12,9 +12,23 @@
 
 
 int maxUsedCallback = 0; // This is set in SPI begin()
-SPI_TypeDef *spiCallbackInstances[6];
-SPIClass *spiClass[6];
 
+#if defined(SPI6)
+#  define SPI_PORT_NR 6
+#elif   defined(SPI5)
+#  define SPI_PORT_NR 5
+#elif   defined(SPI4)
+#  define SPI_PORT_NR 4
+#elif   defined(SPI3)
+#  define SPI_PORT_NR 3
+#elif   defined(SPI2)
+#  define SPI_PORT_NR 2
+#else
+#  define SPI_PORT_NR 1
+#endif
+ 
+SPI_TypeDef *spiCallbackInstances[SPI_PORT_NR];
+SPIClass *spiClass[SPI_PORT_NR];
 
 void SPIClass::begin() {
 

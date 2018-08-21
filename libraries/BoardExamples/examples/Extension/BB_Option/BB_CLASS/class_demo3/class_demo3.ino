@@ -9,15 +9,15 @@
 #include "util/bitband.h"
 
 BB_PIN<LED_BUILTIN>led;
-BB_PIN<BOTTON1>botton;
+BB_PIN<BUTTON1>button;
 
 void setup() {
   // put your setup code here, to run once:
   led.mode(OUTPUT);
-  botton.mode(INPUT);
+  button.mode(INPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  led = botton;  
+  led = button;  
 }

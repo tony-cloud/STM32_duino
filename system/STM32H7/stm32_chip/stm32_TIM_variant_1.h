@@ -128,15 +128,32 @@ const stm32_tim_pin_list_type chip_tim14 [] = {
 }; 
 
 const stm32_tim_pin_list_type chip_tim15 [] = {
+   { TIM15  ,GPIOA, GPIO_PIN_0  ,TIM_BKIN  , GPIO_AF4_TIM15  }, 
+   { TIM15  ,GPIOA, GPIO_PIN_2  ,TIM_CH1   , GPIO_AF4_TIM15  }, 	
+   { TIM15  ,GPIOA, GPIO_PIN_1  ,TIM_CH1N  , GPIO_AF4_TIM15  }, 	
+   { TIM15  ,GPIOA, GPIO_PIN_3  ,TIM_CH2   , GPIO_AF4_TIM15  }, 	
+   { TIM15  ,GPIOE, GPIO_PIN_4  ,TIM_CH1N  , GPIO_AF4_TIM15  }, 	
+   { TIM15  ,GPIOE, GPIO_PIN_3  ,TIM_BKIN  , GPIO_AF4_TIM15  }, 
+   { TIM15  ,GPIOE, GPIO_PIN_6  ,TIM_CH2   , GPIO_AF4_TIM15  }, 	
+   { TIM15  ,GPIOE, GPIO_PIN_5  ,TIM_CH1   , GPIO_AF4_TIM15  }, 	
 }; 
 
 const stm32_tim_pin_list_type chip_tim16 [] = {
+   { TIM16  ,GPIOB, GPIO_PIN_8  ,TIM_CH1    , GPIO_AF1_TIM16  }, 	
+   { TIM16  ,GPIOB, GPIO_PIN_6  ,TIM_CH1N   , GPIO_AF1_TIM16  }, 	
+   { TIM16  ,GPIOB, GPIO_PIN_4  ,TIM_BKIN   , GPIO_AF1_TIM16  }, 
+   { TIM16  ,GPIOF, GPIO_PIN_6  ,TIM_CH1    , GPIO_AF1_TIM16  }, 	
+   { TIM16  ,GPIOF, GPIO_PIN_8  ,TIM_CH1N   , GPIO_AF1_TIM16  }, 	
+   { TIM16  ,GPIOF, GPIO_PIN_10 ,TIM_BKIN   , GPIO_AF1_TIM16  }, 
 }; 
 
 const stm32_tim_pin_list_type chip_tim17 [] = {
-}; 
-
-const stm32_tim_pin_list_type chip_tim18 [] = {
+   { TIM17  ,GPIOB, GPIO_PIN_9 ,TIM_CH1    , GPIO_AF1_TIM17  }, 	
+   { TIM17  ,GPIOB, GPIO_PIN_7 ,TIM_CH1N   , GPIO_AF1_TIM17  }, 	
+   { TIM17  ,GPIOB, GPIO_PIN_5 ,TIM_BKIN   , GPIO_AF1_TIM17  }, 	
+   { TIM17  ,GPIOF, GPIO_PIN_7 ,TIM_CH1    , GPIO_AF1_TIM17  }, 	
+   { TIM17  ,GPIOF, GPIO_PIN_9 ,TIM_CH1N   , GPIO_AF1_TIM17  }, 	
+   { TIM17  ,GPIOG, GPIO_PIN_6 ,TIM_BKIN   , GPIO_AF1_TIM17  }, 	
 }; 
 
 const stm32_tim_pin_list_type chip_tim [] = {
@@ -218,4 +235,24 @@ const stm32_tim_pin_list_type chip_tim [] = {
     { TIM13 ,GPIOF, GPIO_PIN_8  ,TIM_CH1    , GPIO_AF9_TIM13 }, 
     { TIM14 ,GPIOA, GPIO_PIN_7  ,TIM_CH1    , GPIO_AF9_TIM14 }, 
     { TIM14 ,GPIOF, GPIO_PIN_9  ,TIM_CH1    , GPIO_AF9_TIM14 }, 
+    { TIM15 ,GPIOA, GPIO_PIN_0  ,TIM_BKIN   , GPIO_AF4_TIM15  }, 
+    { TIM15 ,GPIOA, GPIO_PIN_2  ,TIM_CH1    , GPIO_AF4_TIM15  }, 	
+    { TIM15 ,GPIOA, GPIO_PIN_1  ,TIM_CH1N   , GPIO_AF4_TIM15  }, 	
+    { TIM15 ,GPIOA, GPIO_PIN_3  ,TIM_CH2    , GPIO_AF4_TIM15  }, 	
+    { TIM15 ,GPIOE, GPIO_PIN_4  ,TIM_CH1N   , GPIO_AF4_TIM15  }, 	
+    { TIM15 ,GPIOE, GPIO_PIN_3  ,TIM_BKIN   , GPIO_AF4_TIM15  }, 
+    { TIM15 ,GPIOE, GPIO_PIN_6  ,TIM_CH2    , GPIO_AF4_TIM15  }, 	
+    { TIM15 ,GPIOE, GPIO_PIN_5  ,TIM_CH1    , GPIO_AF4_TIM15  }, 	
+    { TIM16 ,GPIOB, GPIO_PIN_8  ,TIM_CH1    , GPIO_AF1_TIM16  }, 	
+    { TIM16 ,GPIOB, GPIO_PIN_6  ,TIM_CH1N   , GPIO_AF1_TIM16  }, 	
+    { TIM16 ,GPIOB, GPIO_PIN_4  ,TIM_BKIN   , GPIO_AF1_TIM16  }, 
+    { TIM16 ,GPIOF, GPIO_PIN_6  ,TIM_CH1    , GPIO_AF1_TIM16  }, 	
+    { TIM16 ,GPIOF, GPIO_PIN_8  ,TIM_CH1N   , GPIO_AF1_TIM16  }, 	
+    { TIM16 ,GPIOF, GPIO_PIN_10 ,TIM_BKIN   , GPIO_AF1_TIM16  }, 
+    { TIM17 ,GPIOB, GPIO_PIN_9  ,TIM_CH1    , GPIO_AF1_TIM17  }, 	
+    { TIM17 ,GPIOB, GPIO_PIN_7  ,TIM_CH1N   , GPIO_AF1_TIM17  }, 	
+    { TIM17 ,GPIOB, GPIO_PIN_5  ,TIM_BKIN   , GPIO_AF1_TIM17  }, 	
+    { TIM17 ,GPIOF, GPIO_PIN_7  ,TIM_CH1    , GPIO_AF1_TIM17  }, 	
+    { TIM17 ,GPIOF, GPIO_PIN_9  ,TIM_CH1N   , GPIO_AF1_TIM17  }, 	
+    { TIM17 ,GPIOG, GPIO_PIN_6  ,TIM_BKIN   , GPIO_AF1_TIM17  }, 	
 }; 

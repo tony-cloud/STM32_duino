@@ -173,7 +173,8 @@ inline void digitalWrite(__ConstPin pin, uint8_t value) {
 
 inline int digitalRead(__ConstPin pin) {
 #ifdef STM32H7
-    return HAL_GPIO_ReadPin((GPIO_TypeDef *)pinToPort(pin), pinToBitMask(pin));
+    return (((GPIO_TypeDef *)pinToPort(pin))->IDR & pinToBitMask(pin))?1:0;
+//    return HAL_GPIO_ReadPin((GPIO_TypeDef *)pinToPort(pin), pinToBitMask(pin));
 #else	
     return LL_GPIO_IsInputPinSet(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 #endif
@@ -194,7 +195,7 @@ inline static void pinMode(__ConstPin pin, uint8_t mode) {
 //add by huaweiwx@sina.com  2017.6.4
 inline void digitalToggle(__ConstPin pin) {
 #ifdef STM32H7
-    HAL_GPIO_TogglePin((GPIO_TypeDef *)pinToPort(pin), pinToBitMask(pin));
+    ((GPIO_TypeDef *)pinToPort(pin))->ODR  ^=  pinToBitMask(pin);
 #else
     LL_GPIO_TogglePin(variant_pin_list_ll_static[pin].port, variant_pin_list_ll_static[pin].pinMask);
 #endif

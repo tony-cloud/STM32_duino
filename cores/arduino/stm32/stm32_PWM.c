@@ -133,6 +133,11 @@ extern void tone(uint8_t pin, unsigned int frequency, unsigned long durationMill
 	pwmWrite(pin, 1 << 15, frequency, durationMillis);
 }
 
+extern void noTone(uint8_t pin){
+	stm32_port_pin_type port_pin = variant_pin_list[pin];
+	stm32_pwm_disable(port_pin.port,port_pin.pinMask);
+}
+
 void analogWrite(uint8_t pin, int value) {
 	pwmWrite(pin, ((uint32_t)value << 16) >> analogWriteResolutionBits, pwmFrequecyHz, 0); //add by huaweiwx@sina.com 2017.8.2
 }

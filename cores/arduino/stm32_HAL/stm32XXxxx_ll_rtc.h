@@ -1,5 +1,9 @@
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 #include "stm32XXxxx_ll_rcc.h"
+
 
 #ifdef STM32F0
 	#include "stm32f0xx_ll_rtc.h"
@@ -21,7 +25,6 @@
 #endif
 #ifdef STM32F3
 	#include "stm32f3xx_ll_rtc.h"
-	#include "stm32f3xx_ll_rtc_ex.h"
 	#include "stm32f3xx_ll_pwr.h"
 	#include "stm32f3xx_ll_utils.h"
 	#include "stm32f3xx_ll_cortex.h"
@@ -58,8 +61,9 @@
 #endif
 #ifdef STM32L4
  	#include "stm32l4xx_ll_rtc.h"
-	#include "stm32l4xx_ll_rtc_ex.h"
 	#include "stm32l4xx_ll_pwr.h"
 	#include "stm32l4xx_ll_utils.h"
 	#include "stm32l4xx_ll_cortex.h"
 #endif
+
+#pragma GCC diagnostic pop

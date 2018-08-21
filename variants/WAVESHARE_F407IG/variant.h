@@ -12,14 +12,15 @@
 
 /*KEYs*/
 #define  BOARD_NR_KEY     7
-#define  BOTTON           PF10 // USER
-#define  BOTTON1 		  PA0  // WAKE
-#define  BOTTON2   		  PE6  // CTR
-#define  BOTTON3  		  PE5  // D
-#define  BOTTON4   		  PE4  // C
-#define  BOTTON5   		  PE3  // B
-#define  BOTTON6   		  PE2  // A
-#define  BOTTON_MASK      0x02
+#define  BUTTON           PF10 // USER
+#define  BUTTON1 		  PA0  // WAKE
+#define  SYS_WKUP1	PA0 /*for lowPower*/
+#define  BUTTON2   		  PE6  // CTR
+#define  BUTTON3  		  PE5  // D
+#define  BUTTON4   		  PE4  // C
+#define  BUTTON5   		  PE3  // B
+#define  BUTTON6   		  PE2  // A
+#define  BUTTON_MASK      0x02
 
 #define MOSI PA7
 #define MISO PA6

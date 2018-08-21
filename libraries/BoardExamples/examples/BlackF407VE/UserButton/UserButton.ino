@@ -11,9 +11,9 @@
 */
 
 /*
-  #define KEY_BUTTON PA0 // wakeup, active high
-  #define KEY_BUTTON1 PE3 // active low
-  #define KEY_BUTTON2 PE4 // active low
+  #define BUTTON PA0 // wakeup, active high
+  #define BUTTON1 PE3 // active low
+  #define BUTTON2 PE4 // active low
 */
 
 #define LED  LED_BUILTIN     // same as LED_BUILTIN, active low
@@ -24,9 +24,9 @@ void setup()
   pinMode(LED, OUTPUT);
   pinMode(LED1, OUTPUT);
 
-  pinMode(KEY_BOTTON, INPUT_PULLDOWN);
-  pinMode(KEY_BOTTON1, INPUT_PULLUP);
-  pinMode(KEY_BOTTON2, INPUT_PULLUP);  
+  pinMode(BUTTON, INPUT_PULLDOWN);
+  pinMode(BUTTON1, INPUT_PULLUP);
+  pinMode(BUTTON2, INPUT_PULLUP);  
 }
 
 void loop()
@@ -36,12 +36,12 @@ void loop()
   digitalWrite(LED1, LOW); // led on
 
 
-  // KEY_BOTTON is active high
-  if  ( digitalRead( KEY_BOTTON ) != 0 ) digitalWrite(LED, HIGH); // led off
+  // BUTTON is active high
+  if  ( digitalRead(BUTTON ) != 0 ) digitalWrite(LED, HIGH); // led off
 
-  // KEY_BOTTON and KEY_BOTTON1 are active low
-  if  ( digitalRead( KEY_BOTTON2 ) == 0 ) digitalWrite(LED1, HIGH); // led off
-  if  ( digitalRead( KEY_BOTTON1 ) == 0 )
+  // BUTTON and BUTTON1 are active low
+  if  ( digitalRead( BUTTON2 ) == 0 ) digitalWrite(LED1, HIGH); // led off
+  if  ( digitalRead( BUTTON1 ) == 0 )
   {
     digitalWrite(LED, HIGH); // led off
     digitalWrite(LED1, HIGH); // led off
