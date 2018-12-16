@@ -14,7 +14,7 @@
 #ifndef __HALSPECELCONFIG_H__
 #define __HALSPECELCONFIG_H__
 
-#define  USE_ARDUINOSTREAMING 1   /*set 1 autoload srteaming.h*/
+#define  USE_ARDUINOSTREAMING 1   /*set 1 autoload streaming.h*/
 
 #ifdef USE_FULL_ASSERT /*DEBUG*/
 /* ------------------------------------------------------------------

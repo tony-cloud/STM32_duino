@@ -8,9 +8,15 @@
 */
 #include <FreeRTOS.h>
 
+/*Check environment configuration*/
+#if configUSE_IDLE_HOOK == 0
+# error	"!Use idel hook,The macro variable configUSE_IDLE_HOOK must be set to 1 in file HAL_Conf.h!"
+#endif
+
 // The LED is attached to pin 13 on Arduino.
 # define LED_PIN     LED_BUILTIN
 # define LED_LEVELON (LED_BUILTIN_MASK & 0x01) /*LOW or HIGH*/
+
 volatile uint32_t count = 0;
 
 // handle for blink task

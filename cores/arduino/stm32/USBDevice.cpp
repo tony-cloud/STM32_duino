@@ -26,14 +26,14 @@
 
 #include "USBDevice.h"
 #include "usbd_core.h"
-#include "usbd_desc.h"
+#include <usbd_desc.h>
 
 #include "cdc/usbd_cdc.h"
 #include "cdc/usbd_cdc_if.h"
 
 #include "msc/usbd_msc.h"
 
-#include "usb_device.h"
+#include <usb_device.h>
 
 void USBDeviceClass::reenumerate() {
     /* Re-enumerate the USB */
@@ -136,10 +136,12 @@ extern "C" void USB_LP_IRQHandler(void)
 extern "C" void USB_LP_CAN_RX0_IRQHandler(void) {
   HAL_PCD_IRQHandler(&hpcd_USB_FS);
 }
-#else  //F1
+#else  //F103
+#ifndef USB_OTG_FS
 extern "C" void USB_LP_CAN1_RX0_IRQHandler(void) {
   HAL_PCD_IRQHandler(&hpcd_USB_FS);
 }
+#endif
 #endif
 
 //F105/F107/F2/F4/F7/L4

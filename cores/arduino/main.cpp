@@ -69,9 +69,15 @@ int main(void)
 #endif
 #endif
 	setup();
-    
+
 	for (;;) {
-		loop();
+#if USE_CORECALLBACK > 0
+      coreCallback();
+#endif
+      loop();
+#if USE_SERIALEVENTRUN > 0	
+      if (serialEventRun) serialEventRun();
+#endif
 	}
 	return 0;
 }

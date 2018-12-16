@@ -95,5 +95,20 @@ void vPrintStringAndNumber( const char *pcString, unsigned portLONG ulValue )
 		vTaskEndScheduler();
 	}
 }
+/*
+size_t Print::vPrintln(const char c[])
+{
+  vTaskSuspendAll();
+  uint8_t n = Print::println(c);
+  xTaskResumeAll();
+  return n;
+}
 
-
+size_t Print::vPrint(const char c[])
+{
+  vTaskSuspendAll();
+  uint8_t n = Print::print(c);
+  xTaskResumeAll();
+  return n;
+}
+*/

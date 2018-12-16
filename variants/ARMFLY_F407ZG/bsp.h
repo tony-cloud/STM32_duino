@@ -45,17 +45,21 @@
 
 // SRAM ISSI62WV51216 BANK1_3  
 #ifdef HAVE_SRAM
-#define SRAM_START            LCD_BASE_BK13
-#define SRAM_LENGTH			  (1*1024*1024)  
-#define SRAM_END              (SRAM_START+SRAM_LENGTH)
-#define FSMC_ADDRESSBITS      19
+# define SRAM_START            LCD_BASE_BK13
+# define SRAM_LENGTH			  (1*1024*1024)  
+# define SRAM_END              (SRAM_START+SRAM_LENGTH)
+# define FSMC_ADDRESSBITS      19
 extern SRAM_HandleTypeDef sramHandle;
-
-#if USE_EXTRAMSYSMALLOC
+# if USE_EXTRAMSYSMALLOC
+#   ifdef __cplusplus
+extern "C"{
+#   endif
 void setHeapAtSram(void);
 void setHeapAtCCram(void);
-#endif
-
+#  ifdef __cplusplus
+} //extern "C"
+#  endif
+# endif
 #endif
 
 //have not norflash

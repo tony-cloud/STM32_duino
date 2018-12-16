@@ -46,7 +46,8 @@
   
 #include "../../Source/include/FreeRTOS.h"
 
-#if defined(TIM6) ||  (portTickUSE_TIMx == 6)
+#if (portTickUSE_TIMx == 6)
+#if defined(TIM6)
 
 TIM_HandleTypeDef        htim6; 
 uint32_t                 uwIncrementState = 0;
@@ -158,7 +159,133 @@ void TIM6_IRQHandler(void)
 
   /* USER CODE END TIM17_IRQn 1 */
 }
-#elif defined(TIM17)&& (portTickUSE_TIMx == 17)
+#else
+#error "!!! you selected portTickUSE_TIMx == 6 error, but this mcu not TIM6 !!! Please selected another"
+#endif /* (portTickUSE_TIMx == 6) */
+#endif /* (TIM6) */
+
+
+#if (portTickUSE_TIMx == 7)
+#if defined(TIM7)
+
+TIM_HandleTypeDef        htim7; 
+uint32_t                 uwIncrementState = 0;
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
+
+/**
+  * @brief  This function configures the TIM17 as a time base source. 
+  *         The time source is configured  to have 1ms time base with a dedicated 
+  *         Tick interrupt priority. 
+  * @note   This function is called  automatically at the beginning of program after
+  *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig(). 
+  * @param  TickPriority: Tick interrupt priorty.
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+{
+  RCC_ClkInitTypeDef    clkconfig;
+  uint32_t              uwTimclock = 0;
+  uint32_t              uwPrescalerValue = 0;
+  uint32_t              pFLatency;
+  
+  /*Configure the TIM17 IRQ priority */
+  HAL_NVIC_SetPriority(TIM7_IRQn, TickPriority ,0); 
+  
+  /* Enable the TIM17 global Interrupt */
+  HAL_NVIC_EnableIRQ(TIM7_IRQn); 
+  
+  /* Enable TIM17 clock */
+  __HAL_RCC_TIM7_CLK_ENABLE();
+  
+  /* Get clock configuration */
+  HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
+  
+  /* Compute TIM17 clock */
+  uwTimclock = HAL_RCC_GetPCLK1Freq();
+   
+  /* Compute the prescaler value to have TIM17 counter clock equal to 1MHz */
+  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
+  
+  /* Initialize TIM17 */
+  htim7.Instance = TIM7;
+  
+  /* Initialize TIMx peripheral as follow:
+  + Period = [(TIM17CLK/1000) - 1]. to have a (1/1000) s time base.
+  + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
+  + ClockDivision = 0
+  + Counter direction = Up
+  */
+  htim7.Init.Period = (1000000 / 1000) - 1;
+  htim7.Init.Prescaler = uwPrescalerValue;
+  htim7.Init.ClockDivision = 0;
+  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
+  if(HAL_TIM_Base_Init(&htim7) == HAL_OK)
+  {
+    /* Start the TIM time Base generation in interrupt mode */
+    return HAL_TIM_Base_Start_IT(&htim7);
+  }
+  
+  /* Return function status */
+  return HAL_ERROR;
+}
+
+/**
+  * @brief  Suspend Tick increment.
+  * @note   Disable the tick increment by disabling TIM17 update interrupt.
+  * @param  None
+  * @retval None
+  */
+void HAL_SuspendTick(void)
+{
+  /* Disable TIM17 update Interrupt */
+  __HAL_TIM_DISABLE_IT(&htim7, TIM_IT_UPDATE);                                                  
+}
+
+/**
+  * @brief  Resume Tick increment.
+  * @note   Enable the tick increment by Enabling TIM17 update interrupt.
+  * @param  None
+  * @retval None
+  */
+void HAL_ResumeTick(void)
+{
+  /* Enable TIM17 Update interrupt */
+  __HAL_TIM_ENABLE_IT(&htim7, TIM_IT_UPDATE);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+/* USER CODE BEGIN Callback 0 */
+
+/* USER CODE END Callback 0 */
+  if (htim->Instance == TIM7)
+ { 
+  HAL_IncTick();
+ }
+/* USER CODE BEGIN Callback 1 */
+
+/* USER CODE END Callback 1 */
+}
+
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
+}
+#else
+#error "!!! you selected portTickUSE_TIMx == 7 error, but this mcu not TIM7 !!! Please selected 0 or 11"
+#endif /* (portTickUSE_TIMx == 7) */
+#endif /* (TIM7) */
+
+#if (portTickUSE_TIMx == 17)
+#if defined(TIM17)
+
 TIM_HandleTypeDef        htim17; 
 uint32_t                 uwIncrementState = 0;
 /* Private function prototypes -----------------------------------------------*/
@@ -269,7 +396,10 @@ void TIM17_IRQHandler(void)
 
   /* USER CODE END TIM17_IRQn 1 */
 }
+#else
+#error "!!! you selected portTickUSE_TIMx == 17 error, but this mcu not TIM17 !!! Please selected another"
+#endif /* (portTickUSE_TIMx == 17) */
+#endif /* (TIM17) */
 
-#endif	
 #endif
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -23,17 +23,22 @@
 // This sketch tests the standard 7-bit addresses
 // Devices with higher bit address might not be seen properly.
 //
+// can use ware soft test by huaweiwx@sina.com 2106.8
+
 #include <LED.h>
-#include <Wire.h>
-TwoWire myWire(SDA,SCL);
 
-//#include <WireSoft.h>
-//TwoWireSoft myWire(SDA,SCL);
+/*define your i2c test pin here*/
+#define SDAPIN SDA
+#define SCLPIN SCL
 
-//#define EE_SDA AT24CXX_SDA //PB7
-//#define EE_SCL AT24CXX_SCL //PB6
-
-//TwoWire Wire;
+/**/
+#if USE_WARESOFT >0
+# include <WireSoft.h>
+TwoWireSoft myWire(SDAPIN, SCLPIN);
+#else
+# include <Wire.h>
+TwoWire myWire(SDAPIN, SCLPIN);
+#endif
 
 void setup() {
   Serial.begin(115200);
@@ -46,7 +51,7 @@ void setup() {
 #endif
   Serial.println("\nI2C Scanner");
   delay(1000);
-  
+
   myWire.begin();
   Led.flash(10, 190, 10);
 }

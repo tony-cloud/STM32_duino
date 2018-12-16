@@ -34,6 +34,8 @@
 extern "C"{
 #endif
 
+void yield(void);
+
 inline void delay(unsigned long millis) {
     uint32_t tickstart = 0;
     tickstart = HAL_GetTick();
@@ -73,5 +75,7 @@ void stm32ScheduleMicros(uint32_t microseconds, void (*callback)());
 #ifdef __cplusplus
 }
 #endif
+
+#define systicCallback  HAL_SYSTICK_Callback
 
 #endif

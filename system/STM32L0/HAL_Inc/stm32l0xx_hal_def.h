@@ -73,7 +73,7 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 
-#define UNUSED(x) ((void)(x))
+#define UNUSED(X) (void)X
 
 #define HAL_MAX_DELAY      0xFFFFFFFFU
 

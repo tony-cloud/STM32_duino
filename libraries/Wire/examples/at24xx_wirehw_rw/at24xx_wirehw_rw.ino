@@ -28,21 +28,23 @@
 #include <LED.h>
 #include <Streaming.h> /*for Serial << */
 
-TwoWire mywire(SDA, SCL);
+TwoWire mywire(AT24CXX_SDA, AT24CXX_SCL);
 
 //my vct6 board config:
+#define EE_DISK 0x50    //Address of AT24LC512 A2A1A0=000
 //#define EE_DISK1 0x51  //Address of AT24LCXX  A2A1A0=001
 //#define EE_DISK2 0x52  //Address of FM24LC04  A2A1  =010 page0
 //#define EE_DISK3 0x53  //Address of FM24LC04  A2A1  =011 page1
 
-#define EE_DISK 0x50    //Address of AT24LC512 A2A1A0=000
 #define EE_ADDR_LEN 8    // AT24C01/02/04/08 len = 8  AT24C16/32/64/128/256/512 len=16 
 
+
+uint8_t adrlen;
 
 void setup() {
   Serial.begin(115200);
   Led.Init();
-  
+
   //for  use SerialUSB if selected from menu
 #if (MENU_USB_SERIAL || MENU_USB_IAD)
   while (!Serial.available()) {
@@ -52,23 +54,22 @@ void setup() {
 
   Serial.println("\nAT24CXX RW");
   delay(1000);
-  
+
   mywire.begin();
   Led.flash(10, 190, 10);
-
-}
-
-uint8_t adrlen;
-void loop() {
- adrlen = EE_ADDR_LEN;
+  adrlen = EE_ADDR_LEN;
   for (uint16_t i = 0; i < 16; i++) {
     for (uint16_t j = 0; j < 16; j++) {
+      //      writeEEPROM(EE_DISK,i * 16 + j, i * 16 + j);
       Serial << _HEX(readEEPROM(EE_DISK, i * 16 + j)) << "  ";
     }
     Serial << "\n";
   }
   Serial << "read ok\n\n";
   delay(5000);
+
+}
+void loop() {
 }
 
 void writeEEPROM(uint16_t dev, unsigned int eeaddress, byte data )

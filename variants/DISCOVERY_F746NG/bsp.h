@@ -65,13 +65,13 @@ uint8_t BSP_SDRAM_Sendcmd(FMC_SDRAM_CommandTypeDef *SdramCmd);
 void    BSP_SDRAM_MspInit(SDRAM_HandleTypeDef  *hsdram, void *Params);
 void    BSP_SDRAM_MspDeInit(SDRAM_HandleTypeDef  *hsdram, void *Params);
 
-#ifdef __cplusplus
-}
-#endif
-
 #if USE_EXTRAMSYSMALLOC
 void setHeapAtSram(void);
 void setHeapAtCCram(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* __STM32746G_DISCOVERY_SDRAM_H */

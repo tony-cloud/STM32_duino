@@ -108,20 +108,6 @@
 #define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000)
 #define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)
 
-/**
-  * @}
-  */
-  
-/** @defgroup STM32F429I_DISCOVERY_SDRAM_Exported_Macro STM32F429I DISCOVERY SDRAM Exported Macro
-  * @{
-  */
-/**
-  * @}
-  */ 
-
-/** @defgroup STM32F429I_DISCOVERY_SDRAM_Exported_Functions STM32F429I DISCOVERY SDRAM Exported Functions
-  * @{
-  */
 void              BSP_SDRAM_Init(void);
 void              BSP_SDRAM_Initialization_sequence(uint32_t RefreshCount);
 void              BSP_SDRAM_ReadData(uint32_t uwStartAddress, uint32_t* pData, uint32_t uwDataSize);
@@ -131,26 +117,6 @@ void              BSP_SDRAM_WriteData_DMA(uint32_t uwStartAddress, uint32_t* pDa
 HAL_StatusTypeDef BSP_SDRAM_Sendcmd(FMC_SDRAM_CommandTypeDef *SdramCmd);
 void              BSP_SDRAM_DMA_IRQHandler(void);
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */   
-
-/**
-  * @}
-  */
-
-#ifdef __cplusplus
-}
-#endif
-
 #define SDRAM_START  0xC0000000U  /*for arduino*/
 #define SDRAM_LENGTH   0x800000U  /*for arduino*/
 
@@ -159,6 +125,9 @@ void setHeapAtSram(void);
 void setHeapAtCCram(void);
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BSP_H */
 

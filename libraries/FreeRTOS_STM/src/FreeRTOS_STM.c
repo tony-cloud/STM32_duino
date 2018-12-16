@@ -80,15 +80,17 @@ void SysTick_Handler(void) {
 #endif
 
 #if portUSE_HEAP == 1
-#pragma message "port heap use heap_1.c"
+#pragma message "heap_1 used."
 #elif portUSE_HEAP == 2
-#pragma message "port heap use heap_2.c"
+#pragma message "heap_2 used."
 #elif portUSE_HEAP == 3
-#pragma message "port heap use heap_3.c"
+#pragma message "heap_3 used."
 #elif portUSE_HEAP == 4
-#pragma message "port heap use heap_4.c"
+#pragma message "heap_4 used."
 #elif portUSE_HEAP == 5
-#pragma message "port heap use heap_5.c"
+#pragma message "heap_5 used."
+#else
+#pragma message "heap_useNewlib used."
 #endif
 
 #if configUSE_COUNTING_SEMAPHORES > 0

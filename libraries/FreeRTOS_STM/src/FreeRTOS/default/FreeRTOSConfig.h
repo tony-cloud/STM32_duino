@@ -67,8 +67,8 @@
     1 tab == 4 spaces!
 */
 
-#ifndef FREERTOS_CONFIG_H
-#define FREERTOS_CONFIG_H
+#ifndef _FREERTOS_CONFIG_DEFAULT_H_
+#define _FREERTOS_CONFIG_DEFAULT_H_
 
 /*-----------------------------------------------------------
  * Application specific definitions.
@@ -80,7 +80,7 @@
  * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE.
  *
  * See http://www.freertos.org/a00110.html.
- *----------------------------------------------------------*/
+ *--------------------------------------------------------------------*/
 
 /* USER CODE BEGIN Includes */   	      
 /* Section where include file can be added */
@@ -88,23 +88,31 @@
 
 /* Ensure stdint is only used by the compiler, and not the assembler. */
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
-    #include <stdint.h>
-    extern uint32_t SystemCoreClock;
+   #include <stdint.h>
+   extern uint32_t SystemCoreClock;
 #endif
 
 #ifndef portTickUSE_TIMx
-
-#ifdef TIM7
-#define portTickUSE_TIMx 7
-#else
-#define portTickUSE_TIMx 0
+#  ifdef TIM7
+#    define portTickUSE_TIMx 7
+#  else
+#    define portTickUSE_TIMx 0
+#  endif
 #endif
 
+#ifndef portUSE_HEAP
+	#define  portUSE_HEAP  3
 #endif
 
-#define configUSE_PREEMPTION                     1
-#define configSUPPORT_STATIC_ALLOCATION          0
-#define configSUPPORT_DYNAMIC_ALLOCATION         1
+#ifndef configUSE_PREEMPTION
+#  define configUSE_PREEMPTION                   1
+#endif
+#ifndef configSUPPORT_STATIC_ALLOCATION
+#  define configSUPPORT_STATIC_ALLOCATION        0
+#endif
+#ifndef configSUPPORT_DYNAMIC_ALLOCATION
+#  define configSUPPORT_DYNAMIC_ALLOCATION       1
+#endif
 
 #ifndef configUSE_IDLE_HOOK
 #  define configUSE_IDLE_HOOK                    0
@@ -114,42 +122,94 @@
 #  define configUSE_TICK_HOOK                    0
 #endif
 
+#ifndef configCPU_CLOCK_HZ
 #define configCPU_CLOCK_HZ                       ( SystemCoreClock )
+#endif
+
+#ifndef configTICK_RATE_HZ
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
+#endif
+
+#ifndef configMAX_PRIORITIES
 #define configMAX_PRIORITIES                     ( 7 )
+#endif
 
 #ifndef configMINIMAL_STACK_SIZE
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
 #endif
 
 #ifndef configTOTAL_HEAP_SIZE
+#ifdef RAM_LENGTH
+#define configTOTAL_HEAP_SIZE                    (RAM_LENGTH/8)
+#else
 #define configTOTAL_HEAP_SIZE                    ((size_t)(8*1024))
 #endif
+#endif
 
+#ifndef configMAX_TASK_NAME_LEN
 #define configMAX_TASK_NAME_LEN                  ( 16 )
+#endif
+
+#ifndef configUSE_16_BIT_TICKS
 #define configUSE_16_BIT_TICKS                   0
+#endif
+
+#ifndef configUSE_MUTEXES
 #define configUSE_MUTEXES                        1
+#endif
+
+#ifndef configQUEUE_REGISTRY_SIZE
 #define configQUEUE_REGISTRY_SIZE                8
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION  1
+#endif
+
+#ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
+#endif
 
 /* Co-routine definitions. */
+#ifndef configUSE_CO_ROUTINES
 #define configUSE_CO_ROUTINES                    0
+#endif
+
+#ifndef configMAX_CO_ROUTINE_PRIORITIES
 #define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
+#endif
+
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
+#ifndef INCLUDE_vTaskPrioritySet
 #define INCLUDE_vTaskPrioritySet            1
+#endif
+
+#ifndef INCLUDE_uxTaskPriorityGet
 #define INCLUDE_uxTaskPriorityGet           1
+#endif
+
+#ifndef INCLUDE_vTaskDelete
 #define INCLUDE_vTaskDelete                 1
+#endif
+
+#ifndef INCLUDE_vTaskCleanUpResources
 #define INCLUDE_vTaskCleanUpResources       0
+#endif
+
+#ifndef INCLUDE_vTaskSuspend
 #define INCLUDE_vTaskSuspend                1
+#endif
+
 
 #ifndef INCLUDE_vTaskDelayUntil
 #  define INCLUDE_vTaskDelayUntil           0
 #endif
 
+#ifndef INCLUDE_vTaskDelay
 #define INCLUDE_vTaskDelay                  1
+#endif
+
+#ifndef INCLUDE_xTaskGetSchedulerState
 #define INCLUDE_xTaskGetSchedulerState      1
+#endif
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
@@ -159,6 +219,7 @@ to exclude the API function. */
  #define configPRIO_BITS         4
 #endif
 
+#if configPRIO_BITS > 3
 /* The lowest interrupt priority that can be used in a call to a "set priority"
 function. */
 #define configLIBRARY_LOWEST_INTERRUPT_PRIORITY   15
@@ -168,13 +229,22 @@ routine that makes calls to interrupt safe FreeRTOS API functions.  DO NOT CALL
 INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
 PRIORITY THAN THIS! (higher priorities are lower numeric values. */
 #define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY  5
+#else
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY   3
+#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY  3
+#endif
 
 /* Interrupt priorities used by the kernel port layer itself.  These are generic
 to all Cortex-M ports, and do not rely on any particular library functions. */
+#ifndef configKERNEL_INTERRUPT_PRIORITY
 #define configKERNEL_INTERRUPT_PRIORITY 		( configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
+#endif
+
 /* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY 	( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
+#ifndef configMAX_SYSCALL_INTERRUPT_PRIORITY
+# define configMAX_SYSCALL_INTERRUPT_PRIORITY 	( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
+#endif
 
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
@@ -186,9 +256,15 @@ header file. */
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
+#ifndef vPortSVCHandler
 #define vPortSVCHandler     SVC_Handler
+#endif
+#ifndef xPortPendSVHandler
 #define xPortPendSVHandler  PendSV_Handler
+#endif
+#ifndef xPortSysTickHandler
 #define xPortSysTickHandler HAL_SYSTICK_Callback
+#endif
 
 /* IMPORTANT: This define MUST be commented when used with STM32Cube firmware, 
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */

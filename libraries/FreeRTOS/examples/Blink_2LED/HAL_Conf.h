@@ -36,7 +36,7 @@
  */
  
 #define USE_ERRORBLINK 1
-#undef configASSERT
+#undef  configASSERT
 #define configASSERT( x ) if( ( x ) == 0 ) {assertMsg(__FILE__,__LINE__);}
 
 #define configUSE_MALLOC_FAILED_HOOK   1
@@ -55,8 +55,8 @@
 #undef  INCLUDE_vTaskDelayUntil
 #define INCLUDE_vTaskDelayUntil 1
 
-#undef   configUSE_IDLE_HOOK 
-#define  configUSE_IDLE_HOOK 1
+#undef  configUSE_IDLE_HOOK 
+#define configUSE_IDLE_HOOK 1
 
 #undef  configUSE_TICK_HOOK
 #define configUSE_TICK_HOOK  1

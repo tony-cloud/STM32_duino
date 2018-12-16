@@ -29,6 +29,11 @@
 */
 
 #include <FreeRTOS.h>
+/*Check environment configuration*/
+#if INCLUDE_vTaskDelayUntil == 0
+# error	"!Use vTaskDelayUntil the macro variable INCLUDE_vTaskDelayUntil must be set to 1 in file HAL_Conf.h!"
+#endif
+
 //------------------------------------------------------------------------------
 struct task_t {
   uint16_t period;
@@ -89,6 +94,7 @@ void done(const char* msg, task_t* task, TickType_t now) {
   Serial.println(now);
   Serial.print("Task: ");
   printTask(task);
+  
   while (1);
 }
 //------------------------------------------------------------------------------

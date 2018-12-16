@@ -1,7 +1,7 @@
 /*
   Example 16. Re-writing vPrintString() to Use a Gatekeeper Task
   重新编写 vPrintString()以使用一个守卫把关任务
-  
+
   FreeRTOS.org V9.0.0 - Copyright (C) 2003-2017 Richard Barry.
   This file is part of the FreeRTOS.org distribution.
 
@@ -24,7 +24,7 @@
   the source code for any proprietary components.  See the licensing section
   of http://www.FreeRTOS.org for full details of how and when the exception
   can be applied.
-  
+
   Attention:
       to hook vApplicationTickHook() function, must be set configUSE_TICK_HOOK > 0
 */
@@ -63,10 +63,10 @@ void setup( void )
   /* The tasks are going to use a pseudo random delay, seed the random number
     generator. */
 #if defined( STM32H7) && ( __GNUC__ < 6)
- // GCC 5.4.2-2016q2 srand(x) and rand() have a bug for STM32H7 into HardFault_Handler
- // but GCC 7.3.1-2018q2 ok   huaweiwx@sina.com 2018.7.20
-#else 
-  randomSeed( 567 ); 
+  // GCC 5.4.2-2016q2 srand(x) and rand() have a bug for STM32H7 into HardFault_Handler
+  // but GCC 7.3.1-2018q2 ok   huaweiwx@sina.com 2018.7.20
+#else
+  randomSeed( 567 );
 #endif
 
   /* Check the queue was created successfully. */
@@ -125,28 +125,25 @@ static void prvStdioGatekeeperTask( void *pvParameters )
 }
 
 /******************   vApplicationTickHook   **********************************
- *  Use vApplicationTickHook must set configUSE_TICK_HOOK  1                  *
+    Use vApplicationTickHook must set configUSE_TICK_HOOK  1
  ******************************************************************************/
-extern "C" {
-  void vApplicationTickHook( void );
-  void vApplicationTickHook( void ) // FreeRTOS expects C linkage
+void vApplicationTickHook(void)
+{
+  static int iCount = 0;
+  portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+
+  /* Print out a message every 200 ticks.  The message is not written out
+    directly, but sent to the gatekeeper task. */
+  iCount++;
+  if ( iCount >= 200 )
   {
-    static int iCount = 0;
-    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+    /* In this case the last parameter (xHigherPriorityTaskWoken) is not
+      actually used but must still be supplied. */
+    xQueueSendToFrontFromISR( xPrintQueue, &( pcStringsToPrint[ 2 ] ), &xHigherPriorityTaskWoken );
 
-    /* Print out a message every 200 ticks.  The message is not written out
-      directly, but sent to the gatekeeper task. */
-    iCount++;
-    if ( iCount >= 200 )
-    {
-      /* In this case the last parameter (xHigherPriorityTaskWoken) is not
-        actually used but must still be supplied. */
-      xQueueSendToFrontFromISR( xPrintQueue, &( pcStringsToPrint[ 2 ] ), &xHigherPriorityTaskWoken );
-
-      /* Reset the count ready to print out the string again in 200 ticks
-        time. */
-      iCount = 0;
-    }
+    /* Reset the count ready to print out the string again in 200 ticks
+      time. */
+    iCount = 0;
   }
 }
 /*-----------------------------------------------------------*/
@@ -175,7 +172,7 @@ static void prvPrintTask( void *pvParameters )
       rand() should be protected using a critical section. */
 #if defined( STM32H7) && ( __GNUC__ < 6)
 #warning  "GCC 5.4.2-2016q2  srand(x) and rand() have a bug for STM32H7 into HardFault_Handler  but GCC 7.3.1-2018q2  ok"
-//huaweiwx@sina.com 2018.7.20"
+    //huaweiwx@sina.com 2018.7.20"
     vTaskDelay(0x100);
 #else
     vTaskDelay(random(0x200));
@@ -185,11 +182,11 @@ static void prvPrintTask( void *pvParameters )
 
 
 /****************  default idle hook callback if configUSE_IDLE_HOOK ***************************
- * 1  STM32GENERIC loop() is call by default idle hook if enable(set configUSE_IDLE_HOOK to 1) *
- * 2  Idle loop has a very small stack (check or set configMINIMAL_STACK_SIZE)                 * 
- * 3  Loop must never block.                                                                   * 
- * 4  This default idle hook can be overload by vApplicationIdleHook()                         * 
+   1  STM32GENERIC loop() is call by default idle hook if enable(set configUSE_IDLE_HOOK to 1)
+   2  Idle loop has a very small stack (check or set configMINIMAL_STACK_SIZE)
+   3  Loop must never block.
+   4  This default idle hook can be overload by vApplicationIdleHook()
  ***********************************************************************************************/
 void loop() {
-  for(;;){} //This example Not used.
+  for (;;) {} //This example Not used.
 }

@@ -11,7 +11,7 @@
 BUTTONClass::BUTTONClass() {
   pdata->nr = 0;
   pdata->on = 0;
-  pdata->mode = 0
+  pdata->mode = 0;
 }
 
 BUTTONClass::BUTTONClass (uint16_t mask,uint8_t k0,uint8_t k1, uint8_t k2, uint8_t k3,
@@ -46,10 +46,10 @@ BUTTONClass::BUTTONClass (uint16_t mask,uint8_t k0,uint8_t k1, uint8_t k2, uint8
   pdata->nr = nr;
 }
 
-void BUTTONClass::setKey(uint8_t pin,uint8_t on,uint8_t mode){
+void BUTTONClass::setKey(uint8_t pin,uint16_t on,ButtonMode_TypeDef _mode){
   uint8_t nr = pdata->nr;
   uint8_t mask = on? 0x01:0x0;
-  uint8_t mode = mode? 0x01:0x0;
+  ButtonMode_TypeDef mode = _mode;
   if(nr <16)
   {
 	pdata->pins[nr] = pin;

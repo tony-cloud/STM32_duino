@@ -1,7 +1,7 @@
 /*
   Template_FreeRTOS90.ino running in FreeRTOS V9.0.
   This example code is in the public domain.
-  modified for STM32 HALMX  by huaweiwx@sina.com , May 2 2017
+  For STM32 HALMX  by huaweiwx@sina.com , May 2 2017
 */
 
 #include <FreeRTOS.h>

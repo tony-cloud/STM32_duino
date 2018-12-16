@@ -21,6 +21,11 @@
 # define I2C_PORT_NR 1
 #endif
 
+#if USE_ITERATOR >0  /*for stl begin/end is keywords for iteration*/
+#define begin Init
+#define end   deInit
+#endif
+
 TwoWire *slaveTwoWire[I2C_PORT_NR];
 
 

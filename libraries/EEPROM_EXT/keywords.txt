@@ -14,14 +14,14 @@ AT24CXX_TypeDef	KEYWORD1
 #######################################
 #EXTEEPROM
 setPins	KEYWORD2  
-writeOneByte	KEYWORD2
-writeLenByte	KEYWORD2
 write	KEYWORD2
-read	KEYWORD2
+writeLenByte	KEYWORD2
+writeBuf	KEYWORD2
 check	KEYWORD2
-readOneByte	KEYWORD2
-begin	KEYWORD2
+read	KEYWORD2
 readLenByte	KEYWORD2
+readBuf	KEYWORD2
+begin	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

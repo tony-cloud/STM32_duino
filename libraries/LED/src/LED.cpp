@@ -16,37 +16,38 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 #include "LED.h"
 
 #ifdef LED_BUILTIN
-LEDClass<LED_BUILTIN, bitRead(LED_MASK,0)>Led;
+LEDClass Led(LED_BUILTIN, bitRead(LED_MASK,0));
 #endif
 
 #ifdef LED1_BUILTIN
-LEDClass<LED1_BUILTIN, bitRead(LED_MASK,1)>Led1;
+LEDClass Led1(LED1_BUILTIN, bitRead(LED_MASK,1));
 #endif
 
 #ifdef LED2_BUILTIN
-LEDClass<LED2_BUILTIN, bitRead(LED_MASK,2)>Led2;
+LEDClass Led2(LED2_BUILTIN, bitRead(LED_MASK,2));
 #endif
 
 #ifdef LED3_BUILTIN
-LEDClass<LED3_BUILTIN, bitRead(LED_MASK,3)>Led3;
+LEDClass Led3(LED3_BUILTIN, bitRead(LED_MASK,3));
 #endif
 
 #ifdef LED4_BUILTIN
-LEDClass<LED4_BUILTIN, bitRead(LED_MASK,4)>Led4;
+LEDClass Led4(LED4_BUILTIN, bitRead(LED_MASK,4));
 #endif
 
 #ifdef LED5_BUILTIN
-LEDClass<LED5_BUILTIN, bitRead(LED_MASK,5)>Led5;
+LEDClass Led5(LED5_BUILTIN, bitRead(LED_MASK,5));
 #endif
 
 #ifdef LED6_BUILTIN
-LEDClass<LED6_BUILTIN, bitRead(LED_MASK,6)>Led6;
+LEDClass Led6(LED6_BUILTIN, bitRead(LED_MASK,6));
 #endif
 
 #ifdef LED7_BUILTIN
-LEDClass<LED7_BUILTIN, bitRead(LED_MASK,7)>Led7;
+LEDClass Led7(LED7_BUILTIN, bitRead(LED_MASK,7));
 #endif
 

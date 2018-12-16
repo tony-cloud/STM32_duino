@@ -62,12 +62,12 @@ void STM_FSMC_LCD_TimeSet(uint8_t _as, uint8_t _ds);
 void STM_FSMC_SRAM_Init(void);
 //void STM_FSMC_NAND_Init(void);
 
-#ifdef __cplusplus
-} //extern "C"
-#endif
-
 #if USE_EXTRAMSYSMALLOC
 void setHeapAtSram(void);
+#endif
+
+#ifdef __cplusplus
+} //extern "C"
 #endif
 
 #endif   //__BSP_H__

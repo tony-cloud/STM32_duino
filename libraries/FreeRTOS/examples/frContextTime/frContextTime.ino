@@ -8,6 +8,14 @@
 
 #include <FreeRTOS.h>
 
+/*Check environment configuration*/
+#if configUSE_COUNTING_SEMAPHORES == 1
+// Semaphore to trigger context switch
+SemaphoreHandle_t xSemaphore;
+#else
+# error	"!The macro variable configUSE_COUNTING_SEMAPHORES must be set to 1 in file HAL_Conf.h!"
+#endif
+
 // The LED is attached to pin 13 on Arduino.
 #ifdef  LED_BUILTIN
 # define LED_PIN    LED_BUILTIN
@@ -17,8 +25,6 @@
 #	define LED_ON 1   //fixd me
 #endif
 
-// Semaphore to trigger context switch
-SemaphoreHandle_t xSemaphore;
 //------------------------------------------------------------------------------
 // high priority thread to set pin low
 static void ledOffTask(void *pvParameters) {

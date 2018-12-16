@@ -18,8 +18,13 @@
 #ifdef STM32F7
     #include "stm32f7xx_ll_gpio.h"
 #endif
+
 #ifdef STM32H7
-//    #include "stm32h7xx_ll_gpio.h"
+# define LL_GPIO_SetOutputPin(p,m)   (p)->BSRRH=(m)
+# define LL_GPIO_ResetOutputPin(p,m) (p)->BSRRL=(m)
+# define LL_GPIO_IsInputPinSet(p,m)  (((p)->IDR & m)?1:0)
+# define LL_GPIO_TogglePin(p,m)      (p)->ODR ^= (m)
+//    #include "stm32h7xx_ll_gpio.h"   
 #endif
 #ifdef STM32L0
     #include "stm32l0xx_ll_gpio.h"

@@ -46,7 +46,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "../../Source/include/FreeRTOS.h"
 
-#if defined(TIM7)&& (portTickUSE_TIMx == 7)
+#if (portTickUSE_TIMx == 7)
+#if defined(TIM7)
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
   */
@@ -164,8 +165,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /* USER CODE END Callback 1 */
 }	
+#else
+#error "!!! you selected portTickUSE_TIMx == 7 error, but this mcu not TIM7 !!! Please selected 0 or 11"
+#endif /* (portTickUSE_TIMx == 7) */
+#endif /* (TIM7) */
 
-#elif defined(TIM11) && (portTickUSE_TIMx == 11)
+#if (portTickUSE_TIMx == 11)
+#if defined(TIM11)
  /*401C*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -289,14 +295,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /* USER CODE END Callback 1 */
 }
-#endif //portTickUSE_TIMx
 
-/**
-  * @}
-  */ 
+# if  defined(TIM7)	
+# pragma message "You have selected portTickUSE_TIMx == 11. but this mcu has TIM7. Recommended use of TIM7"
+# endif /* (TIM7) */
+#else
+# error "!!! you selected portTickUSE_TIMx == 11 error, but this mcu not TIM11 !!! Please selected another"
+#endif /* (portTickUSE_TIMx == 11) */
 
-/**
-  * @}
-  */ 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif /*(TIM11)*/
+
 #endif //defined(STM32F4)

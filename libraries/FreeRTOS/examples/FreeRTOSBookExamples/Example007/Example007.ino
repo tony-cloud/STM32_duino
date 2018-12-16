@@ -32,9 +32,6 @@
 
 #include "FreeRTOS.h"
 
-/* Demo includes. */
-#include "basic_io_arm.h"
-
 /* The task function. */
 void vTaskFunction( void *pvParameters );
 
@@ -93,22 +90,19 @@ void vTaskFunction( void *pvParameters )
 
 //------------------  vApplicationIdleHook: default idle hook ----------------
 //
-extern "C" {
-  void vApplicationIdleHook( void );
-  void vApplicationIdleHook( void ) // FreeRTOS expects C linkage
-  {
-    /* This hook function does nothing but increment a counter. */
-    ulIdleCycleCount++;
-  }
+void vApplicationIdleHook( void ) // FreeRTOS expects C linkage
+{
+  /* This hook function does nothing but increment a counter. */
+  ulIdleCycleCount++;
 }
 
 
 /****************  default idle hook callback if configUSE_IDLE_HOOK ***************************
- * 1  STM32GENERIC loop() is call by default idle hook if enable(set configUSE_IDLE_HOOK to 1) *
- * 2  Idle loop has a very small stack (check or set configMINIMAL_STACK_SIZE)                 * 
- * 3  Loop must never block.                                                                   * 
- * 4  This default idle hook can be overload by vApplicationIdleHook()                         * 
+   1  STM32GENERIC loop() is call by default idle hook if enable(set configUSE_IDLE_HOOK to 1)
+   2  Idle loop has a very small stack (check or set configMINIMAL_STACK_SIZE)
+   3  Loop must never block.
+   4  This default idle hook can be overload by vApplicationIdleHook()
  ***********************************************************************************************/
 void loop() {
-  for(;;){} //This example Not used.
+  for (;;) {} //This example Not used.
 }

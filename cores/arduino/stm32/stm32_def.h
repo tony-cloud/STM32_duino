@@ -1,6 +1,6 @@
 #ifndef STM32_DEF_H
 #define STM32_DEF_H
-
+#include "util/toolschain.h"
 #include "stm32_build_defines.h"
 
 #ifdef STM32F0

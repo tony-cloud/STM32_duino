@@ -20,6 +20,7 @@
   SOFTWARE.
 */
 
+#pragma GCC diagnostic ignored "-Wunused-function"
 #include "stm32_gpio_af.h"
 
 #include CHIP_PERIPHERAL_INCLUDE
@@ -48,13 +49,12 @@ uint32_t stm32GetClockFrequency(void *instance) {
 	return 0;
 }
 
-stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask) {
-    for(size_t i=0; i<sizeof(chip_adc1_channel) / sizeof(chip_adc1_channel[0]); i++) {
-        if (chip_adc1_channel[i].port == port && chip_adc1_channel[i].pinMask == pinMask) {
-            return chip_adc1_channel[i];
-        }
+stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask, uint8_t start) {
+    for(size_t i=start; i<sizeof(chip_adc1_channel) / sizeof(chip_adc1_channel[0]); i++) {
+       if (chip_adc1_channel[i].port == port && chip_adc1_channel[i].pinMask == pinMask) {
+         return chip_adc1_channel[i];
+       }
     }
-
     stm32_chip_adc1_channel_type notFound = {0};
     return notFound;
 }

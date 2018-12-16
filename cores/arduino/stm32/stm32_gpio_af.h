@@ -167,9 +167,9 @@ void stm32AfSDIO8BitInit(const SD_TypeDef *instance,
 uint32_t stm32GetClockFrequency(void *instance);
 
 /**
- * Get the ADC1 channel for the specified port / pin
+ * Get the ADC1 channel for the specified port / pin 
  */
-stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask);
+stm32_chip_adc1_channel_type stm32ADC1GetChannel(GPIO_TypeDef *port, uint32_t pinMask, uint8_t start);
 
 /**
  * Internal: set the AF function for the selected peripheral on the selected pin, with GPIO_SPEED_FREQ_VERY_HIGH speed

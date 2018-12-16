@@ -5,11 +5,24 @@
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
+STM32DMA	KEYWORD1
+dma	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+stm32DmaAcquire	KEYWORD2
+stm32DmaRelease	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
+dma_request_to_instance_t	LITERAL1
+
+SPI_TX	LITERAL1 
+SPI_RX	LITERAL1
+SDIO_RXTX	LITERAL1
+DAC1_CH1	LITERAL1
+DAC1_CH2	LITERAL1
+MEMTOMEM	LITERAL1
+
 #######################################

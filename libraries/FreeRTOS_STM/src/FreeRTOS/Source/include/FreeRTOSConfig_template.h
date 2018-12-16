@@ -164,6 +164,7 @@ header file. */
    standard names. */
 #define vPortSVCHandler    SVC_Handler
 #define xPortPendSVHandler PendSV_Handler
+#define xPortSysTickHandler HAL_SYSTICK_Callback /* STM32Cube HAL */
 
 /* IMPORTANT: This define MUST be commented when used with STM32Cube firmware, 
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */

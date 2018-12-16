@@ -118,13 +118,13 @@ void              BSP_SDRAM_DMA_IRQHandler(void);
   * @}
   */
 
-#ifdef __cplusplus
-}
-#endif
-
 #if USE_EXTRAMSYSMALLOC
 void setHeapAtSram(void);
 void setHeapAtCCram(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* __STM32F429I_DISCOVERY_SDRAM_H */

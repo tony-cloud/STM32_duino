@@ -68,7 +68,9 @@ uint32_t                 uwIncrementState = 0;
   * @param  TickPriority: Tick interrupt priorty.
   * @retval HAL status
   */
-#if defined(TIM7) && (portTickUSE_TIMx == 7)
+ 
+#if (portTickUSE_TIMx == 7)
+#if defined(TIM7)
 TIM_HandleTypeDef        htim7; 
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -173,6 +175,9 @@ void TIM7_IRQHandler(void)
 /**
   * @}
   */ 
-#endif  /* portTickUSE_TIMx */
-#endif  
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#else
+#error "!!! you selected portTickUSE_TIMx == 7 error, but this mcu not TIM7 !!! "
+#endif /* (portTickUSE_TIMx == 7) */
+#endif /* (TIM7) */
+
+#endif //defined(STM32F1/2/L1)

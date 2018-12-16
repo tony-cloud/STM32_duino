@@ -78,12 +78,13 @@ void STM_FSMC_SRAM_Init(void);
 uint8_t STM_FSMC_NOR_Init(void);
 void STM_FSMC_NAND_Init(void);
 
+#if USE_EXTRAMSYSMALLOC
+void setHeapAtSram(void);
+#endif
+
 #ifdef __cplusplus
 } //extern "C"
 #endif
 
-#if USE_EXTRAMSYSMALLOC
-void setHeapAtSram(void);
-#endif
 
 #endif   //__BSP_H__

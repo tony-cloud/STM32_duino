@@ -1,14 +1,9 @@
 /*
   Blink2_FreeRTOS90.ino
-  Turns on 2 LEDs on/off , running in FreeRTOS V9.0.
-
-  Most Arduinos have an on-board LED you can control. On the Uno and
-  Leonardo, it is attached to digital pin 13. If you're unsure what
-  pin the on-board LED is connected to on your Arduino model, check
-  the documentation at http://www.arduino.cc
+  Turns 2 LEDs on/off , running in FreeRTOS V9.0/10.0
 
   This example code is in the public domain.
-  modified for STM32 HALMX   by huaweiwx@sina.com , May 2 2017
+  Tested STM32 HALMX by huaweiwx@sina.com , May 2 2017
 */
 
 #include <FreeRTOS.h>

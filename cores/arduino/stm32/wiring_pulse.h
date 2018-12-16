@@ -26,8 +26,7 @@
  * to 3 minutes in length, but must be called at least a few dozen microseconds
  * before the start of the pulse.
  */
-extern uint32_t pulseIn( uint32_t pin, uint32_t state, uint32_t timeout = 1000000L ) ;
-extern uint32_t pulseInLong( uint32_t pin, uint32_t state, uint32_t timeout = 1000000L ) ;
+uint32_t pulseIn( uint32_t pin, uint32_t state, uint32_t timeout = 1000000) ;
+#define pulseInLong pulseIn
 #endif
-
 #endif /* _WIRING_PULSE_ */

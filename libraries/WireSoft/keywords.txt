@@ -11,22 +11,22 @@
 # Instances (KEYWORD1)
 #######################################
 
-Wire	KEYWORD1
-TwoWire	KEYWORD1
+WireSoft	KEYWORD2
+TwoWireSoft	KEYWORD2
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-begin	KEYWORD2
-end	KEYWORD2
-setPins	KEYWORD2
-setClock	KEYWORD2
-beginTransmission	KEYWORD2
-endTransmission	KEYWORD2
-requestFrom	KEYWORD2
-send	KEYWORD2
-receive	KEYWORD2
+begin	KEYWORD1
+end	KEYWORD1
+setPins	KEYWORD1
+setClock	KEYWORD1
+beginTransmission	KEYWORD1
+endTransmission	KEYWORD1
+requestFrom	KEYWORD1
+send	KEYWORD1
+receive	KEYWORD1
 
 #######################################
 # Constants (LITERAL1)

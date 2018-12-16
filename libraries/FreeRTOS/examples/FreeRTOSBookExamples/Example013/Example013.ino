@@ -29,10 +29,6 @@
 
 #include "FreeRTOS.h"
 
-/* Demo includes. */
-#include "basic_io_arm.h"
-
-extern "C"  QueueHandle_t xQueueCreateCountingSemaphore( const UBaseType_t uxMaxCount, const UBaseType_t uxInitialCount );
 /* The tasks to be created. */
 static void vHandlerTask( void *pvParameters );
 static void vPeriodicTask( void *pvParameters );

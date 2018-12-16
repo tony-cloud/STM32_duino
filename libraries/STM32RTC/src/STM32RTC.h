@@ -42,7 +42,7 @@
 #define __STM32_RTC_H
 
 #include "Arduino.h"
-#include "stm32_HAL/stm32XXxxx_ll_rtc.h"
+#include "stm32_HAL/stm32XXxx_ll_rtc.h"
 #include <RTC.H>
 
 // Check if RTC HAL enable in variants/board_name/stm32yzxx_hal_conf.h
@@ -192,19 +192,6 @@ public:
   bool isAlarmEnabled(void) {
     return _alarmEnabled;
   }
-
-#if 0  
- inline uint8_t rstSource(void){
-#ifdef RCC_FLAG_BORRST // STM32L4
-	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_BORRST)) return  1;
-#else	 
-	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) return  1;
-#endif	 
-	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST)) return  2;
-
-	 if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) return 3;
-  }
-#endif
 
   void setRegister(uint32_t index, uint32_t value) /*add by huaweiwx@sina.com 2018.6.6*/
   {

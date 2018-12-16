@@ -65,6 +65,9 @@
 #define BIT30 (1 << 30)
 #define BIT31 (1 << 31)
 
+#if USE_BITCONSTANTS >0
+#warnning "for C++14 replace with 0bxxxxxxxx"
+
 #define B0        0
 #define B00       0
 #define B000      0
@@ -575,5 +578,5 @@
 #define B11111101 253
 #define B11111110 254
 #define B11111111 255
-
+#endif
 #endif  /* _BIT_CONSTANTS_H_ */

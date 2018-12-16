@@ -138,10 +138,21 @@ class TwoWire : public Stream {
 			};
     WIRE_StatusTypeDef setPins(uint8_t sda,uint8_t scl);
 	
+#if USE_ITERATOR >0
+    void Init();
+    void Init(uint8_t);
+    void Init(int);
+    void deInit();
+#else
+    __deprecated("This wire init func, if you use begin() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
     void begin();
+    __deprecated("This wire init func, if you use begin() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
     void begin(uint8_t);
+    __deprecated("This wire init func, if you use begin() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
     void begin(int);
     void end();
+#endif
+	
 	
     void setClock(uint32_t);
 	
@@ -165,12 +176,12 @@ class TwoWire : public Stream {
 
     void stm32SetInstance(I2C_TypeDef *instance){pdev->handle.Instance = instance;};
 
+	
     __deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSDA(uint8_t sda){pdev->sda = sda;};
-  
 	__deprecated("have a new func instead: setPins(sdapin,sclpin) add by huaweiwx")
     void stm32SetSCL(uint8_t scl){pdev->scl = scl;};
-
+	
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
     inline size_t write(long n) { return write((uint8_t)n); }
     inline size_t write(unsigned int n) { return write((uint8_t)n); }

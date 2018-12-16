@@ -32,7 +32,16 @@
 #include "stm32_gpio.h"
 #include "Stream.h"
 #include "util/toolschain.h"
+
+#ifndef BUFFER_SIZE
 #define BUFFER_SIZE 128
+#endif
+#ifndef RX_BUFFER_SIZE
+#define RX_BUFFER_SIZE BUFFER_SIZE
+#endif
+#ifndef TX_BUFFER_SIZE
+#define TX_BUFFER_SIZE BUFFER_SIZE
+#endif
 
 /*from Arduino_Core*/
 #ifdef UART_WORDLENGTH_7B
@@ -55,10 +64,10 @@
 #define SERIAL_7O2 0x3C
 #define SERIAL_8O2 0x3E
 
-class HardwareSerial : public Stream  {
+class HardwareSerial : public Stream{
   public:
     HardwareSerial(USART_TypeDef *instance);
-    void begin(const uint32_t baud, uint8_t config = SERIAL_8N1);
+    void begin(const uint32_t baud = 115200, uint8_t config = SERIAL_8N1);
     void configForLowPower(void);
     void end(void);
     int available(void);
@@ -86,13 +95,22 @@ class HardwareSerial : public Stream  {
     uint8_t receive_buffer = 0;
 
     uint8_t *txBuffer = NULL;
+#if TX_BUFFER_SIZE >256
+    volatile uint16_t txStart = 0;
+    volatile uint16_t txEnd = 0;
+#else
     volatile uint8_t txStart = 0;
     volatile uint8_t txEnd = 0;
+#endif
 
     uint8_t *rxBuffer = NULL;
+#if RX_BUFFER_SIZE >256
+    volatile uint16_t rxStart = 0;
+    volatile uint16_t rxEnd = 0;
+#else	
     volatile uint8_t rxStart = 0;
     volatile uint8_t rxEnd = 0;
-
+#endif
     //    GPIO_TypeDef *rxPort = NULL;
     //    uint32_t rxPin = 0;
     //    GPIO_TypeDef *txPort = NULL;

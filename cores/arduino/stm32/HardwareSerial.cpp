@@ -19,21 +19,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 
-  2018.1.8 change SerialUART to HardwareSerial comptatible with arduino stl libs 
-           and some apps modified by huaweiwx@sina.com
+  2018.1.8  change SerialUART to HardwareSerial comptatible with arduino stl libs 
+            and some apps modified by huaweiwx@sina.com
   2018.7.22 Thanks csnol!  modifyed begin(baud) to begin(baud, config) parm config(optional)
-           comptatible with arduino official implementation. by huaweiwx@sina.com
+            comptatible with arduino official implementation. by huaweiwx@sina.com
+  2018.10.7 fixed: error data may be returned from available() 
+;
 */
 
 /**
    TODO: Check if txBuffer is NULL in every method
-   TODO: generate different BUFFER_SIZE values for different boards based on available memory
+   TODO: generate different TX/RX_BUFFER_SIZE values for different boards based on available memory
    TODO: add alternate pin selection functions
    TODO: add constructor with custom buffer parameter
 */
-
-#include "HardwareSerial.h"
+#include "Arduino.h"
+//#include "HardwareSerial.h"
 #include "stm32_gpio_af.h"
+
+#if defined(USART3_6_IRQn) //f0
+#define USART3_IRQn USART3_6_IRQn
+#define USART4_IRQn USART3_6_IRQn
+#define USART5_IRQn USART3_6_IRQn
+#define USART6_IRQn USART3_6_IRQn
+#endif
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 /**
@@ -54,26 +63,26 @@ HardwareSerial::HardwareSerial(USART_TypeDef *instance) {
 
 void HardwareSerial::begin(const uint32_t baud, uint8_t config) {
   if (txBuffer == NULL) {
-    static uint8_t tx[BUFFER_SIZE];
+    static uint8_t tx[TX_BUFFER_SIZE];
     static uint8_t static_tx_used = 0;
 
     if (!static_tx_used) {
       txBuffer = (uint8_t*)tx;
       static_tx_used = true;
     } else {
-      txBuffer = (uint8_t*)malloc(BUFFER_SIZE);
+      txBuffer = (uint8_t*)malloc(TX_BUFFER_SIZE);
     }
   }
 
   if (rxBuffer == NULL) {
-    static uint8_t rx[BUFFER_SIZE];
+    static uint8_t rx[RX_BUFFER_SIZE];
     static uint8_t static_rx_used = 0;
 
     if (!static_rx_used) {
       rxBuffer = (uint8_t*)rx;
       static_rx_used = true;
     } else {
-      rxBuffer = (uint8_t*)malloc(BUFFER_SIZE);
+      rxBuffer = (uint8_t*)malloc(RX_BUFFER_SIZE);
     }
   }
 
@@ -491,8 +500,7 @@ void HardwareSerial::end(void) {
 }
 
 int HardwareSerial::available() {
-  if (rxEnd >= rxStart) return (rxEnd - rxStart);
-  return BUFFER_SIZE + rxEnd - rxStart;
+  return ((unsigned int) (RX_BUFFER_SIZE + rxEnd - rxStart)) % RX_BUFFER_SIZE;
 }
 
 int HardwareSerial::availableForWrite() {
@@ -501,20 +509,21 @@ int HardwareSerial::availableForWrite() {
 
 int HardwareSerial::peek() {
   if (available()) {
-    return rxBuffer[rxStart % BUFFER_SIZE];
+    return rxBuffer[rxStart];
   } else {
     return -1;
   }
 }
 
 void HardwareSerial::flush() {
-
-  while (txEnd % BUFFER_SIZE != txStart % BUFFER_SIZE);
+  while (txEnd != txStart);
 }
 
 int HardwareSerial::read() {
   if (available()) {
-    return rxBuffer[rxStart++ % BUFFER_SIZE];
+    uint8_t uc = rxBuffer[rxStart];
+	rxStart = (rxStart + 1) % RX_BUFFER_SIZE;
+    return uc;
   } else {
     return -1;
   }
@@ -524,12 +533,12 @@ size_t HardwareSerial::write(const uint8_t c) {
 #if PROTEUS
    HAL_UART_Transmit(handle, (uint8_t*)&c, 1,100); /*for proteus*/	  
 #else
-  while ((txEnd + 1) % BUFFER_SIZE == txStart % BUFFER_SIZE);
+  while ((txEnd + 1) % TX_BUFFER_SIZE == txStart);
 
-  txBuffer[txEnd % BUFFER_SIZE] = c;
-  txEnd++;
-  if (txEnd % BUFFER_SIZE == (txStart + 1) % BUFFER_SIZE) {
-    HAL_UART_Transmit_IT(handle, &txBuffer[txStart % BUFFER_SIZE], 1);
+  txBuffer[txEnd] = c;
+  txEnd = (txEnd + 1) % TX_BUFFER_SIZE;
+  if (txEnd == (txStart + 1) % TX_BUFFER_SIZE) {
+    HAL_UART_Transmit_IT(handle, &txBuffer[txStart], 1);
   } 
 #endif	
   return 1;
@@ -694,20 +703,21 @@ HardwareSerial SerialLPUART1(LPUART1);
 #endif
 
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-  interruptUART->txStart++;
+  interruptUART->txStart = (interruptUART->txStart+1) % TX_BUFFER_SIZE;
   if (interruptUART->txStart != interruptUART->txEnd) {
-    HAL_UART_Transmit_IT(interruptUART->handle, &interruptUART->txBuffer[interruptUART->txStart % BUFFER_SIZE], 1);
+    HAL_UART_Transmit_IT(interruptUART->handle, &interruptUART->txBuffer[interruptUART->txStart], 1);
   }
 }
 extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  interruptUART->rxBuffer[interruptUART->rxEnd % BUFFER_SIZE] = interruptUART->receive_buffer;
-  interruptUART->rxEnd++;
+  interruptUART->rxBuffer[interruptUART->rxEnd % RX_BUFFER_SIZE] = interruptUART->receive_buffer;
+  interruptUART->rxEnd = (interruptUART->rxEnd + 1) % RX_BUFFER_SIZE;
   HAL_UART_Receive_IT(interruptUART->handle, &interruptUART->receive_buffer, 1);
 }
 
+
 extern "C" void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-  volatile uint32_t tmpval;
+  uint32_t tmpval;
 #if defined(STM32F1) || defined(STM32F2) || defined(STM32F4) || defined(STM32L1)
   if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE) != RESET) {
     tmpval = huart->Instance->DR; /* Clear PE flag */

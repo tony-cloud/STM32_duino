@@ -8,7 +8,7 @@
 #ifndef _SDCARDCONFIG_H_
 #define _SDCARDCONFIG_H_
 
-#define SDCARD_SPIX  SPI1
+#define SDCARD_SPI   SPI1
 #define SDCARD_CS	 PA3
 #define SDCARD_SCK	 PA5
 #define SDCARD_MISO	 PA6

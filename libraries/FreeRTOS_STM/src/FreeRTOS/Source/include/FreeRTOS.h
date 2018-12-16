@@ -101,9 +101,9 @@ extern "C" {
 #   include "FreeRTOSConfig.h"
 #elif __has_include("configs/FreeRTOSConfig.h")  //
 #   include "configs/FreeRTOSConfig.h"
-#else /*FreeRTOS default define file*/
-#   include "FreeRTOS/default/FreeRTOSConfig.h"
 #endif
+
+#include "FreeRTOS/default/FreeRTOSConfig.h"
 
 
 /* Basic FreeRTOS definitions. */
@@ -114,7 +114,11 @@ extern "C" {
 
 /* Must be defaulted before configUSE_NEWLIB_REENTRANT is used below. */
 #ifndef configUSE_NEWLIB_REENTRANT
+# if portUSE_HEAP > 0
 	#define configUSE_NEWLIB_REENTRANT 0
+# else
+	#define configUSE_NEWLIB_REENTRANT 1
+# endif	
 #endif
 
 /* Required if struct _reent is used. */

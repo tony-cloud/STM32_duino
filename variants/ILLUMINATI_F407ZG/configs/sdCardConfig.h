@@ -8,9 +8,12 @@
 #ifndef _SDCARDCONFIG_H_
 #define _SDCARDCONFIG_H_
 
-#define USE_SDIO 1
-#define USE_STANDARD_SPI_LIBRARY 0
-
-#define SD_DATATIMEOUT  2000
+/* test soft spi use only */
+                   /*PC9     3 DAT1 */
+#define SDCARD_MISO	 PC8   /*4 DAT0 */
+#define SDCARD_SCK	 PC12  /*6 CLK  */
+#define SDCARD_MOSI	 PD2   /*8 CMD  */  
+#define SDCARD_CS	 PC11  /*9 CD/DAT3 */
+                  /* PC10    10 DAT2   */ 
 
 #endif  // _SDCARDCONFIG_H_

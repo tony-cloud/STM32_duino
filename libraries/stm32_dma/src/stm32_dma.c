@@ -18,12 +18,18 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+  
+  by huaweiwx@sina.com 
+  add dma request type: DAC   2018.7.22
+  add H7 support                   7.25
 */
 
 #include "stm32_def.h"
 #include "stm32_dma.h"
 
-#if defined(STM32F2) || defined(STM32F4) || defined(STM32F7)||defined(STM32H7)
+#if defined(STM32H7)
+#include "stm32_dma_H7.h"
+#elif defined(STM32F2) || defined(STM32F4) || defined(STM32F7)
 #include "stm32_dma_F2F4F7.h"
 #elif defined(STM32F0) || defined(STM32F1) || defined(STM32F3) || defined(STM32L1)
 #include "stm32_dma_F0F1F3L1.h"
@@ -39,35 +45,33 @@
 DMA_HandleTypeDef *dmaHandles[16];
 bool reserved[16];
 
-bool stm32DmaAcquire(DMA_HandleTypeDef *handle, dmaRequest request, void *periphInstance,  bool enableIrq) {
+bool stm32DmaAcquire(DMA_HandleTypeDef *handle, uint8_t request, void *periphInstance,  bool enableIrq) {
     if (handle->Instance != NULL) {
         return true;
     }
-
-    for(size_t i=0; i<sizeof(dmaRequestToStream) / sizeof(dmaRequestToStream[0]); i++) {
-        int dmaHandlesIndex = dmaRequestToStream[i].dmaHandlesIndex;
-        if (!reserved[dmaHandlesIndex]
-              && dmaRequestToStream[i].request == request
-              && dmaRequestToStream[i].periphInstance == periphInstance
-            ) {
-
-            setDmaInstance(handle, dmaRequestToStream[i]);
-
-            if (enableIrq) {
-                HAL_NVIC_SetPriority(dmaRequestToStream[i].irqN, DMA1_PRIORITY, 0);
-                HAL_NVIC_EnableIRQ(dmaRequestToStream[i].irqN);
-            }
-
-            if (dmaHandles[dmaHandlesIndex]) {
-                dmaHandles[dmaHandlesIndex]->Instance = NULL;
-            }
-
-            dmaHandles[dmaHandlesIndex] = handle;
-            reserved[dmaHandlesIndex] = true;
-
-            return true;
-        }
-    }
+	for(size_t i=0; i<sizeof(dmaRequestToStream) / sizeof(dmaRequestToStream[0]); i++) {
+		int dmaHandlesIndex = dmaRequestToStream[i].dmaHandlesIndex;
+		if (!reserved[dmaHandlesIndex]
+			  && dmaRequestToStream[i].request == request
+			  && dmaRequestToStream[i].periphInstance == periphInstance)				
+	      {
+			setDmaInstance(handle, dmaRequestToStream[i]);
+	
+			if (enableIrq) {
+				HAL_NVIC_SetPriority(dmaRequestToStream[i].irqN, DMA1_PRIORITY, 0);
+				HAL_NVIC_EnableIRQ(dmaRequestToStream[i].irqN);
+			}
+	
+			if (dmaHandles[dmaHandlesIndex]) {
+				dmaHandles[dmaHandlesIndex]->Instance = NULL;
+			}
+	
+			dmaHandles[dmaHandlesIndex] = handle;
+			reserved[dmaHandlesIndex] = true;
+	
+			return true;
+		} /*if*/
+	} /*for*/
     return false;
 }
 
@@ -75,7 +79,6 @@ void stm32DmaRelease(DMA_HandleTypeDef *handle) {
     if (handle->Instance == NULL) {
         return;
     }
-
     for(int i=0; i<16; i++) {
         if (dmaHandles[i] == handle) {
             reserved[i] = false;
@@ -85,82 +88,82 @@ void stm32DmaRelease(DMA_HandleTypeDef *handle) {
 }
 
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream0_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[0]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream1_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[1]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream2_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[2]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream3_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[3]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream4_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[4]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream5_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[5]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream6_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[6]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA1_Stream7_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[7]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream0_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[0 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream1_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[1 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream2_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[2 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream3_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[3 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream4_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[4 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream5_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[5 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream6_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[6 + 8]);
 }
 
-// F2, F4, F7
+// F2, F4, F7, H7
 extern void DMA2_Stream7_IRQHandler() {
     HAL_DMA_IRQHandler(dmaHandles[7 + 8]);
 }

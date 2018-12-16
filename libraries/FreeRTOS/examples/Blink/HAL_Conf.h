@@ -51,8 +51,8 @@
 #undef  INCLUDE_vTaskDelayUntil
 #define INCLUDE_vTaskDelayUntil 1
 
-#undef   configUSE_IDLE_HOOK 
-#define  configUSE_IDLE_HOOK 1
+#undef  configUSE_IDLE_HOOK 
+#define configUSE_IDLE_HOOK 1
 
 #undef  configUSE_TICK_HOOK
 #define configUSE_TICK_HOOK  1

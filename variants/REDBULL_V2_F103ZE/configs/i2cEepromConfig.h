@@ -1,13 +1,27 @@
-/* i2cEepromConfig.h: The specific board iiceeprom configfile ,arduino have not autoload! */
+/* i2cEepromConfig.h  specific board iic eeprom config file
+
+   The definitions can be changed  by  HAL_Conf.h file
+*/
+
 #ifndef __BSP_I2CEEPROM_H__
 #define __BSP_I2CEEPROM_H__
-//#include <Arduino.h>
+#include <Arduino.h>
 
-//#define AT24CXX_TYPE AT24C02  /*standard board use 24c02*/
-#define AT24CXX_TYPE AT24C512   /*my diy board use 24c512*/
-#define AT24CXX_IIC_DEV	I2C1 	    /*unused i2cport ,SOFT IIC*/
-#define AT24CXX_SCL PB6
-#define AT24CXX_SDA PB7
-#define AT24CXX_A2A1A0 0x00        /* AT24Cxx A2/A1/A0 LOW*/
+#ifndef  AT24CXX_TYPE   
+//#define AT24CXX_TYPE	AT24C02  /*standard board use 24c02*/
+# define AT24CXX_TYPE	AT24C512   /*my diy board use 24c512*/
+#endif
+#ifndef  AT24CXX_DEV   
+# define AT24CXX_DEV	I2C1 	    /*can use I2C1 port or SOFT IIC*/
+#endif
+#ifndef  AT24CXX_SCL   
+# define AT24CXX_SCL PB6
+#endif
+#ifndef  AT24CXX_SDA   
+# define AT24CXX_SDA PB7
+#endif
+#ifndef  AT24CXX_A2A1A0   
+# define AT24CXX_A2A1A0 0x00        /* AT24Cxx A2/A1/A0 LOW*/
+#endif  
 
 #endif   //__BSP_I2CEEPROM_H__
