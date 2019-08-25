@@ -71,11 +71,24 @@ inline void delayMicroseconds(uint32_t microseconds){
 }
 
 void stm32ScheduleMicros(uint32_t microseconds, void (*callback)());
+
+/* 8 cycle*/
+
+inline void _delay_loop_2(uint32_t cnt){
+	for(uint32_t i=cnt ; i>0; i--) {
+		asm volatile("nop");
+	}
+}
  
+inline void _delay_loop_100ns(uint32_t ns){
+	_delay_loop_2(((F_CPU/10000)*ns)/6000);
+}
+
 #ifdef __cplusplus
 }
 #endif
 
 #define systicCallback  HAL_SYSTICK_Callback
+
 
 #endif

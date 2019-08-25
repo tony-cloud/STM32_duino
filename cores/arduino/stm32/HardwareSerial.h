@@ -121,7 +121,6 @@ class HardwareSerial : public Stream{
 
   private:
     uint8_t _config;
-
 };
 
 #if defined(USART1) && (USE_SERIAL1)

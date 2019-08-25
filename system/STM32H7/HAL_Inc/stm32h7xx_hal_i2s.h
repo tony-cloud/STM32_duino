@@ -6,39 +6,23 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32H7xx_HAL_I2S_H
-#define __STM32H7xx_HAL_I2S_H
+#ifndef STM32H7xx_HAL_I2S_H
+#define STM32H7xx_HAL_I2S_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -92,7 +76,7 @@ typedef struct
   uint32_t Data24BitAlignment;              /*!< Specifies the Data Padding for 24 bits data lenght
                                                  This parameter can be a value of @ref I2S_Data_24Bit_Alignment    */
 
-  uint32_t FifoThreshold;                   /*!< Specifies the FIFO threshold level. 
+  uint32_t FifoThreshold;                   /*!< Specifies the FIFO threshold level.
                                                  This parameter can be a value of @ref I2S_Fifo_Threshold          */
 
   uint32_t MasterKeepIOState;               /*!< Control of Alternate function GPIOs state
@@ -102,7 +86,7 @@ typedef struct
                                                  This parameter can be a value of @ref I2S_SlaveExtendFREDetection */
 
 
-}I2S_InitTypeDef;
+} I2S_InitTypeDef;
 
 /**
   * @brief  HAL State structures definition
@@ -117,7 +101,7 @@ typedef enum
   HAL_I2S_STATE_BUSY_TX_RX = 0x05U,         /*!< Data Transmission and Reception process is ongoing */
   HAL_I2S_STATE_TIMEOUT    = 0x06U,         /*!< I2S timeout state                                  */
   HAL_I2S_STATE_ERROR      = 0x07U          /*!< I2S error state                                    */
-}HAL_I2S_StateTypeDef;
+} HAL_I2S_StateTypeDef;
 
 /**
   * @brief I2S handle Structure definition
@@ -154,7 +138,44 @@ typedef struct __I2S_HandleTypeDef
 
   __IO uint32_t              ErrorCode;                /*!< I2S Error code                          */
 
-}I2S_HandleTypeDef;
+#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)
+  void (* TxCpltCallback)(struct __I2S_HandleTypeDef *hi2s);       /*!< I2S Tx Completed callback        */
+  void (* RxCpltCallback)(struct __I2S_HandleTypeDef *hi2s);       /*!< I2S Rx Completed callback        */
+  void (* TxRxCpltCallback)(struct __I2S_HandleTypeDef *hi2s);     /*!< I2S TxRx Completed callback      */
+  void (* TxHalfCpltCallback)(struct __I2S_HandleTypeDef *hi2s);   /*!< I2S Tx Half Completed callback   */
+  void (* RxHalfCpltCallback)(struct __I2S_HandleTypeDef *hi2s);   /*!< I2S Rx Half Completed callback   */
+  void (* TxRxHalfCpltCallback)(struct __I2S_HandleTypeDef *hi2s); /*!< I2S TxRx Half Completed callback */
+  void (* ErrorCallback)(struct __I2S_HandleTypeDef *hi2s);        /*!< I2S Error callback               */
+  void (* MspInitCallback)(struct __I2S_HandleTypeDef *hi2s);      /*!< I2S Msp Init callback            */
+  void (* MspDeInitCallback)(struct __I2S_HandleTypeDef *hi2s);    /*!< I2S Msp DeInit callback          */
+
+#endif  /* USE_HAL_I2S_REGISTER_CALLBACKS */
+} I2S_HandleTypeDef;
+
+#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)
+/**
+  * @brief  HAL I2S Callback ID enumeration definition
+  */
+typedef enum
+{
+  HAL_I2S_TX_COMPLETE_CB_ID             = 0x00U,    /*!< I2S Tx Completed callback ID        */
+  HAL_I2S_RX_COMPLETE_CB_ID             = 0x01U,    /*!< I2S Rx Completed callback ID        */
+  HAL_I2S_TX_RX_COMPLETE_CB_ID          = 0x02U,    /*!< I2S TxRx Completed callback ID      */
+  HAL_I2S_TX_HALF_COMPLETE_CB_ID        = 0x03U,    /*!< I2S Tx Half Completed callback ID   */
+  HAL_I2S_RX_HALF_COMPLETE_CB_ID        = 0x04U,    /*!< I2S Rx Half Completed callback ID   */
+  HAL_I2S_TX_RX_HALF_COMPLETE_CB_ID     = 0x05U,    /*!< I2S TxRx Half Completed callback ID */
+  HAL_I2S_ERROR_CB_ID                   = 0x06U,    /*!< I2S Error callback ID               */
+  HAL_I2S_MSPINIT_CB_ID                 = 0x07U,    /*!< I2S Msp Init callback ID            */
+  HAL_I2S_MSPDEINIT_CB_ID               = 0x08U     /*!< I2S Msp DeInit callback ID          */
+
+} HAL_I2S_CallbackIDTypeDef;
+
+/**
+  * @brief  HAL I2S Callback pointer definition
+  */
+typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to an I2S callback function */
+
+#endif /* USE_HAL_I2S_REGISTER_CALLBACKS */
 /**
   * @}
   */
@@ -169,17 +190,21 @@ typedef struct __I2S_HandleTypeDef
   * @brief     I2S Error Code
   * @{
   */
-#define HAL_I2S_ERROR_NONE                       (0x00000000U)    /*!< No error                    */
-#define HAL_I2S_ERROR_UDR                        (0x00000001U)    /*!< I2S Underrun error          */
-#define HAL_I2S_ERROR_OVR                        (0x00000002U)    /*!< I2S Overrun error           */
-#define HAL_I2S_ERROR_FRE                        (0x00000004U)    /*!< I2S Frame format error      */
-#define HAL_I2S_ERROR_DMA                        (0x00000008U)    /*!< DMA transfer error          */
-#define HAL_I2S_ERROR_DMA                        (0x00000008U)    /*!< DMA transfer error          */
-#define HAL_I2S_ERROR_TIMEOUT                    (0x00000010U)    /*!< Timeout error               */
-#define HAL_I2S_ERROR_PRESCALER                  (0x00000020U)    /*!< Prescaler error             */
-  /**
-    * @}
-    */
+#define HAL_I2S_ERROR_NONE                       (0x00000000U)    /*!< No error                          */
+#define HAL_I2S_ERROR_UDR                        (0x00000001U)    /*!< I2S Underrun error                */
+#define HAL_I2S_ERROR_OVR                        (0x00000002U)    /*!< I2S Overrun error                 */
+#define HAL_I2S_ERROR_FRE                        (0x00000004U)    /*!< I2S Frame format error            */
+#define HAL_I2S_ERROR_DMA                        (0x00000008U)    /*!< DMA transfer error                */
+#define HAL_I2S_ERROR_TIMEOUT                    (0x00000010U)    /*!< Timeout error                     */
+#define HAL_I2S_ERROR_PRESCALER                  (0x00000020U)    /*!< Prescaler error                   */
+#define HAL_I2S_ERROR_NOT_SUPPORTED              (0x00000040U)    /*!< Requested operation not supported */
+#define HAL_I2S_ERROR_NO_TRANSFER                (0x00000080U)    /*!< No on going transfert             */
+#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)
+#define HAL_I2S_ERROR_INVALID_CALLBACK           (0x00000100U)    /*!< Invalid Callback error            */
+#endif /* USE_HAL_I2S_REGISTER_CALLBACKS */
+/**
+  * @}
+  */
 
 /** @defgroup I2S_Mode I2S Mode
   * @{
@@ -272,7 +297,7 @@ typedef struct __I2S_HandleTypeDef
 
 /** @defgroup I2S_IO_Swap Control I2S IO Swap
   * @{
-  */ 
+  */
 #define I2S_IO_SWAP_DISABLE                     (0x00000000U)
 #define I2S_IO_SWAP_ENABLE                      SPI_CFG2_IOSWP
 /**
@@ -281,7 +306,7 @@ typedef struct __I2S_HandleTypeDef
 
 /** @defgroup I2S_Data_24Bit_Alignment Data Padding 24Bit
   * @{
-  */ 
+  */
 #define I2S_DATA_24BIT_ALIGNMENT_RIGHT         (0x00000000U)
 #define I2S_DATA_24BIT_ALIGNMENT_LEFT          SPI_I2SCFGR_DATFMT
 /**
@@ -299,6 +324,14 @@ typedef struct __I2S_HandleTypeDef
 #define I2S_FIFO_THRESHOLD_06DATA              (0x000000A0U)
 #define I2S_FIFO_THRESHOLD_07DATA              (0x000000C0U)
 #define I2S_FIFO_THRESHOLD_08DATA              (0x000000E0U)
+#define I2S_FIFO_THRESHOLD_09DATA              (0x00000100U)
+#define I2S_FIFO_THRESHOLD_10DATA              (0x00000120U)
+#define I2S_FIFO_THRESHOLD_11DATA              (0x00000140U)
+#define I2S_FIFO_THRESHOLD_12DATA              (0x00000160U)
+#define I2S_FIFO_THRESHOLD_13DATA              (0x00000180U)
+#define I2S_FIFO_THRESHOLD_14DATA              (0x000001A0U)
+#define I2S_FIFO_THRESHOLD_15DATA              (0x000001C0U)
+#define I2S_FIFO_THRESHOLD_16DATA              (0x000001E0U)
 /**
   * @}
   */
@@ -324,9 +357,12 @@ typedef struct __I2S_HandleTypeDef
 /** @defgroup I2S_Interrupt_definition I2S Interrupt definition
   * @{
   */
-#define I2S_IT_TXE                             SPI_IER_TXPIE
-#define I2S_IT_RXNE                            SPI_IER_RXPIE
-#define I2S_IT_ERR                            (SPI_IER_OVRIE | SPI_IER_UDRIE | SPI_IER_TIFREIE)
+#define I2S_IT_TXP                             SPI_IER_TXPIE
+#define I2S_IT_RXP                             SPI_IER_RXPIE
+#define I2S_IT_OVR                             SPI_IER_OVRIE
+#define I2S_IT_UDR                             SPI_IER_UDRIE
+#define I2S_IT_TIFRE                           SPI_IER_TIFREIE
+#define I2S_IT_ERR                             (SPI_IER_OVRIE | SPI_IER_UDRIE | SPI_IER_TIFREIE)
 
 /**
   * @}
@@ -335,20 +371,20 @@ typedef struct __I2S_HandleTypeDef
 /** @defgroup I2S_Flag_definition I2S Flag definition
   * @{
   */
-#define I2S_FLAG_TXE                           SPI_SR_TXP     /* I2S status flag: Tx buffer empty flag           */
-#define I2S_FLAG_RXNE                          SPI_SR_RXP     /* I2S status flag: Rx buffer not empty flag       */
+#define I2S_FLAG_TXP                           SPI_SR_TXP     /* I2S status flag: Tx-Packet space available      */
+#define I2S_FLAG_RXP                           SPI_SR_RXP     /* I2S status flag: Rx-Packet available            */
 #define I2S_FLAG_UDR                           SPI_SR_UDR     /* I2S Error flag: Underrun flag                   */
 #define I2S_FLAG_RXWNE                         SPI_SR_RXWNE   /* I2S RxFIFO Word Not Empty                       */
 #define I2S_FLAG_OVR                           SPI_SR_OVR     /* I2S Error flag: Overrun flag                    */
-#define I2S_FLAG_FRE                           SPI_SR_TIFRE   /* I2S Error flag: TI mode frame format error flag */
+#define I2S_FLAG_TIFRE                         SPI_SR_TIFRE   /* I2S Error flag: TI mode frame format error flag */
 /**
   * @}
   */
-  
+
 /**
   * @}
   */
-/* Exported macro ------------------------------------------------------------*/
+/* Exported macros -----------------------------------------------------------*/
 /** @defgroup I2S_Exported_Macros I2S Exported Macros
   * @{
   */
@@ -357,10 +393,18 @@ typedef struct __I2S_HandleTypeDef
   * @param  __HANDLE__: specifies the I2S Handle.
   * @retval None
   */
+#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)
+#define __HAL_I2S_RESET_HANDLE_STATE(__HANDLE__) do{                                                  \
+                                                     (__HANDLE__)->State = HAL_I2S_STATE_RESET;       \
+                                                     (__HANDLE__)->MspInitCallback = NULL;            \
+                                                     (__HANDLE__)->MspDeInitCallback = NULL;          \
+                                                   } while(0)
+#else
 #define __HAL_I2S_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_I2S_STATE_RESET)
+#endif
 
 /** @brief  Enable the specified SPI peripheral (in I2S mode).
-  * @param  __HANDLE__: specifies the I2S Handle. 
+  * @param  __HANDLE__: specifies the I2S Handle.
   * @retval None
   */
 #define __HAL_I2S_ENABLE(__HANDLE__) SET_BIT((__HANDLE__)->Instance->CR1, SPI_CR1_SPE)
@@ -373,22 +417,28 @@ typedef struct __I2S_HandleTypeDef
 
 /** @brief  Enable the specified I2S interrupts.
   * @param  __HANDLE__: specifies the I2S Handle.
-  * @param  __INTERRUPT__: specifies the interrupt source to enable or disable.
+  * @param  __INTERRUPT__: specifies the interrupt source to enable.
   *         This parameter can be one of the following values:
-  *            @arg I2S_IT_TXE: Tx buffer empty interrupt enable
-  *            @arg I2S_IT_RXNE: RX buffer not empty interrupt enable
-  *            @arg I2S_IT_ERR: Error interrupt enable
+  *            @arg I2S_IT_TXP  : Tx-Packet space available interrupt
+  *            @arg I2S_IT_RXP  : Rx-Packet available interrupt
+  *            @arg I2S_IT_OVR  : Overrun interrupt
+  *            @arg I2S_IT_UDR  : Underrun interrupt
+  *            @arg I2S_IT_TIFRE: TI mode frame format error interrupt
+  *            @arg I2S_IT_ERR: Error interrupt
   * @retval None
   */
 #define __HAL_I2S_ENABLE_IT(__HANDLE__, __INTERRUPT__)    (SET_BIT((__HANDLE__)->Instance->IER,(__INTERRUPT__)))
 
 /** @brief  Disable the specified I2S interrupts.
   * @param  __HANDLE__: specifies the I2S Handle.
-  * @param  __INTERRUPT__: specifies the interrupt source to enable or disable.
+  * @param  __INTERRUPT__: specifies the interrupt source to disable.
   *         This parameter can be one of the following values:
-  *            @arg I2S_IT_TXE: Tx buffer empty interrupt enable
-  *            @arg I2S_IT_RXNE: RX buffer not empty interrupt enable
-  *            @arg I2S_IT_ERR: Error interrupt enable
+  *            @arg I2S_IT_TXP  : Tx-Packet space available interrupt
+  *            @arg I2S_IT_RXP  : Rx-Packet available interrupt
+  *            @arg I2S_IT_OVR  : Overrun interrupt
+  *            @arg I2S_IT_UDR  : Underrun interrupt
+  *            @arg I2S_IT_TIFRE: TI mode frame format error interrupt
+  *            @arg I2S_IT_ERR  : Error interrupt
   * @retval None
   */
 #define __HAL_I2S_DISABLE_IT(__HANDLE__, __INTERRUPT__) (CLEAR_BIT((__HANDLE__)->Instance->IER,(__INTERRUPT__)))
@@ -398,9 +448,12 @@ typedef struct __I2S_HandleTypeDef
   *         This parameter can be I2S where x: 1, 2, or 3 to select the I2S peripheral.
   * @param  __INTERRUPT__: specifies the I2S interrupt source to check.
   *          This parameter can be one of the following values:
-  *            @arg I2S_IT_TXE: Tx buffer empty interrupt enable
-  *            @arg I2S_IT_RXNE: RX buffer not empty interrupt enable
-  *            @arg I2S_IT_ERR: Error interrupt enable
+  *            @arg I2S_IT_TXP  : Tx-Packet space available interrupt
+  *            @arg I2S_IT_RXP  : Rx-Packet available interrupt
+  *            @arg I2S_IT_OVR  : Overrun interrupt
+  *            @arg I2S_IT_UDR  : Underrun interrupt
+  *            @arg I2S_IT_TIFRE: TI mode frame format error interrupt
+  *            @arg I2S_IT_ERR  : Error interrupt
   * @retval The new state of __IT__ (TRUE or FALSE).
   */
 #define __HAL_I2S_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__) ((((__HANDLE__)->Instance->IER & (__INTERRUPT__)) == (__INTERRUPT__)) ? SET : RESET)
@@ -409,11 +462,12 @@ typedef struct __I2S_HandleTypeDef
   * @param  __HANDLE__: specifies the I2S Handle.
   * @param  __FLAG__: specifies the flag to check.
   *         This parameter can be one of the following values:
-  *            @arg I2S_FLAG_TXE   : Tx buffer empty flag
-  *            @arg I2S_FLAG_RXNE  : Rx buffer not empty flag
-  *            @arg I2S_FLAG_UDR   : Underrun flag
-  *            @arg I2S_FLAG_OVR   : Overrun flag
-  *            @arg I2S_FLAG_FRE   : TI mode frame format error flag
+  *            @arg I2S_FLAG_TXP  : Tx-Packet space available flag
+  *            @arg I2S_FLAG_RXP  : Rx-Packet available flag
+  *            @arg I2S_FLAG_UDR  : Underrun flag
+  *            @arg I2S_FLAG_RXWNE: RxFIFO Word Not Empty flag
+  *            @arg I2S_FLAG_OVR  : Overrun flag
+  *            @arg I2S_FLAG_TIFRE: TI mode frame format error flag
   * @retval The new state of __FLAG__ (TRUE or FALSE).
   */
 #define __HAL_I2S_GET_FLAG(__HANDLE__, __FLAG__) ((((__HANDLE__)->Instance->SR) & (__FLAG__)) == (__FLAG__))
@@ -430,11 +484,17 @@ typedef struct __I2S_HandleTypeDef
   */
 #define __HAL_I2S_CLEAR_OVRFLAG(__HANDLE__)   SET_BIT((__HANDLE__)->Instance->IFCR , SPI_IFCR_OVRC)
 
-/** @brief  Clear the I2S FRE pending flag.
+/** @brief  Clear the I2S TIFRE pending flag.
   * @param  __HANDLE__: specifies the I2S Handle.
   * @retval None
   */
-#define __HAL_I2S_CLEAR_FREFLAG(__HANDLE__) SET_BIT((__HANDLE__)->Instance->IFCR , SPI_IFCR_TIFREC)
+#define __HAL_I2S_CLEAR_TIFREFLAG(__HANDLE__) SET_BIT((__HANDLE__)->Instance->IFCR , SPI_IFCR_TIFREC)
+
+/** @brief  Clear the I2S SUSP pending flag.
+  * @param  __HANDLE__: specifies the I2S Handle.
+  * @retval None
+  */
+#define __HAL_I2S_CLEAR_SUSPFLAG(__HANDLE__) SET_BIT((__HANDLE__)->Instance->IFCR , SPI_IFCR_SUSPC)
 
 /* Include I2S HAL Extended module */
 #include "stm32h7xx_hal_i2s_ex.h"
@@ -449,9 +509,15 @@ typedef struct __I2S_HandleTypeDef
   */
 /* Initialization/de-initialization functions  ********************************/
 HAL_StatusTypeDef HAL_I2S_Init(I2S_HandleTypeDef *hi2s);
-HAL_StatusTypeDef HAL_I2S_DeInit (I2S_HandleTypeDef *hi2s);
+HAL_StatusTypeDef HAL_I2S_DeInit(I2S_HandleTypeDef *hi2s);
 void HAL_I2S_MspInit(I2S_HandleTypeDef *hi2s);
 void HAL_I2S_MspDeInit(I2S_HandleTypeDef *hi2s);
+
+/* Callbacks Register/UnRegister functions  ***********************************/
+#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)
+HAL_StatusTypeDef HAL_I2S_RegisterCallback(I2S_HandleTypeDef *hspi, HAL_I2S_CallbackIDTypeDef CallbackID, pI2S_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_I2S_UnRegisterCallback(I2S_HandleTypeDef *hspi, HAL_I2S_CallbackIDTypeDef CallbackID);
+#endif /* USE_HAL_I2S_REGISTER_CALLBACKS */
 /**
   * @}
   */
@@ -460,11 +526,11 @@ void HAL_I2S_MspDeInit(I2S_HandleTypeDef *hi2s);
   * @{
   */
 /* I/O operation functions  ***************************************************/
- /* Blocking mode: Polling */
+/* Blocking mode: Polling */
 HAL_StatusTypeDef HAL_I2S_Transmit(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size, uint32_t Timeout);
 HAL_StatusTypeDef HAL_I2S_Receive(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size, uint32_t Timeout);
 
- /* Non-Blocking mode: Interrupt */
+/* Non-Blocking mode: Interrupt */
 HAL_StatusTypeDef HAL_I2S_Transmit_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size);
 HAL_StatusTypeDef HAL_I2S_Receive_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size);
 
@@ -594,7 +660,7 @@ uint32_t HAL_I2S_GetError(I2S_HandleTypeDef *hi2s);
 /**
   * @}
   */
-  
+
 /**
   * @}
   */
@@ -610,6 +676,6 @@ uint32_t HAL_I2S_GetError(I2S_HandleTypeDef *hi2s);
 
 
 
-#endif /* __STM32H7xx_HAL_I2S_H */
+#endif /* STM32H7xx_HAL_I2S_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

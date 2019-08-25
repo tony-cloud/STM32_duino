@@ -19,7 +19,7 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("\nAT24CXX RW");
-  myeeprom.begin(); //
+  myeeprom.Init(); //
 
   //write all eeprom with page number; run one times only
 #if 0

@@ -10,29 +10,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -73,6 +57,20 @@
   * @{
   */
 #define PWR_FLAG_SETTING_DELAY_US  ((uint32_t)1000U)
+/**
+  * @}
+  */
+
+/** @defgroup PWREx_WakeUp_Pins_Offsets PWREx Wake-Up Pins masks and offsets
+  * @{
+  */
+/* Wake-Up Pins EXTI register mask */
+#define PWR_EXTI_WAKEUP_PINS_MASK  (uint32_t)(EXTI_IMR2_IM55 | EXTI_IMR2_IM56 | \
+                                              EXTI_IMR2_IM57 | EXTI_IMR2_IM58 | \
+                                              EXTI_IMR2_IM59 | EXTI_IMR2_IM60)
+
+/* Wake-Up Pins PWR Pin Pull shift offsets */
+#define PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET      2U
 /**
   * @}
   */
@@ -147,10 +145,19 @@
   */
 HAL_StatusTypeDef HAL_PWREx_ConfigSupply(uint32_t SupplySource)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   /* Check the parameters */
   assert_param(IS_PWR_SUPPLY(SupplySource));
+
+  if(!__HAL_PWR_GET_FLAG(PWR_FLAG_SCUEN))
+  {
+    if((PWR->CR3 & PWR_SUPPLY_CONFIG_MASK) != SupplySource)
+    {
+      /* Supply configuration update locked, can't apply a new regulator config */
+      return HAL_ERROR;
+    }
+  }
 
   /* Set the power supply configuration */
   MODIFY_REG(PWR->CR3, PWR_SUPPLY_CONFIG_MASK, SupplySource);
@@ -158,8 +165,8 @@ HAL_StatusTypeDef HAL_PWREx_ConfigSupply(uint32_t SupplySource)
   /* Get tick */
   tickstart = HAL_GetTick();
 
-  /* Wait till voltage level flag is set and supply configuration update flag is reset */
-  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_ACTVOSRDY) && __HAL_PWR_GET_FLAG(PWR_FLAG_SCUEN))
+  /* Wait till voltage level flag is set */
+  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_ACTVOSRDY))
   {
     if((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY_US)
     {
@@ -180,7 +187,6 @@ uint32_t  HAL_PWREx_GetSupplyConfig(void)
   return (PWR->CR3 & PWR_SUPPLY_CONFIG_MASK);
 }
 
-
 /**
   * @brief  Configure the main internal regulator output voltage.
   * @param  VoltageScaling: Specifies the regulator output voltage to achieve
@@ -200,7 +206,7 @@ uint32_t  HAL_PWREx_GetSupplyConfig(void)
   */
 HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling(uint32_t VoltageScaling)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   assert_param(IS_PWR_REGULATOR_VOLTAGE(VoltageScaling));
 
@@ -235,7 +241,7 @@ uint32_t  HAL_PWREx_GetVoltageRange(void)
 /**
   * @brief  Configure the main internal regulator output voltage in STOP mode.
   * @param  VoltageScaling: Specifies the regulator output voltage when the system enters
-  *         STOP mode to achieve a tradeoff between performance and power consumption.
+  *         Stop mode to achieve a tradeoff between performance and power consumption.
   *          This parameter can be one of the following values:
   *            @arg PWR_REGULATOR_SVOS_SCALE3: Regulator voltage output range 3 mode.
   *            @arg PWR_REGULATOR_SVOS_SCALE4: Regulator voltage output range 4 mode.
@@ -442,9 +448,11 @@ void HAL_PWREx_EnterSTOPMode(uint32_t Regulator, uint8_t STOPEntry, uint32_t Dom
   /* Select the domain Power Down DeepSleep */
   if (Domain == PWR_D1_DOMAIN)
   {
+    /* Check Core */
+    assert_param(IS_PWR_D1_CPU(HAL_GetCurrentCPUID()));
+
     /* Keep DSTOP mode when D1 domain enters Deepsleep */
     CLEAR_BIT(PWR->CPUCR, PWR_CPUCR_PDDS_D1);
-
 
     /* Set SLEEPDEEP bit of Cortex System Control Register */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
@@ -462,8 +470,6 @@ void HAL_PWREx_EnterSTOPMode(uint32_t Regulator, uint8_t STOPEntry, uint32_t Dom
     else
     {
       /* Request Wait For Event */
-      __SEV();
-      __WFE();
       __WFE();
     }
 
@@ -474,14 +480,24 @@ void HAL_PWREx_EnterSTOPMode(uint32_t Regulator, uint8_t STOPEntry, uint32_t Dom
   {
     /* Keep DSTOP mode when D2 domain enters Deepsleep */
     CLEAR_BIT(PWR->CPUCR, PWR_CPUCR_PDDS_D2);
-
   }
   else
   {
     /* Keep DSTOP mode when D3 domain enters Deepsleep */
     CLEAR_BIT(PWR->CPUCR, PWR_CPUCR_PDDS_D3);
-
   }
+}
+
+
+/**
+  * @brief  Clear pending event.
+  * @note   This API clear the pending event in order to enter a given domain to DSTOP. It should
+  *         be called just before enter low power mode APIs using Wait For Event request.
+  * @retval None
+  */
+void HAL_PWREx_ClearPendingEvent(void)
+{
+  __WFE();
 }
 
 /**
@@ -511,9 +527,11 @@ void HAL_PWREx_EnterSTANDBYMode(uint32_t Domain)
   /* Select the domain Power Down DeepSleep */
   if (Domain == PWR_D1_DOMAIN)
   {
-    /* Allow DSTANDBY mode when D1 domain enters to Deepsleep */
-    SET_BIT(PWR-> CPUCR, PWR_CPUCR_PDDS_D1);
+    /* Check Core */
+    assert_param(IS_PWR_D1_CPU(HAL_GetCurrentCPUID()));
 
+    /* Allow DSTANDBY mode when D1 domain enters Deepsleep */
+    SET_BIT(PWR-> CPUCR, PWR_CPUCR_PDDS_D1);
 
     /* Set SLEEPDEEP bit of Cortex System Control Register */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
@@ -528,15 +546,13 @@ void HAL_PWREx_EnterSTANDBYMode(uint32_t Domain)
   }
   else if (Domain == PWR_D2_DOMAIN)
   {
-    /* Allow DSTANDBY mode when D2 domain enters to Deepsleep */
+    /* Allow DSTANDBY mode when D2 domain enters Deepsleep */
     SET_BIT(PWR-> CPUCR, PWR_CPUCR_PDDS_D2);
-
   }
   else
   {
-    /* Allow DSTANDBY mode when D3 domain enters to Deepsleep */
+    /* Allow DSTANDBY mode when D3 domain enters Deepsleep */
     SET_BIT(PWR-> CPUCR, PWR_CPUCR_PDDS_D3);
-
   }
 }
 
@@ -557,10 +573,6 @@ void HAL_PWREx_ConfigD3Domain(uint32_t D3State)
   /* Keep D3 in run mode */
   MODIFY_REG(PWR->CPUCR, PWR_CPUCR_RUN_D3, D3State);
 }
-
-
-
-
 
 /**
   * @brief  Enable the Flash Power Down in Stop mode.
@@ -600,18 +612,20 @@ void HAL_PWREx_EnableWakeUpPin(PWREx_WakeupPinTypeDef *sPinParams)
   assert_param(IS_PWR_WAKEUP_PIN_PULL(sPinParams->PinPull));
 
   pinConfig = sPinParams->WakeUpPin | \
-              (sPinParams->PinPolarity << (POSITION_VAL(sPinParams->WakeUpPin) + PWR_WAKEUP_PINS_POLARITY_REGISTER_OFFSET)) | \
-              (sPinParams->PinPull << ((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_POSITION_OFFSET) + PWR_WAKEUP_PINS_PULL_REGISTER_OFFSET));
+              (sPinParams->PinPolarity << ((POSITION_VAL(sPinParams->WakeUpPin) + PWR_WKUPEPR_WKUPP1_Pos) & 0x1FU)) | \
+              (sPinParams->PinPull << (((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) + PWR_WKUPEPR_WKUPPUPD1_Pos) & 0x1FU));
 
   regMask   = sPinParams->WakeUpPin | \
-              (PWR_WKUPEPR_WKUPP_1 << POSITION_VAL(sPinParams->WakeUpPin)) | \
-              (pullMask << (POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_POSITION_OFFSET));
+              (PWR_WKUPEPR_WKUPP1 << (POSITION_VAL(sPinParams->WakeUpPin) & 0x1FU)) | \
+              (pullMask << ((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) & 0x1FU));
 
   /* Enable and Specify the Wake-Up pin polarity and the pull configuration
      for the event detection (rising or falling edge) */
   MODIFY_REG(PWR->WKUPEPR, regMask, pinConfig);
+
   /* Configure the Wakeup Pin EXTI Line */
-  MODIFY_REG(EXTI_D1->IMR2, PWR_EXTI_WAKEUP_PINS_MASK, (sPinParams->WakeUpPin << PWR_EXTI_WAKEUP_PINS_PULL_POSITION_OFFSET));
+  MODIFY_REG(EXTI->IMR2, PWR_EXTI_WAKEUP_PINS_MASK, (sPinParams->WakeUpPin << EXTI_IMR2_IM55_Pos));
+
 }
 
 /**
@@ -674,7 +688,7 @@ HAL_StatusTypeDef HAL_PWREx_ClearWakeupFlag(uint32_t WakeUpFlag)
 
   SET_BIT(PWR->WKUPCR, WakeUpFlag);
 
-  if((PWR->WKUPFR & WakeUpFlag) != RESET)
+  if((PWR->WKUPFR & WakeUpFlag) != 0U)
   {
     return HAL_ERROR;
   }
@@ -690,7 +704,7 @@ HAL_StatusTypeDef HAL_PWREx_ClearWakeupFlag(uint32_t WakeUpFlag)
 void HAL_PWREx_WAKEUP_PIN_IRQHandler(void)
 {
   /* Wakeup pin EXTI line interrupt detected */
-  if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF1) != RESET)
+  if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF1) != 0U)
   {
     /* Clear PWR WKUPF1 flag */
     SET_BIT(PWR->WKUPCR, PWR_WKUPCR_WKUPC1);
@@ -698,7 +712,7 @@ void HAL_PWREx_WAKEUP_PIN_IRQHandler(void)
     /* PWR WKUP1 interrupt user callback */
     HAL_PWREx_WKUP1_Callback();
   }
-  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF2) != RESET)
+  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF2) != 0U)
   {
     /* Clear PWR WKUPF2 flag */
     SET_BIT(PWR->WKUPCR, PWR_WKUPCR_WKUPC2);
@@ -706,7 +720,7 @@ void HAL_PWREx_WAKEUP_PIN_IRQHandler(void)
     /* PWR WKUP2 interrupt user callback */
     HAL_PWREx_WKUP2_Callback();
   }
-  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF3) != RESET)
+  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF3) != 0U)
   {
     /* Clear PWR WKUPF3 flag */
     SET_BIT(PWR->WKUPCR, PWR_WKUPCR_WKUPC3);
@@ -714,7 +728,7 @@ void HAL_PWREx_WAKEUP_PIN_IRQHandler(void)
     /* PWR WKUP3 interrupt user callback */
     HAL_PWREx_WKUP3_Callback();
   }
-  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF4) != RESET)
+  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF4) != 0U)
   {
     /* Clear PWR WKUPF4 flag */
     SET_BIT(PWR->WKUPCR, PWR_WKUPCR_WKUPC4);
@@ -722,7 +736,7 @@ void HAL_PWREx_WAKEUP_PIN_IRQHandler(void)
     /* PWR WKUP4 interrupt user callback */
     HAL_PWREx_WKUP4_Callback();
   }
-  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF5) != RESET)
+  else if(READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF5) != 0U)
   {
     /* Clear PWR WKUPF5 flag */
     SET_BIT(PWR->WKUPCR, PWR_WKUPCR_WKUPC5);
@@ -886,7 +900,7 @@ __weak void HAL_PWREx_WKUP6_Callback(void)
   */
 HAL_StatusTypeDef HAL_PWREx_EnableBkUpReg(void)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   /* Enable the Backup regulator */
   SET_BIT(PWR->CR2, PWR_CR2_BREN);
@@ -911,7 +925,7 @@ HAL_StatusTypeDef HAL_PWREx_EnableBkUpReg(void)
   */
 HAL_StatusTypeDef HAL_PWREx_DisableBkUpReg(void)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   /* Disable the Backup regulator */
   CLEAR_BIT(PWR->CR2, PWR_CR2_BREN);
@@ -936,7 +950,7 @@ HAL_StatusTypeDef HAL_PWREx_DisableBkUpReg(void)
   */
 HAL_StatusTypeDef HAL_PWREx_EnableUSBReg(void)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   /* Enable the USB regulator */
   SET_BIT(PWR->CR3, PWR_CR3_USBREGEN);
@@ -945,7 +959,7 @@ HAL_StatusTypeDef HAL_PWREx_EnableUSBReg(void)
   tickstart = HAL_GetTick();
 
   /* Wait till the USB regulator ready flag is set */
-  while(READ_BIT(PWR->CR3, PWR_CR3_USB33RDY) == RESET)
+  while(READ_BIT(PWR->CR3, PWR_CR3_USB33RDY) == 0U)
   {
     if((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY_US)
     {
@@ -962,7 +976,7 @@ HAL_StatusTypeDef HAL_PWREx_EnableUSBReg(void)
   */
 HAL_StatusTypeDef HAL_PWREx_DisableUSBReg(void)
 {
-  uint32_t tickstart = 0;
+  uint32_t tickstart;
 
   /* Disable the USB regulator */
   CLEAR_BIT(PWR->CR3, PWR_CR3_USBREGEN);
@@ -971,7 +985,7 @@ HAL_StatusTypeDef HAL_PWREx_DisableUSBReg(void)
   tickstart = HAL_GetTick();
 
   /* Wait till the USB regulator ready flag is reset */
-  while(READ_BIT(PWR->CR3, PWR_CR3_USB33RDY) != RESET)
+  while(READ_BIT(PWR->CR3, PWR_CR3_USB33RDY) != 0U)
   {
     if((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY_US)
     {
@@ -1191,6 +1205,7 @@ void HAL_PWREx_ConfigAVD(PWREx_AVDTypeDef *sConfigAVD)
   {
     __HAL_PWR_AVD_EXTI_ENABLE_EVENT();
   }
+
   /* Configure the edge */
   if(AVD_RISING_EDGE == (sConfigAVD->Mode & AVD_RISING_EDGE))
   {
@@ -1231,7 +1246,7 @@ void HAL_PWREx_DisableAVD(void)
 void HAL_PWREx_PVD_AVD_IRQHandler(void)
 {
   /* PVD EXTI line interrupt detected */
-  if(READ_BIT(PWR->CR1, PWR_CR1_PVDEN) != RESET)
+  if(READ_BIT(PWR->CR1, PWR_CR1_PVDEN) != 0U)
   {
     /* Check PWR EXTI flag */
     if(__HAL_PWR_PVD_EXTI_GET_FLAG() != RESET)
@@ -1245,7 +1260,7 @@ void HAL_PWREx_PVD_AVD_IRQHandler(void)
   }
 
   /* AVD EXTI line interrupt detected */
-  if(READ_BIT(PWR->CR1, PWR_CR1_AVDEN) != RESET)
+  if(READ_BIT(PWR->CR1, PWR_CR1_AVDEN) != 0U)
   {
     /* Check PWR EXTI flag */
     if(__HAL_PWR_AVD_EXTI_GET_FLAG() != RESET)

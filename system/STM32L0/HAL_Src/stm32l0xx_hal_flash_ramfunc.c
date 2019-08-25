@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32l0xx_hal_flash_ramfunc.c
   * @author  MCD Application Team
-  * @version V1.7.0
-  * @date    31-May-2016
   * @brief   FLASH RAMFUNC driver.
   *          This file provides a Flash firmware functions which should be 
   *          executed from internal SRAM
@@ -32,32 +30,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics. 
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the 
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
@@ -68,30 +50,48 @@
 
 #ifdef HAL_FLASH_MODULE_ENABLED
 
+/** @addtogroup FLASH
+  * @{
+  */
+/** @addtogroup FLASH_Private_Variables
+ * @{
+ */
+extern FLASH_ProcessTypeDef pFlash;
+/**
+  * @}
+  */
 
-/** @addtogroup FLASH_RAMFUNC
+/**
+  * @}
+  */
+  
+/** @defgroup FLASH_RAMFUNC FLASH_RAMFUNC
   * @brief FLASH functions executed from RAM
   * @{
-  */
-/** @addtogroup FLASH_RAMFUNC_Private
-  * @{
-  */
+  */ 
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-static __RAM_FUNC FLASHRAM_WaitForLastOperation(uint32_t Timeout);
-static __RAM_FUNC FLASHRAM_SetErrorCode(void);
+/** @defgroup FLASH_RAMFUNC_Private_Functions FLASH RAM Private Functions
+ * @{
+ */
+
+static __RAM_FUNC HAL_StatusTypeDef FLASHRAM_WaitForLastOperation(uint32_t Timeout);
+static __RAM_FUNC HAL_StatusTypeDef FLASHRAM_SetErrorCode(void);
+
 /**
   * @}
   */
 
-
-/** @addtogroup FLASH_RAMFUNC_Exported_Functions
+/* Private functions ---------------------------------------------------------*/
+ 
+/** @defgroup FLASH_RAMFUNC_Exported_Functions FLASH RAM Exported Functions
  *
-@verbatim   
+@verbatim  
  ===============================================================================
                       ##### ramfunc functions #####
  ===============================================================================  
@@ -101,33 +101,35 @@ static __RAM_FUNC FLASHRAM_SetErrorCode(void);
 
 @endverbatim
   * @{
-  */
+  */ 
 
-/** @addtogroup FLASH_RAMFUNC_Exported_Functions_Group1
+/** @defgroup FLASH_RAMFUNC_Exported_Functions_Group1 Peripheral features functions 
   * @{
   */  
 
 /**
   * @brief  Enable  the power down mode during RUN mode.
-  * @note   This function can be used only when the user code is running from Internal SRAM.
-  * @retval HAL Status
+  * @note  This function can be used only when the user code is running from Internal SRAM.
+  * @retval HAL status
   */
-__RAM_FUNC HAL_FLASHEx_EnableRunPowerDown(void)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_EnableRunPowerDown(void)
 {
   /* Enable the Power Down in Run mode*/
   __HAL_FLASH_POWER_DOWN_ENABLE();
+
   return HAL_OK;
 }
 
 /**
   * @brief  Disable the power down mode during RUN mode.
-  * @note   This function can be used only when the user code is running from Internal SRAM.
-  * @retval HAL Status
+  * @note  This function can be used only when the user code is running from Internal SRAM.
+  * @retval HAL status
   */
-__RAM_FUNC HAL_FLASHEx_DisableRunPowerDown(void)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_DisableRunPowerDown(void)
 {
   /* Disable the Power Down in Run mode*/
   __HAL_FLASH_POWER_DOWN_DISABLE();
+
   return HAL_OK;  
 }
 
@@ -135,22 +137,21 @@ __RAM_FUNC HAL_FLASHEx_DisableRunPowerDown(void)
   * @}
   */
 
-#if defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) || defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-/** @addtogroup FLASH_RAMFUNC_Exported_Functions_Group2
+/** @defgroup FLASH_RAMFUNC_Exported_Functions_Group2 Programming and erasing operation functions 
  *
 @verbatim  
 @endverbatim
   * @{
   */
 
+#if defined(FLASH_PECR_PARALLBANK)
 /**
   * @brief  Erases a specified 2 pages in program memory in parallel.
   * @note   This function can be used only for STM32L07xxx/STM32L08xxx  devices.
-  *         To correctly run this function, the HAL_FLASH_Unlock() function
+  *         To correctly run this function, the @ref HAL_FLASH_Unlock() function
   *         must be called before.
-  *         Call the HAL_FLASH_Lock() to disable the flash memory access 
-  *         (recommended to protect the FLASH memory against possible unwanted operation).
+  *         Call the @ref HAL_FLASH_Lock() to disable the flash memory access 
+  *        (recommended to protect the FLASH memory against possible unwanted operation).
   * @param  Page_Address1: The page address in program memory to be erased in 
   *         the first Bank (BANK1). This parameter should be between FLASH_BASE
   *         and FLASH_BANK1_END.
@@ -158,11 +159,10 @@ __RAM_FUNC HAL_FLASHEx_DisableRunPowerDown(void)
   *         the second Bank (BANK2). This parameter should be between FLASH_BANK2_BASE
   *         and FLASH_BANK2_END.
   * @note   A Page is erased in the Program memory only if the address to load 
-  *         is the start address of a page (multiple of 128 bytes).
-  * @retval HAL Status: The returned value can be: 
-  *         HAL_ERROR, HAL_OK or HAL_TIMEOUT.
+  *         is the start address of a page (multiple of @ref FLASH_PAGE_SIZE bytes).
+  * @retval HAL status
   */
-__RAM_FUNC HAL_FLASHEx_EraseParallelPage(uint32_t Page_Address1, uint32_t Page_Address2)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_EraseParallelPage(uint32_t Page_Address1, uint32_t Page_Address2)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -179,7 +179,7 @@ __RAM_FUNC HAL_FLASHEx_EraseParallelPage(uint32_t Page_Address1, uint32_t Page_A
     /* Write 00000000h to the first word of the first program page to erase */
     *(__IO uint32_t *)Page_Address1 = 0x00000000U;
     /* Write 00000000h to the first word of the second program page to erase */    
-    *(__IO uint32_t *)Page_Address2 = 0x00000000U;    
+    *(__IO uint32_t *)Page_Address2 = 0x00000000U;
  
     /* Wait for last operation to be completed */
     status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
@@ -189,24 +189,24 @@ __RAM_FUNC HAL_FLASHEx_EraseParallelPage(uint32_t Page_Address1, uint32_t Page_A
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_ERASE);
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_PARALLBANK);
   }     
-  /* Return the erasesStatus */
+  /* Return the Erase Status */
   return status;
 }
 
 /**
-  * @brief  Programs 2 half pages in program memory in parallel. The half page size is 16 Words.
-  * @note   This function can be used only for STM32L07xxx/STM32L08xxx devices.
+  * @brief  Program 2 half pages in program memory in parallel (half page size is 16 Words).
+  * @note   This function can be used only for STM32L07xxx/STM32L08xxx  devices.
   * @param  Address1: specifies the first address to be written in the first bank 
-  *         (BANK1). This parameter should be between FLASH_BASE and (FLASH_BANK1_END - FLASH_PAGE_SIZE).
+  *        (BANK1). This parameter should be between FLASH_BASE and (FLASH_BANK1_END - FLASH_PAGE_SIZE).
   * @param  pBuffer1: pointer to the buffer  containing the data to be  written 
   *         to the first half page in the first bank.
   * @param  Address2: specifies the second address to be written in the second bank
-  *         (BANK2). This parameter should be between FLASH_BANK2_BASE and (FLASH_BANK2_END - FLASH_PAGE_SIZE).
+  *        (BANK2). This parameter should be between FLASH_BANK2_BASE and (FLASH_BANK2_END - FLASH_PAGE_SIZE).
   * @param  pBuffer2: pointer to the buffer containing the data to be  written 
   *         to the second half page in the second bank.
-  * @note   To correctly run this function, the HAL_FLASH_Unlock() function
+  * @note   To correctly run this function, the @ref HAL_FLASH_Unlock() function
   *         must be called before.
-  *         Call the HAL_FLASH_Lock() to disable the flash memory access  
+  *         Call the @ref HAL_FLASH_Lock() to disable the flash memory access  
   *         (recommended to protect the FLASH memory against possible unwanted operation).
   * @note   Half page write is possible only from SRAM.
   * @note   A half page is written to the program memory only if the first 
@@ -219,13 +219,12 @@ __RAM_FUNC HAL_FLASHEx_EraseParallelPage(uint32_t Page_Address1, uint32_t Page_A
   *         complete write operation is aborted. Software should then reset the 
   *         FPRG and PROG/DATA bits and restart the write operation from the 
   *         beginning.
-  * @retval HAL Status: The returned value can be:  
-  *         HAL_ERROR, HAL_OK or HAL_TIMEOUT.
+  * @retval HAL status
   */
-__RAM_FUNC HAL_FLASHEx_ProgramParallelHalfPage(uint32_t Address1, uint32_t* pBuffer1, uint32_t Address2, uint32_t* pBuffer2)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_ProgramParallelHalfPage(uint32_t Address1, uint32_t* pBuffer1, uint32_t Address2, uint32_t* pBuffer2)
 {
-  uint32_t count; 
-  HAL_StatusTypeDef status;
+  uint32_t count = 0U; 
+  HAL_StatusTypeDef status = HAL_OK;
 
   /* Wait for last operation to be completed */
   status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
@@ -237,67 +236,58 @@ __RAM_FUNC HAL_FLASHEx_ProgramParallelHalfPage(uint32_t Address1, uint32_t* pBuf
     SET_BIT(FLASH->PECR, FLASH_PECR_FPRG);
     SET_BIT(FLASH->PECR, FLASH_PECR_PROG);
 
- 
     /* Wait for last operation to be completed */
     status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-
     if(status == HAL_OK)
     {
-      /* Write one half page,
-         Address1 doesn't need to be increased */ 
-      count = 0U;
-
       /* Disable all IRQs */
       __disable_irq();
 
+      /* Write the first half page directly with 16 different words */
       while(count < 16U)
       {
+        /* Address1 doesn't need to be increased */ 
         *(__IO uint32_t*) Address1 = *pBuffer1;
         pBuffer1++;
-        count++;
+        count ++;  
       }
-      
-      /* Write the second half page,
-         Address2 doesn't need to be increased */ 
+
+      /* Write the second half page directly with 16 different words */
       count = 0U;
       while(count < 16U)
       {
+        /* Address2 doesn't need to be increased */ 
         *(__IO uint32_t*) Address2 = *pBuffer2;
         pBuffer2++;
-        count++;
+        count ++;  
       }
 
       /* Enable IRQs */
       __enable_irq();
-      
+
       /* Wait for last operation to be completed */
       status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-    } 
+    }
+
     /* if the write operation is completed, disable the PROG, FPRG and PARALLBANK bits */
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_PROG);
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_FPRG);
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_PARALLBANK);
   }
+
   /* Return the Write Status */
   return status;
 }
-/**
-  * @}
-  */
-#endif /* STM32L071xx || STM32L072xx || STM32L073xx || STM32L081xx || STM32L082xx || STM32L083xx */
+#endif /* FLASH_PECR_PARALLBANK */
 
-/** @addtogroup FLASH_RAMFUNC_Exported_Functions_Group1
- *
-  * @{
-  */
 /**
-  * @brief  Program a half page in program memory. 
-  * @param  Address: specifies the address to be written.
-  * @param  pBuffer: pointer to the buffer  containing the data to be  written to 
+  * @brief  Program a half page in program memory.
+  * @param  Address specifies the address to be written.
+  * @param  pBuffer pointer to the buffer  containing the data to be  written to 
   *         the half page.
-  * @note   To correctly run this function, the HAL_FLASH_Unlock() function
+  * @note   To correctly run this function, the @ref HAL_FLASH_Unlock() function
   *         must be called before.
-  *         Call the HAL_FLASH_Lock() to disable the flash memory access  
+  *         Call the @ref HAL_FLASH_Lock() to disable the flash memory access  
   *         (recommended to protect the FLASH memory against possible unwanted operation)
   * @note   Half page write is possible only from SRAM.
   * @note   A half page is written to the program memory only if the first 
@@ -310,67 +300,82 @@ __RAM_FUNC HAL_FLASHEx_ProgramParallelHalfPage(uint32_t Address1, uint32_t* pBuf
   *         complete write operation is aborted. Software should then reset the 
   *         FPRG and PROG/DATA bits and restart the write operation from the 
   *         beginning.
-  * @retval HAL Status: The returned value can be:  
-  *         HAL_ERROR, HAL_OK or HAL_TIMEOUT. 
+  * @retval HAL status
   */
-__RAM_FUNC HAL_FLASHEx_HalfPageProgram(uint32_t Address, uint32_t *pBuffer)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_HalfPageProgram(uint32_t Address, uint32_t* pBuffer)
 {
-  uint32_t count; 
-  HAL_StatusTypeDef status;
+  uint32_t count = 0U; 
+  HAL_StatusTypeDef status = HAL_OK;
 
   /* Wait for last operation to be completed */
   status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-
+  
   if(status == HAL_OK)
   {
     /* Proceed to program the new half page */
     SET_BIT(FLASH->PECR, FLASH_PECR_FPRG);
     SET_BIT(FLASH->PECR, FLASH_PECR_PROG);
-
-
-    count = 0U;
-    /* Write one half page,
-       Address doesn't need to be increased */ 
-
+    
     /* Disable all IRQs */
     __disable_irq();
 
+    /* Write one half page directly with 16 different words */
     while(count < 16U)
     {
+      /* Address doesn't need to be increased */ 
       *(__IO uint32_t*) Address = *pBuffer;
       pBuffer++;
-      count++;
+      count ++;  
     }
 
     /* Enable IRQs */
     __enable_irq();
-  
+
     /* Wait for last operation to be completed */
     status = FLASHRAM_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-
+ 
     /* If the write operation is completed, disable the PROG and FPRG bits */
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_PROG);
     CLEAR_BIT(FLASH->PECR, FLASH_PECR_FPRG);
   }
-  /* Return the write status */
+
+  /* Return the Write Status */
   return status;
 }
 
 /**
+  * @}
+  */
+
+/** @defgroup FLASH_RAMFUNC_Exported_Functions_Group3 Peripheral errors functions 
+ *  @brief    Peripheral errors functions 
+ *
+@verbatim   
+ ===============================================================================
+                      ##### Peripheral errors functions #####
+ ===============================================================================  
+    [..]
+    This subsection permit to get in run-time errors of  the FLASH peripheral.
+
+@endverbatim
+  * @{
+  */
+
+/**
   * @brief  Get the specific FLASH errors flag.
-  * @param error pointer is the error value. It can be a mixed of :
-  *            @arg HAL_FLASH_ERROR_RD: FLASH Read Protection error flag (PCROP)
-  *            @arg HAL_FLASH_ERROR_SIZE: FLASH Programming Parallelism error flag  
-  *            @arg HAL_FLASH_ERROR_PGA: FLASH Programming Alignment error flag
-  *            @arg HAL_FLASH_ERROR_WRP: FLASH Write protected error flag
-  *            @arg HAL_FLASH_ERROR_OPTV: FLASH Option valid error flag 
-  *            @arg HAL_FLASH_ERROR_FWWERR: FLASH Write or Errase operation aborted
-  *            @arg HAL_FLASH_ERROR_NOTZERO: FLASH Write operation is done in a not-erased region 
+  * @param  Error pointer is the error value. It can be a mixed of:
+  *            @arg @ref HAL_FLASH_ERROR_RD      FLASH Read Protection error flag (PCROP)
+  *            @arg @ref HAL_FLASH_ERROR_SIZE    FLASH Programming Parallelism error flag  
+  *            @arg @ref HAL_FLASH_ERROR_PGA     FLASH Programming Alignment error flag
+  *            @arg @ref HAL_FLASH_ERROR_WRP     FLASH Write protected error flag
+  *            @arg @ref HAL_FLASH_ERROR_OPTV    FLASH Option valid error flag 
+  *            @arg @ref HAL_FLASH_ERROR_FWWERR  FLASH Write or Erase operation aborted
+  *            @arg @ref HAL_FLASH_ERROR_NOTZERO FLASH Write operation is done in a not-erased region
   * @retval HAL Status
   */
-__RAM_FUNC HAL_FLASHRAM_GetError(uint32_t * error)
+__RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_GetError(uint32_t * Error)
 { 
-  *error = ProcFlash.ErrorCode;
+  *Error = pFlash.ErrorCode;
   return HAL_OK;  
 }
 
@@ -382,7 +387,7 @@ __RAM_FUNC HAL_FLASHRAM_GetError(uint32_t * error)
   * @}
   */
 
-/** @addtogroup FLASH_RAMFUNC_Private
+/** @addtogroup FLASH_RAMFUNC_Private_Functions
   * @{
   */ 
 
@@ -390,22 +395,27 @@ __RAM_FUNC HAL_FLASHRAM_GetError(uint32_t * error)
   * @brief  Set the specific FLASH error flag.
   * @retval HAL Status
   */
-static __RAM_FUNC FLASHRAM_SetErrorCode(void)
-{  
+static __RAM_FUNC HAL_StatusTypeDef FLASHRAM_SetErrorCode(void)
+{
+  uint32_t flags = 0;
+  
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_WRPERR))
-  { 
-    ProcFlash.ErrorCode |= HAL_FLASH_ERROR_WRP;
+  {
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_WRP;
+    flags |= FLASH_FLAG_WRPERR;
   }
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_PGAERR))
-  { 
-    ProcFlash.ErrorCode |= HAL_FLASH_ERROR_PGA;
+  {
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_PGA;
+    flags |= FLASH_FLAG_PGAERR;
   }
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_SIZERR))
   { 
-    ProcFlash.ErrorCode |= HAL_FLASH_ERROR_SIZE;
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_SIZE;
+    flags |= FLASH_FLAG_SIZERR;
   }
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_OPTVERR))
-  { 
+  {
     /* WARNING : On the first cut of STM32L031xx and STM32L041xx devices,
      *           (RefID = 0x1000) the FLASH_FLAG_OPTVERR bit was not behaving
      *           as expected. If the user run an application using the first
@@ -414,36 +424,38 @@ static __RAM_FUNC FLASHRAM_SetErrorCode(void)
      *           can be retrieved via the HAL_GetREVID() function.
      *
      */
-    ProcFlash.ErrorCode |= HAL_FLASH_ERROR_OPTV;
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_OPTV;
+    flags |= FLASH_FLAG_OPTVERR;
   }
+
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_RDERR))
-  { 
-    ProcFlash.ErrorCode |= HAL_FLASH_ERROR_RD;
+  {
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_RD;
+    flags |= FLASH_FLAG_RDERR;
   }
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_FWWERR))
   { 
-   ProcFlash.ErrorCode |= HAL_FLASH_ERROR_FWWERR;
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_FWWERR;
+    flags |= HAL_FLASH_ERROR_FWWERR;
   }
   if(__HAL_FLASH_GET_FLAG(FLASH_FLAG_NOTZEROERR))
   { 
-   ProcFlash.ErrorCode |= HAL_FLASH_ERROR_NOTZERO;
+    pFlash.ErrorCode |= HAL_FLASH_ERROR_NOTZERO;
+    flags |= FLASH_FLAG_NOTZEROERR;
   }
-  
-  /* Errors are now stored, clear errors flags */
 
-  __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_SIZERR |
-                         FLASH_FLAG_OPTVERR | FLASH_FLAG_RDERR | FLASH_FLAG_FWWERR | 
-                         FLASH_FLAG_NOTZEROERR);
+  /* Clear FLASH error pending bits */
+  __HAL_FLASH_CLEAR_FLAG(flags);
+
   return HAL_OK;
-} 
-
+}  
 
 /**
   * @brief  Wait for a FLASH operation to complete.
-  * @param  Timeout: maximum flash operationtimeout
+  * @param  Timeout maximum flash operationtimeout
   * @retval HAL status
   */
-static __RAM_FUNC FLASHRAM_WaitForLastOperation(uint32_t Timeout)
+static __RAM_FUNC HAL_StatusTypeDef FLASHRAM_WaitForLastOperation(uint32_t Timeout)
 { 
     /* Wait for the FLASH operation to complete by polling on BUSY flag to be reset.
        Even if the FLASH operation fails, the BUSY flag will be reset and an error
@@ -454,36 +466,42 @@ static __RAM_FUNC FLASHRAM_WaitForLastOperation(uint32_t Timeout)
       Timeout--;
     }
     
-    if(Timeout == 0x00U )
+    if(Timeout == 0x00U)
     {
       return HAL_TIMEOUT;
     }
     
-    if( (__HAL_FLASH_GET_FLAG(FLASH_FLAG_RDERR)      != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_WRPERR)     != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_PGAERR)     != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_OPTVERR)    != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_SIZERR)     != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_FWWERR)     != RESET) || 
-        (__HAL_FLASH_GET_FLAG(FLASH_FLAG_NOTZEROERR) != RESET) )
-    {
-      /*Save the error code*/
-
-      /* WARNING : On the first cut of STM32L031xx and STM32L041xx devices,
-       *           (RefID = 0x1000) the FLASH_FLAG_OPTVERR bit was not behaving
-       *           as expected. If the user run an application using the first
-       *           cut of the STM32L031xx device or the first cut of the STM32L041xx
-       *           device, this error should be ignored. The revId of the device
-       *           can be retrieved via the HAL_GetREVID() function.
-       *
-       */
-
-      FLASHRAM_SetErrorCode();
-      return HAL_ERROR;
-    }
+  /* Check FLASH End of Operation flag  */
+  if (__HAL_FLASH_GET_FLAG(FLASH_FLAG_EOP))
+  {
+    /* Clear FLASH End of Operation pending bit */
+    __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP);
+  }
   
-    /* If there is an error flag set */
-    return HAL_OK;
+  if( __HAL_FLASH_GET_FLAG(FLASH_FLAG_WRPERR)     || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_PGAERR)     || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_SIZERR)     || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_OPTVERR)    || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_RDERR)      || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_FWWERR)     || 
+      __HAL_FLASH_GET_FLAG(FLASH_FLAG_NOTZEROERR) )
+  {
+    /*Save the error code*/
+
+    /* WARNING : On the first cut of STM32L031xx and STM32L041xx devices,
+     *           (RefID = 0x1000) the FLASH_FLAG_OPTVERR bit was not behaving
+     *           as expected. If the user run an application using the first
+     *           cut of the STM32L031xx device or the first cut of the STM32L041xx
+     *           device, this error should be ignored. The revId of the device
+     *           can be retrieved via the HAL_GetREVID() function.
+     *
+     */
+    FLASHRAM_SetErrorCode();
+    return HAL_ERROR;
+  }
+
+  /* There is no error flag set */
+  return HAL_OK;
 }
 
 /**
@@ -495,11 +513,9 @@ static __RAM_FUNC FLASHRAM_WaitForLastOperation(uint32_t Timeout)
   */
 
 #endif /* HAL_FLASH_MODULE_ENABLED */
-
 /**
   * @}
   */
 
-
+     
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

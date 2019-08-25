@@ -62,7 +62,6 @@ void stm32GpioClockEnable(GPIO_TypeDef *port) {
 #endif
 }
 
-#ifndef STM32H7
 extern "C"
 void pinModeLL(GPIO_TypeDef *port, uint32_t ll_pin, uint8_t mode) {
 
@@ -177,70 +176,6 @@ void pinMode(uint8_t pin, uint8_t mode) {
   HAL_GPIO_Init(port_pin.port, &init);
 
 }
-
-#else
-	
-extern "C"
-void pinModeLL(GPIO_TypeDef *port, uint32_t pinMask, uint8_t mode) {
-  assert_param(IS_GPIO_ALL_INSTANCE(port));
-  assert_param(IS_GPIO_PIN(pinMask));
-
-  if (stm32_pwm_disable_callback != NULL) {
-    (*stm32_pwm_disable_callback)(port, pinMask);
-  }
-  stm32GpioClockEnable(port);
-
-  GPIO_InitTypeDef init;
-
-  init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  init.Pin = pinMask;
-
-  switch ( mode ) {
-    case OUTPUT:
-      init.Mode = GPIO_MODE_OUTPUT_PP;
-      init.Pull =  GPIO_NOPULL;
-      break;
-
-    case INPUT:
-      init.Mode = GPIO_MODE_INPUT;
-      init.Pull =  GPIO_NOPULL;
-      break;
-
-    case INPUT_PULLUP:
-      init.Mode = GPIO_MODE_INPUT;
-      init.Pull =  GPIO_PULLUP;
-      break;
-
-    case INPUT_PULLDOWN:
-      init.Mode = GPIO_MODE_INPUT;
-      init.Pull = GPIO_PULLDOWN;
-      break;
-
-    case ANALOG:                    //add by huaweiwx@sina.com 2017.6.9
-      init.Mode = GPIO_MODE_ANALOG;
-      init.Pull = GPIO_NOPULL;
-      break;
-
-    case OUTPUT_OD:                    //add by huaweiwx@sina.com 2017.6.9
-      init.Mode = GPIO_MODE_OUTPUT_OD;
-      init.Pull = GPIO_NOPULL;
-      break;
-
-    default:
-      assert_param(0);
-      return;
-      break;
-  }
-  HAL_GPIO_Init(port, &init);
-}
-
-extern "C"
-void pinMode(uint8_t pin, uint8_t mode) {
-  stm32_port_pin_type port_pin = variant_pin_list[pin];
-  pinModeLL(port_pin.port, port_pin.pinMask, mode);
-}
-#endif
-
 
 uint32_t pulseIn(__ConstPin cpin, bool state, uint32_t timeout )
 {

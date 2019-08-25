@@ -83,6 +83,11 @@ class SPIClass {
   public:
     SPIClass(){};
 	
+	
+    SPIClass(uint8_t mosi, uint8_t miso, uint8_t sck) {
+        setPins(mosi,miso,sck);
+    };
+	
     SPIClass(SPI_TypeDef *instance) {
     	spiHandle.Instance = instance;
     };
@@ -94,9 +99,6 @@ class SPIClass {
 	    sckPin  = sck;
 	};
 	
-    SPIClass(uint8_t mosi, uint8_t miso, uint8_t sck) {
-        setPins(mosi,miso,sck);
-    };
 
 	HAL_StatusTypeDef setPins(uint8_t mosi,uint8_t miso,uint8_t sck);
 	
@@ -111,8 +113,13 @@ class SPIClass {
 	
     void stm32SetInstance(SPI_TypeDef *instance);
 	
-    void begin();
-    void end();
+    void Init();
+	void deInit();
+	
+#if USE_ITERATOR == 0  /*for stl begin/end is keywords for iteration*/
+    void begin(){Init();}
+	void end(){deInit();}
+#endif
 
     void beginTransaction(SPISettings settings);
 	void endTransaction();
@@ -214,13 +221,7 @@ class SPIClass {
 
     DMA_HandleTypeDef hdma_spi_rx = {};
     DMA_HandleTypeDef hdma_spi_tx = {};
-
-//    GPIO_TypeDef *mosiPort = NULL;
-//    uint32_t mosiPin = 0;
-//    GPIO_TypeDef *misoPort = NULL;
-//    uint32_t misoPin = 0;
-//    GPIO_TypeDef *sckPort = NULL;
-//    uint32_t sckPin = 0;
+	
     uint8_t mosiPin = 0xff;
     uint8_t misoPin = 0xff;
     uint8_t sckPin = 0xff;
@@ -270,4 +271,5 @@ inline void SPIClass::transfer(uint8_t *buf, size_t count) {
 
 extern SPIClass SPI;
 
+#include "SoftSPI.h"
 #endif

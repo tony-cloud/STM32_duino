@@ -25,6 +25,7 @@
 #include <string.h>
 #include <math.h>
 #include "Arduino.h"
+
 #include <stdarg.h>
 #include <limits.h>
 #include "Print.h"
@@ -44,7 +45,7 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 
 size_t Print::print(const __FlashStringHelper *ifsh)
 {
-    return print(reinterpret_cast<const char *>(ifsh));
+  return print(reinterpret_cast<const char *>(ifsh));
 }
 
 size_t Print::print(const String &s)
@@ -147,13 +148,17 @@ size_t Print::println(const __FlashStringHelper *ifsh)
   return n;
 }
 
+
 size_t Print::print(const Printable& x)
 {
   return x.printTo(*this);
 }
 
+
 size_t Print::println(void)
 {
+
+
   return write("\r\n");
 }
 
@@ -239,12 +244,14 @@ size_t Print::println(double num, int digits)
   return n;
 }
 
+
 size_t Print::println(const Printable& x)
 {
   size_t n = print(x);
   n += println();
   return n;
 }
+
 
 // Private Methods /////////////////////////////////////////////////////////////
 
@@ -259,8 +266,10 @@ size_t Print::printNumber(unsigned long long n, uint8_t base)
   if (base < 2) base = 10;
 
   do {
+
     char c = n % base;
     n /= base;
+
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
 
@@ -270,6 +279,12 @@ size_t Print::printNumber(unsigned long long n, uint8_t base)
 size_t Print::printFloat(double number, uint8_t digits) 
 { 
   size_t n = 0;
+
+
+
+
+
+
    
   // Handle negative numbers
   if (number < 0.0)

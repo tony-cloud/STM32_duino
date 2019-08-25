@@ -19,7 +19,7 @@
     #include "stm32f7xx_ll_spi.h"
 #endif
 #ifdef STM32H7
-//    #include "stm32h7xx_ll_spi.h"
+    #include "stm32h7xx_ll_spi.h"
 #endif
 #ifdef STM32L0
     #include "stm32l0xx_ll_spi.h"

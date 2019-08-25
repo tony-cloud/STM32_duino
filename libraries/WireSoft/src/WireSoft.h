@@ -76,7 +76,7 @@ class TwoWireSoft : public WireBase {
 #if USE_ITERATOR == 0  /*for stl begin/end is keywords for iteration*/
     __deprecated("This wire init func, if you use begin() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
     void begin(uint8_t self_addr = 0){Init(self_addr);} 
-     __deprecated("This wire init func, if you use begin() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
+     __deprecated("This wire deinit func, if you use end() as iterator must set USE_ITERATOR to 1, chandged by huaweiwx")
    void end(){deInit();}
 #endif
 

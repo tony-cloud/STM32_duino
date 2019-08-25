@@ -368,6 +368,11 @@ Nucleo-F401RE.menu.extern_lib.STemWinOS.build.extra_flags_os=-DOS_SUPPORT=1
 Nucleo-F401RE.upload.protocol=STLink
 Nucleo-F401RE.upload.tool=stlink_upload
 
+Nucleo-F401RE.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
+Nucleo-F401RE.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
+Nucleo-F401RE.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+Nucleo-F401RE.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
+
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 Nucleo-F401RE.menu.log.default=Release(no-exceptions)
 Nucleo-F401RE.menu.log.default.build.log_level=-fno-exceptions
@@ -1862,6 +1867,8 @@ BluePill.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 BluePill.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 BluePill.menu.serial.SerialUSB=SerialUSB
 BluePill.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+BluePill.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+BluePill.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #BluePill.menu.jtag_swd.default=Debug_default
 BluePill.menu.jtag_swd.JTAG=JTAG [reserved: PA13, PA14, PA15, PB3, PB4]
@@ -1944,6 +1951,8 @@ L152C.menu.serial.SerialUART1=SerialUART1 [Through ST-Link Virtual COM port] [PA
 L152C.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
 L152C.menu.serial.SerialUSB=SerialUSB (USB connector)
 L152C.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+L152C.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+L152C.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 L152C.menu.log.default=Release(no-exceptions)
@@ -2118,6 +2127,8 @@ GD103RB.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 GD103RB.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 GD103RB.menu.serial.SerialUSB=SerialUSB
 GD103RB.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+GD103RB.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+GD103RB.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #GD103RB.menu.jtag_swd.default=Debug_default
 GD103RB.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4,PB3,PA15,PA14,PA13]
@@ -2300,6 +2311,8 @@ GD103RE.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 GD103RE.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 GD103RE.menu.serial.SerialUSB=SerialUSB
 GD103RE.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+GD103RE.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+GD103RE.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #GD103RE.menu.jtag_swd.default=Debug_default
 GD103RE.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4,PB3,PA15,PA14,PA13]
@@ -2454,6 +2467,8 @@ F103RB.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 F103RB.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 F103RB.menu.serial.SerialUSB=SerialUSB
 F103RB.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F103RB.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F103RB.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #F103RB.menu.jtag_swd.default=Debug_default
 F103RB.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4,PB3,PA15,PA14,PA13]
@@ -2650,6 +2665,8 @@ F103RE.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 F103RE.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 F103RE.menu.serial.SerialUSB=SerialUSB
 F103RE.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F103RE.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F103RE.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #F103RE.menu.jtag_swd.default=Debug_default
 F103RE.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4,PB3,PA15,PA14,PA13]
@@ -2854,6 +2871,8 @@ F103V.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 F103V.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 F103V.menu.serial.SerialUSB=SerialUSB
 F103V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F103V.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F103V.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 F103V.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4, PB3,PA15,PA14,PA13]
 F103V.menu.jtag_swd.JTAG.build.extra_flags_jtag=-DMENU_DEBUG_JTAG
@@ -3113,6 +3132,8 @@ F103Z.menu.serial.SerialUART3=SerialUART3
 F103Z.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
 F103Z.menu.serial.SerialUSB=SerialUSB
 F103Z.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F103Z.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F103Z.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 F103Z.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4,PB3,PA15,PA14,PA13]
 F103Z.menu.jtag_swd.JTAG.build.extra_flags_jtag=-DMENU_DEBUG_JTAG
@@ -3280,6 +3301,8 @@ F107V.menu.serial.SerialUART2=SerialUART2[PA2/PA3]
 F107V.menu.serial.SerialUART2.build.extra_flags_serial=-DMENU_SERIAL=SerialUART2
 F107V.menu.serial.SerialUSB=SerialUSB
 F107V.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F107V.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F107V.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 F107V.menu.jtag_swd.JTAG=JTAG [debug pins reserved: PB4, PB3,PA15,PA14,PA13]
 F107V.menu.jtag_swd.JTAG.build.extra_flags_jtag=-DMENU_DEBUG_JTAG
@@ -3446,6 +3469,8 @@ F401S.menu.serial.SerialUART1=SerialUART1
 F401S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
 F401S.menu.serial.SerialUSB=SerialUSB
 F401S.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F401S.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F401S.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 F401S.menu.log.default=Release(no-exceptions)
@@ -3641,7 +3666,8 @@ F407xE.menu.serial.SerialUART3=SerialUART3
 F407xE.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
 F407xE.menu.serial.SerialUSB=SerialUSB
 F407xE.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-#F407xE.menu.serial.Automatic=Automatically selected based on upload method
+F407xE.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F407xE.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 F407xE.menu.log.default=Release(no-exceptions)
@@ -3881,7 +3907,8 @@ F407xG.menu.serial.SerialUART3=SerialUART3
 F407xG.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
 F407xG.menu.serial.SerialUSB=SerialUSB
 F407xG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-#F407xG.menu.serial.Automatic=Automatically selected based on upload method
+F407xG.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F407xG.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 F407xG.menu.log.default=Release(no-exceptions)
@@ -3916,7 +3943,7 @@ f429xG.upload.vect=0x08000000
 
 f429xG.build.mcu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 f429xG.build.core=arduino
-f429xG.build.board=IGT6CORE
+f429xG.build.board=F429xG
 f429xG.build.series=STM32F4
 f429xG.build.f_cpu=180000000L
 
@@ -3928,7 +3955,6 @@ f429xG.menu.cpu.IGT6_CORE.build.board=IGT6CORE
 f429xG.menu.cpu.IGT6_CORE.build.extra_flags0=-DSTM32F429IG -DHSE_VALUE=8000000
 f429xG.menu.cpu.IGT6_CORE.build.ldscript_pre=ld/f429xG
 f429xG.menu.cpu.IGT6_CORE.upload.device=STM32F429IG
-#default upload method
 f429xG.menu.cpu.IGT6_CORE.upload.protocol=STLink
 f429xG.menu.cpu.IGT6_CORE.upload.tool=stlink_upload
 f429xG.menu.cpu.IGT6_CORE.build.extra_flags_serial_auto=-DMENU_SERIAL_AUTO=SerialUART1
@@ -4069,7 +4095,8 @@ f429xG.menu.serial.SerialUART3=SerialUART3
 f429xG.menu.serial.SerialUART3.build.extra_flags_serial=-DMENU_SERIAL=SerialUART3
 f429xG.menu.serial.SerialUSB=SerialUSB
 f429xG.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
-#f429xG.menu.serial.Automatic=Automatically selected based on upload method
+f429xG.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+f429xG.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- DEBUG & LOGLEVEL ---------------------------------------#
 f429xG.menu.log.default=Release(no-exceptions)
@@ -4168,6 +4195,8 @@ F746S.menu.serial.SerialUART1=SerialUART1 [Through ST-Link Virtual COM port] [PA
 F746S.menu.serial.SerialUART1.build.extra_flags_serial=-DMENU_SERIAL=SerialUART1
 F746S.menu.serial.SerialUSB=SerialUSB
 F746S.menu.serial.SerialUSB.build.extra_flags_serial=-DMENU_SERIAL=SerialUSB
+F746S.menu.serial.SerialSWO=SerialSWO(If the SWO is connected)
+F746S.menu.serial.SerialSWO.build.extra_flags_serial=-DMENU_SERIAL=SerialSWO
 
 #-------------------------------------- UPLOAD METHODS ----------------------------------------#
 F746S.menu.upload_method.STLinkMethod=STLink

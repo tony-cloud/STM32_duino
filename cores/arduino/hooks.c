@@ -30,4 +30,4 @@ static void __empty() {
 }
 void yield(void) __attribute__ ((weak, alias("__empty")));
 
-void Error_Handler() __attribute__ ((weak, alias("__empty"))); /*move from stm32_init.c*/
+void Error_Handler() __attribute__ ((weak, alias("__empty"))); /* move from stm32_init.c for usb*/

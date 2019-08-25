@@ -162,10 +162,6 @@
 #define configQUEUE_REGISTRY_SIZE                8
 #endif
 
-#ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
-#endif
-
 /* Co-routine definitions. */
 #ifndef configUSE_CO_ROUTINES
 #define configUSE_CO_ROUTINES                    0

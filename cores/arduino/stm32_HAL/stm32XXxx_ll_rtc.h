@@ -42,10 +42,10 @@
 	#include "stm32f7xx_ll_cortex.h"
 #endif
 #ifdef STM32H7
-//	#include "stm32h7xx_ll_rtc.h"
-//	#include "stm32h7xx_ll_pwr.h"
-//	#include "stm32h7xx_ll_utils.h"
-//	#include "stm32h7xx_ll_cortex.h"
+	#include "stm32h7xx_ll_rtc.h"
+	#include "stm32h7xx_ll_pwr.h"
+	#include "stm32h7xx_ll_utils.h"
+	#include "stm32h7xx_ll_cortex.h"
 #endif
 #ifdef STM32L0
 	#include "stm32l0xx_ll_rtc.h"

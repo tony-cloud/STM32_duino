@@ -6,36 +6,20 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32H7xx_HAL_PWR_H
-#define __STM32H7xx_HAL_PWR_H
+#ifndef STM32H7xx_HAL_PWR_H
+#define STM32H7xx_HAL_PWR_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -67,7 +51,7 @@ typedef struct
                             This parameter can be a value of @ref PWR_PVD_detection_level */
 
   uint32_t Mode;      /*!< Mode: Specifies the operating mode for the selected pins.
-                           This parameter can be a value of @ref PWR_PVD_Mode */
+                           This parameter can be a value of @ref PWR_PVD_Mode             */
 }PWR_PVDTypeDef;
 
 /**
@@ -82,14 +66,14 @@ typedef struct
 /** @defgroup PWR_PVD_detection_level PWR PVD detection level
   * @{
   */
-#define PWR_PVDLEVEL_0  PWR_CR1_PLS_LEV0
-#define PWR_PVDLEVEL_1  PWR_CR1_PLS_LEV1
-#define PWR_PVDLEVEL_2  PWR_CR1_PLS_LEV2
-#define PWR_PVDLEVEL_3  PWR_CR1_PLS_LEV3
-#define PWR_PVDLEVEL_4  PWR_CR1_PLS_LEV4
-#define PWR_PVDLEVEL_5  PWR_CR1_PLS_LEV5
-#define PWR_PVDLEVEL_6  PWR_CR1_PLS_LEV6
-#define PWR_PVDLEVEL_7  PWR_CR1_PLS_LEV7/* External input analog voltage (Compare internally to VREFINT) */
+#define PWR_PVDLEVEL_0  PWR_CR1_PLS_LEV0  /*!< Programmable voltage detector level 0 selection : 1V95        */
+#define PWR_PVDLEVEL_1  PWR_CR1_PLS_LEV1  /*!< Programmable voltage detector level 1 selection : 2V1         */
+#define PWR_PVDLEVEL_2  PWR_CR1_PLS_LEV2  /*!< Programmable voltage detector level 2 selection : 2V25        */
+#define PWR_PVDLEVEL_3  PWR_CR1_PLS_LEV3  /*!< Programmable voltage detector level 3 selection : 2V4         */
+#define PWR_PVDLEVEL_4  PWR_CR1_PLS_LEV4  /*!< Programmable voltage detector level 4 selection : 2V55        */
+#define PWR_PVDLEVEL_5  PWR_CR1_PLS_LEV5  /*!< Programmable voltage detector level 5 selection : 2V7         */
+#define PWR_PVDLEVEL_6  PWR_CR1_PLS_LEV6  /*!< Programmable voltage detector level 6 selection : 2V85        */
+#define PWR_PVDLEVEL_7  PWR_CR1_PLS_LEV7  /*!< External input analog voltage (Compare internally to VREFINT) */
 /**
   * @}
   */
@@ -97,13 +81,13 @@ typedef struct
 /** @defgroup PWR_PVD_Mode PWR PVD Mode
   * @{
   */
-#define PWR_PVD_MODE_NORMAL                 ((uint32_t)0x00000000U)   /*!< Basic mode is used */
-#define PWR_PVD_MODE_IT_RISING              ((uint32_t)0x00010001U)   /*!< External Interrupt Mode with Rising edge trigger detection */
-#define PWR_PVD_MODE_IT_FALLING             ((uint32_t)0x00010002U)   /*!< External Interrupt Mode with Falling edge trigger detection */
+#define PWR_PVD_MODE_NORMAL                 ((uint32_t)0x00000000U)   /*!< Basic mode is used                                                 */
+#define PWR_PVD_MODE_IT_RISING              ((uint32_t)0x00010001U)   /*!< External Interrupt Mode with Rising edge trigger detection         */
+#define PWR_PVD_MODE_IT_FALLING             ((uint32_t)0x00010002U)   /*!< External Interrupt Mode with Falling edge trigger detection        */
 #define PWR_PVD_MODE_IT_RISING_FALLING      ((uint32_t)0x00010003U)   /*!< External Interrupt Mode with Rising/Falling edge trigger detection */
-#define PWR_PVD_MODE_EVENT_RISING           ((uint32_t)0x00020001U)   /*!< Event Mode with Rising edge trigger detection */
-#define PWR_PVD_MODE_EVENT_FALLING          ((uint32_t)0x00020002U)   /*!< Event Mode with Falling edge trigger detection */
-#define PWR_PVD_MODE_EVENT_RISING_FALLING   ((uint32_t)0x00020003U)   /*!< Event Mode with Rising/Falling edge trigger detection */
+#define PWR_PVD_MODE_EVENT_RISING           ((uint32_t)0x00020001U)   /*!< Event Mode with Rising edge trigger detection                      */
+#define PWR_PVD_MODE_EVENT_FALLING          ((uint32_t)0x00020002U)   /*!< Event Mode with Falling edge trigger detection                     */
+#define PWR_PVD_MODE_EVENT_RISING_FALLING   ((uint32_t)0x00020003U)   /*!< Event Mode with Rising/Falling edge trigger detection              */
 /**
   * @}
   */
@@ -152,17 +136,13 @@ typedef struct
 #define PWR_FLAG_SB_D1      ((uint8_t)0x02U)
 #define PWR_FLAG_SB_D2      ((uint8_t)0x03U)
 #define PWR_FLAG_SB         ((uint8_t)0x04U)
-#define PWR_FLAG_PVDO       ((uint8_t)0x07U)
-#define PWR_FLAG_AVDO       ((uint8_t)0x08U)
-#define PWR_FLAG_ACTVOSRDY  ((uint8_t)0x09U)
-#define PWR_FLAG_ACTVOS     ((uint8_t)0x0AU)
-#define PWR_FLAG_BRR        ((uint8_t)0x0BU)
-#define PWR_FLAG_VOSRDY     ((uint8_t)0x0CU)
-#if defined(SMPS)
-#define PWR_FLAG_SMPSEXTRDY   ((uint8_t)0x0DU)
-#else
-#define PWR_FLAG_SCUEN       ((uint8_t)0x0DU)
-#endif /* SMPS */
+#define PWR_FLAG_PVDO       ((uint8_t)0x0BU)
+#define PWR_FLAG_AVDO       ((uint8_t)0x0CU)
+#define PWR_FLAG_ACTVOSRDY  ((uint8_t)0x0DU)
+#define PWR_FLAG_ACTVOS     ((uint8_t)0x0EU)
+#define PWR_FLAG_BRR        ((uint8_t)0x0FU)
+#define PWR_FLAG_VOSRDY     ((uint8_t)0x10U)
+#define PWR_FLAG_SCUEN      ((uint8_t)0x11U)
 /**
   * @}
   */
@@ -187,7 +167,7 @@ typedef struct
   * @param  __REGULATOR__: specifies the regulator output voltage to achieve
   *         a tradeoff between performance and power consumption when the device does
   *         not operate at the maximum frequency (refer to the datasheets for more details).
-  *          This parameter can be one of the following values:
+  *         This parameter can be one of the following values:
   *            @arg PWR_REGULATOR_VOLTAGE_SCALE1: Regulator voltage output Scale 1 mode
   *            @arg PWR_REGULATOR_VOLTAGE_SCALE2: Regulator voltage output Scale 2 mode
   *            @arg PWR_REGULATOR_VOLTAGE_SCALE3: Regulator voltage output Scale 3 mode
@@ -197,20 +177,21 @@ typedef struct
 do { \
       __IO uint32_t tmpreg = 0x00; \
       MODIFY_REG(PWR->D3CR, PWR_D3CR_VOS, (__REGULATOR__)); \
-      /* Delay after an RCC peripheral clock enabling */  \
+      /* Delay after setting the voltage scaling */  \
       tmpreg = READ_BIT(PWR->D3CR, PWR_D3CR_VOS); \
       UNUSED(tmpreg); \
 } while(0)
+
 
 /** @brief  Check PWR PVD/AVD and VOSflags are set or not.
   * @param  __FLAG__: specifies the flag to check.
   *           This parameter can be one of the following values:
   *            @arg PWR_FLAG_PVDO: PVD Output. This flag is valid only if PVD is enabled
-  *                  by the HAL_PWR_EnablePVD() function. The PVD is stopped by Standby mode
+  *                  by the HAL_PWR_EnablePVD() function. The PVD is stopped by Standby mode.
   *                  For this reason, this bit is equal to 0 after Standby or reset
   *                  until the PVDE bit is set.
   *            @arg PWR_FLAG_AVDO: AVD Output. This flag is valid only if AVD is enabled
-  *                  by the HAL_PWREx_EnableAVD() function. The AVD is stopped by Standby mode
+  *                  by the HAL_PWREx_EnableAVD() function. The AVD is stopped by Standby mode.
   *                  For this reason, this bit is equal to 0 after Standby or reset
   *                  until the AVDE bit is set.
   *            @arg PWR_FLAG_ACTVOSRDY: This flag indicates that the Regulator voltage
@@ -239,10 +220,10 @@ do { \
 ((PWR->CPUCR & PWR_CPUCR_SBF_D2) == PWR_CPUCR_SBF_D2))
 
 
-/** @brief  Clear the PWR's flags.
+/** @brief  Clear PWR flags.
   * @param  __FLAG__: specifies the flag to clear.
   *           This parameter can be one of the following values:
-  *            @arg PWR_FLAG_SB: StandBy flag.
+  *            @arg PWR_FLAG_SB: Standby flag.
   *            @arg PWR_CPU_FLAGS: Clear STOPF, SBF, SBF_D1, and SBF_D2 CPU flags.
   * @retval None.
   */
@@ -252,29 +233,25 @@ do { \
   * @brief Enable the PVD EXTI Line 16.
   * @retval None.
   */
-#define __HAL_PWR_PVD_EXTI_ENABLE_IT()  SET_BIT(EXTI_D1->IMR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_ENABLE_IT()  SET_BIT(EXTI->IMR1, PWR_EXTI_LINE_PVD)
 
 /**
   * @brief Disable the PVD EXTI Line 16.
   * @retval None.
   */
-#define __HAL_PWR_PVD_EXTI_DISABLE_IT()  CLEAR_BIT(EXTI_D1->IMR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_DISABLE_IT()  CLEAR_BIT(EXTI->IMR1, PWR_EXTI_LINE_PVD)
 
 /**
   * @brief   Enable event on PVD EXTI Line 16.
   * @retval None.
   */
-#define __HAL_PWR_PVD_EXTI_ENABLE_EVENT()  SET_BIT(EXTI_D1->EMR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_ENABLE_EVENT()  SET_BIT(EXTI->EMR1, PWR_EXTI_LINE_PVD)
 
 /**
   * @brief   Disable event on PVD EXTI Line 16.
   * @retval None.
   */
-#define __HAL_PWR_PVD_EXTI_DISABLE_EVENT()  CLEAR_BIT(EXTI_D1->EMR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_DISABLE_EVENT()  CLEAR_BIT(EXTI->EMR1, PWR_EXTI_LINE_PVD)
 
 /**
   * @brief Enable the PVD Extended Interrupt Rising Trigger.
@@ -326,15 +303,13 @@ do { \
   * @brief  Check whether the specified PVD EXTI interrupt flag is set or not.
   * @retval EXTI PVD Line Status.
   */
-#define __HAL_PWR_PVD_EXTI_GET_FLAG()  READ_BIT(EXTI_D1->PR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_GET_FLAG()  ((READ_BIT(EXTI->PR1, PWR_EXTI_LINE_PVD) == PWR_EXTI_LINE_PVD) ? SET : RESET)
 
 /**
   * @brief Clear the PVD EXTI flag.
   * @retval None.
   */
-#define __HAL_PWR_PVD_EXTI_CLEAR_FLAG()  SET_BIT(EXTI_D1->PR1, PWR_EXTI_LINE_PVD)
-
+#define __HAL_PWR_PVD_EXTI_CLEAR_FLAG()  SET_BIT(EXTI->PR1, PWR_EXTI_LINE_PVD)
 
 /**
   * @brief  Generates a Software interrupt on PVD EXTI line.
@@ -431,13 +406,17 @@ void HAL_PWR_DisableSEVOnPend(void);
                                  ((LEVEL) == PWR_PVDLEVEL_2) || ((LEVEL) == PWR_PVDLEVEL_3)|| \
                                  ((LEVEL) == PWR_PVDLEVEL_4) || ((LEVEL) == PWR_PVDLEVEL_5)|| \
                                  ((LEVEL) == PWR_PVDLEVEL_6) || ((LEVEL) == PWR_PVDLEVEL_7))
+
 #define IS_PWR_PVD_MODE(MODE) (((MODE) == PWR_PVD_MODE_IT_RISING)|| ((MODE) == PWR_PVD_MODE_IT_FALLING) || \
                               ((MODE) == PWR_PVD_MODE_IT_RISING_FALLING) || ((MODE) == PWR_PVD_MODE_EVENT_RISING) || \
                               ((MODE) == PWR_PVD_MODE_EVENT_FALLING) || ((MODE) == PWR_PVD_MODE_EVENT_RISING_FALLING) || \
                               ((MODE) == PWR_PVD_MODE_NORMAL))
+
 #define IS_PWR_REGULATOR(REGULATOR) (((REGULATOR) == PWR_MAINREGULATOR_ON) || \
                                      ((REGULATOR) == PWR_LOWPOWERREGULATOR_ON))
+
 #define IS_PWR_SLEEP_ENTRY(ENTRY) (((ENTRY) == PWR_SLEEPENTRY_WFI) || ((ENTRY) == PWR_SLEEPENTRY_WFE))
+
 #define IS_PWR_STOP_ENTRY(ENTRY) (((ENTRY) == PWR_STOPENTRY_WFI) || ((ENTRY) == PWR_STOPENTRY_WFE))
 #define IS_PWR_REGULATOR_VOLTAGE(VOLTAGE) (((VOLTAGE) == PWR_REGULATOR_VOLTAGE_SCALE1) || \
                                            ((VOLTAGE) == PWR_REGULATOR_VOLTAGE_SCALE2) || \
@@ -464,6 +443,6 @@ void HAL_PWR_DisableSEVOnPend(void);
 #endif
 
 
-#endif /* __STM32H7xx_HAL_PWR_H */
+#endif /* STM32H7xx_HAL_PWR_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

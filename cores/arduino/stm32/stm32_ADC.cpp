@@ -174,7 +174,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 }
 
 
-#ifdef  ADC_SINGLE_ENDED
+#ifdef ADC_OFFSET_NONE  //F3/H7/L4
 extern "C"
 int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode)
 #else
@@ -243,7 +243,7 @@ int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch)
   handle[instanceIndex].Init.Overrun = ADC_OVR_DATA_PRESERVED;
   handle[instanceIndex].Init.LowPowerAutoWait = DISABLE;
   handle[instanceIndex].Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  handle[instanceIndex].Init.BoostMode = DISABLE;
+//  handle[instanceIndex].Init.BoostMode = DISABLE;
   handle[instanceIndex].Init.OversamplingMode = DISABLE;
 #else
   handle[instanceIndex].Init.DataAlign = ADC_DATAALIGN_RIGHT;
@@ -262,7 +262,7 @@ int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch)
   handle[instanceIndex].Init.Overrun               = ADC_OVR_DATA_OVERWRITTEN;
 
 # ifdef STM32L0
-  handle[instanceIndex].Init.SamplingTime       = ADC_SAMPLETIME_13CYCLES_5;
+  handle[instanceIndex].Init.SamplingTime       = ADC_SAMPLETIME_12CYCLES_5;
 # else //STM32F0
   handle[instanceIndex].Init.SamplingTimeCommon = ADC_SAMPLETIME_13CYCLES_5;
 # endif
@@ -347,7 +347,7 @@ int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch)
   return ret;
 }
 
-#ifdef  ADC_SINGLE_ENDED
+#ifdef ADC_OFFSET_NONE  //F3/H7/L4
 extern "C"
 int analogReadChanelAve(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode, uint8_t n)
 {
@@ -410,7 +410,7 @@ int analogRead(uint8_t pin) {
 #endif
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(variant_pin_list[pin].port, &GPIO_InitStruct);
-#ifdef  ADC_SINGLE_ENDED
+#ifdef  ADC_OFFSET_NONE
   return analogReadChanel(config.instance, config.channel, ADC_SINGLE_ENDED) >> (MAX_RESOLUTION - readResolution);
 #else
   return analogReadChanel(config.instance, config.channel) >> (MAX_RESOLUTION - readResolution);

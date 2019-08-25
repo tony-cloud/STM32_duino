@@ -42,7 +42,7 @@ extern void setHeap(unsigned char *start, unsigned char *end);
 
 extern caddr_t _sbrk( int incr ) ;
 
-extern int link( char *cOld, char *cNew ) ;
+extern int link(const char *cOld,const char *cNew ) ;
 
 extern int _close( int file ) ;
 

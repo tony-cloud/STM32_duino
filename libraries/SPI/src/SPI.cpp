@@ -26,18 +26,19 @@ int maxUsedCallback = 0; // This is set in SPI begin()
 #else
 #  define SPI_PORT_NR 1
 #endif
- 
-SPI_TypeDef *spiCallbackInstances[SPI_PORT_NR];
-SPIClass *spiClass[SPI_PORT_NR];
 
-void SPIClass::begin() {
+
+SPI_TypeDef *spiCallbackInstances[SPI_PORT_NR];
+SPIClass    *spiClass[SPI_PORT_NR];
+
+void SPIClass::Init() {
 
 	apb_freq = stm32GetClockFrequency((void*)spiHandle.Instance);
 
-	spiHandle.Init.Mode = SPI_MODE_MASTER;
+	spiHandle.Init.Mode =      SPI_MODE_MASTER;
 	spiHandle.Init.Direction = SPI_DIRECTION_2LINES;
-	spiHandle.Init.DataSize = SPI_DATASIZE_8BIT;
-	spiHandle.Init.NSS = SPI_NSS_SOFT;
+	spiHandle.Init.DataSize =  SPI_DATASIZE_8BIT;
+	spiHandle.Init.NSS =       SPI_NSS_SOFT;
 
 	__HAL_RCC_DMA1_CLK_ENABLE();
 #ifdef __HAL_RCC_DMA2_CLK_ENABLE
@@ -140,6 +141,12 @@ void SPIClass::begin() {
 
 }
 
+void SPIClass::deInit() {
+	//TODO deinit GPIO
+	HAL_DMA_Init(&hdma_spi_tx);
+	HAL_DMA_Init(&hdma_spi_rx);
+}
+
 void SPIClass::beginTransaction(SPISettings settings) {
 	if (this->settings.clock == settings.clock
 			&& this->settings.bitOrder == settings.bitOrder
@@ -186,12 +193,6 @@ void SPIClass::beginTransaction(SPISettings settings) {
 
 	HAL_SPI_Init(&spiHandle);
 	__HAL_SPI_ENABLE(&spiHandle);
-}
-
-void SPIClass::end() {
-	//TODO deinit GPIO
-	HAL_DMA_Init(&hdma_spi_tx);
-	HAL_DMA_Init(&hdma_spi_rx);
 }
 
 void SPIClass::endTransaction() {

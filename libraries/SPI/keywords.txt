@@ -30,6 +30,8 @@ done	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+USE_SOFTWARE_SPI 	LITERAL1
+
 SPI_CLOCK_DIV2	LITERAL1
 SPI_CLOCK_DIV4	LITERAL1
 SPI_CLOCK_DIV8	LITERAL1

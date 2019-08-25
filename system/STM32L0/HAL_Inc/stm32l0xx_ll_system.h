@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32l0xx_ll_system.h
   * @author  MCD Application Team
-  * @version V1.7.0
-  * @date    31-May-2016
   * @brief   Header file of SYSTEM LL module.
   @verbatim
   ==============================================================================
@@ -20,29 +18,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -76,14 +58,11 @@ extern "C" {
   * @{
   */
 
-/* Defines used for position in the register */
-#define DBGMCU_REVID_POSITION         (uint32_t)16U
-
 /**
  * @brief Power-down in Run mode Flash key
  */
 #define FLASH_PDKEY1                  ((uint32_t)0x04152637U) /*!< Flash power down key1 */
-#define FLASH_PDKEY2                  ((uint32_t)0xFAFBFCFDU) /*!< Flash power down key2: used with FLASH_PDKEY1 
+#define FLASH_PDKEY2                  ((uint32_t)0xFAFBFCFDU) /*!< Flash power down key2: used with FLASH_PDKEY1
                                                                    to unlock the RUN_PD bit in FLASH_ACR */
 
 /**
@@ -230,41 +209,41 @@ extern "C" {
 
 
 
-/** @defgroup SYSTEM_LL_EC_ABP1_GRP1_STOP_IP DBGMCU ABP1 GRP1 STOP IP
+/** @defgroup SYSTEM_LL_EC_APB1_GRP1_STOP_IP DBGMCU APB1 GRP1 STOP IP
   * @{
   */
-#define LL_DBGMCU_ABP1_GRP1_TIM2_STOP      DBGMCU_APB1_FZ_DBG_TIM2_STOP    /*!< TIM2 counter stopped when core is halted */
+#define LL_DBGMCU_APB1_GRP1_TIM2_STOP      DBGMCU_APB1_FZ_DBG_TIM2_STOP    /*!< TIM2 counter stopped when core is halted */
 #if defined(TIM3)
-#define LL_DBGMCU_ABP1_GRP1_TIM3_STOP      DBGMCU_APB1_FZ_DBG_TIM3_STOP    /*!< TIM3 counter stopped when core is halted */
+#define LL_DBGMCU_APB1_GRP1_TIM3_STOP      DBGMCU_APB1_FZ_DBG_TIM3_STOP    /*!< TIM3 counter stopped when core is halted */
 #endif /*TIM3*/
 #if defined(TIM6)
-#define LL_DBGMCU_ABP1_GRP1_TIM6_STOP      DBGMCU_APB1_FZ_DBG_TIM6_STOP    /*!< TIM6 counter stopped when core is halted */
+#define LL_DBGMCU_APB1_GRP1_TIM6_STOP      DBGMCU_APB1_FZ_DBG_TIM6_STOP    /*!< TIM6 counter stopped when core is halted */
 #endif /*TIM6*/
 #if defined(TIM7)
-#define LL_DBGMCU_ABP1_GRP1_TIM7_STOP      DBGMCU_APB1_FZ_DBG_TIM7_STOP    /*!< TIM7 counter stopped when core is halted */
+#define LL_DBGMCU_APB1_GRP1_TIM7_STOP      DBGMCU_APB1_FZ_DBG_TIM7_STOP    /*!< TIM7 counter stopped when core is halted */
 #endif /*TIM7*/
-#define LL_DBGMCU_ABP1_GRP1_RTC_STOP       DBGMCU_APB1_FZ_DBG_RTC_STOP     /*!< RTC Calendar frozen when core is halted */
-#define LL_DBGMCU_ABP1_GRP1_WWDG_STOP      DBGMCU_APB1_FZ_DBG_WWDG_STOP    /*!< Debug Window Watchdog stopped when Core is halted */
-#define LL_DBGMCU_ABP1_GRP1_IWDG_STOP      DBGMCU_APB1_FZ_DBG_IWDG_STOP    /*!< Debug Independent Watchdog stopped when Core is halted */
-#define LL_DBGMCU_ABP1_GRP1_I2C1_STOP      DBGMCU_APB1_FZ_DBG_I2C1_STOP    /*!< I2C1 SMBUS timeout mode stopped when Core is halted */
+#define LL_DBGMCU_APB1_GRP1_RTC_STOP       DBGMCU_APB1_FZ_DBG_RTC_STOP     /*!< RTC Calendar frozen when core is halted */
+#define LL_DBGMCU_APB1_GRP1_WWDG_STOP      DBGMCU_APB1_FZ_DBG_WWDG_STOP    /*!< Debug Window Watchdog stopped when Core is halted */
+#define LL_DBGMCU_APB1_GRP1_IWDG_STOP      DBGMCU_APB1_FZ_DBG_IWDG_STOP    /*!< Debug Independent Watchdog stopped when Core is halted */
+#define LL_DBGMCU_APB1_GRP1_I2C1_STOP      DBGMCU_APB1_FZ_DBG_I2C1_STOP    /*!< I2C1 SMBUS timeout mode stopped when Core is halted */
 #if defined(I2C2)
-#define LL_DBGMCU_ABP1_GRP1_I2C2_STOP      DBGMCU_APB1_FZ_DBG_I2C2_STOP    /*!< I2C2 SMBUS timeout mode stopped when Core is halted */
+#define LL_DBGMCU_APB1_GRP1_I2C2_STOP      DBGMCU_APB1_FZ_DBG_I2C2_STOP    /*!< I2C2 SMBUS timeout mode stopped when Core is halted */
 #endif /*I2C2*/
 #if defined(I2C3)
-#define LL_DBGMCU_ABP1_GRP1_I2C3_STOP      DBGMCU_APB1_FZ_DBG_I2C3_STOP    /*!< I2C3 SMBUS timeout mode stopped when Core is halted */
+#define LL_DBGMCU_APB1_GRP1_I2C3_STOP      DBGMCU_APB1_FZ_DBG_I2C3_STOP    /*!< I2C3 SMBUS timeout mode stopped when Core is halted */
 #endif /*I2C3*/
-#define LL_DBGMCU_ABP1_GRP1_LPTIM1_STOP    DBGMCU_APB1_FZ_DBG_LPTIMER_STOP /*!< LPTIM1 counter stopped when core is halted */
+#define LL_DBGMCU_APB1_GRP1_LPTIM1_STOP    DBGMCU_APB1_FZ_DBG_LPTIMER_STOP /*!< LPTIM1 counter stopped when core is halted */
 /**
   * @}
   */
 
-/** @defgroup SYSTEM_LL_EC_ABP2_GRP1_STOP_IP DBGMCU ABP2 GRP1 STOP IP
+/** @defgroup SYSTEM_LL_EC_APB2_GRP1_STOP_IP DBGMCU APB2 GRP1 STOP IP
   * @{
   */
 #if defined(TIM22)
-#define LL_DBGMCU_ABP2_GRP1_TIM22_STOP     DBGMCU_APB2_FZ_DBG_TIM22_STOP /*!< TIM22 counter stopped when core is halted */
+#define LL_DBGMCU_APB2_GRP1_TIM22_STOP     DBGMCU_APB2_FZ_DBG_TIM22_STOP /*!< TIM22 counter stopped when core is halted */
 #endif /*TIM22*/
-#define LL_DBGMCU_ABP2_GRP1_TIM21_STOP     DBGMCU_APB2_FZ_DBG_TIM21_STOP /*!< TIM21 counter stopped when core is halted */
+#define LL_DBGMCU_APB2_GRP1_TIM21_STOP     DBGMCU_APB2_FZ_DBG_TIM21_STOP /*!< TIM21 counter stopped when core is halted */
 /**
   * @}
   */
@@ -751,7 +730,7 @@ __STATIC_INLINE uint32_t LL_DBGMCU_GetDeviceID(void)
   */
 __STATIC_INLINE uint32_t LL_DBGMCU_GetRevisionID(void)
 {
-  return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_REV_ID) >> DBGMCU_REVID_POSITION);
+  return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_REV_ID) >> DBGMCU_IDCODE_REV_ID_Pos);
 }
 
 /**
@@ -816,100 +795,100 @@ __STATIC_INLINE void LL_DBGMCU_DisableDBGStandbyMode(void)
 
 /**
   * @brief  Freeze APB1 peripherals (group1 peripherals)
-  * @rmtoll APB1FZ      DBG_TIM2_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_TIM3_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_TIM6_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_TIM7_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_RTC_STOP      LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_WWDG_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_IWDG_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_I2C1_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_I2C2_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_I2C3_STOP     LL_DBGMCU_ABP1_GRP1_FreezePeriph\n
-  *         APB1FZ      DBG_LPTIMER_STOP  LL_DBGMCU_ABP1_GRP1_FreezePeriph
+  * @rmtoll APB1FZ      DBG_TIM2_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_TIM3_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_TIM6_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_TIM7_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_RTC_STOP      LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_WWDG_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_IWDG_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_I2C1_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_I2C2_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_I2C3_STOP     LL_DBGMCU_APB1_GRP1_FreezePeriph\n
+  *         APB1FZ      DBG_LPTIMER_STOP  LL_DBGMCU_APB1_GRP1_FreezePeriph
   * @param  Periphs This parameter can be a combination of the following values:
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM2_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM3_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM6_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM7_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_RTC_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_WWDG_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_IWDG_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C1_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C2_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C3_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_LPTIM1_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM2_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM3_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM6_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM7_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_RTC_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_WWDG_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_IWDG_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C1_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C2_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C3_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_LPTIM1_STOP
   *
   *         (*) value not defined in all devices
   * @retval None
   */
-__STATIC_INLINE void LL_DBGMCU_ABP1_GRP1_FreezePeriph(uint32_t Periphs)
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_FreezePeriph(uint32_t Periphs)
 {
   SET_BIT(DBGMCU->APB1FZ, Periphs);
 }
 
 /**
   * @brief  Unfreeze APB1 peripherals (group1 peripherals)
-  * @rmtoll APB1FZ      DBG_TIM2_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_TIM3_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_TIM6_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_TIM7_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_RTC_STOP      LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_WWDG_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_IWDG_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_I2C1_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_I2C2_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_I2C3_STOP     LL_DBGMCU_ABP1_GRP1_UnFreezePeriph\n
-  *         APB1FZ      DBG_LPTIMER_STOP  LL_DBGMCU_ABP1_GRP1_UnFreezePeriph
+  * @rmtoll APB1FZ      DBG_TIM2_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_TIM3_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_TIM6_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_TIM7_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_RTC_STOP      LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_WWDG_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_IWDG_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_I2C1_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_I2C2_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_I2C3_STOP     LL_DBGMCU_APB1_GRP1_UnFreezePeriph\n
+  *         APB1FZ      DBG_LPTIMER_STOP  LL_DBGMCU_APB1_GRP1_UnFreezePeriph
   * @param  Periphs This parameter can be a combination of the following values:
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM2_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM3_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM6_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_TIM7_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_RTC_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_WWDG_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_IWDG_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C1_STOP
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C2_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_I2C3_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP1_GRP1_LPTIM1_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM2_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM3_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM6_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_TIM7_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_RTC_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_WWDG_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_IWDG_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C1_STOP
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C2_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_I2C3_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB1_GRP1_LPTIM1_STOP
   *
   *         (*) value not defined in all devices
   * @retval None
   */
-__STATIC_INLINE void LL_DBGMCU_ABP1_GRP1_UnFreezePeriph(uint32_t Periphs)
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_UnFreezePeriph(uint32_t Periphs)
 {
   CLEAR_BIT(DBGMCU->APB1FZ, Periphs);
 }
 
 /**
   * @brief  Freeze APB2 peripherals
-  * @rmtoll APB2FZ      DBG_TIM22_STOP  LL_DBGMCU_ABP2_GRP1_FreezePeriph\n
-  *         APB2FZ      DBG_TIM21_STOP  LL_DBGMCU_ABP2_GRP1_FreezePeriph
+  * @rmtoll APB2FZ      DBG_TIM22_STOP  LL_DBGMCU_APB2_GRP1_FreezePeriph\n
+  *         APB2FZ      DBG_TIM21_STOP  LL_DBGMCU_APB2_GRP1_FreezePeriph
   * @param  Periphs This parameter can be a combination of the following values:
-  *         @arg @ref LL_DBGMCU_ABP2_GRP1_TIM22_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP2_GRP1_TIM21_STOP
+  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM22_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM21_STOP
   *
   *         (*) value not defined in all devices
   * @retval None
   */
-__STATIC_INLINE void LL_DBGMCU_ABP2_GRP1_FreezePeriph(uint32_t Periphs)
+__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_FreezePeriph(uint32_t Periphs)
 {
   SET_BIT(DBGMCU->APB2FZ, Periphs);
 }
 
 /**
   * @brief  Unfreeze APB2 peripherals
-  * @rmtoll APB2FZ      DBG_TIM22_STOP  LL_DBGMCU_ABP2_GRP1_UnFreezePeriph\n
-  *         APB2FZ      DBG_TIM21_STOP  LL_DBGMCU_ABP2_GRP1_UnFreezePeriph
+  * @rmtoll APB2FZ      DBG_TIM22_STOP  LL_DBGMCU_APB2_GRP1_UnFreezePeriph\n
+  *         APB2FZ      DBG_TIM21_STOP  LL_DBGMCU_APB2_GRP1_UnFreezePeriph
   * @param  Periphs This parameter can be a combination of the following values:
-  *         @arg @ref LL_DBGMCU_ABP2_GRP1_TIM22_STOP (*)
-  *         @arg @ref LL_DBGMCU_ABP2_GRP1_TIM21_STOP
+  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM22_STOP (*)
+  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM21_STOP
   *
   *         (*) value not defined in all devices
   * @retval None
   */
-__STATIC_INLINE void LL_DBGMCU_ABP2_GRP1_UnFreezePeriph(uint32_t Periphs)
+__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_UnFreezePeriph(uint32_t Periphs)
 {
   CLEAR_BIT(DBGMCU->APB2FZ, Periphs);
 }

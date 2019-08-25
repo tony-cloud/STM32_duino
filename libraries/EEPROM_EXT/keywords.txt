@@ -15,6 +15,7 @@ AT24CXX_TypeDef	KEYWORD1
 #EXTEEPROM
 setPins	KEYWORD2  
 write	KEYWORD2
+write_byte	KEYWORD2
 writeLenByte	KEYWORD2
 writeBuf	KEYWORD2
 check	KEYWORD2

@@ -1,6 +1,9 @@
-#ifndef _STM32_IO_MACRO_H_
-#define _STM32_IO_MACRO_H_
+/*
+FAST IO MACRO  by huaweiwx@sina.com 2016.2
+*/
 
+#ifndef _FAST_IO_MACRO_H_
+#define _FAST_IO_MACRO_H_
 
 #ifndef _BV
 #define _BV(A)       (1U<<(A))
@@ -14,19 +17,11 @@
 #define GPIO_ALIAS_ASSIGN_POLARITY	STM32_ALIAS_ASSIGN_POLARITY
 
 //fast_io
-#ifdef STM32H7
 #define PORTPIN_IN(p,n)     ((GPIO##p##->IDR) &(1<<n))
-#define PORTPIN_LOW(p,n)    ((GPIO##p->BSRRL) = (1<<n))
-#define PORTPIN_HIGH(p,n)   ((GPIO##p->BSRRH) = (1<<n))
+#define PORTPIN_LOW(p,n)    ((GPIO##p->BSRR) = (1<<n))
+#define PORTPIN_HIGH(p,n)   ((GPIO##p->BSRR) = ((1<<n)<<16U))
 #define PORTPIN_TOGGLE(p,n) ((GPIO##p->ODR) ^=(1<<n))
-#define PORTPIN_Mode(p,n,x) pinMode(P##p##n,x)
-#else
-#define PORTPIN_IN(p,n)      LL_GPIO_IsInputPinSet(GPIO##p,LL_GPIO_PIN_##n)
-#define PORTPIN_LOW(p,n)     LL_GPIO_ResetOutputPin(GPIO##p,LL_GPIO_PIN_##n)
-#define PORTPIN_HIGH(p,n)    LL_GPIO_SetOutputPin(GPIO##p,LL_GPIO_PIN_##n)
-#define PORTPIN_TOGGLE(p,n)  LL_GPIO_TogglePin(GPIO##p,LL_GPIO_PIN_##n)
-#define PORTPIN_Mode(p,n,x)  pinModeLL(GPIO##p,LL_GPIO_PIN_##n,x)
-#endif
+#define PORTPIN_Mode(p,n,x)  pinMode(P##p##n,x)
 
 #define STM32_GPIO_ASSIGN(A, C)\
 static inline void     P##A##C##_Set(void)          {PORTPIN_HIGH(A,C);}\
@@ -71,7 +66,7 @@ static inline void     N##_Off(void)          {(!X)?(N##_Set()):(N##_Clr());}\
 static inline uint8_t  N##_IsOn(void)         {return  (X)?N##_IsOutHigh():N##_IsOutLow();}\
 static inline uint8_t  N##_IsOff(void)        {return (!X)?N##_IsOutHigh():N##_IsOutLow();}
 
-#elif  ARDUINO_ARCH_STM8
+#elif  defined(ARDUINO_ARCH_STM8)
 
 #define GPIO_ASSIGN			    STM8_GPIO_ASSIGN
 #define GPIO_ASSIGN_POLARITY	STM8_GPIO_ASSIGN_POLARITY
@@ -146,12 +141,9 @@ static  void     N##_On(void)           { (X)?(N##_Set()):(N##_Clr());}\
 static  void     N##_Off(void)          {(!X)?(N##_Set()):(N##_Clr());}\
 static  uint8_t  N##_IsOn(void)         {return  (X)?N##_IsOutHigh():N##_IsOutLow();}\
 static  uint8_t  N##_IsOff(void)        {return (!X)?N##_IsOutHigh():N##_IsOutLow();}
-#elif  ARDUINO_ARCH_STM8
-
 
 #else
 // !other here!	 add me
-#endif  // ARDUINO_ARCH_STM8
+#endif  // STM32GENERIC
 
-
-#endif //_STM8_FASTIO_H_
+#endif //_FAST_IO_MACRO_H_

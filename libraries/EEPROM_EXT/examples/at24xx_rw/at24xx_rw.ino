@@ -37,6 +37,7 @@ void setup() {
   }
 #endif
 
+  char s[17] = {0};
   for (uint32_t  page = 0; page < EEPROM.length() / 256; page++) {
     Serial << "page: " << page + 1  <<  "/" <<  EEPROM.length() / 256 << " \n";
     for (auto i = 0; i < 16; i++) {
@@ -47,13 +48,14 @@ void setup() {
       if (addr == 0)    Serial  << "0";
       Serial << _HEX(addr) << ") ";
       for (auto j = 0; j < 16; j++) {
-
         //      uint8_t ch = EEPROM.read(addr + j); /*use read function*/
         uint8_t ch = EEPROM[addr + j];             /*use iteration*/
         if ( ch < 16) Serial << "0";
         Serial << _HEX(ch) << "  ";
+        if(isPrintable(ch)) s[j] = ch;
+        else s[j] = '.';
       }
-      Serial << "\n";
+      Serial << s << "\n";
     }
     Serial << "\n";
   }

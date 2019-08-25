@@ -167,6 +167,7 @@ xEventGroupWaitBits	KEYWORD2
 #######################################
 BaseType_t	LITERAL1
 FREERTOS	LITERAL1
+portINFO	LITERAL1
 portCHAR	LITERAL1
 portFLOAT	LITERAL1
 portDOUBLE	LITERAL1

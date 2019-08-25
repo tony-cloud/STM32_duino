@@ -132,6 +132,7 @@
     #include "stm32h7xx_hal_uart_ex.c"
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     #include "stm32h7xx_hal_i2s_ex.c"
+    #include "stm32h7xx_hal_smartcard.c"
 #endif
 #ifdef STM32L0
     #include "stm32l0xx_hal_adc_ex.c"

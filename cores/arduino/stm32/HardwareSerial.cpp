@@ -530,18 +530,18 @@ int HardwareSerial::read() {
 }
 
 size_t HardwareSerial::write(const uint8_t c) {
-#if PROTEUS
-   HAL_UART_Transmit(handle, (uint8_t*)&c, 1,100); /*for proteus*/	  
+#if defined(USE_FULL_ASSERT) || defined(PROTEUS)
+   HAL_UART_Transmit(handle, (uint8_t*)&c, 1,100); /*use polling mode  for debug / proteus */
 #else
-  while ((txEnd + 1) % TX_BUFFER_SIZE == txStart);
+   while ((txEnd + 1) % TX_BUFFER_SIZE == txStart);
 
-  txBuffer[txEnd] = c;
-  txEnd = (txEnd + 1) % TX_BUFFER_SIZE;
-  if (txEnd == (txStart + 1) % TX_BUFFER_SIZE) {
-    HAL_UART_Transmit_IT(handle, &txBuffer[txStart], 1);
-  } 
-#endif	
-  return 1;
+   txBuffer[txEnd] = c;
+   txEnd = (txEnd + 1) % TX_BUFFER_SIZE;
+   if (txEnd == (txStart + 1) % TX_BUFFER_SIZE) {
+      HAL_UART_Transmit_IT(handle, &txBuffer[txStart], 1);
+   } 
+#endif
+   return 1;
 }
 
 void HardwareSerial::stm32SetRX(uint8_t rx) {

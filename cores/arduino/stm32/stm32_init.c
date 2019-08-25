@@ -25,8 +25,10 @@
 extern void SystemClock_Config(void);
 
 void init() {
-#if defined(STM32F7)||defined(STM32H7)	
+#if (__ICACHE_PRESENT == 1U)
   SCB_EnableICache();  /* Enable I-Cache */
+#endif
+#if (__DCACHE_PRESENT == 1U)
   SCB_EnableDCache();  /* Enable D-Cache */
 #endif
   HAL_Init();

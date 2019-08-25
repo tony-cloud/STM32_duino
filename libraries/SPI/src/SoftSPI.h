@@ -26,36 +26,76 @@
  * @{
  */
 
-#ifndef SoftSPI_h
-#define SoftSPI_h
-#include "util/digitalPin.h"
+#ifndef __SOFTSPI_H__
+#define __SOFTSPI_H__
+
 //------------------------------------------------------------------------------
-/** Nop for timing. */
 #define nop asm volatile ("nop\n\t")
+
+#define SOFTSPI_DELAY(x) do{for(uint32_t i=0;i<x;i++) {asm volatile("nop");}}while(0)
+
 //------------------------------------------------------------------------------
 /** Pin Mode for MISO is input.*/
-#define MISO_MODE INPUT
+#define MISO_MODE  INPUT_PULLDOWN
 /** Pullups disabled for MISO are disabled. */
-#define MISO_LEVEL false
+#define MISO_LEVEL LOW
 /** Pin Mode for MOSI is output.*/
 #define MOSI_MODE  OUTPUT
 /** Pin Mode for SCK is output. */
-#define SCK_MODE  OUTPUT
+#define SCK_MODE   OUTPUT
 //------------------------------------------------------------------------------
 /**
  * @class SoftSPI
  * @brief Fast software SPI.
  */
-template<const int MosiPin, const int MisoPin, const int SckPin, const int Mode = 0>
 class SoftSPI {
  public:
+    SoftSPI(ARDUINOPIN_TypeDef MosiPin, ARDUINOPIN_TypeDef MisoPin, ARDUINOPIN_TypeDef SckPin)
+          : MosiPin(MosiPin),MisoPin(MisoPin),SckPin(SckPin){}
+		 
+		  ARDUINOPIN_TypeDef MosiPin;
+		  ARDUINOPIN_TypeDef MisoPin;
+		  ARDUINOPIN_TypeDef SckPin;
+		 
   //----------------------------------------------------------------------------
   /** Initialize SoftSPI pins. */
-  void begin() {
-    fastPinConfig(MisoPin, MISO_MODE, MISO_LEVEL);
-    fastPinConfig(MosiPin, MOSI_MODE, !MODE_CPHA(Mode));
-    fastPinConfig(SckPin, SCK_MODE, MODE_CPOL(Mode));
+#if USE_ITERATOR == 0
+  void begin(){Init();}	
+  void end()  {deInit();}
+#endif
+
+  void Init()
+  {
+    pinMode(MisoPin,MISO_MODE);
+//	digitalWrite(MisoPin, MISO_LEVEL);
+    pinMode(MosiPin,MOSI_MODE);
+	digitalWrite(MosiPin, !MODE_CPHA(settings.dataMode));
+	
+    pinMode(SckPin,SCK_MODE);
+	digitalWrite(SckPin,MODE_CPOL(settings.dataMode));
   }
+  
+  void deInit(){}
+
+  void setBitOrder(uint8_t bitOrder) {
+	this->settings.bitOrder = bitOrder;
+  }
+  
+  void setDataMode(uint8_t dataMode) {
+	this->settings.dataMode = dataMode;	  
+  }
+  
+  void setClock(uint32_t clock) {
+	this->settings.clock  = F_CPU/7/clock;
+  }
+
+  void beginTransaction(SPISettings settings){
+	this->settings.clock    = F_CPU/7/settings.clock;
+	this->settings.bitOrder = settings.bitOrder;
+	this->settings.dataMode = settings.dataMode;
+  }
+  void endTransaction() {}
+  
   //----------------------------------------------------------------------------
   /** Soft SPI receive byte.
    * @return Data byte received.
@@ -95,7 +135,7 @@ class SoftSPI {
    */
   inline __attribute__((always_inline))
   uint8_t transfer(uint8_t txData) {
-    uint8_t rxData = 0;
+	uint8_t rxData = 0;
     transferBit(7, &rxData, txData);
     transferBit(6, &rxData, txData);
     transferBit(5, &rxData, txData);
@@ -107,53 +147,84 @@ class SoftSPI {
     return rxData;
   }
 
+  void transfer(uint8_t *buf, size_t count){  /*reseive*/
+	  uint8_t *ptr = buf;
+	  for(size_t i = 0;i<count;i++,ptr++){
+		  *ptr = receive();
+      }		  
+  }
+  
+   uint16_t transfer16(uint16_t data) {
+	 if(settings.bitOrder == MSBFIRST) {
+	   uint16_t ret =  transfer(data>>8);
+	   return (ret<<8) + transfer(data &0xff);
+	 }else{
+	   uint16_t ret =  transfer(data &0xff);
+	   return (ret + (transfer(data>>8) <<8));
+	 }
+   }
+   
  private:
   //----------------------------------------------------------------------------
-  constexpr bool MODE_CPHA(const int mode) {return ((mode & 1) != 0);}
-  constexpr bool MODE_CPOL(const int mode) {return ((mode & 2) != 0);}
+  inline __attribute__((always_inline))
+  bool MODE_CPHA(uint8_t mode) {return ((mode & 1) != 0);}
+  inline __attribute__((always_inline))
+  bool MODE_CPOL(uint8_t mode) {return ((mode & 2) != 0);}
   
   inline __attribute__((always_inline))
   void receiveBit(uint8_t bit, uint8_t* data) {
-    if (MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, !MODE_CPOL(Mode));
+    if (MODE_CPHA(settings.dataMode)) {
+      setClockPin(!MODE_CPOL(settings.dataMode));
     }
     nop;
     nop;
-    fastDigitalWrite(SckPin,
-      MODE_CPHA(Mode) ? MODE_CPOL(Mode) : !MODE_CPOL(Mode));
-    if (fastDigitalRead(MisoPin)) *data |= 1 << bit;
-    if (!MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, MODE_CPOL(Mode));
+    setClockPin((MODE_CPHA(settings.dataMode) ? MODE_CPOL(settings.dataMode) : !MODE_CPOL(settings.dataMode)));
+    if (digitalRead(MisoPin)) *data |= 1 << bit;
+    if (!MODE_CPHA(settings.dataMode)) {
+      setClockPin(MODE_CPOL(settings.dataMode));
     }
   }
   //----------------------------------------------------------------------------
+ 
   inline __attribute__((always_inline))
   void sendBit(uint8_t bit, uint8_t data) {
-    if (MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, !MODE_CPOL(Mode));
+    if (MODE_CPHA(settings.dataMode)) {
+      setClockPin(!MODE_CPOL(settings.dataMode));
     }
-    fastDigitalWrite(MosiPin, data & (1 << bit));
-    fastDigitalWrite(SckPin,
-      MODE_CPHA(Mode) ? MODE_CPOL(Mode) : !MODE_CPOL(Mode));
-    if (!MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, MODE_CPOL(Mode));
+    digitalWrite(MosiPin, data & (1 << bit));
+    setClockPin(MODE_CPHA(settings.dataMode) ? MODE_CPOL(settings.dataMode) : !MODE_CPOL(settings.dataMode));
+    nop;
+    nop;
+    if (!MODE_CPHA(settings.dataMode)) {
+      setClockPin(MODE_CPOL(settings.dataMode));
     }
   }
   //----------------------------------------------------------------------------
   inline __attribute__((always_inline))
   void transferBit(uint8_t bit, uint8_t* rxData, uint8_t txData) {
-    if (MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, !MODE_CPOL(Mode));
+    if (MODE_CPHA(settings.dataMode)) {
+      setClockPin(!MODE_CPOL(settings.dataMode));
     }
-    fastDigitalWrite(MosiPin, txData & (1 << bit));
-    fastDigitalWrite(SckPin,
-      MODE_CPHA(Mode) ? MODE_CPOL(Mode) : !MODE_CPOL(Mode));
-    if (fastDigitalRead(MisoPin)) *rxData |= 1 << bit;
-    if (!MODE_CPHA(Mode)) {
-      fastDigitalWrite(SckPin, MODE_CPOL(Mode));
+    digitalWrite(MosiPin, txData & (1 << bit));
+    setClockPin(MODE_CPHA(settings.dataMode) ? MODE_CPOL(settings.dataMode) : !MODE_CPOL(settings.dataMode));
+    if (digitalRead(MisoPin)) *rxData |= 1 << bit;
+    if (!MODE_CPHA(settings.dataMode)) {
+      setClockPin(MODE_CPOL(settings.dataMode));
     }
   }
   //----------------------------------------------------------------------------
+  inline __attribute__((always_inline))
+  void setClockPin(bool state) {
+      SOFTSPI_DELAY(settings.clock);
+	  if(state) digitalWriteHigh(SckPin);
+      else 	 digitalWriteLow(SckPin);  
+//      SOFTSPI_DELAY(settings.clock);
+   //Allow for clock stretching - dangerous currently
+//      while (digitalRead(this->SckPin) != state);
+  }
+  private:
+    SPISettings settings = {(F_CPU)/4000000/7, MSBFIRST, SPI_MODE0};
 };
+
 #endif  // SoftSPI_h
 /** @} */

@@ -29,9 +29,14 @@ static int FreeStack() {
 
 void setup() 
 {
+  pinMode(LED_BUILTIN,OUTPUT);
   Serial.begin(115200);
-  while (!Serial.available()); //wait for usb_serial input a char; 
-  Serial.println("Ram Free Example");
+  delay(1000);
+  Serial.println("Ram Free Example,Press any key to being");
+  while (!Serial.available()){ //wait for usb_serial input a char; 
+   digitalToggle(LED_BUILTIN);
+   delay(100);
+  }
   Serial.println("show the RAM space available");
 }
 

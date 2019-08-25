@@ -1,6 +1,9 @@
 # STM32LowPower Lib
 Arduino library to support STM32 Low Power(低功耗库).
 
+## Requirement
+* [STM32GENERIC] (https://github.com/huaweiwx/STM32GENERIC)  version >= 1.3.0
+
 ## API
 
 * **`void begin()`**: configure the Low Power
@@ -36,7 +39,7 @@ Arduino library to support STM32 Low Power(低功耗库).
 **param** callback: pointer to a callback to call when the board is waked up.  
 
 
-`Begin()` function must be called at least once before `idle()`, `sleep()`, `deepSleep()` or `shutdown()` functions.  
+`begin()` function must be called at least once before `idle()`, `sleep()`, `deepSleep()` or `shutdown()` functions.  
 
 `attachInterruptWakeup()` or `enableWakeupFrom()` functions should be called before `idle()`, `sleep()`, `deepSleep()` or `shutdown()` functions.  
 
@@ -70,7 +73,7 @@ The board will restart when exit the shutdown mode.
 
 * **`void enableWakeupFrom(TwoWire *wire, voidFuncPtrVoid callback)`**: 允许I2C唤醒（未完成，暂不支持）
 
-`Begin()`该函数必须在 `idle()`, `sleep()`, `deepSleep()` or `shutdown()`前调用一次。  
+`begin()`该函数必须在 `idle()`, `sleep()`, `deepSleep()` or `shutdown()`前调用一次。  
 `attachInterruptWakeup()` or `enableWakeupFrom()`在 `idle()`, `sleep()`, `deepSleep()` or `shutdown()`前调用。
 HardwareSerial 用于唤醒源时配置为 HSI clock source 而不论已配置的任何时钟源.
 RTC用于唤醒源使用 LSE 而不论已配置的其他任何时钟源.
@@ -96,4 +99,4 @@ and voltage supplies are retained. If supported, Peripherals wake-up is possible
 
 ## Source
 You can find the source files at  
-https://github.com/stm32duino/STM32LowPower
+https://github.com/huaweiwx/STM32GENERIC/tree/master/STM32/libraries/STM32LowPower

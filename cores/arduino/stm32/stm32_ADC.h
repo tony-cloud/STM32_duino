@@ -29,7 +29,7 @@
 
 #ifdef STM32H7
 # define INTERNAL_Instance ADC3
-# define ADC_CHANNEL_VBAT ADC_CHANNEL_VBAT_DIV4
+//# define ADC_CHANNEL_VBAT ADC_CHANNEL_VBAT_DIV4
 #else
 # define INTERNAL_Instance ADC1
 #endif
@@ -84,12 +84,12 @@ void analogReadResolution(int resolution);
 
 int analogReadResolutionVal(void);
 
-#ifdef   ADC_SINGLE_ENDED
+#ifdef ADC_OFFSET_NONE  //F3/H7/L4
 int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode);
-int analogReadChanelAve(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode,uint8_t n);
+int analogReadChanelAve(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode, uint8_t n);
 #else
 int analogReadChanel(ADC_TypeDef* ADCx, uint32_t ch);
-int analogReadChanelAve(ADC_TypeDef* ADCx, uint32_t ch,uint8_t);
+int analogReadChanelAve(ADC_TypeDef* ADCx, uint32_t ch, uint8_t n);
 #endif
 
 #ifdef __cplusplus
@@ -106,8 +106,8 @@ class ADCClass {
       return analogReadResolutionVal();
     }
 
-#ifdef  ADC_SINGLE_ENDED
-    inline int read(ADC_TypeDef* ADCx, uint32_t ch, uint8_t differentialMode = ADC_SINGLE_ENDED) {
+#ifdef ADC_OFFSET_NONE  //F3/H7/L4
+    inline int read(ADC_TypeDef* ADCx, uint32_t ch, uint32_t differentialMode = ADC_SINGLE_ENDED) {
       return  analogReadChanel(ADCx, ch, differentialMode);
     }
 #else
@@ -121,7 +121,7 @@ class ADCClass {
 #ifdef  ADC_CHANNEL_VBAT_DIV4  /*H7*/
 //      int vref = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_VREFINT, ADC_SINGLE_ENDED,16);
       return  getReference() * MAX_CONVERTED_VALUE / analogReadChanelAve(INTERNAL_Instance,  ADC_CHANNEL_VBAT_DIV4, ADC_SINGLE_ENDED,16) / ADC_VBAT_MULTI;
-#elif defined(ADC_SINGLE_ENDED)
+#elif defined(ADC_OFFSET_NONE)
 //      int vref = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_VREFINT, ADC_SINGLE_ENDED,16);
       return  getReference() * MAX_CONVERTED_VALUE / analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_VBAT, ADC_SINGLE_ENDED,16) / ADC_VBAT_MULTI;
 #else
@@ -133,7 +133,7 @@ class ADCClass {
 #endif
 
     inline int getReference(void) { // Vref+ unit: mVolt
-#ifdef ADC_SINGLE_ENDED
+#ifdef ADC_OFFSET_NONE  //F3/H7/L4
       int date = analogReadChanelAve(INTERNAL_Instance,ADC_CHANNEL_VREFINT,ADC_SINGLE_ENDED,16);
 #else
       int date = analogReadChanelAve(INTERNAL_Instance,ADC_CHANNEL_VREFINT,16);
@@ -149,10 +149,10 @@ class ADCClass {
     }
 
     inline float temperatureCelsius(void) {
-#ifdef ADC_SINGLE_ENDED
+#ifdef ADC_OFFSET_NONE
       int vref = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_VREFINT, ADC_SINGLE_ENDED,32);
 //      return (((analogReadChanel(INTERNAL_Instance, ADC_CHANNEL_TEMPSENSOR, ADC_SINGLE_ENDED) * 1225 / vref) - VSENS_AT_AMBIENT_TEMP) * 10.0 / AVG_SLOPE) + AMBIENT_TEMP;
-      int date = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_TEMPSENSOR, ADC_SINGLE_ENDED,32);
+      int date = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_TEMPSENSOR, ADC_OFFSET_NONE,32);
 #else
       int vref = analogReadChanelAve(INTERNAL_Instance, ADC_CHANNEL_VREFINT,32);
 //	  float    vref = analogReadChanel(INTERNAL_Instance, ADC_CHANNEL_VREFINT)/ MAX_CONVERTED_VALUE * 3300;  	

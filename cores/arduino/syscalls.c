@@ -17,7 +17,7 @@
 */
 
 /**
-  * \file syscalls_sam3.c
+  * \file syscalls.c
   *
   * Implementation of newlib syscall.
   *
@@ -41,7 +41,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/times.h>
-#include <sys/errno.h>
 
 // Helper macro to mark unused parameters and prevent compiler warnings.
 // Appends _UNUSED to the variable name to prevent accidentally using them.
@@ -55,6 +54,7 @@
  *        Exported variables
  *----------------------------------------------------------------------------*/
 
+#include <sys/errno.h>
 #undef errno
 extern int errno ;
 //extern int  _end ;
@@ -91,7 +91,7 @@ caddr_t _sbrk( int incr ) {
 }
 
 __attribute__((weak))
-int _link(char *old, char *new)
+int _link(const char *old, const char *new)
 {
     UNUSED(old);
     UNUSED(new);	
@@ -154,6 +154,7 @@ int _read(UNUSED_PARAM(int file), UNUSED_PARAM(char *ptr), UNUSED_PARAM(int len)
   return 0 ;
 }
 
+/* move to STM32SYSTEM.cpp use Serial.
 __attribute__((weak))
 int _write( UNUSED_PARAM(int file), UNUSED_PARAM(char *ptr), int len )
 {
@@ -163,6 +164,7 @@ int _write( UNUSED_PARAM(int file), UNUSED_PARAM(char *ptr), int len )
   }
   return iIndex ;
 }
+*/
 
 __attribute__((weak))
 void _exit(UNUSED_PARAM(int status))

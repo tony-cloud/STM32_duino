@@ -418,7 +418,7 @@ extern "C" {
 #endif
 
 #ifndef configCHECK_FOR_STACK_OVERFLOW
-#if USE_ERRORBLINK
+#ifdef USE_FULL_ASSERT
 	#define configCHECK_FOR_STACK_OVERFLOW 1
 #else
 	#define configCHECK_FOR_STACK_OVERFLOW 0
@@ -698,7 +698,7 @@ extern "C" {
 #endif
 
 #ifndef configUSE_MALLOC_FAILED_HOOK
-#if USE_ERRORBLINK
+#ifdef USE_FULL_ASSERT
 	#define configUSE_MALLOC_FAILED_HOOK 1
 #else
 	#define configUSE_MALLOC_FAILED_HOOK 0

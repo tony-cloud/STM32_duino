@@ -221,7 +221,7 @@ class BB_PIN {
     const uint32_t bb_outadr = BITBAND(outReg, pos);
 
     template<typename T = bool>
-    inline T read() const {
+    inline T read() {
       return MEM_ADDR(this->bb_inadr);
     }
 
@@ -254,7 +254,7 @@ class BB_PIN {
       MEM_ADDR(this->bb_outadr) = 0;
     }
 
-    inline operator bool () const __attribute__((always_inline)) {
+    inline operator bool () __attribute__((always_inline)) {
       return (MEM_ADDR(this->bb_inadr));
     }
 

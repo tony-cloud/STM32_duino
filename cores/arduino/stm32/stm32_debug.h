@@ -43,7 +43,7 @@
 extern "C" {
 #endif
 
-void errorLedBlink(int n);
+void errorLedBlink(char* file, uint32_t n);
 
 //Returns the name of the pin: "PA4" or "1 (PB3)"
 char *stm32PinName(uint8_t pin);
@@ -62,6 +62,57 @@ void _Error_Handler(char* file, uint32_t line);
 
 #ifdef __cplusplus
 }
+
+#if  __CORTEX_M  > 0  /* M0/M0+ not swo */
+#include "Stream.h"
+
+/*********************************************************************
+*       SWO "Terminal" class
+*********************************************************************/
+class SWO:public Stream {
+public:
+    void begin(uint32_t baud = 115200) {
+      UNUSED(baud);
+    }
+    int available( void ) {
+#if USE_ITMRXBUFFER > 0
+      return ITM_CheckChar();
+#else
+      return 0;
+#endif
+    }
+	int read( void ) {
+#if USE_ITMRXBUFFER > 0
+      return ITM_ReceiveChar();
+#else
+      return 0;
+#endif
+    }
+    int availableForWrite(void) {
+      return 1;
+    }
+    size_t write(const uint8_t ch ) {
+	  ITM_SendChar(ch);
+      return 1;
+    }
+    int peek(void ){
+		return 1;
+	}
+
+    void flush( void ) {} ;
+
+    using Print::write; // pull in write(str) and write(buf, size) from Print
+
+    void end(void) {}
+
+    operator bool() {
+      return true;
+    }  // RTT always active
+};
+
+extern SWO SerialSWO;
+#endif
+
 #endif
 
 #if __unix__

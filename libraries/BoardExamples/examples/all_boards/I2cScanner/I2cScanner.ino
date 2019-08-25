@@ -50,15 +50,19 @@ void enableDevices()
 
 void setup()
 {
+  pinMode(LED_BUILTIN,OUTPUT);
+  Serial.begin(115200);
+  delay(1000);
+  Serial.println("\nI2C Scanner,Press any key to being");
+  while (!Serial.available()){ //wait for usb_serial input a char; 
+   digitalToggle(LED_BUILTIN);
+   delay(100);
+  }
+ 
   Wire.begin();
   
   enableDevices();
 
-  Serial.begin(115200);
-  while (!Serial.available()); //wait for serial input a char; 
-  
-//  delay(5000);
-  Serial.println("\nI2C Scanner");
 }
 
 

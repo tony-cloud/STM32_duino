@@ -2,35 +2,17 @@
   ******************************************************************************
   * @file    stm32l0xx_ll_pwr.h
   * @author  MCD Application Team
-  * @version V1.7.0
-  * @date    31-May-2016
   * @brief   Header file of PWR LL module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright(c) 2016 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -58,11 +40,8 @@ extern "C" {
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-
 /* Private constants ---------------------------------------------------------*/
-
 /* Private macros ------------------------------------------------------------*/
-
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup PWR_LL_Exported_Constants PWR Exported Constants
@@ -85,17 +64,17 @@ extern "C" {
   */
 #define LL_PWR_CSR_WUF                     PWR_CSR_WUF            /*!< Wakeup flag */
 #define LL_PWR_CSR_SBF                     PWR_CSR_SBF            /*!< Standby flag */
-#if defined (PWR_PVD_SUPPORT)
+#if defined(PWR_PVD_SUPPORT)
 #define LL_PWR_CSR_PVDO                    PWR_CSR_PVDO           /*!< Power voltage detector output flag */
-#endif
-#if defined (PWR_CSR_VREFINTRDYF)
+#endif /* PWR_PVD_SUPPORT */
+#if defined(PWR_CSR_VREFINTRDYF)
 #define LL_PWR_CSR_VREFINTRDYF             PWR_CSR_VREFINTRDYF    /*!< VREFINT ready flag */
-#endif
-#define LL_PWR_CSR_VOSF                    PWR_CSR_VOSF           /*!< Voltage scaling select flag */
+#endif /* PWR_CSR_VREFINTRDYF */
+#define LL_PWR_CSR_VOS                     PWR_CSR_VOSF           /*!< Voltage scaling select flag */
 #define LL_PWR_CSR_REGLPF                  PWR_CSR_REGLPF         /*!< Regulator low power flag */
 #define LL_PWR_CSR_EWUP1                   PWR_CSR_EWUP1          /*!< Enable WKUP pin 1 */
 #define LL_PWR_CSR_EWUP2                   PWR_CSR_EWUP2          /*!< Enable WKUP pin 2 */
-#if defined (PWR_CSR_EWUP3)
+#if defined(PWR_CSR_EWUP3)
 #define LL_PWR_CSR_EWUP3                   PWR_CSR_EWUP3          /*!< Enable WKUP pin 3 */
 #endif /* PWR_CSR_EWUP3 */
 /**
@@ -115,8 +94,8 @@ extern "C" {
 /** @defgroup PWR_LL_EC_MODE_PWR Mode Power
   * @{
   */
-#define LL_PWR_MODE_STOP                   ((uint32_t)0x00000000U)        /*!< Enter Stop mode when the CPU enters deepsleep */
-#define LL_PWR_MODE_STANDBY                (PWR_CR_PDDS)                  /*!< Enter Standby mode when the CPU enters deepsleep */
+#define LL_PWR_MODE_STOP                      0x00000000U                    /*!< Enter Stop mode when the CPU enters deepsleep */
+#define LL_PWR_MODE_STANDBY                   (PWR_CR_PDDS)                  /*!< Enter Standby mode when the CPU enters deepsleep */
 /**
   * @}
   */
@@ -124,24 +103,23 @@ extern "C" {
 /** @defgroup PWR_LL_EC_REGU_MODE_LP_MODES  Regulator Mode In Low Power Modes
   * @{
   */
-#define LL_PWR_REGU_LPMODES_MAIN           ((uint32_t)0x00000000U)        /*!< Voltage regulator in main mode during deepsleep/sleep/low-power run mode */
-#define LL_PWR_REGU_LPMODES_LOW_POWER      (PWR_CR_LPSDSR)                /*!< Voltage regulator in low-power mode during deepsleep/sleep/low-power run mode */
+#define LL_PWR_REGU_LPMODES_MAIN           0x00000000U        /*!< Voltage regulator in main mode during deepsleep/sleep/low-power run mode */
+#define LL_PWR_REGU_LPMODES_LOW_POWER      (PWR_CR_LPSDSR)    /*!< Voltage regulator in low-power mode during deepsleep/sleep/low-power run mode */
 /**
   * @}
   */
-
 #if defined(PWR_CR_LPDS)
 /** @defgroup PWR_LL_EC_REGU_MODE_DS_MODE  Regulator Mode In Deep Sleep Mode
  * @{
  */
-#define LL_PWR_REGU_DSMODE_MAIN       ((uint32_t)0x00000000U)        /*!< Voltage regulator in main mode during deepsleep mode when PWR_CR_LPSDSR = 0 */
-#define LL_PWR_REGU_DSMODE_LOW_POWER  (PWR_CR_LPDS)                  /*!< Voltage regulator in low-power mode during deepsleep mode when PWR_CR_LPSDSR = 0 */
+#define LL_PWR_REGU_DSMODE_MAIN        0x00000000U           /*!< Voltage regulator in main mode during deepsleep mode when PWR_CR_LPSDSR = 0 */
+#define LL_PWR_REGU_DSMODE_LOW_POWER   (PWR_CR_LPDS)         /*!< Voltage regulator in low-power mode during deepsleep mode when PWR_CR_LPSDSR = 0 */
 /**
- * @}
- */
+  * @}
+  */
 #endif /* PWR_CR_LPDS */
 
-#if defined (PWR_PVD_SUPPORT)
+#if defined(PWR_PVD_SUPPORT)
 /** @defgroup PWR_LL_EC_PVDLEVEL Power Voltage Detector Level
   * @{
   */
@@ -156,14 +134,13 @@ extern "C" {
 /**
   * @}
   */
-#endif
-
+#endif /* PWR_PVD_SUPPORT */
 /** @defgroup PWR_LL_EC_WAKEUP_PIN  Wakeup Pins
-* @{
-*/
+  * @{
+  */
 #define LL_PWR_WAKEUP_PIN1                 (PWR_CSR_EWUP1)        /*!< WKUP pin 1 : PA0 */
 #define LL_PWR_WAKEUP_PIN2                 (PWR_CSR_EWUP2)        /*!< WKUP pin 2 : PC13 */
-#if defined (PWR_CSR_EWUP3)
+#if defined(PWR_CSR_EWUP3)
 #define LL_PWR_WAKEUP_PIN3                 (PWR_CSR_EWUP3)        /*!< WKUP pin 3 : PE6 or PA2 according to device */
 #endif /* PWR_CSR_EWUP3 */
 /**
@@ -206,7 +183,6 @@ extern "C" {
   * @}
   */
 
-
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup PWR_LL_Exported_Functions PWR Exported Functions
   * @{
@@ -215,7 +191,6 @@ extern "C" {
 /** @defgroup PWR_LL_EF_Configuration Configuration
   * @{
   */
-
 /**
   * @brief  Switch the regulator from main mode to low-power mode
   * @rmtoll CR    LPRUN       LL_PWR_EnableLowPowerRunMode
@@ -285,7 +260,6 @@ __STATIC_INLINE void LL_PWR_ExitLowPowerRunMode(void)
   CLEAR_BIT(PWR->CR, PWR_CR_LPRUN);   /* => LL_PWR_DisableLowPowerRunMode() */
   CLEAR_BIT(PWR->CR, PWR_CR_LPSDSR);  /* => LL_PWR_SetRegulModeLP(LL_PWR_REGU_LPMODES_MAIN) */
 }
-
 /**
   * @brief  Set the main internal regulator output voltage
   * @rmtoll CR    VOS       LL_PWR_SetRegulVoltageScaling
@@ -424,7 +398,7 @@ __STATIC_INLINE uint32_t LL_PWR_GetPowerMode(void)
   return (uint32_t)(READ_BIT(PWR->CR, PWR_CR_PDDS));
 }
 
-#if defined (PWR_PVD_SUPPORT)
+#if defined(PWR_PVD_SUPPORT)
 /**
   * @brief  Configure the voltage threshold detected by the Power Voltage Detector
   * @rmtoll CR    PLS       LL_PWR_SetPVDLevel
@@ -491,13 +465,13 @@ __STATIC_INLINE uint32_t LL_PWR_IsEnabledPVD(void)
 {
   return (READ_BIT(PWR->CR, PWR_CR_PVDE) == (PWR_CR_PVDE));
 }
-#endif
+#endif /* PWR_PVD_SUPPORT */
 
 /**
   * @brief  Enable the WakeUp PINx functionality
   * @rmtoll CSR   EWUP1       LL_PWR_EnableWakeUpPin\n
-  *         CSR   EWUP2       LL_PWR_EnableWakeUpPin\n
-  *         CSR   EWUP3       LL_PWR_EnableWakeUpPin
+  * @rmtoll CSR   EWUP2       LL_PWR_EnableWakeUpPin\n
+  * @rmtoll CSR   EWUP3       LL_PWR_EnableWakeUpPin
   * @param  WakeUpPin This parameter can be one of the following values:
   *         @arg @ref LL_PWR_WAKEUP_PIN1
   *         @arg @ref LL_PWR_WAKEUP_PIN2
@@ -514,8 +488,8 @@ __STATIC_INLINE void LL_PWR_EnableWakeUpPin(uint32_t WakeUpPin)
 /**
   * @brief  Disable the WakeUp PINx functionality
   * @rmtoll CSR   EWUP1       LL_PWR_DisableWakeUpPin\n
-  *         CSR   EWUP2       LL_PWR_DisableWakeUpPin\n
-  *         CSR   EWUP3       LL_PWR_DisableWakeUpPin
+  * @rmtoll CSR   EWUP2       LL_PWR_DisableWakeUpPin\n
+  * @rmtoll CSR   EWUP3       LL_PWR_DisableWakeUpPin
   * @param  WakeUpPin This parameter can be one of the following values:
   *         @arg @ref LL_PWR_WAKEUP_PIN1
   *         @arg @ref LL_PWR_WAKEUP_PIN2
@@ -532,8 +506,8 @@ __STATIC_INLINE void LL_PWR_DisableWakeUpPin(uint32_t WakeUpPin)
 /**
   * @brief  Check if the WakeUp PINx functionality is enabled
   * @rmtoll CSR   EWUP1       LL_PWR_IsEnabledWakeUpPin\n
-  *         CSR   EWUP2       LL_PWR_IsEnabledWakeUpPin\n
-  *         CSR   EWUP3       LL_PWR_IsEnabledWakeUpPin
+  * @rmtoll CSR   EWUP2       LL_PWR_IsEnabledWakeUpPin\n
+  * @rmtoll CSR   EWUP3       LL_PWR_IsEnabledWakeUpPin
   * @param  WakeUpPin This parameter can be one of the following values:
   *         @arg @ref LL_PWR_WAKEUP_PIN1
   *         @arg @ref LL_PWR_WAKEUP_PIN2
@@ -671,7 +645,7 @@ __STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_SB(void)
   return (READ_BIT(PWR->CSR, PWR_CSR_SBF) == (PWR_CSR_SBF));
 }
 
-#if defined (PWR_PVD_SUPPORT)
+#if defined(PWR_PVD_SUPPORT)
 /**
   * @brief  Indicate whether VDD voltage is below the selected PVD threshold
   * @rmtoll CSR   PVDO       LL_PWR_IsActiveFlag_PVDO
@@ -681,9 +655,9 @@ __STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_PVDO(void)
 {
   return (READ_BIT(PWR->CSR, PWR_CSR_PVDO) == (PWR_CSR_PVDO));
 }
-#endif
+#endif /* PWR_PVD_SUPPORT */
 
-#if defined (PWR_CSR_VREFINTRDYF)
+#if defined(PWR_CSR_VREFINTRDYF)
 /**
   * @brief  Get Internal Reference VrefInt Flag
   * @rmtoll CSR   VREFINTRDYF       LL_PWR_IsActiveFlag_VREFINTRDY
@@ -693,18 +667,16 @@ __STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_VREFINTRDY(void)
 {
   return (READ_BIT(PWR->CSR, PWR_CSR_VREFINTRDYF) == (PWR_CSR_VREFINTRDYF));
 }
-#endif
-
+#endif /* PWR_CSR_VREFINTRDYF */
 /**
   * @brief  Indicate whether the regulator is ready in the selected voltage range or if its output voltage is still changing to the required voltage level
-  * @rmtoll CSR   VOSF       LL_PWR_IsActiveFlag_VOSF
+  * @rmtoll CSR   VOSF       LL_PWR_IsActiveFlag_VOS
   * @retval State of bit (1 or 0).
   */
-__STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_VOSF(void)
+__STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_VOS(void)
 {
-  return (READ_BIT(PWR->CSR, PWR_CSR_VOSF) == (PWR_CSR_VOSF));
+  return (READ_BIT(PWR->CSR, LL_PWR_CSR_VOS) == (LL_PWR_CSR_VOS));
 }
-
 /**
   * @brief Indicate whether the regulator is ready in main mode or is in low-power mode
   * @rmtoll CSR   REGLPF       LL_PWR_IsActiveFlag_REGLPF
@@ -715,7 +687,6 @@ __STATIC_INLINE uint32_t LL_PWR_IsActiveFlag_REGLPF(void)
 {
   return (READ_BIT(PWR->CSR, PWR_CSR_REGLPF) == (PWR_CSR_REGLPF));
 }
-
 /**
   * @brief  Clear Standby Flag
   * @rmtoll CR   CSBF       LL_PWR_ClearFlag_SB
@@ -735,8 +706,6 @@ __STATIC_INLINE void LL_PWR_ClearFlag_WU(void)
 {
   SET_BIT(PWR->CR, PWR_CR_CWUF);
 }
-
-
 #if defined(USE_FULL_LL_DRIVER)
 /** @defgroup PWR_LL_EF_Init De-initialization function
   * @{

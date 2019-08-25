@@ -37,4 +37,5 @@
     #error "STM32XX is not defined in boards.txt"
 #endif
 
+
 #endif  // STM32_DEF_H

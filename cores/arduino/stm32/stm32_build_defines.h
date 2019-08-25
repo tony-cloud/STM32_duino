@@ -33,10 +33,8 @@
 # define USE_CORECALLBACK  0
 #endif
 
-#ifndef USE_ERRORBLINK
-#  ifdef USE_FULL_ASSERT
-    #define USE_ERRORBLINK 1
-#  else
+#ifdef USE_FULL_ASSERT
+# ifndef USE_ERRORBLINK
     #define USE_ERRORBLINK 0
 #  endif
 #endif	
@@ -50,7 +48,7 @@
 #endif
 
 #ifndef USE_BITBAND
-#define USE_BITBAND      0
+#define USE_BITBAND       0
 #endif
 
 //devices

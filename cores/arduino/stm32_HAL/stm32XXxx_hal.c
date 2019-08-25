@@ -366,7 +366,7 @@
     #include "stm32h7xx_hal_hsem.c"
     #include "stm32h7xx_hal_i2c.c"
 	#undef TIMING_CLEAR_MASK //remove warning
-	#undef MAX_NBYTE_SIZE	 //remove warning
+//	#undef MAX_NBYTE_SIZE	 //remove warning
     #include "stm32h7xx_hal_i2s.c"
     #include "stm32h7xx_hal_irda.c"
     #include "stm32h7xx_hal_iwdg.c"
@@ -388,7 +388,7 @@
     #include "stm32h7xx_hal_sai.c"
     #include "stm32h7xx_hal_sd.c"
     #include "stm32h7xx_hal_sdram.c"
-    #include "stm32h7xx_hal_smartcard.c"
+//    #include "stm32h7xx_hal_smartcard.c"
 	#undef USART_CR3_FIELDS	 //remove warning
     #include "stm32h7xx_hal_smbus.c"
     #include "stm32h7xx_hal_spdifrx.c"
@@ -400,12 +400,32 @@
 	#undef USART_CR1_FIELDS	 //remove warning
 	#undef USART_CR2_FIELDS	 //remove warning
 	#undef USART_CR3_FIELDS	 //remove warning
+	#undef USART_BRR_MAX     //remove warning
     #include "stm32h7xx_hal_usart.c"
     #include "stm32h7xx_hal_wwdg.c"
     #include "stm32h7xx_ll_delayblock.c"
     #include "stm32h7xx_ll_fmc.c"
     #include "stm32h7xx_ll_sdmmc.c"
     #include "stm32h7xx_ll_usb.c"
+    #include "stm32h7xx_ll_adc.c"
+    #include "stm32h7xx_ll_crc.c"
+    #include "stm32h7xx_ll_dac.c"
+    #include "stm32h7xx_ll_dma.c"
+    #include "stm32h7xx_ll_dma2d.c"
+    #include "stm32h7xx_ll_exti.c"
+    #include "stm32h7xx_ll_gpio.c"
+    #include "stm32h7xx_ll_i2c.c"
+    #include "stm32h7xx_ll_lptim.c"
+    #include "stm32h7xx_ll_pwr.c"
+    #include "stm32h7xx_ll_rcc.c"
+    #include "stm32h7xx_ll_rng.c"
+    #include "stm32h7xx_ll_rtc.c"
+    #include "stm32h7xx_ll_spi.c"
+    #include "stm32h7xx_ll_tim.c"
+    #include "stm32h7xx_ll_usart.c"
+    #undef assert_param
+    #define USE_FULL_LL_DRIVER   /*reomve warning*/
+    #include "stm32h7xx_ll_utils.c"
 #endif
 #ifdef STM32L0
     #include "stm32l0xx_hal.c"
@@ -431,11 +451,14 @@
     #include "stm32l0xx_hal_rng.c"
     #include "stm32l0xx_hal_rtc.c"
 //    #include "stm32l0xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
+	#undef TIMING_CLEAR_MASK	 //remove warning
     #include "stm32l0xx_hal_smbus.c"
     #include "stm32l0xx_hal_spi.c"
     #include "stm32l0xx_hal_tim.c"
     #include "stm32l0xx_hal_tsc.c"
     #include "stm32l0xx_hal_uart.c"
+	#undef USART_CR1_FIELDS	 //remove warning
+	#undef USART_BRR_MAX     //remove warning
     #include "stm32l0xx_hal_usart.c"
     #include "stm32l0xx_hal_wwdg.c"
     #include "stm32l0xx_ll_adc.c"
@@ -542,6 +565,7 @@
     #include "stm32l4xx_hal_sai.c"
     #include "stm32l4xx_hal_sd.c"
 //    #include "stm32l4xx_hal_smartcard.c"  //move to stm32XXxx_hal_ex.c by huaweiwx@sina.com 2017.11.12
+	#undef TIMING_CLEAR_MASK	 //remove warning
     #include "stm32l4xx_hal_smbus.c"
     #include "stm32l4xx_hal_spi.c"
     #include "stm32l4xx_hal_sram.c"
@@ -549,8 +573,9 @@
     #include "stm32l4xx_hal_tim.c"
     #include "stm32l4xx_hal_tsc.c"
     #include "stm32l4xx_hal_uart.c"
-    #undef USART_CR1_FIELDS  // remove warning "USART_CR1_FIELDS" redefined	by huaweiwx@sina.com 2018.01.26
-    #undef USART_CR3_FIELDS  // remove warning "USART_CR3_FIELDS" l4r5 redefined	by huaweiwx@sina.com 2018.02.27
+    #undef USART_CR1_FIELDS  // remove warning "USART_CR1_FIELDS" redefined	        by huaweiwx@sina.com 2018.01.26
+    #undef USART_CR3_FIELDS  // remove warning "USART_CR3_FIELDS" L4R5 redefined	by huaweiwx@sina.com 2018.02.27
+	#undef USART_BRR_MAX     //remove warning
     #include "stm32l4xx_hal_usart.c"
     #include "stm32l4xx_hal_wwdg.c"
     #include "stm32l4xx_ll_adc.c"

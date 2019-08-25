@@ -6,36 +6,20 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************  
+  ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32H7xx_HAL_COMP_H
-#define __STM32H7xx_HAL_COMP_H
+#ifndef STM32H7xx_HAL_COMP_H
+#define STM32H7xx_HAL_COMP_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -52,13 +36,13 @@
   * @{
   */
 
-/* Exported types ------------------------------------------------------------*/ 
+/* Exported types ------------------------------------------------------------*/
 /** @defgroup COMP_Exported_Types COMP Exported Types
   * @{
   */
 
-/** 
-  * @brief  COMP Init structure definition  
+/**
+  * @brief  COMP Init structure definition
   */
 typedef struct
 {
@@ -107,18 +91,45 @@ typedef enum
   HAL_COMP_STATE_BUSY_LOCKED       = (HAL_COMP_STATE_BUSY | COMP_STATE_BITFIELD_LOCK)   /*!< COMP is running and configuration is locked          */
 }HAL_COMP_StateTypeDef;
 
-/** 
+/**
   * @brief  COMP Handle Structure definition
   */
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+typedef struct __COMP_HandleTypeDef
+#else
 typedef struct
+#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
 {
   COMP_TypeDef       *Instance;       /*!< Register base address    */
   COMP_InitTypeDef   Init;            /*!< COMP required parameters */
   HAL_LockTypeDef    Lock;            /*!< Locking object           */
   __IO HAL_COMP_StateTypeDef  State;  /*!< COMP communication state */
+  __IO uint32_t      ErrorCode;       /*!< COMP error code */
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+  void (* TriggerCallback)(struct __COMP_HandleTypeDef *hcomp);   /*!< COMP trigger callback */
+  void (* MspInitCallback)(struct __COMP_HandleTypeDef *hcomp);   /*!< COMP Msp Init callback */
+  void (* MspDeInitCallback)(struct __COMP_HandleTypeDef *hcomp); /*!< COMP Msp DeInit callback */
+#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
 
 } COMP_HandleTypeDef;
 
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+/**
+  * @brief  HAL COMP Callback ID enumeration definition
+  */
+typedef enum
+{
+  HAL_COMP_TRIGGER_CB_ID                = 0x00U,  /*!< COMP trigger callback ID */
+  HAL_COMP_MSPINIT_CB_ID                = 0x01U,  /*!< COMP Msp Init callback ID */
+  HAL_COMP_MSPDEINIT_CB_ID              = 0x02U   /*!< COMP Msp DeInit callback ID */
+} HAL_COMP_CallbackIDTypeDef;
+
+/**
+  * @brief  HAL COMP Callback pointer definition
+  */
+typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer to a COMP callback function */
+
+#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
 /**
   * @}
   */
@@ -127,6 +138,18 @@ typedef struct
 /** @defgroup COMP_Exported_Constants COMP Exported Constants
   * @{
   */
+
+/** @defgroup COMP_Error_Code COMP Error Code
+  * @{
+  */
+#define HAL_COMP_ERROR_NONE             (0x00U)   /*!< No error */
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+#define HAL_COMP_ERROR_INVALID_CALLBACK (0x01U)   /*!< Invalid Callback error */
+#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
+/**
+  * @}
+  */
+
 /** @defgroup COMP_WindowMode COMP Window Mode
   * @{
   */
@@ -215,7 +238,7 @@ typedef struct
 
 /** @defgroup COMP_OutputLevel COMP Output Level
   * @{
-  */ 
+  */
 
 /* Note: Comparator output level values are fixed to "0" and "1",             */
 /* corresponding COMP register bit is managed by HAL function to match        */
@@ -267,17 +290,17 @@ typedef struct
 /** @defgroup COMP_Interrupts_Definitions COMP Interrupts Definitions
   * @{
   */
-#define COMP_IT_EN               COMP_CFGRx_ITEN 
+#define COMP_IT_EN               COMP_CFGRx_ITEN
 
 /**
   * @}
   */
-  
+
 
 /**
   * @}
   */
- 
+
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup COMP_Exported_Macros COMP Exported Macros
   * @{
@@ -287,10 +310,25 @@ typedef struct
   */
 
 /** @brief  Reset COMP handle state.
-  * @param  __HANDLE__ COMP handle
+  * @param  __HANDLE__  COMP handle
   * @retval None
   */
-#define __HAL_COMP_RESET_HANDLE_STATE(__HANDLE__)  ((__HANDLE__)->State = HAL_COMP_STATE_RESET)
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+#define __HAL_COMP_RESET_HANDLE_STATE(__HANDLE__) do{                                                   \
+                                                     (__HANDLE__)->State = HAL_COMP_STATE_RESET;      \
+                                                     (__HANDLE__)->MspInitCallback = NULL;            \
+                                                     (__HANDLE__)->MspDeInitCallback = NULL;          \
+                                                    } while(0)
+#else
+#define __HAL_COMP_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_COMP_STATE_RESET)
+#endif
+
+/**
+  * @brief Clear COMP error code (set it to no error code "HAL_COMP_ERROR_NONE").
+  * @param __HANDLE__ COMP handle
+  * @retval None
+  */
+#define COMP_CLEAR_ERRORCODE(__HANDLE__) ((__HANDLE__)->ErrorCode = HAL_COMP_ERROR_NONE)
 
 /**
   * @brief  Enable the specified comparator.
@@ -327,41 +365,41 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @defgroup COMP_Exti_Management  COMP external interrupt line management
   * @{
   */
 
 /**
-  * @brief  Enable the COMP1 EXTI line rising edge trigger. 
+  * @brief  Enable the COMP1 EXTI line rising edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_ENABLE_RISING_EDGE()    SET_BIT(EXTI->RTSR1, COMP_EXTI_LINE_COMP1)
 
 
 /**
-  * @brief  Disable the COMP1 EXTI line rising edge trigger. 
+  * @brief  Disable the COMP1 EXTI line rising edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_DISABLE_RISING_EDGE()    CLEAR_BIT(EXTI->RTSR1, COMP_EXTI_LINE_COMP1)
 
 /**
-  * @brief  Enable the COMP1 EXTI line falling edge trigger. 
+  * @brief  Enable the COMP1 EXTI line falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_ENABLE_FALLING_EDGE()    SET_BIT(EXTI->FTSR1, COMP_EXTI_LINE_COMP1)
 
 /**
   * @brief  Disable the COMP1 EXTI line falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_DISABLE_FALLING_EDGE()    CLEAR_BIT(EXTI->FTSR1, COMP_EXTI_LINE_COMP1)
 
 
 /**
-  * @brief  Enable the COMP1 EXTI line rising & falling edge trigger. 
+  * @brief  Enable the COMP1 EXTI line rising & falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_ENABLE_RISING_FALLING_EDGE()   do { \
                                                                __HAL_COMP_COMP1_EXTI_ENABLE_RISING_EDGE(); \
                                                                __HAL_COMP_COMP1_EXTI_ENABLE_FALLING_EDGE(); \
@@ -369,9 +407,9 @@ typedef struct
 
 
 /**
-  * @brief  Disable the COMP1 EXTI line rising & falling edge trigger. 
+  * @brief  Disable the COMP1 EXTI line rising & falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_DISABLE_RISING_FALLING_EDGE()  do { \
                                                                __HAL_COMP_COMP1_EXTI_DISABLE_RISING_EDGE(); \
                                                                __HAL_COMP_COMP1_EXTI_DISABLE_FALLING_EDGE(); \
@@ -381,7 +419,7 @@ typedef struct
 /**
   * @brief  Enable the COMP1 EXTI line in interrupt mode.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP1_EXTI_ENABLE_IT()             SET_BIT(EXTI_D1->IMR1, COMP_EXTI_LINE_COMP1)
 
 /**
@@ -431,35 +469,34 @@ typedef struct
   */
 #define __HAL_COMP_COMP1_EXTID3_DISABLE_EVENT()        CLEAR_BIT(EXTI->D3PMR1, COMP_EXTI_LINE_COMP1)
 
-
 /**
   * @brief  Enable the COMP2 EXTI line rising edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_ENABLE_RISING_EDGE()    SET_BIT(EXTI->RTSR1, COMP_EXTI_LINE_COMP2)
 
 /**
   * @brief  Disable the COMP2 EXTI line rising edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_DISABLE_RISING_EDGE()   CLEAR_BIT(EXTI->RTSR1, COMP_EXTI_LINE_COMP2)
 
 /**
   * @brief  Enable the COMP2 EXTI line falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_ENABLE_FALLING_EDGE()   SET_BIT(EXTI->FTSR1, COMP_EXTI_LINE_COMP2)
 
 /**
-  * @brief  Disable the COMP2 EXTI line falling edge trigger. 
+  * @brief  Disable the COMP2 EXTI line falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_DISABLE_FALLING_EDGE()  CLEAR_BIT(EXTI->FTSR1, COMP_EXTI_LINE_COMP2)
 
 /**
   * @brief  Enable the COMP2 EXTI line rising & falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_ENABLE_RISING_FALLING_EDGE()   do { \
                                                                __HAL_COMP_COMP2_EXTI_ENABLE_RISING_EDGE(); \
                                                                __HAL_COMP_COMP2_EXTI_ENABLE_FALLING_EDGE(); \
@@ -468,7 +505,7 @@ typedef struct
 /**
   * @brief  Disable the COMP2 EXTI line rising & falling edge trigger.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_DISABLE_RISING_FALLING_EDGE()   do { \
                                                                __HAL_COMP_COMP2_EXTI_DISABLE_RISING_EDGE(); \
                                                                __HAL_COMP_COMP2_EXTI_DISABLE_FALLING_EDGE(); \
@@ -476,7 +513,7 @@ typedef struct
 /**
   * @brief  Enable the COMP2 EXTI line.
   * @retval None
-  */                                         
+  */
 #define __HAL_COMP_COMP2_EXTI_ENABLE_IT()             SET_BIT(EXTI_D1->IMR1, COMP_EXTI_LINE_COMP2)
 
 /**
@@ -533,7 +570,7 @@ typedef struct
   * @param  __INTERRUPT__: specifies the COMP interrupt source to check.
   *          This parameter can be one of the following values:
   *            @arg COMP_IT_EN: Comparator interrupt enable
-  *   
+  *
   * @retval The new state of __IT__ (TRUE or FALSE)
   */
 #define __HAL_COMP_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__) ((((__HANDLE__)->Instance->CFGR & (__INTERRUPT__)) == (__INTERRUPT__)) ? SET : RESET)
@@ -545,7 +582,7 @@ typedef struct
   *            @arg COMP_FLAG_C2I:  Comparator 2 Interrupt Flag
   *            @retval The new state of __FLAG__ (TRUE or FALSE)
   */
-#define __HAL_COMP_GET_FLAG(__FLAG__)     ((COMP12->SR & (__FLAG__)) == (__FLAG__))   
+#define __HAL_COMP_GET_FLAG(__FLAG__)     ((COMP12->SR & (__FLAG__)) == (__FLAG__))
 
 /** @brief  Clears the specified COMP pending flag.
   * @param  __FLAG__: specifies the flag to check.
@@ -599,7 +636,7 @@ typedef struct
   *            @arg COMP_OR_AFOPG3  :  Alternate Function PG3 source selection
   *            @arg COMP_OR_AFOPG4  :  Alternate Function PG4 source selection
   *            @arg COMP_OR_AFOPI1  :  Alternate Function PI1 source selection
-  *            @arg COMP_OR_AFOPI4  :  Alternate Function PI4 source selection 
+  *            @arg COMP_OR_AFOPI4  :  Alternate Function PI4 source selection
   *            @arg COMP_OR_AFOPK2  :  Alternate Function PK2 source selection
   * @retval None
   */
@@ -618,7 +655,7 @@ typedef struct
   *            @arg COMP_OR_AFOPG4  :  Alternate Function PG4 source selection
   *            @arg COMP_OR_AFOPI1  :  Alternate Function PI1 source selection
   *            @arg COMP_OR_AFOPI4  :  Alternate Function PI4 source selection
-  *            @arg COMP_OR_AFOPK2  :  Alternate Function PK2 source selection  
+  *            @arg COMP_OR_AFOPK2  :  Alternate Function PK2 source selection
   * @retval None
   */
 #define __HAL_COMP_DISABLE_OR(__AF__) CLEAR_BIT(COMP12->OR, (__AF__))
@@ -657,7 +694,7 @@ typedef struct
 /** @defgroup COMP_Private_Macros COMP Private Macros
   * @{
   */
-/** @defgroup COMP_GET_EXTI_LINE COMP Private macros to get EXTI line associated with Comparators 
+/** @defgroup COMP_GET_EXTI_LINE COMP Private macros to get EXTI line associated with Comparators
   * @{
   */
 /**
@@ -683,7 +720,7 @@ typedef struct
 
 #define IS_COMP_INPUT_PLUS(__COMP_INSTANCE__, __INPUT_PLUS__) (((__INPUT_PLUS__) == COMP_INPUT_PLUS_IO1) || \
                                                                ((__INPUT_PLUS__) == COMP_INPUT_PLUS_IO2))
-                                                              
+
 
 
 #define IS_COMP_INPUT_MINUS(__COMP_INSTANCE__, __INPUT_MINUS__) (((__INPUT_MINUS__) == COMP_INPUT_MINUS_1_4VREFINT)  || \
@@ -745,6 +782,11 @@ HAL_StatusTypeDef HAL_COMP_Init(COMP_HandleTypeDef *hcomp);
 HAL_StatusTypeDef HAL_COMP_DeInit (COMP_HandleTypeDef *hcomp);
 void              HAL_COMP_MspInit(COMP_HandleTypeDef *hcomp);
 void              HAL_COMP_MspDeInit(COMP_HandleTypeDef *hcomp);
+#if (USE_HAL_COMP_REGISTER_CALLBACKS == 1)
+/* Callbacks Register/UnRegister functions  ***********************************/
+HAL_StatusTypeDef HAL_COMP_RegisterCallback(COMP_HandleTypeDef *hcomp, HAL_COMP_CallbackIDTypeDef CallbackID, pCOMP_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_COMP_UnRegisterCallback(COMP_HandleTypeDef *hcomp, HAL_COMP_CallbackIDTypeDef CallbackID);
+#endif /* USE_HAL_COMP_REGISTER_CALLBACKS */
 /**
   * @}
   */
@@ -780,6 +822,7 @@ void              HAL_COMP_TriggerCallback(COMP_HandleTypeDef *hcomp);
   * @{
   */
 HAL_COMP_StateTypeDef HAL_COMP_GetState(COMP_HandleTypeDef *hcomp);
+uint32_t              HAL_COMP_GetError(COMP_HandleTypeDef *hcomp);
 /**
   * @}
   */
@@ -800,6 +843,6 @@ HAL_COMP_StateTypeDef HAL_COMP_GetState(COMP_HandleTypeDef *hcomp);
 }
 #endif
 
-#endif /* __STM32H7xx_HAL_COMP_H */
+#endif /* STM32H7xx_HAL_COMP_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

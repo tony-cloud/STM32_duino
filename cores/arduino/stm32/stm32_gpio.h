@@ -47,7 +47,7 @@
 #define GPIO_SPEED_FREQ_VERY_HIGH GPIO_SPEED_FREQ_HIGH
 #endif
 
-#define RwReg  uint32_t
+// #define RwReg  uint32_t
 
 #ifdef __cplusplus
 extern "C" {
@@ -111,6 +111,7 @@ inline void digitalWrite(uint8_t pin, uint8_t value) {
   stm32_port_pin_type port_pin = variant_pin_list[pin];
   HAL_GPIO_WritePin(port_pin.port, port_pin.pinMask, value ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
+
 inline int digitalRead(uint8_t pin) {
   //    if (pin >= sizeof(variant_pin_list) / sizeof(variant_pin_list[0])) {
   //        return 0;
@@ -136,13 +137,11 @@ static const uint8_t variant_gpiopin_pos_static[] = {
 };
 #undef PIN
 
-#ifndef STM32H7
 #define PIN(a, b) { GPIO##a , LL_GPIO_PIN_##b }
 static const stm32_port_pin_type variant_pin_list_ll_static[] = {
   PIN_LIST
 };
 #undef PIN
-#endif
 
 #ifdef __cplusplus
 
@@ -285,7 +284,7 @@ class PORTemulation
     PORTemulation(GPIO_TypeDef *port): port(port) {}
     GPIO_TypeDef *port;
  
-    inline operator int () const __attribute__((always_inline)) {
+    inline operator int () __attribute__((always_inline)) {
       return port->ODR;
     }
     inline PORTemulation & operator = (uint16_t pins) __attribute__((always_inline)) {
@@ -296,7 +295,6 @@ class PORTemulation
       port->ODR ^= pins;
       return *this;
     }
-#ifndef STM32H7	
     inline PORTemulation & operator |= (int pins) __attribute__((always_inline)) {
       port->BSRR = pins;
       return *this;
@@ -305,16 +303,6 @@ class PORTemulation
       port->BSRR = (~pins) << 16U;
       return *this;
     }
-#else
-    inline PORTemulation & operator |= (int pins) __attribute__((always_inline)) {
-      port->BSRRL = pins;
-      return *this;
-    }
-    inline PORTemulation & operator &= (int pins) __attribute__((always_inline)) {
-      port->BSRRH = ~pins;
-      return *this;
-    }
-#endif
 };
 
 class PINemulation
@@ -402,12 +390,12 @@ class LL_PIN {
     }
 
     template<typename T = bool>
-    inline operator T () const {
+    inline operator T () {
       return this->read();
     }
 
     template<typename T = bool>
-    inline T read() const {
+    inline T read() {
       return digitalRead(CPin);
     }
 
@@ -455,7 +443,7 @@ class InputPin : public LL_PIN {
 	}
 
     template<typename T = bool>
-    inline operator T () const {
+    inline operator T () {
       /*Waiting for stability*/
       if (ulDelayCnt) {                           
         for (volatile uint32_t i = ulDelayCnt; i > 0; i--);
@@ -516,7 +504,7 @@ class OutputPin : public LL_PIN {
     }
 
     template<typename T = bool>
-    inline operator T () const {
+    inline operator T () {
        return read();
     }
  

@@ -74,7 +74,7 @@ void setup() {
 
 /* function prototypes */
 void POUT(long N, long J, long K, float X1, float X2, float X3, float X4);
-void PA(float E[]);
+void Proc_A(float E[]);
 void P0(void);
 void P3(float X, float Y, float *Z);
 #define USAGE   "usage: whetdc [-c] [loops]\n"
@@ -91,7 +91,7 @@ int argc = 0; //Mod for nucleo. Change in code below if you want non-default loo
 
 
 void
-PA(float E[])
+Proc_A(float E[])
 {
   J = 0;
 
@@ -139,7 +139,7 @@ POUT(long N, long J, long K, float X1, float X2, float X3, float X4)
 int
 whetstone(int argc)
 {
-  UNUSED(argc);  /*remove warning by huaweiwx@sina.com 2018.7*/
+//  UNUSED(argc);  /*remove warning by huaweiwx@sina.com 2018.7*/
   /* used in the FORTRAN version */
   long I;
   long N1, N2, N3, N4, N6, N7, N8, N9, N10, N11;
@@ -245,7 +245,7 @@ IILOOP:
     C
   */
   for (I = 1; I <= N3; I++)
-    PA(E1);
+    Proc_A(E1);
 
 #ifdef PRINTOUT
   IF (JJ == II)POUT(N3, N2, N2, E1[1], E1[2], E1[3], E1[4]);
