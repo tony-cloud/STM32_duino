@@ -126,9 +126,9 @@ upload.altID=unknown
 upload.usbID=unknown
 
 #Upload to Nucleo via mass storage
-tools.nucleoFlasher.path={runtime.ide.path}/hardware/tools/win/nucleoFlasher
-tools.nucleoFlasher.path.macosx={runtime.ide.path}/hardware/tools/macosx/nucleoFlasher
-tools.nucleoFlasher.path.linux={runtime.ide.path}/hardware/tools/linux/nucleoFlasher
+tools.nucleoFlasher.path={runtime.tools.STM32Tools.path}/tools/win/nucleoFlasher
+tools.nucleoFlasher.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx/nucleoFlasher
+tools.nucleoFlasher.path.linux={runtime.tools.STM32Tools.path}/tools/linux/nucleoFlasher
 tools.nucleoFlasher.cmd.windows=nucleoFlasher.bat
 tools.nucleoFlasher.cmd.linux=nucleoFlasher
 tools.nucleoFlasher.cmd.macosx=nucleoFlasherMacOsX
@@ -139,9 +139,9 @@ tools.nucleoFlasher.upload.pattern="{path}/{cmd}" {upload.verbose} -I "{build.pa
 # STLINK/V2 upload
 tools.stlink_upload.cmd=stlink_upload
 tools.stlink_upload.cmd.windows=stlink_upload.bat
-tools.stlink_upload.path.windows={runtime.ide.path}/hardware/tools/win
-tools.stlink_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
-tools.stlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
+tools.stlink_upload.path.windows={runtime.tools.STM32Tools.path}/tools/win
+tools.stlink_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
+tools.stlink_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
 
 tools.stlink_upload.upload.params.verbose=-d
 tools.stlink_upload.upload.params.quiet=
@@ -151,9 +151,9 @@ tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} "{upload.al
 # this can be overriden in boards.txt
 tools.jlink_upload.cmd=jlink_upload
 tools.jlink_upload.cmd.windows=jlinkob_upload.bat
-tools.jlink_upload.path.windows={runtime.ide.path}/hardware/tools/win
-tools.jlink_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
-tools.jlink_upload.path.linux={runtime.ide.path}/hardware/tools/linux
+tools.jlink_upload.path.windows={runtime.tools.STM32Tools.path}/tools/win
+tools.jlink_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
+tools.jlink_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
 
 tools.jlink_upload.upload.params.verbose=-d
 tools.jlink_upload.upload.params.quiet=
@@ -162,9 +162,9 @@ tools.jlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altI
 # jLINK/V21 v5.02 upload
 tools.jlinkob_upload.cmd=jlinkob_upload
 tools.jlinkob_upload.cmd.windows=jlinkob_upload.bat
-tools.jlinkob_upload.path.windows={runtime.ide.path}/hardware/tools/win
-tools.jlinkob_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
-tools.jlinkob_upload.path.linux={runtime.ide.path}/hardware/tools/linux
+tools.jlinkob_upload.path.windows={runtime.tools.STM32Tools.path}/tools/win
+tools.jlinkob_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
+tools.jlinkob_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
 
 tools.jlinkob_upload.upload.params.verbose=-d
 tools.jlinkob_upload.upload.params.quiet=
@@ -173,10 +173,10 @@ tools.jlinkob_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.al
 # Upload using Maple bootloader over DFU
 tools.maple_upload.cmd=maple_upload
 tools.maple_upload.cmd.windows=maple_upload.bat
-tools.maple_upload.path={runtime.ide.path}/hardware/tools/win
-tools.maple_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx
-tools.maple_upload.path.linux={runtime.ide.path}/hardware/tools/linux
-tools.maple_upload.path.linux64={runtime.ide.path}/hardware/tools/linux64
+tools.maple_upload.path={runtime.tools.STM32Tools.path}/tools/win
+tools.maple_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
+tools.maple_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
+tools.maple_upload.path.linux64={runtime.tools.STM32Tools.path}/tools/linux64
 tools.maple_upload.upload.params.verbose=-d
 tools.maple_upload.upload.params.quiet=
 tools.maple_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
@@ -187,9 +187,9 @@ tools.serial_upload.cmd=serial_upload
 tools.serial_upload.cmd.windows=serial_up.bat
 tools.serial_upload.cmd.macosx=serial_upload 
 
-tools.serial_upload.path={runtime.ide.path}/hardware/tools/win 
-tools.serial_upload.path.macosx={runtime.ide.path}/hardware/tools/macosx 
-tools.serial_upload.path.linux={runtime.ide.path}/hardware/tools/linux 
+tools.serial_upload.path={runtime.tools.STM32Tools.path}/tools/win
+tools.serial_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx 
+tools.serial_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux 
 
 tools.serial_upload.upload.params.verbose=-d 
 tools.serial_upload.upload.params.quiet=n 
@@ -203,3 +203,4 @@ tools.bmp_upload.upload.speed=230400
 tools.bmp_upload.upload.params.verbose=
 tools.bmp_upload.upload.params.quiet=-q --batch-silent
 tools.bmp_upload.upload.pattern="{path}{cmd}" -cd "{build.path}" -b {upload.speed} {upload.verbose} -ex "set debug remote 0" -ex "set target-async off" -ex "set remotetimeout 60" -ex "set mem inaccessible-by-default off" -ex "set confirm off" -ex "set height 0" -ex "target extended-remote {serial.port}" -ex "monitor swdp_scan" -ex "attach 1" -ex "x/wx 0x8000004" -ex "monitor erase_mass" -ex "echo 0x8000004 expect 0xffffffff after erase\n" -ex "x/wx 0x8000004" -ex "file {build.project_name}.elf" -ex "load" -ex "x/wx 0x08000004" -ex "tbreak main" -ex "run" -ex "echo \n\n\nUpload finished!" -ex "quit"
+
